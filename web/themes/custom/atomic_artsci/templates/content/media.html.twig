@@ -7,7 +7,7 @@
  * - name: Name of the media.
  * - content: Media content.
  *
- * @see \Drupal\media\MediaThemeHooks::preprocessMedia
+ * @see template_preprocess_media()
  *
  * @ingroup themeable
  */
@@ -20,9 +20,11 @@
     view_mode ? 'media--view-mode-' ~ view_mode|clean_class,
   ]
 %}
-<article{{ attributes.addClass(classes) }}>
+{{ attach_library('atomic_artsci/embedded-entity') }}
+{{ attach_library('atomic_artsci/media-type-image') }}
+<div{{ attributes.addClass(classes) }}>
   {{ title_suffix.contextual_links }}
   {% if content %}
     {{ content }}
   {% endif %}
-</article>
+</div>

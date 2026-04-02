@@ -1,0 +1,7 @@
+{% embed '@atomic_artsci/artsci/image-caption.html.twig' %}
+  {% block caption %}
+    {% for item in items %}
+      {{ item.content }}
+    {% endfor %}
+  {% endblock %}
+{% endembed %}

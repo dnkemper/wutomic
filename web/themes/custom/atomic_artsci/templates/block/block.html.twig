@@ -11,7 +11,6 @@
  *   - label_display: The display settings for the label.
  *   - provider: The module or other provider that provided this block plugin.
  *   - Block plugin specific settings will also be stored here.
- * - in_preview: Whether the plugin is being rendered in preview mode.
  * - content: The content of this block.
  * - attributes: array of HTML attributes populated by modules, intended to
  *   be added to the main container tag of this template.
@@ -28,18 +27,21 @@
 #}
 {%
   set classes = [
-    'block',
-    'block-' ~ configuration.provider|clean_class,
-    'block-' ~ plugin_id|clean_class,
-  ]
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+]
 %}
-<div{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {% if label %}
-    <h2{{ title_attributes }}>{{ label }}</h2>
-  {% endif %}
-  {{ title_suffix }}
-  {% block content %}
-    {{ content }}
-  {% endblock %}
-</div>
+{% set content_rendered = content|render %}
+{% if content_rendered is not empty %}
+  <div{{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+{#    {% if label %}#}
+{#      <h2{{ title_attributes }}>{{ label }}</h2>#}
+{#    {% endif %}#}
+    {{ title_suffix }}
+    {% block content %}
+      {{ content }}
+    {% endblock %}
+  </div>
+{% endif %}

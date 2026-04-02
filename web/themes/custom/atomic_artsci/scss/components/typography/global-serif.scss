@@ -1,0 +1,29 @@
+@use '../../abstracts/variables';
+@use '../../abstracts/utilities';
+
+
+body.text--serif {
+  $text--serif: variables.$font-family-serif;
+
+  .field--name-body,
+  .block-inline-blockartsci-text-area,
+  .event-description,
+  .ck-content {
+    p,
+    li {
+      &:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
+        font-family: $text--serif, serif;
+        font-size: calc(#{variables.$content-font-size} + 1px);
+      }
+    }
+
+    .lead {
+      &:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
+        font-family: $text--serif, serif;
+        font-size: 1.6rem;
+      }
+    }
+  }
+}
+
+

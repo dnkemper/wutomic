@@ -9,7 +9,7 @@
  *   - attributes: HTML attributes for the menu item.
  *   - below: The menu item child items.
  *   - title: The menu link title.
- *   - url: The menu link URL, instance of \Drupal\Core\Url
+ *   - url: The menu link url, instance of \Drupal\Core\Url
  *   - localized_options: Menu link localized options.
  *   - is_expanded: TRUE if the link has visible children within the current
  *     menu tree.
@@ -22,10 +22,10 @@
 
 {#
   We call a macro which calls itself to render the full tree.
-  @see https://twig.symfony.com/doc/3.x/tags/macro.html
+  @see http://twig.sensiolabs.org/doc/tags/macro.html
 #}
 {{ menus.menu_links(items, attributes, 0) }}
-
+{{ attach_library('atomic_artsci/main-menu') }}
 {% macro menu_links(items, attributes, menu_level) %}
   {% import _self as menus %}
   {% if items %}
@@ -38,7 +38,7 @@
       {%
         set classes = [
           'menu-item',
-          item.is_expanded ? 'menu-item--expanded',
+          item.below ? 'menu-item--expanded',
           item.is_collapsed ? 'menu-item--collapsed',
           item.in_active_trail ? 'menu-item--active-trail',
         ]

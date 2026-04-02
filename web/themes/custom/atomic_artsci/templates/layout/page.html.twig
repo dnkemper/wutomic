@@ -38,50 +38,65 @@
  * - page.footer: Items for the footer region.
  * - page.breadcrumb: Items for the breadcrumb region.
  *
- * @see \Drupal\Core\Theme\ThemePreprocess::preprocessPage()
+ * @see template_preprocess_page()
  * @see html.html.twig
  */
 #}
-<div class="layout-container">
+{% if logged_in %}
+  {{ attach_library('atomic_artsci/admin') }}
+{% endif %}
 
-  <header role="banner">
-    {{ page.header }}
-  </header>
+{% set node_attributes = create_attribute() %}
 
-  {{ page.primary_menu }}
-  {{ page.secondary_menu }}
+{% set content_classes = [] %}
 
-  {{ page.breadcrumb }}
+{% if layout_builder_enabled == TRUE %}
+  {% set content_classes = content_classes|merge(['content__container']) %}
+{% else %}
+  {{ attach_library('atomic_artsci/artsci') }}
+  {% set content_classes = content_classes|merge(['page__container']) %}
+  {# Add sticky classes #}
+  {% if sticky_classes %}
+    {% set content_classes = content_classes|merge(sticky_classes) %}
+  {% endif %}
+{% endif %}
 
-  {{ page.highlighted }}
+{% if page.header %}
+{# {% include '@atomic_artsci/layout/header--' ~ header_type ~ '.html.twig' %} #}
+{% include '@atomic_artsci/layout/header--inline.html.twig' %}
 
-  {{ page.help }}
+{% endif %}
+  {% if page.breadcrumb %}
+    {{ page.breadcrumb }}hi
+  {% endif %}
+{% if page.alert %}
+  {{ page.alert }}
+{% endif %}
 
-  <main role="main">
-    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+<main role="main" {{ node_attributes.addClass(content_classes) }}>
 
-    <div class="layout-content">
-      {{ page.content }}
-    </div>{# /.layout-content #}
+  <a id="main-content" tabindex="-1"></a>
+  {# link is in html.html.twig #}
 
-    {% if page.sidebar_first %}
-      <aside class="layout-sidebar-first" role="complementary">
-        {{ page.sidebar_first }}
-      </aside>
-    {% endif %}
+  {{ page.content }}
 
-    {% if page.sidebar_second %}
-      <aside class="layout-sidebar-second" role="complementary">
-        {{ page.sidebar_second }}
-      </aside>
-    {% endif %}
-
-  </main>
-
-  {% if page.footer %}
-    <footer role="contentinfo">
-      {{ page.footer }}
-    </footer>
+  {% if header_toppage and show_back_top_nav %}
+    {% include '@atomic_artsci/navigation/top-scroll.html.twig' %}
   {% endif %}
 
-</div>{# /.layout-container #}
+</main>
+
+{# After content #}
+{% set after_content_rendered = page.after_content | render %}
+{% if after_content_rendered|striptags('<embed><hr><iframe><img><input><drupal-render-placeholder>')|trim %}
+  {{ attach_library('atomic_artsci/region_item')  }}
+  <aside class="bg--white after_content content__container">
+    {{ page.after_content }}
+  </aside>
+{% endif %}
+
+{% block footer %}
+  {% if page.pre_footer or page.footer_first or page.footer_second %}
+    {% include '@atomic_artsci/layout/footer.html.twig' %}
+  {% endif %}
+{% endblock %}

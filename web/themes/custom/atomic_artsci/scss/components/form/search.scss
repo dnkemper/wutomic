@@ -1,0 +1,186 @@
+@use '../../abstracts/variables';
+@use '../../abstracts/_utilities.scss';
+
+
+.artsci-search label {
+  @include utilities.element-invisible;
+}
+
+.artsci-search input[type="text"] {
+  &::placeholder {
+    color: variables.$secondary;
+  }
+  padding-left: variables.$md;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 1.5rem;
+  text-align: center;
+
+  @include utilities.breakpoint(md) {
+    text-align: left;
+  }
+}
+
+.artsci-search [type="submit"] {
+  width: 100%;
+  margin-top: unset;
+  background: #ccc;
+  line-height: 1;
+  text-transform: uppercase;
+  font-family: variables.$font-family-caps-bold;
+
+  @include utilities.breakpoint(md) {
+    width: auto;
+  }
+}
+
+.search-overlay .artsci-search [type="submit"]  {
+  width: auto;
+}
+
+.artsci-search [type="search"] {
+  margin: 0;
+}
+
+.artsci-search .form-item,
+.artsci-search .form-actions {
+  margin: 0;
+}
+
+.artsci-search>* {
+  margin: calc(0px / 2);
+}
+
+.artsci-search>* {
+  flex-grow: 1;
+}
+
+.artsci-search>input[type=text] {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: calc(66.666% - 0px);
+}
+
+.artsci-search [type="text"] {
+  width: 100%;
+  font-size: inherit;
+  margin: 0;
+}
+
+.artsci-search {
+  display: block;
+  margin-bottom: 40px;
+
+  @include utilities.breakpoint(sm) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  @include utilities.breakpoint(md) {
+    padding: 20px;
+    background: #f1f1f1;
+  }
+}
+
+.search-overlay .artsci-search {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.artsci-search>* {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.artsci-search>*>:first-child {
+  @include utilities.breakpoint(md) {
+    flex-basis: 0;
+    flex-grow: 999;
+    min-width: calc(66.666% - 0px);
+  }
+}
+
+.artsci-search>*>:last-child {
+  display: flex;
+}
+
+// full width for any elements not part of the form
+
+.artsci-search .search-help-link {
+  width: 100%;
+}
+
+.container-inline .artsci-search div,
+.container-inline .artsci-search label {
+  display: flex;
+}
+
+
+// Custom Search Block
+.artsci-search-form {
+  padding: 5px 19px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  margin-bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  [type="search"]::placeholder {
+    color: variables.$secondary;
+  }
+  .form:not(.artsci-search) & {
+    padding: 5px 0;
+    [type=submit] {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    [id^=edit-reset] {
+      margin-inline-start: 1rem;
+    }
+  }
+  &.form:not(.artsci-search) {
+    padding: 5px 0;
+    .form-item {
+      margin-top: 0;
+      margin-right: 0;
+    }
+    .form-actions {
+      margin-right: 0;
+      margin-top: 0;
+    }
+    [type="submit"],
+    input[id^='edit-submit'] {
+      padding-top: 13px;
+      padding-bottom: 13px;
+
+      .layout__container:not([class*="bg-"]) & {
+        @include utilities.bttn--primary;
+        & {
+          border: 1px solid variables.$primary;
+        }
+      }
+      [class*=bg--black] & {
+        @include utilities.bttn--primary;
+        & {
+          border: 1px solid variables.$primary;
+        }
+      }
+      [class*=bg--gray] &,
+      [class*=bg--gold] &,
+      [class*=bg--white] &{
+        @include utilities.bttn--secondary;
+        & {
+          border: 1px solid variables.$secondary;
+        }
+      }
+    }
+  }
+  .js-form-item {
+    flex: 1;
+    label {
+      @include utilities.element-invisible;
+    }
+  }
+}

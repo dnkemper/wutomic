@@ -1,0 +1,27 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.node--view-mode-teaser {
+
+  // Styles for the masonry display.
+  .masonry & {
+    figure {
+      flex-basis: 0px;
+    }
+
+    .node__content {
+      margin-right: 0;
+    }
+  }
+
+  // Styles for the grid display.
+  .grid & {
+    figure {
+      flex-basis: 0px;
+    }
+
+    .node__content {
+      margin-right: 0;
+    }
+  }
+}

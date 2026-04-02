@@ -1,0 +1,255 @@
+@use 'abstracts/_variables.scss';
+@use 'abstracts/utilities' as utilities;
+@use 'components/tables.scss';
+@use 'components/typography/paragraph.scss';
+@use 'components/alert';
+@use 'artsci/components/blockquote.scss';
+@use "components/typography/lists.scss";
+@use 'components/button';
+@use 'components/typography/global-serif.scss';
+@use 'components/callout';
+@use 'components/inline';
+// Define the editor styles scope
+.ck.ck-content,
+.ck-content {
+  font-family: Roboto, sans-serif;
+
+  // Colors
+  --brand-primary: #FFCD00;
+  --brand-secondary: #000000;
+
+  // Margin/Padding
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+
+
+
+
+  .element--circle-list>li:before, .artsci-component--circle-list>li:before {
+    width: 80px;
+    height: 80px;
+    line-height: 1.8;
+    padding-top: 0;
+  }
+
+  blockquote {
+    font-style: normal;
+  }
+
+  ul {
+    padding: initial;
+  }
+
+  .table {
+    table,
+    table caption,
+    table > tr > td,
+    table > tr > th,
+    table > tbody > tr > td,
+    table > tbody > tr > th,
+    table > thead > tr > td,
+    table > thead > tr > th,
+    table > tfoot > tr > td,
+    table > tfoot > tr > th {
+      border: #d3d3d3 1px dotted;
+    }
+    table th {
+      padding: 1.05rem;
+    }
+  }
+
+  // CKEditor uses figcaption for table captions, but renders as caption..
+  figure.table {
+    table {
+      display: table-footer-group;
+    }
+    figcaption {
+      display: table-caption;
+      width: 100%;
+      padding: 1.05rem;
+      text-align: center;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #333;
+      font-weight: bold;
+      em, strong, sup, sub {
+        color: inherit!important;
+      }
+      a,
+      :where(p) a:not(.bttn) {
+        color: variables.$primary;
+        [class*="bg--"] &,
+        [class*="bg--"] [class*="bg--"] & {
+          color: variables.$primary;
+        }
+      }
+    }
+  }
+
+  figure.table .table-responsive {
+    figcaption {
+      text-align: left;
+      @include utilities.breakpoint(sm) {
+        text-align: center;
+      }
+    }
+  }
+
+  figure.table table.table--gray-borders {
+    & > figcaption {
+      & > td,
+      & > th {
+        border: #7c7c7c 1px solid;
+      }
+    }
+  }
+
+
+  .drupal-media {
+    max-width: max-content;
+    figcaption {
+      display: block;
+    }
+    img {
+      min-width: initial;
+    }
+  }
+
+  .media--type-remote-video {
+    iframe {
+      position: relative;
+      top: 0;
+    }
+    &.media--view-mode-vertical .field--name-field-media-oembed-video {
+      height: 100%;
+    }
+  }
+
+  // Deal with drupal-media wysiwyg issue for align none originals.
+  .media:not(.align-left):not(.align-right):not(.align-center) {
+    &.media--type-remote-video.media--view-mode-default,
+    &.media--type-remote-video.media--view-mode-full,
+    &.media--type-panopto.media--view-mode-default,
+    &.media--type-panopto.media--view-mode-full {
+      width: 854px;
+      max-width: 100%;
+      height: 480px;
+      position: unset;
+      display: inherit;
+      padding: 0;
+      overflow: auto;
+
+      .field--name-field-media-oembed-video,
+      .field--name-field-media-panopto-url {
+        height: 100%;
+
+        & > iframe {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  figure.caption {
+    .media:not(.align-left):not(.align-right):not(.align-center) {
+      &.media--type-remote-video.media--view-mode-default,
+      &.media--type-remote-video.media--view-mode-full,
+      &.media--type-panopto.media--view-mode-default,
+      &.media--type-panopto.media--view-mode-full {
+        width: 300px;
+        // 150px + edit button + border/padding.
+        height: calc(150px + 40px + 9px);
+
+        .field--name-field-media-oembed-video,
+        .field--name-field-media-panopto-url {
+          height: unset;
+        }
+      }
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  // Adjust responsive positioning to make room for edit button
+  .embed-responsive embed,
+  .embed-responsive iframe,
+  .embed-responsive object,
+  .embed-responsive video,
+  .media--type-panopto embed,
+  .media--type-panopto iframe,
+  .media--type-panopto object,
+  .media--type-panopto video,
+  .media--type-remote-video embed,
+  .media--type-remote-video iframe,
+  .media--type-remote-video object,
+  .media--type-remote-video video {
+    top: 40px;
+  }
+
+  // Placeholder twitter for within CKEditor.
+  .media--type-twitter {
+    height: 150px !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center center !important;
+    background-image: url("../images/twitter.png") !important;
+  }
+}
+
+// Remove uppercase styling from editor buttons.
+.ck.ck-button {
+  text-transform: inherit;
+}
+
+// Fix overlapping grid spacing under styles dropdown.
+.ck.ck-style-panel .ck-style-grid {
+  row-gap: 2rem!important;
+}
+
+// @todo remove when https://www.drupal.org/project/drupal/issues/3332416 is resolved.
+.ck.ck-toolbar.ck-toolbar_grouping > .ck-toolbar__items {
+  flex-wrap: wrap!important;
+}
+
+// @todo remove when https://github.com/ckeditor/ckeditor5/issues/18215 is resolved.
+.ck.ck-splitbutton>.ck-splitbutton__arrow {
+  min-width: 24px!important;
+}
+
+// Add extra padding to the "About text formats" link text for formatted text fields.
+// Minimum size for interactive elements is 44px by 44px.
+// This is an override of the Claro admin theme, and can be removed if
+// it gets adjusted upstream.
+.filter-help>a {
+  padding: 1rem 0;
+}
+
+.ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library {
+  color: #00558c;
+  span {
+    text-decoration: underline;
+  }
+  &:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #00558c;;
+    transform-origin: center;
+    transform: translate(-50%) scaleX(0);
+    transition: transform .3s ease-in-out;
+
+  }
+  &:hover, &:focus {
+    &:before {
+      transform: translate(-50%) scaleX(1);
+    }
+  }
+}

@@ -1,0 +1,75 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.breadcrumb {
+  list-style: none;
+  @include utilities.margin(variables.$top: variables.$sm, variables.$right: 0, variables.$bottom: variables.$sm, variables.$left:0);
+  ol {
+    @extend %no-ul-list;
+  }
+}
+
+.breadcrumb::before,
+.breadcrumb::after {
+  display: table;
+  content: ' ';
+  flex:1 0 0;
+  order: 1;
+}
+
+.breadcrumb::after {
+  clear: both;
+}
+
+.breadcrumb li {
+  float: left;
+  cursor: default;
+  //text-transform: uppercase;
+  color: variables.$secondary;
+  font-size: variables.$small-font-size;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  position: relative;
+  content: "/";
+  opacity: 1;
+  color: variables.$primary;
+  @include utilities.margin(variables.$top: 0, variables.$right: variables.$sm, variables.$bottom: 0, variables.$left:variables.$sm);
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: variables.$secondary;
+}
+
+.breadcrumb a:hover,
+.breadcrumb a:focus {
+  text-decoration: underline;
+}
+
+.breadcrumb .disabled {
+  cursor: not-allowed;
+  color: variables.$gray-light;
+}
+
+.breadcrumb {
+  margin-bottom: 0;
+  margin-top: 1.75rem;
+  .hero__content & {
+    margin-bottom: 0;
+    margin-top: 0rem;
+  }
+  [class*="bg--black"] & li,
+  [class*="bg--black"] & li a {
+    color: #fff;
+  }
+}
+
+.block-system-breadcrumb-block {
+  //margin-bottom: -35px;
+  z-index: 1;
+    .hero__content & {
+      //@include: -25px;
+    }
+}
+

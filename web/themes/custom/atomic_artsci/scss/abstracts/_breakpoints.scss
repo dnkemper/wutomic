@@ -1,0 +1,100 @@
+// ==========================================================================
+// BREAKPOINTS
+// ==========================================================================
+@use 'variables';
+$breakpoints: (
+  'sm':   576px,
+  'md':   768px,
+  'lg':   992px,
+  'xl':   1200px,
+  'xxl':  1400px,
+);
+
+// Mobile-first: min-width
+@mixin bp($name) {
+  @if map-has-key($breakpoints, $name) {
+    @media (min-width: map-get($breakpoints, $name)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint `#{$name}` not found.";
+  }
+}
+
+// Desktop-first: max-width (subtract 1px)
+@mixin bp-down($name) {
+  @if map-has-key($breakpoints, $name) {
+    @media (max-width: map-get($breakpoints, $name) - 1px) {
+      @content;
+    }
+  }
+}
+
+// Between two breakpoints
+@mixin bp-between($lower, $upper) {
+  @media (min-width: map-get($breakpoints, $lower)) and (max-width: map-get($breakpoints, $upper) - 1px) {
+    @content;
+  }
+}
+
+// Media Queries ///////////////
+@mixin breakpoint($class) {
+  @if $class==xxsm {
+    @media (min-width: variables.$break-xxsm) {
+      @content;
+    }
+  }
+
+  @else if $class==xsm {
+    @media (min-width: variables.$break-xsm) {
+      @content;
+    }
+  }
+
+  @else if $class==sm {
+    @media (min-width: variables.$break-sm) {
+      @content;
+    }
+  }
+
+  @else if $class==md {
+    @media (min-width: variables.$break-md) {
+      @content;
+    }
+  }
+
+  @else if $class==lg {
+    @media (min-width: variables.$break-lg) {
+      @content;
+    }
+  }
+
+  @else if $class==xlg {
+    @media (min-width: variables.$break-xlg) {
+      @content;
+    }
+  }
+
+  @else if $class==page-container {
+    @media (min-width: variables.$break-page-container) {
+      @content;
+    }
+  }
+
+  @else {
+    @warn "Breakpoint mixin supports: xs, xsm, sm, md, lg, page-container, xlg";
+  }
+}
+
+@mixin container-query($size: variables.$break-sm, $type: min) {
+  @supports (contain: inline-size) {
+    @container column (#{$type}-width: #{$size}) {
+      @content
+    }
+  }
+  @supports not (contain: inline-size) {
+    @media (#{$type}-width: #{$size}) {
+      @content
+    }
+  }
+}

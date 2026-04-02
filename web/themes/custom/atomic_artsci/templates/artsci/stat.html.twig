@@ -1,0 +1,24 @@
+{{ attach_library('atomic_artsci/stat') }}
+{% set attributes = attributes ?: create_attribute() %}
+<div{{ attributes.addClass(stat_classes) }}>
+  {% block heading %}
+    <div>
+      {% if stat_title is not empty %}
+        {% include '@atomic_artsci/artsci/headline.html.twig' with {
+          'headline_level' : headline_level ?: 'h2',
+          'headline_class' : 'stat__title',
+          'headline_text' : stat_title,
+          'headline_prefix' : stat_prefix,
+          'headline_suffix' : stat_suffix,
+        } only %}
+      {% endif %}
+    </div>
+  {% endblock %}
+  {% if stat_summary is not empty %}
+    <span class="stat__description">{{ stat_summary }}</span>
+  {% endif %}
+  {% if stat_content is not empty %}
+    <p class="stat__content">{{ stat_content }}</p>
+  {% endif %}
+</div>
+

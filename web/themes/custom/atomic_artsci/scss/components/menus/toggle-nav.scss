@@ -1,0 +1,327 @@
+@use '../../abstracts/variables';
+@use '../../abstracts/_utilities.scss';
+
+// Previous artsci 3.x component styles.
+
+// traditional navigation below logo
+.nav--horizontal {
+  padding-top: 10px;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+}
+
+.block-superfish .menu>li:first-child>a {
+  padding-left: 0;
+}
+
+.artsci-bar.artsci-bar--narrow {
+  &.artsci-bar--healthcare {
+    .toggle-nav__bttn {
+      @include utilities.breakpoint(page-container) {
+        top: 64px;
+      }
+    }
+  }
+
+  .toggle-nav__bttn {
+    display: flex;
+    height: 60px;
+
+    @include utilities.breakpoint(md) {
+      height: 90px;
+    }
+
+    @include utilities.breakpoint(page-container) {
+      top: 50px;
+    }
+  }
+
+  .toggle-nav__bttn.inactive {
+    background: #f1f1f1;
+  }
+
+  .toggle-nav__bttn.active {
+    background: #fff;
+  }
+
+  .toggle-nav__bttn {
+    .o-canvas--complete & {
+      background: #f1f1f1;
+    }
+  }
+}
+
+// drawer container
+.o-canvas__group {
+  display: flex;
+  height: 100%;
+  flex-basis: 100%;
+
+  @include utilities.breakpoint(page-container) {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  @include utilities.breakpoint(md) {
+    flex-basis: unset;
+  }
+}
+
+.artsci-bar.artsci-bar--narrow .o-canvas__group {
+  position: relative;
+  display: flex;
+  height: 100%;
+
+  @include utilities.breakpoint(page-container) {
+    position: absolute;
+  }
+}
+
+// transparent overlay
+body {
+  &.o-canvas--lock::before {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &.o-canvas--lock {
+    overflow: hidden !important;
+  }
+
+  &:before {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    content: "";
+    transition: opacity .35s;
+    pointer-events: none;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.55);
+  }
+}
+
+// buttons
+.toggle-nav__bttn {
+  border: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  width: 100%;
+  height: 60px;
+  padding: 0 0 0 15px;
+  font-weight: 700;
+  font-size: 1rem;
+  z-index: 2;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  line-height: 1.4;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+
+  .o-canvas--complete & {
+    background: #fff;
+  }
+
+  .below.scroll-up &,
+  .below.scroll-down & {
+    @include utilities.breakpoint(md) {
+      animation: fadeIn 3s;
+    }
+  }
+
+  &.active {
+    background: #fff;
+  }
+
+  &.inactive {
+    background: #fff;
+  }
+
+  &:before {
+    margin-right: 10px;
+    padding: variables.$xsm;
+    padding-right: 7px;
+    content: "\f0c9";
+    color: variables.$secondary;
+    font-size: 1.5rem;
+    @include utilities.fas();
+
+    @include utilities.breakpoint(md) {
+      font-size: 1.2rem;
+    }
+  }
+
+  @include utilities.breakpoint(md) {
+    height: 80px;
+    padding: 14px 35px 7px;
+
+    .artsci-bar--narrow & {
+      padding: 9px 35px 7px;
+    }
+
+    .artsci-bar--healthcare & {
+      height: 100px;
+    }
+  }
+
+  &:focus,
+  &:hover {
+    span {
+      text-decoration: underline;
+    }
+  }
+
+  &:focus {}
+  &:focus:not(:focus-visible) {}
+  &:focus-visible {}
+
+  span {
+    @include utilities.breakpoint(md) {
+      display: inline;
+    }
+  }
+
+  .o-canvas--open & {
+    color: variables.$secondary;
+  }
+
+  &:before {
+    margin-right: 0;
+    margin-top: -2px;
+    padding: 1rem .9rem 1rem .7rem;
+    color: variables.$secondary;
+    font-size: variables.$base-font-size;
+    @include utilities.fas();
+
+    @include utilities.breakpoint(md) {
+      margin-right: 5px;
+      padding: .8rem 1rem;
+    }
+
+    .o-canvas--open & {
+      width: 25px;
+      height: 25px;
+      margin-right: 10px;
+      padding: 7px;
+      content: "\f00d";
+      color: variables.$white;
+      border-radius: 50%;
+      background: #999;
+      font-size: 1rem;
+      line-height: .8;
+
+      @include utilities.breakpoint(md) {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+        line-height: 1;
+      }
+    }
+  }
+}
+
+.toggle-nav__bttn.inactive {
+  background: #f1f1f1;
+
+  @include utilities.breakpoint(md) {
+    background: #fff;
+  }
+}
+
+.toggle-nav__bttn.active {
+  background: #f1f1f1;
+
+  @include utilities.breakpoint(md) {
+    background: #fff;
+  }
+}
+
+.o-canvas__wrapper {
+  width: 100%;
+
+  button>* {
+    pointer-events: none;
+  }
+}
+
+// off canvas drawer
+.o-canvas__drawer {
+  position: fixed;
+  z-index: 2;
+  right: 0;
+  display: block;
+  visibility: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  padding: 20px 22px 40px;
+  transform: scale(0.925);
+  transform-origin: right top;
+  opacity: 0;
+  background: #fff;
+  background-color: rgb(255, 255, 255);
+
+  @include utilities.breakpoint(md) {
+    padding: 40px 35px;
+    max-width: 560px;
+  }
+
+  .o-canvas--open & {
+    visibility: visible;
+    height: 100%;
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 8px 8px 0 rgba(63, 63, 70, .25);
+  }
+
+  &[aria-hidden="false"]:not(:focus-within) {
+    background-color: rgb(255, 255, 254);
+  }
+}
+
+.o-canvas--lock .artsci-bar__below {
+  background: #f1f1f1;
+}
+
+// atomic_artsci overrides.
+.o-canvas__group .region-primary-menu {
+  height: auto;
+}
+
+.artsci-bar--full.toggle .toggle-nav__bttn {
+  @include utilities.breakpoint(page-container) {
+    padding: 14px 35px 0;
+  }
+}
+
+.sf-accordion-toggle {
+  display: none;
+}
+
+#superfish-main-accordion {
+  position: unset !important;
+  clip: auto !important;
+  height: auto !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  display: block !important;
+  margin-bottom: variables.$md;
+}
+
+.artsci-bar--full.toggle,
+.artsci-bar--narrow.toggle {
+  .block-superfish {
+    display: block;
+  }
+  .region-primary-menu {
+    display: block;
+  }
+}

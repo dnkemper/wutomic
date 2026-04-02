@@ -1,0 +1,80 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+// apply artsci styles to artsci_bar search form
+
+.form {
+  &.form__search {
+    display: flex;
+    justify-content: flex-start;
+    height: variables.$lg;
+    @include utilities.margin(variables.$left: variables.$xlg);
+
+    .form-item,
+    .form-actions {
+      margin: 0;
+    }
+
+    input[type="text"] {
+      margin: 0;
+      height: variables.$lg;
+      border-radius: 0;
+      border: none;
+    }
+
+    input[type="submit"] {
+      height: variables.$lg;
+      margin-left: -4px;
+      background: #343a40;
+      color: #fff;
+      font-size: variables.$small-font-size;
+      @include utilities.padding(variables.$top: variables.$xsm-sm, variables.$bottom: variables.$xsm-sm);
+    }
+  }
+}
+
+// additional styles for artsci_bar
+
+#artsci-search {
+  display: flex;
+}
+
+.artsci-bar--navbar--links {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  li {
+    display: inline-flex;
+    @include utilities.margin(variables.$right: variables.$xlg);
+    &:last-child {
+      margin: 0;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+// styles for html.html.twig
+
+.artsci__container {
+  background: variables.$secondary;
+  @include utilities.padding(variables.$top: variables.$sm, variables.$bottom: variables.$sm);
+  .artsci-bar--wrapper {
+    @include utilities.container-width;
+    & {
+      padding: 0;
+      background: variables.$secondary;
+    }
+  }
+}
+
+.artsci__container--full {
+  @include utilities.padding(variables.$top: variables.$sm, variables.$right: variables.$gutter, variables.$bottom: variables.$sm, variables.$left: variables.$gutter);
+  background: variables.$secondary;
+  .artsci-bar--wrapper {
+    padding: 0;
+    background: variables.$secondary;
+  }
+}

@@ -1,0 +1,43 @@
+{% extends '@atomic_artsci/layout/header.html.twig' %}
+
+{% block artsci_bar %}
+
+  {# {% if site_has_parent %}
+    {% include '@atomic_artsci/artsci/site-parent.html.twig' with {
+      'parent_name': site_parent_name,
+      'parent_url': site_parent_url,
+    } %}
+  {% endif %} #}
+{% endblock %}
+
+{% block tertiary_content %}
+  <div class="artsci-bar__below {{ header_nav }}">
+    <div class="artsci-bar__container">
+
+      {# {% if logo_path and is_off_brand %}
+        <div class="site-name">
+          <a href="{{ path('<front>') }}"><img alt="{{ site_name }}" src ="{{ logo_path }}" /></a>
+        </div>
+      {% else %}
+        {% include '@atomic_artsci/artsci/site-name.html.twig' with {
+          'site_name': site_name,
+          'site_url': path('<front>'),
+        } %}
+      {% endif %} #}
+
+      {% if page.search %}
+        {% include '@atomic_artsci/artsci/global/search-toggle.html.twig' with {
+          'search_form': page.search,
+        } %}
+      {% endif %}
+      {% if page.action_menu %}
+        {{ page.action_menu }}
+      {% endif %}
+      {% if page.primary_menu %}
+        {% if header_nav == 'toggle' %}
+          {% include '@atomic_artsci/navigation/toggle-nav.html.twig' %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

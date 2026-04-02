@@ -1,0 +1,71 @@
+@use '../../abstracts/variables';
+@use '../../abstracts/_utilities.scss';
+
+.menu--quick-links {
+  top: 1.3rem;
+  left: 69%;
+  @include utilities.element-invisible;
+
+  ul {
+    list-style: none;
+    margin: 0;
+
+    li {
+      list-style: none;
+      margin-right: 20px;
+
+      i {
+        color: #999;
+        padding-right: 6px;
+      }
+
+      a {
+        display: block;
+        text-decoration: none;
+        color: variables.$secondary;
+        font-size: .8rem;
+        text-transform: uppercase;
+        padding: 0;
+
+        &:hover, &:focus {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+
+.menu--quick-links {
+  .contextual {
+    display: none;
+  }
+
+  li:first-child a:before {
+    content: "\f02e";
+    @include utilities.fas();
+    padding-right: variables.$md;
+    color: white;
+  }
+
+  li:nth-child(2) a:before {
+    content: "\f007";
+    @include utilities.fas();
+    padding-right: variables.$md;
+    color: white;
+  }
+}
+
+.region-under-search {
+  transition: transform .4s;
+}
+
+.search-is-open .region-under-search .menu--quick-links {
+  @include utilities.breakpoint(md) {
+    clip: auto;
+    height: auto;
+    width: auto;
+    overflow: auto;
+    position: absolute !important;
+  }
+}

@@ -1,0 +1,178 @@
+// ==========================================================================
+// LARGE FAN CAROUSEL — "Visionaries Among Us" style
+//
+// Teal gradient background with shield SVG pattern.
+// 3-card fan: center slide is scaled up, left/right are smaller + faded.
+// White arrows below. Slide captions appear on center card only.
+//
+// Activated by: .artsci-carousel--large
+// JS handles: positioning via inline styles + data-slide-position attribute
+// ==========================================================================
+@use 'carousel-base' as cb;
+
+// ── Local tokens ──
+$_track-height: 300px;
+$_slide-width: 240px;
+
+.artsci-carousel--large {
+  background: linear-gradient(180deg, var(--brand-teal, #007360) 0%, var(--brand-teal-dark, #00573F) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-12, 3rem) 0 var(--space-section, 3.5rem);
+
+  // ── Shield pattern overlay ──
+  .artsci-carousel__shield {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg width='200' height='240' viewBox='0 0 200 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 10 L180 50 L180 140 Q180 200 100 230 Q20 200 20 140 L20 50 Z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+    background-size: 200px 240px;
+    background-position: center -20px;
+    background-repeat: repeat;
+    pointer-events: none;
+  }
+
+  // ── Pre-title (white on dark) ──
+  .artsci-carousel__pre-title {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    opacity: 0.85;
+    @include cb.pre-title;
+  }
+
+  // ── Title ──
+  .artsci-carousel__title {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    font-size: var(--text-2xl, 2rem);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    margin: 0 0 var(--space-8, 2rem);
+    line-height: var(--leading-tight, 1.15);
+  }
+
+  // ── Slide track ──
+  .artsci-carousel__track {
+    position: relative;
+    height: $_track-height;
+    max-width: 780px;
+    margin: 0 auto;
+    z-index: 2;
+  }
+
+  // ── Individual slides (positioned absolutely by JS) ──
+  .artsci-carousel__slide--large,
+  .paragraph--carousel-slide {
+    position: absolute;
+    width: $_slide-width;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all cb.$_transition;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%) scale(0.82);
+    opacity: 0.7;
+    z-index: 1;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+
+    // Center / active
+    &[data-slide-position="center"] {
+      transform: translateY(-50%) scale(1);
+      opacity: 1;
+      z-index: 3;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    // Hidden
+    &[data-slide-position="hidden"] {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  // ── Slide image ──
+  .artsci-carousel__slide-image,
+  .carousel-slide__image {
+    width: 100%;
+    height: 260px;
+
+    img,
+    .media,
+    .media__inner {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  // ── Caption overlay (visible on center slide only) ──
+  .artsci-carousel__slide-overlay {
+    @include cb.gradient-overlay;
+    padding: 2.5rem 1rem 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  [data-slide-position="center"] .artsci-carousel__slide-overlay {
+    opacity: 1;
+  }
+
+  .artsci-carousel__slide-caption {
+    color: #fff;
+    font-size: var(--text-sm, 0.8125rem);
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      &:hover, &:focus { text-decoration: underline; }
+    }
+  }
+
+  // ── Arrows (light variant for dark bg) ──
+  .artsci-carousel__nav {
+    @include cb.arrow-nav;
+    justify-content: center;
+    margin-top: var(--space-5, 1.25rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .artsci-carousel__arrow {
+    @include cb.arrow-button-light;
+  }
+}
+
+// ==========================================================================
+// RESPONSIVE
+// ==========================================================================
+@media (max-width: 600px) {
+  .artsci-carousel--large {
+    padding: var(--space-8, 2rem) 0 var(--space-10, 2.5rem);
+
+    .artsci-carousel__title {
+      font-size: 1.625rem;
+    }
+
+    .artsci-carousel__track {
+      height: 260px;
+    }
+
+    .artsci-carousel__slide--large,
+    .paragraph--carousel-slide {
+      width: 180px;
+    }
+
+    .artsci-carousel__slide-image,
+    .carousel-slide__image {
+      height: 220px;
+    }
+  }
+}

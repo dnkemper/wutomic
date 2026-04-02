@@ -1,0 +1,17 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.field--name-field-person-contact-information {
+  margin-bottom: .7rem;
+}
+
+.field--name-field-artsci-contact-label {
+  margin-top: .7rem;
+  font-weight: variables.$font-weight-bold;
+  line-height: 1.7;
+  font-size: 1.2rem;
+
+  &:after {
+    content: ":";
+  }
+}

@@ -1,0 +1,244 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+// Style the article page.
+.node--type-article {
+  .field--name-body {
+    margin: variables.$gutter 0;
+  }
+
+  .article-created-date {
+    display: block;
+    opacity: .7;
+    font-family: variables.$font-family-serif;
+    font-size: 1.3rem;
+    font-weight: variables.$font-weight-medium;
+    line-height: 1.3;
+  }
+
+  // Remove colon being added by field.css.
+  .field--label-above .field--label-inline:after {
+    content: "";
+  }
+
+  .block-extra-field-blocknodearticlearticle-created-date {
+    margin: 0 0 0.7rem;
+  }
+
+  .block-field-blocknodearticlefield-article-source-org+.block-field-blocknodearticlefield-article-source-link:before {
+    content: "| ";
+    color: #737373;
+    margin: 0 0.325rem;
+  }
+
+  .block-field-blocknodearticlefield-article-author+.block-field-blocknodearticlefield-article-source-org {
+    &:before {
+      content: '- ';
+      color: variables.$gray;
+      margin: 0 variables.$xsm;
+    }
+  }
+
+  .gallery-jump-link {
+    display: block;
+
+    svg {
+      margin-right: 0.3rem;
+    }
+  }
+
+  // Set display:grid on banner__content to set order on caption.
+  .banner__content {
+    display: grid;
+  }
+
+  .block-field-blocknodearticlefield-image-caption {
+    font-style: italic;
+    z-index: 3;
+    position: relative;
+    margin-bottom: variables.$mobile-height-gutter;
+    line-height: 1.3;
+    @include utilities.breakpoint(sm) {
+      order: 2;
+      margin-bottom: unset;
+      margin-top: variables.$gutter;
+    }
+  }
+  .field--name-field-image-caption {
+    margin: 1rem 0 3rem;
+    color: #666;
+  }
+}
+
+
+.article--meta {
+  display: inline-block;
+  font-family: variables.$font-family-serif;
+  font-size: 1.2rem;
+  line-height: 1.7;
+
+  a {
+    text-decoration: none;
+
+    &:focus,
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &:after {
+    display: inline-block;
+  }
+
+  .field__item,
+  .link-item {
+    display: inline-block;
+  }
+
+  .field--label-inline {
+    margin-bottom: 0;
+  }
+
+  &.article--meta__block {
+    display: block;
+  }
+}
+
+// Hero
+.page-node-type-article .hero {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+  -webkit-transform: translateX(calc(50vw - 50%));
+  transform: translateX(calc(50vw - 50%));
+}
+
+// Arrow button spacing for article teasers
+.card.node--type-article {
+  &.card--media-left,
+  &.card--media-right {
+    .field--name-field-article-author.field--label-inline {
+      margin-bottom: 0;
+      display: inline-block;
+    }
+
+    .article--meta+.bttn,
+    .field--name-body+.bttn {
+      margin-top: 1.05rem;
+    }
+  }
+}
+
+// Overrides for narrow article.
+.node--type-article .layout--twocol--67-33 {
+  .article-created-date {
+    opacity: 1;
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+
+  .article--meta {
+    .field__item {
+      display: block;
+    }
+  }
+
+  .field--name-field-article-subhead {
+    margin: variables.$gutter 0;
+  }
+
+  .block-field-blocknodearticlefield-article-author+.block-field-blocknodearticlefield-article-source-org:before {
+    content: none;
+  }
+
+  .block-field-blocknodearticlefield-article-source-org+.block-field-blocknodearticlefield-article-source-link:before {
+    content: none;
+  }
+
+  .layout__region--second {
+    @include utilities.breakpoint(md) {
+      margin-top: variables.$mobile-height-gutter;
+      padding-left: variables.$desktop-width-gutter;
+      border-left: 1px solid #ccc;
+    }
+  }
+}
+
+// Styles for article lists.
+.field--name-field-article-author {
+  .field__label {
+    display: inline;
+    margin-right: variables.$xsm;
+  }
+
+  &.field--label-above {
+    margin-bottom: 0;
+    margin-top: 0.125rem;
+  }
+
+  .field__items {
+    padding-right: 0;
+    display: inline-block;
+  }
+  display: inline-block;
+}
+
+.field--name-field-article-source-link {
+  .link-item {
+    display: inline-block;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:focus,
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &:after {
+    display: inline-block;
+  }
+}
+
+.field--name-field-article-author + .field--name-field-article-source-link,
+.field--name-field-article-author + .field--article-byline,
+.block-field-blocknodearticlefield-article-author + .block-field-blocknodearticlefield-article-source-link {
+  &:before {
+    content: '- ';
+    color: variables.$gray;
+    margin: 0 variables.$xsm;
+  }
+}
+
+// V2 Styles.
+.paragraph--type--articles.list {
+  .field--name-body {
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0.5rem 0 0;
+
+    a {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
+.grid.paragraph--type--articles,
+.masonry.paragraph--type--articles {
+  .node--type-article.node--view-mode-teaser {
+    .content-image {
+      margin-left: 0;
+    }
+
+    .content-image img {
+      margin-left: 0 !important;
+      max-width: 100%;
+    }
+  }
+}
+

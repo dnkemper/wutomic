@@ -1,0 +1,200 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+// Headline
+
+@mixin headline {
+  padding: 0;
+  line-height: 1;
+
+  a {
+    color: variables.$secondary;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}
+
+@mixin headline-negative {
+  color: variables.$white;
+
+  a {
+    color: variables.$white;
+  }
+}
+
+@mixin headline-uppercase {
+  text-transform: uppercase;
+  font-family: variables.$font-family-caps;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@mixin headline-serif {
+  font-family: variables.$font-family-serif;
+  font-weight: variables.$font-weight-bold;
+}
+
+@mixin headline-highlight {
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  padding: 2px 0;
+  line-height: 1.7;
+}
+
+@mixin headline-highlight-word {
+  background: variables.$primary;
+  display: inline;
+  padding: 0.85rem 1rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  color: variables.$secondary;
+  text-shadow: none;
+  [class*="bg--gold"] & {
+    background: variables.$secondary;
+    color: #fff;
+  }
+}
+
+@mixin headline-highlight-word-uppercase {
+  background: variables.$primary;
+  display: inline-block;
+  margin-bottom: .8rem;
+  margin-top: .8rem;
+  padding: .4rem 1.2rem .8rem;
+  color: variables.$secondary;
+  [class*="bg--gold"] & {
+    background: variables.$secondary;
+    color: #fff;
+    font-weight: 400;
+  }
+  [class*="bg--gold"] [class*="bg--black"] & {
+    background: variables.$primary;
+    color: variables.$secondary;
+  }
+}
+
+@mixin headline-underline {
+  padding-bottom: variables.$sm;
+  overflow: auto;
+
+  &:after {
+    content: "";
+    display: block;
+    width: 75px;
+    height: 6px;
+    margin-top: 15px;
+    background: variables.$primary;
+  }
+
+  &.headline--center {
+    &:after {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+
+  .bg-pattern--brain-reversed &,
+  [class*="bg--gold"] & {
+    &:after {
+      background: variables.$light;
+    }
+  }
+}
+
+
+.layout--onecol .layout__region {
+  width: 100%;
+  @include utilities.inner-grid(100);
+}
+
+.layout--onecol--background {
+  .layout__region {
+    @include utilities.inner-grid(100);
+  }
+  // Add padding to banner content if not in edge-to-edge column
+  // or is in twocol layout.
+  &.banner {
+    .banner__content {
+      @include utilities.breakpoint(sm) {
+        padding: 1.25rem;
+      }
+      @include utilities.breakpoint(page-container) {
+        padding: 1.25rem 0;
+      }
+    }
+  }
+
+  // @todo Move this to a more appropriate location.
+  .banner .media--image .layout-builder__add-block {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    z-index: 2;
+  }
+
+  // When we have a background image - and we're not in the Layout
+  // Builder screen - change the text color to white.
+  &.layout--title--with-background {
+    .breadcrumb {
+      margin-top: 0;
+      @include utilities.breakpoint(sm) {
+        margin-top: 1.75rem;
+      }
+      li {
+        @include utilities.container-query() {
+          color: white;
+        }
+      }
+
+      a {
+        @include utilities.container-query() {
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.content__container {
+  .layout--onecol {
+
+    &--background,
+    &--no--background,
+    &--background.page__container--edge.layout--has-sidebar,
+    &--no--background.page__container--edge.sidebar-invisible {
+      .layout__spacing_container {
+        @include utilities.container-width;
+      }
+    }
+  }
+
+  .layout--has-sidebar {
+    &.layout__container.sidebar-invisible {
+      margin-top: 0;
+    }
+  }
+}
+
+.layout--title--hidden {
+  .block-system-breadcrumb-block {
+    @include utilities.element-invisible;
+  }
+}
+
+// Fix for featured image banners on custom content types.
+.layout--onecol--background .block[class*="image"]:not([class*="image-caption"])  {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  @include utilities.container-query($type: max) {
+    position: relative;
+  }
+}

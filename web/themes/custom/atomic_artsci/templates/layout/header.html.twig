@@ -1,0 +1,65 @@
+{% set header_classes = header_classes|merge([
+  'artsci-bar',
+  header_nav,
+  header_branding == 'uihc' ? 'artsci-bar--healthcare' : ''
+]) %}
+
+{% if header_nav == 'toggle' %}
+  {% if not logged_in %}
+    {{ attach_library('atomic_artsci/header-sticky') }}
+  {% elseif logged_in and header_sticky %}
+    {{ attach_library('atomic_artsci/header-sticky') }}
+  {% endif %}
+{% endif %}
+
+<header data-artsci-header {{ attributes.addClass(header_classes) }}>
+  <div class="artsci-bar__container">
+    {% block logo %}
+      {% if artsci_logo is not empty %}
+        {{ attach_library('atomic_artsci/logo') }}
+
+        {% if header_branding == 'artsci' %}
+          {% include '@atomic_artsci/artsci/logo.twig' with {
+            path: artsci_url,
+            logo_classes: 'logo--tab',
+            logo_path_png: logo_path_head,
+            logo_id: 'header',
+            is_homepage: is_homepage|default(false),
+          } %}
+        {% endif %}
+      {% endif %}
+      {% if artsci_logo is empty %}
+        {% if header_branding == 'regents' %}
+          <div class="top-bar"></div>
+        {% endif %}
+      {% endif %}
+    {% endblock %}
+
+    {% block artsci_bar %}
+      {# Artsci bar content #}
+    {% endblock %}
+  </div>
+
+  {% block tertiary_content %}
+    {# Tertiary content #}
+  {% endblock %}
+</header>
+
+{% block horizontal_nav %}
+  {% if header_nav in['horizontal', 'mega'] %}
+    {{ attach_library('atomic_artsci/mega-menu') }}
+    {{ attach_library('atomic_artsci/horizontal-menu') }}
+    {% set nav_attributes = create_attribute() %}
+    {% set nav_classes = [
+      'nav--horizontal',
+      'nav--' ~ header_nav,
+    ] %}
+
+    <nav{{ nav_attributes.addClass(nav_classes) }} aria-label="Primary menu">
+      <div class="page__container">
+        {{ page.primary_menu }}
+      </div>
+    </nav>
+  {% endif %}
+
+{% endblock %}

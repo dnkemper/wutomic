@@ -20,7 +20,7 @@
 
 {% set background = content.background | render %}
 {% if background is not empty and (featured_image_display is not empty) %}
-  {% embed "@atomic_artsci/atomic/banner.html.twig" with {
+  {% embed "@atomic_artsci/artsci/banner.html.twig" with {
     'attributes' : attributes.addClass(background_classes,layout.template|clean_class),
   } %}
     {% block banner_image %}

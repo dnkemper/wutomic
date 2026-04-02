@@ -1,0 +1,36 @@
+{{ attach_library('atomic_artsci/accordion') }}
+
+{% if items is defined and items is iterable %}
+  {% set clean_label = label|clean_class %}
+  {% set aria_owns = [] %}
+
+  {% for item in items %}
+    {% set item_label = item.label is defined ? item.label|clean_class : clean_label ~ (items|length > 1 ? '-' ~ loop.index : '') %}
+    {% set aria_owns = aria_owns|merge([item_label]) %}
+  {% endfor %}
+{% endif %}
+
+<div class="collection--accordion">
+  <div class="accordion" role="tablist"
+    {% if aria_owns is defined and aria_owns is iterable %}
+      aria-owns="{{ aria_owns|join(' ') }}"
+    {% endif %}
+       aria-multiselectable="true" id="accordion-{{ clean_label }}">
+    {% for item in items %}
+      {% set is_single_item = items|length == 1 %}
+      {% set item_label = item.label ?: (is_single_item ? label : label ~ ' - ' ~ loop.index) %}
+      {% set clean_item_label = item.label is defined ? item.label|clean_class : clean_label ~ (is_single_item ? '' : '-' ~ loop.index) %}
+      {% set accordion_item = {
+        'accordion_h_size': accordion_h_size ?: 'h2',
+        'accordion_type': accordion_type ?: 'single',
+        'accordion_parent_id': 'accordion-' ~ clean_label,
+        'accordion_item_id': clean_item_label,
+        'accordion_item_label': item_label,
+        'accordion_item_content': item.content|without(label, attributes),
+        'accordion_button_class': 'border',
+      } %}
+      {% embed '@atomic_artsci/artsci/accordion-item.html.twig' with accordion_item only %}
+      {% endembed %}
+    {% endfor %}
+  </div>
+</div>

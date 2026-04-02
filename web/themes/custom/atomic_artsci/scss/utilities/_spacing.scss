@@ -1,0 +1,16 @@
+// ==========================================================================
+// SPACING UTILITIES
+// ==========================================================================
+
+.section--contained {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section--full-width {
+  max-width: none;
+  padding-inline: 0;
+}
+
+

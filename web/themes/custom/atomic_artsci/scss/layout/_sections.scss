@@ -1,0 +1,182 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+
+// Flexbox utility classes for building showcase layouts.
+.flex--wrap {
+  flex-wrap: wrap;
+}
+
+.flex--break {
+  flex-basis: 100%;
+}
+
+.flex--1 {
+  flex: 1;
+}
+
+.flex--2 {
+  flex: 2;
+}
+
+.flex--3 {
+  flex: 3;
+}
+
+.flex--4 {
+  flex: 4;
+}
+
+.flex--5 {
+  flex: 5;
+}
+
+.flex--6 {
+  flex: 6;
+}
+
+.flex--7 {
+  flex: 7;
+}
+
+.flex--8 {
+  flex: 8;
+}
+
+.flex--9 {
+  flex: 9;
+}
+
+.flex--10 {
+  flex: 10;
+}
+
+.flex--11 {
+  flex: 11;
+}
+
+.flex--12 {
+  flex: 12;
+}
+
+.element--flex-left,
+.flex--left {
+  flex-flow: column nowrap;
+  text-align: left;
+  width: 100%;
+  padding: 1.5rem 0;
+}
+
+.element--flex-center,
+.flex--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  text-align: center;
+
+  @include utilities.breakpoint(sm) {
+    padding: 1.5rem 0;
+  }
+}
+
+.flex--gap__sm {
+    @include utilities.breakpoint(sm) {
+      column-gap: var(--space-sm-width-gutter);
+    }
+}
+
+.flex--gap__md {
+  @include utilities.breakpoint(sm) {
+    column-gap: var(--space-md-width-gutter);
+  }
+}
+
+.flex {
+  @include utilities.breakpoint(sm) {
+    display: flex;
+  }
+}
+
+.grid--onecol {
+  .list-container__inner {
+    max-width: 81.875em;
+    margin: 0 auto;
+  }
+}
+
+.grid--onecol__narrow {
+  .list-container__inner {
+    max-width: 63.75em;
+    margin: 0 auto;
+  }
+}
+
+[class*="grid"].grid--gap__sm {
+  .list-container__inner {
+    @include utilities.breakpoint(sm) {
+      column-gap: var(--space-sm-width-gutter);
+    }
+  }
+}
+
+.grid--twocol--50-50 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      @include utilities.twocol-grid;
+    }
+  }
+}
+
+.grid--threecol--33-34-33 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      @include utilities.threecol-grid;
+    }
+  }
+}
+
+.grid--twocol--67-33 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      grid-template-columns: repeat(3, 1fr);
+
+      .grid__column:first-child {
+        grid-area: 1 / 1 / 2 / 3;
+        min-width: 0;
+      }
+    }
+
+    .grid__column:last-child {
+      @include utilities.breakpoint(sm) {
+        grid-area: 1 / 3 / 2 / 4;
+        min-width: 0;
+      }
+    }
+  }
+}
+
+.grid--fourcol--25 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      @include utilities.fourcol-grid;
+    }
+  }
+}
+
+// Declare which containers to query.
+@supports (contain: inline-size) {
+  .grid__column,
+  .column-container,
+  .layout-container{
+    container-type: inline-size;
+    container-name: column;
+  }
+}

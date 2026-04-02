@@ -1,0 +1,82 @@
+{#
+/**
+ * @file
+ * Theme override to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ */
+#}
+
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+] %}
+
+{% set block_banner = {
+  'banner_image': content.field_artsci_banner_image|render|trim is not empty ? content.field_artsci_banner_image : null,
+  'banner_summary': content.field_artsci_banner_excerpt|render,
+  'attributes': attributes.removeClass(headline_classes,background_classes,button_classes).addClass(classes),
+  'banner_pre_title': content.field_artsci_banner_pre_title,
+  'banner_title': content.field_artsci_banner_title[0]['#text'],
+  'headline_level': content.field_artsci_banner_title[0]['#size'],
+  'headline_class' : headline_classes,
+  'button_classes' : button_classes,
+  'banner_aria_describedby': content.field_artsci_banner_title[0]['#text'] is not empty ? content.field_artsci_banner_title[0]['#text']|clean_id : '' ,
+  'field_styles_gradient_midpoint': content.field_styles_gradient_midpoint['#items'][0].value ?? null,
+  'layout_builder_style_media_overlay': layout_builder_style_media_overlay,
+  'links': links,
+  'title_prefix': title_prefix,
+  'title_suffix': title_suffix,
+  'in_preview': in_preview,
+  'options_list_title': content.field_options_list_title,
+} %}
+
+{% embed '@atomic_artsci/artsci/banner.html.twig' with block_banner only %}
+
+  {% block banner_image %}
+    {# Embed contextual links so that they'll show up in the upper right-hand corner. #}
+    {{ title_prefix }}
+    {{ title_suffix }}
+    {% if banner_image %}
+      {{ banner_image }}
+    {% endif %}
+  {% endblock %}
+
+  {% block banner_bttn %}
+    {{ parent() }}
+
+    {# "Explore programs for" dropdown — options list unique to the banner hero. #}
+    {% if options_list_title|render|trim is not empty %}
+      <div class="banner__options">
+        <button class="banner__options-toggle bttn bttn--outline" aria-expanded="false" aria-haspopup="true">
+          {{ options_list_title }}
+          <i role="presentation" class="fas fa-chevron-down"></i>
+        </button>
+        <div class="banner__options-list" hidden>
+          {{ options_list_links }}
+        </div>
+      </div>
+    {% endif %}
+  {% endblock %}
+
+{% endembed %}

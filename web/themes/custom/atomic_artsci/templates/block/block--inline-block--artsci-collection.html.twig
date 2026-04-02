@@ -1,0 +1,75 @@
+{#
+/**
+* @file
+* Theme override to display a block.
+*
+* Available variables:
+* - plugin_id: The ID of the block implementation.
+* - label: The configured label of the block if visible.
+* - configuration: A list of the block's configuration values.
+*   - label: The configured label for the block.
+*   - label_display: The display settings for the label.
+*   - provider: The module or other provider that provided this block plugin.
+*   - Block plugin specific settings will also be stored here.
+* - elements: The elements of this block.
+* - attributes: array of HTML attributes populated by modules, intended to
+*   be added to the main container tag of this template.
+*   - id: A valid HTML ID and guaranteed unique.
+* - title_attributes: Same as attributes, except applied to the main title
+*   tag that appears in the template.
+* - title_prefix: Additional output populated by modules, intended to be
+*   displayed in front of the main title tag that appears in the template.
+* - title_suffix: Additional output populated by modules, intended to be
+*   displayed after the main title tag that appears in the template.
+*
+* @see template_preprocess_block()
+*/
+#}
+{%
+  set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% if is_accordion %}
+    {% set id = "accordion-" ~ id %}
+    <div class="collection--accordion">
+      {{ content.field_artsci_headline }}
+      <div class="{{ accordion_container_classes }}" role="tablist" {% if aria_owns is not empty %}
+        aria-owns="{{ aria_owns }}"
+      {% endif %} aria-multiselectable="{{ multiselect }}" id="{{ id }}">
+        {{ content|without('field_artsci_headline') }}
+      </div>
+    </div>
+  {% elseif is_tab %}
+    {{ attach_library('atomic_artsci/tabs') }}
+    {% set tab_id = "tabs--" ~ id %}
+    <div class="collection--tabs tabs-collection" id="{{ tab_id }}">
+      {{ content.field_artsci_headline }}
+      {# Tab navigation buttons #}
+      <div role="tablist" aria-label="{{ content.field_artsci_headline|render|striptags|trim }}">
+        {% for tab in tab_nav %}
+          <button role="tab"
+                  id="tabs--{{ tab.id }}__{{ tab.delta }}"
+                  aria-controls="tabs--{{ tab.id }}__panel--{{ tab.delta }}"
+                  aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                  {{ loop.first ? '' : 'tabindex="-1"' }}>
+            {{ tab.label }}
+          </button>
+        {% endfor %}
+      </div>
+      {# Tab panels (rendered by paragraph--artsci-collection-item--tab.html.twig) #}
+      {{ content|without('field_artsci_headline') }}
+    </div>
+  {% else %}
+    <div class="collection--descriptive-list">
+      <dl>
+        {{ content }}
+      </dl>
+    </div>
+  {% endif %}
+</div>

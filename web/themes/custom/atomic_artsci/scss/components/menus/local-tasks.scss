@@ -1,0 +1,129 @@
+@use '../../abstracts/variables';
+@use '../../abstracts/_utilities.scss';
+
+.block-local-tasks-block {
+  .tabs {
+    margin: 0;
+    list-style-type: none;
+    background: variables.$white;
+    @extend %no-ul-list;
+  }
+
+  .tabs::after,
+  .tabs::before {
+    display: table;
+    content: ' ';
+    flex:1 0 0;
+    order: 1;
+  }
+
+  .tabs::after {
+    clear: both;
+  }
+
+  .tab,
+  .tabs li {
+    float: left;
+  }
+
+  .tab > a,
+  .tabs li > a {
+    display: block;
+    text-decoration: none;
+    color: variables.$blk;
+    line-height: 1;
+    @include utilities.padding(variables.$top: variables.$md, variables.$right: variables.$lg, variables.$bottom: variables.$md, variables.$left:variables.$lg);
+  }
+
+  .tabs {
+    li {
+      border-bottom: 1px solid rgba(0,0,0,.125);
+
+      .layout-builder-disabled & {
+        @include utilities.breakpoint(sm) {
+          margin-bottom: variables.$md;
+          margin-top: variables.$md;
+        }
+      }
+    }
+  }
+
+  .tabs > li > a.local-task-icon {
+    &:focus,
+    &:hover {
+      background: #f3f3f3;
+      text-decoration: underline;
+    }
+
+    &.is-active {
+      background: none;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: variables.$primary;
+        content: "";
+      }
+    }
+  }
+
+  .local-task-icon {
+    &.local-task-icon--delete {
+      color: variables.$danger;
+    }
+
+    &:focus:before,
+    &:hover:before {
+      color: variables.$secondary;
+    }
+
+    &:before {
+      @include utilities.fas();
+      margin-right: 15px;
+      color: variables.$gray;
+      font-size: 13px;
+    }
+
+    &.local-task-icon--view::before {
+      content: "\f06e";
+    }
+
+    &.local-task-icon--edit::before {
+      content: "\f044";
+    }
+
+    &.local-task-icon--delete::before {
+      content: "\f2ed";
+      color: variables.$danger;
+    }
+
+    &.local-task-icon--layout::before {
+      content: "\f009";
+    }
+
+    &.local-task-icon--history::before {
+      content: "\f1da";
+    }
+
+    &.local-task-icon--usage::before {
+      content: "\f0c1";
+    }
+
+    &.local-task-icon--devel::before {
+      content: "\f121";
+    }
+
+    &.local-task-icon--replicate::before {
+      content: "\f24d";
+    }
+
+    &.local-task-icon--latest::before {
+      content: "\f0c5";
+    }
+  }
+}
+

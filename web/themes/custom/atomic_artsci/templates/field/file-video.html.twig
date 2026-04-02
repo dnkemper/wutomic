@@ -15,9 +15,23 @@
 * @ingroup themeable
 */
 #}
-{{ attach_library('atomic_artsci/file') }}
-<video {{ attributes }}>
+{{ attach_library('atomic_artsci/video-cookie') }}
+  <div class="video-controls video">
+    {% if attributes.storage.autoplay and attributes.storage.muted %}
+    <button class="video-btn video-btn__pause" id="video-btn">
+      <span class="element-invisible">Pause</span>
+    </button>
+    {% else %}
+    <button class="video-btn video-btn__play" id="video-btn">
+      <span class="element-invisible">Play</span>
+    </button>
+    {% endif %}
+  </div>
+<video {{ attributes }} id="video-container">
   {% for file in files %}
     <source {{ file.source_attributes }} />
   {% endfor %}
+  {% if attributes.storage['data-decorative'] %}
+    <track kind="captions" src="{{ base_path ~ directory }}/assets/video/decorative-video-captions.vtt" srclang="en" label="No audio">
+  {% endif %}
 </video>

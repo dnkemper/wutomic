@@ -1,5 +1,5 @@
 layout_onecol:
-  label: 'Atomic Artsci - One column'
+  label: 'Artsci - One column'
   template: templates/layouts/layout--onecol
   library: atomic_artsci/onecol
   category: 'Columns: 1'
@@ -11,7 +11,7 @@ layout_onecol:
       label: Content
 
 layout_twocol:
-  label: 'Atomic Artsci - Two column'
+  label: 'Artsci - Two column'
   template: templates/layouts/layout--twocol
   library: atomic_artsci/twocol
   class: '\Drupal\layout_builder\Plugin\Layout\TwoColumnLayout'
@@ -26,7 +26,7 @@ layout_twocol:
       label: Second
 
 layout_threecol:
-  label: 'Atomic Artsci - Three column'
+  label: 'Artsci - Three column'
   template: templates/layouts/layout--threecol
   library: atomic_artsci/threecol
   class: '\Drupal\layout_builder\Plugin\Layout\ThreeColumnLayout'
@@ -43,7 +43,7 @@ layout_threecol:
       label: Third
 
 layout_fourcol:
-  label: 'Atomic Artsci - Four column'
+  label: 'Artsci - Four column'
   template: templates/layouts/layout--fourcol
   library: atomic_artsci/fourcol
   category: 'Columns: 4'
@@ -61,7 +61,7 @@ layout_fourcol:
       label: Fourth
 
 layout_onecol_fixed:
-  label: 'Atomic Artsci - One column fixed'
+  label: 'Artsci - One column fixed'
   template: templates/layouts/layout--onecol--fixed
   library: atomic_artsci/onecol--fixed
   category: 'Columns: 1'
@@ -73,7 +73,7 @@ layout_onecol_fixed:
       label: Content
 
 layout_header:
-  label: 'Atomic Artsci - Header layout with background media'
+  label: 'Artsci - Header layout with background media'
   template: templates/layouts/layout--onecol--background
   library: atomic_artsci/onecol--background
   category: 'Columns: 1'
@@ -87,7 +87,7 @@ layout_header:
       label: Background
 
 layout_page:
-  label: 'Atomic Artsci - Page w/ left sidebar'
+  label: 'Artsci - Page w/ left sidebar'
   template: templates/layouts/layout--page--left-sidebar
   library: atomic_artsci/page--left-sidebar
   category: 'Columns: 2'
@@ -101,7 +101,7 @@ layout_page:
       label: Content
 
 layout_twocol_card_sidebar:
-  label: 'Atomic Artsci - Two column with card sidebar'
+  label: 'Artsci - Two column with card sidebar'
   template: templates/layouts/layout--twocol--card-sidebar
   library: atomic_artsci/twocol
   category: 'Columns: 2'

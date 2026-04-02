@@ -1,0 +1,95 @@
+// ==========================================================================
+// Component: Media
+// ==========================================================================
+
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+// --------------------------------------------------------------------------
+// Media modifiers
+// --------------------------------------------------------------------------
+
+.media--border {
+  img {
+    padding: 0.5rem;
+    border: 2px solid var(--transparent-border);
+  }
+}
+
+.media--circle {
+  border-radius: 50%;
+  margin-top: 0;
+  height: auto;
+
+  img {
+    aspect-ratio: 1 / 1;
+    margin-top: 0;
+    height: auto;
+    border-radius: 50%;
+  }
+}
+
+.media--circle .img--empty {
+  border-radius: 50%;
+  margin-top: 0;
+  height: auto;
+}
+
+.media--cover {
+  img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Aspect ratio overrides for iframes
+// --------------------------------------------------------------------------
+
+.media--1-1 {
+  iframe { aspect-ratio: 1 / 1; }
+}
+
+.media--4-3 {
+  iframe { aspect-ratio: 4 / 3; }
+}
+
+.media--16-9 {
+  iframe { aspect-ratio: 16 / 9; }
+}
+
+.media--21-9 {
+  iframe { aspect-ratio: 21 / 9; }
+}
+
+.media--1-1,
+.media--4-3,
+.media--16-9,
+.media--21-9 {
+  iframe {
+    width: 100%;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Border colors on dark backgrounds
+// --------------------------------------------------------------------------
+
+.media--border img {
+  [class*="bg--black"] & {
+    background: #f3f3f3;
+    box-shadow: inset 0 0 0 8px variables.$secondary;
+  }
+  [class*="bg--black"] [class*="bg--gold"] & {
+    box-shadow: inset 0 0 0 8px variables.$primary;
+  }
+  [class*="bg--black"] [class*="bg--white"] & {
+    box-shadow: inset 0 0 0 8px #fff;
+    background: variables.$gray-light;
+  }
+  [class*="bg--black"] [class*="bg--gray"] & {
+    box-shadow: inset 0 0 0 8px variables.$light;
+    background: variables.$brand-cool-gray;
+  }
+}

@@ -1,0 +1,19 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.layout--fourcol {
+  .layout__spacing_container {
+    @include utilities.grid-base;
+    @include utilities.breakpoint(md) {
+      // @todo Move to UIDS as a four column mixin.
+      gap: variables.$desktop-width-gutter;
+      grid-template-columns: repeat(auto-fill, minmax(21%, 1fr));
+    }
+  }
+  &.column-spacing__removed {
+    .layout__spacing_container {
+      gap: 0;
+      column-gap: 0;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{% extends '@atomic_artsci/layout/header.html.twig' %}
+
+{% set is_homepage = true %}
+
+{% block artsci_bar %}
+
+  {% if page.action_menu %}
+    {{ page.action_menu }}
+  {% endif %}
+
+  {% if page.search %}
+    {% include '@atomic_artsci/artsci/global/search-toggle.html.twig' with {
+      'search_form': page.search,
+      'under_search': page.under_search,
+    } %}
+  {% endif %}
+
+  {% if header_nav == 'toggle' %}
+    {% include '@atomic_artsci/navigation/toggle-nav.html.twig' %}
+  {% endif %}
+
+{% endblock %}

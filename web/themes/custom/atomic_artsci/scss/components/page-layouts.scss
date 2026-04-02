@@ -1,0 +1,66 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+aside .region,
+.layout-content .region {
+  padding: 0;
+  border: none;
+}
+
+.layout-container {
+  @include utilities.container-width;;
+}
+
+.page__container {
+  @include utilities.container-width;;
+
+  &--mixed {
+    @include utilities.container-width;;
+  }
+}
+
+.flex__wrapper {
+  @include utilities.breakpoint(sm) {
+    flex-wrap: wrap;
+    display: flex;
+  }
+}
+
+
+// layout_builder_styles full width override
+.page__container.page__container--full {
+  max-width: 100%;
+}
+
+// sticky footer
+.dialog-off-canvas-main-canvas {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+// todo - add styles for College main content margins when sticky
+main {
+  flex: 1 0 auto;
+}
+
+.header-sticky {
+  &.header--healthcare {
+    @include utilities.breakpoint(md) {
+      padding-top: 100px;
+    }
+    &.below {
+      @include utilities.breakpoint(md) {
+        padding-top: 140px;
+      }
+    }
+  }
+  @include utilities.breakpoint(md) {
+    padding-top: 80px;
+  }
+  &.below {
+    @include utilities.breakpoint(md) {
+      padding-top: 130px;
+    }
+  }
+}

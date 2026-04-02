@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Theme override to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ */
+#}
+
+{% include '@atomic_artsci/templates/layout/header--inline.html.twig' with {
+  'site_name': site_name,
+  'site_url': path('<front>'),
+  'header_branding': 'artsci',
+  'header_nav': 'inline',
+  'artsci_logo': true,
+  'header_classes': [' ']
+} %}
+
+<main role="main" class="content__container">
+  <div class="layout__container layout__container section-padding__top-extra text-align-center">
+    <div class="layout__spacing_container">
+      <a id="main-content" tabindex="-1"></a>
+      {% if title %}
+        <h1>{{ title }}</h1>
+      {% endif %}
+      <p>{{ page.content }}</p>
+    </div>
+  </div>
+</main>

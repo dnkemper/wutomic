@@ -1,0 +1,216 @@
+// ==========================================================================
+// CAROUSEL BASE — Shared primitives
+//
+// @use 'carousel-base' as cb;
+// Then use: @include cb.arrow-button; etc.
+//
+// All carousel variants share arrow buttons, dot pagination,
+// pre-title styling, and decorative lines.
+// ==========================================================================
+
+// ── Tokens (use CSS custom properties for runtime, SCSS for compile) ──
+$_red:        var(--brand-red, #BA0C2F);
+$_teal:       var(--brand-teal, #007360);
+$_teal-dark:  var(--brand-teal-dark, #00573F);
+$_black:      #1a1a1a;
+$_white:      #fff;
+$_gray-300:   var(--color-gray-300, #B5B5B5);
+$_gray-700:   var(--color-gray-700, #555);
+
+$_font-serif: var(--font-serif, 'Playfair Display', Georgia, serif);
+$_font-sans:  var(--font-sans, 'Montserrat', -apple-system, sans-serif);
+
+$_transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ==========================================================================
+// ARROW BUTTON — circular nav button
+// ==========================================================================
+@mixin arrow-button($size: 40px) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  background: $_white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+  color: $_black;
+  font-size: 0.875rem;
+  line-height: 1;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $_red;
+    color: $_red;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $_red;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+// Light variant for dark backgrounds
+@mixin arrow-button-light($size: 40px) {
+  @include arrow-button($size);
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: $_white;
+  backdrop-filter: blur(4px);
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.9);
+    color: $_white;
+  }
+}
+
+// ==========================================================================
+// ARROW NAV — flex row of arrow buttons
+// ==========================================================================
+@mixin arrow-nav($gap: 0.625rem) {
+  display: flex;
+  gap: $gap;
+}
+
+// ==========================================================================
+// DOT PAGINATION
+// ==========================================================================
+@mixin dot-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin dot-button($active-color: $_red) {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid $_gray-300;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: $active-color;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $active-color;
+    outline-offset: 2px;
+  }
+
+  &.is-active {
+    background: $active-color;
+    border-color: $active-color;
+    transform: scale(1.15);
+  }
+}
+
+// ==========================================================================
+// PRE-TITLE
+// ==========================================================================
+@mixin pre-title {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: $_font-sans;
+  margin-bottom: var(--space-2, 0.5rem);
+}
+
+.pretitle--red-caps {
+  @include pre-title;
+  color: $_red;
+}
+
+.pretitle--subtle {
+  @include pre-title;
+  color: $_gray-700;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+// ==========================================================================
+// SECTION TITLE
+// ==========================================================================
+@mixin section-title {
+  font-size: var(--text-2xl, 2rem);
+  font-family: $_font-serif;
+  font-weight: 700;
+  line-height: var(--leading-tight, 1.15);
+  color: $_black;
+  margin: 0;
+}
+
+// ==========================================================================
+// DECORATIVE LINES
+// ==========================================================================
+.deco-vline {
+  width: 2px;
+  height: 40px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+
+  &--top    { margin-bottom: var(--space-6, 1.5rem); }
+  &--bottom { margin-top: var(--space-6, 1.5rem); }
+  &--red    { background: $_red; }
+  &--black  { background: $_black; }
+}
+
+.deco-hline {
+  border: none;
+  height: 1px;
+  background: $_gray-300;
+  margin: var(--space-8, 2rem) 0;
+
+  &--red {
+    height: 3px;
+    background: $_red;
+  }
+}
+
+// ==========================================================================
+// CARD IMAGE — consistent aspect ratio container
+// ==========================================================================
+@mixin card-image($ratio: 16 / 10) {
+  aspect-ratio: $ratio;
+  overflow: hidden;
+
+  img,
+  .media,
+  .media__inner {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+// ==========================================================================
+// GRADIENT OVERLAY — bottom fade for text on images
+// ==========================================================================
+@mixin gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  z-index: 1;
+}

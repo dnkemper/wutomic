@@ -1,0 +1,96 @@
+// ==========================================================================
+// ATOMIC ARTSCI — Main SCSS Entry Point
+// ==========================================================================
+//
+// Architecture: Modified 7-1 pattern
+//   abstracts/  → Variables, mixins, functions (no CSS output)
+//   base/       → Resets, typography, root-level elements
+//   components/ → BEM component blocks (blocks/, paragraphs/, decorative/)
+//   layout/     → Page structure, regions, Layout Builder sections
+//   utilities/  → LB Style utility classes, show/hide, alignment
+//   vendor/     → Third-party overrides
+//
+// Each component SCSS file maps 1:1 to a library in libraries.yml.
+// Components are loaded on-demand via {{ attach_library() }}, NOT globally.
+// Only abstracts, base, layout, and utilities compile into the global CSS.
+//
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// 1. ABSTRACTS — No CSS output, available everywhere via @use
+// --------------------------------------------------------------------------
+// These are @use'd by individual component files, not @use'd here.
+// Listed for reference:
+//   abstracts/_tokens.scss        → Design tokens (colors, spacing, fonts)
+//   abstracts/_mixins.scss        → Reusable mixins
+//   abstracts/_breakpoints.scss   → Media query breakpoints
+//   abstracts/_typography.scss    → Font stacks, type scale
+
+// --------------------------------------------------------------------------
+// 2. BASE — Global resets and element-level styles
+// --------------------------------------------------------------------------
+@use 'base/reset';
+@use 'base/typography';
+@use 'base/links';
+
+// --------------------------------------------------------------------------
+// 3. LAYOUT — Page structure, header/footer, LB sections
+// --------------------------------------------------------------------------
+@use 'layout/page';
+@use 'layout/header';
+@use 'layout/footer';
+@use 'layout/sections';
+
+// --------------------------------------------------------------------------
+// 4. UTILITIES — LB Style utility classes (loaded globally)
+// --------------------------------------------------------------------------
+@use 'utilities/backgrounds';
+@use 'utilities/text';
+@use 'utilities/spacing';
+@use 'utilities/decorative';
+@use 'utilities/visibility';
+
+// --------------------------------------------------------------------------
+// 5. COMPONENTS — NOT useed here (loaded per-template via libraries.yml)
+// --------------------------------------------------------------------------
+// Each component compiles to its own CSS file and is attached in Twig.
+// See libraries.yml for the mapping.
+//
+// Components listed for reference:
+//
+// Blocks:
+//   components/blocks/_featured-content.scss
+//   components/blocks/_collection.scss
+//   components/blocks/_image-callout.scss
+//   components/blocks/_content-block.scss
+//   components/blocks/_call-to-action.scss
+//   components/blocks/_video-block.scss
+//   components/blocks/_testimonial.scss
+//   components/blocks/_card-collection.scss
+//   components/blocks/_banner.scss
+//   components/blocks/_ampersand-banner.scss
+//   components/blocks/_statement.scss
+//   components/blocks/_image-carousel.scss
+//   components/blocks/_media-carousel.scss
+//   components/blocks/_component-tabs.scss
+//   components/blocks/_gallery.scss
+//   components/blocks/_social-embed.scss
+//   components/blocks/_anchor-links.scss
+//
+// Paragraphs:
+//   components/paragraphs/_featured-item.scss
+//   components/paragraphs/_testimonial-item.scss
+//   components/paragraphs/_stat-card.scss
+//   components/paragraphs/_carousel-slide.scss
+//   components/paragraphs/_tab-item.scss
+//   components/paragraphs/_gallery-item.scss
+//
+// Decorative:
+//   components/decorative/_carousel.scss       (shared carousel core)
+//   components/decorative/_stories-carousel.scss
+//   components/decorative/_deco-lines.scss
+
+// --------------------------------------------------------------------------
+// 6. VENDOR — Third-party overrides
+// --------------------------------------------------------------------------
+@use 'vendor/photoswipe-overrides';

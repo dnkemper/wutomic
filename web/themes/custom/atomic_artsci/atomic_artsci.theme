@@ -2,20 +2,1989 @@
 
 /**
  * @file
- * Functions to support theming.
+ * Functions to support theming in the atomic_artsci theme.
  */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
+use Drupal\block\Entity\Block;
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\block_content\BlockContentInterface;
+use Drupal\fragments\Entity\FragmentInterface;
+use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
+use Drupal\atomic_artsci\ArtsciPreRender;
+use Drupal\artsci_core\HeadlineHelper;
+use Drupal\artsci_core\LinkHelper;
+use Drupal\views\Plugin\views\field\EntityField;
 
 /**
- * Implements hook_preprocess_image_widget().
+ * Implements hook_preprocess_paragraph() for carousel_slide.
+ *
+ * Extracts link URL/text and detects parent carousel size
+ * (large, mini, paged, stats) using the static bridge.
  */
-function atomic_artsci_preprocess_image_widget(array &$variables): void {
-  $data = &$variables['data'];
+function atomic_artsci_preprocess_paragraph__carousel_slide(array &$variables): void {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
 
-  // This prevents image widget templates from rendering preview container HTML
-  // to users that do not have permission to access these previews.
-  // @todo revisit in https://drupal.org/node/953034
-  // @todo revisit in https://drupal.org/node/3114318
-  if (isset($data['preview']['#access']) && $data['preview']['#access'] === FALSE) {
-    unset($data['preview']);
+  $variables['slide_link_url'] = NULL;
+  $variables['slide_link_text'] = NULL;
+
+  if ($paragraph->hasField('field_link') && !$paragraph->get('field_link')->isEmpty()) {
+    $link = $paragraph->get('field_link')->first();
+    $variables['slide_link_url'] = $link->getUrl()->toString();
+    $variables['slide_link_text'] = $link->get('title')->getValue();
   }
+
+  // Read carousel size from static bridge (set by block preprocess).
+  $variables['parent_carousel_size'] = 'large';
+  $parent = $paragraph->getParentEntity();
+  if ($parent && $parent instanceof \Drupal\block_content\BlockContentInterface) {
+    $variables['parent_carousel_size'] = _atomic_artsci_carousel_size_bridge($parent->id());
+
+    // Override: banner carousel slides are always mini.
+    $parent_field = $paragraph->get('parent_field_name')->value ?? '';
+    if ($parent_field === 'field_banner_carousel_slides') {
+      $variables['parent_carousel_size'] = 'mini';
+    }
+  }
+}
+
+/**
+ * Stores/retrieves carousel size for a block content entity.
+ *
+ * Bridges block preprocess (has LB Styles) → paragraph preprocess (doesn't).
+ * Block preprocess stores; paragraph preprocess reads.
+ *
+ * @param int|string $block_content_id
+ *   The block content entity ID.
+ * @param string|null $size
+ *   If provided, stores this size. If NULL, retrieves.
+ *
+ * @return string
+ *   The carousel size ('large', 'mini', 'paged', 'stats').
+ */
+function _atomic_artsci_carousel_size_bridge($block_content_id, ?string $size = NULL): string {
+  static $sizes = [];
+  if ($size !== NULL) {
+    $sizes[$block_content_id] = $size;
+  }
+  return $sizes[$block_content_id] ?? 'large';
+}
+
+/**
+ * Implements hook_preprocess_paragraph() for featured_item.
+ *
+ * Passes parent display mode and detects video entities.
+ */
+function atomic_artsci_preprocess_paragraph__featured_item(array &$variables): void {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
+
+  // Default display mode.
+  $variables['parent_display_mode'] = 'grid_2col';
+  $variables['is_video'] = FALSE;
+  $variables['slide_link_url'] = NULL;
+
+  // Get parent display mode.
+  $parent = $paragraph->getParentEntity();
+  if ($parent && $parent instanceof \Drupal\block_content\BlockContentInterface) {
+    if ($parent->hasField('field_display_mode') && !$parent->get('field_display_mode')->isEmpty()) {
+      $variables['parent_display_mode'] = $parent->get('field_display_mode')->value;
+    }
+  }
+
+  // Extract link URL from either the entity reference or manual link.
+  if ($paragraph->hasField('field_referenced_content') && !$paragraph->get('field_referenced_content')->isEmpty()) {
+    $referenced = $paragraph->get('field_referenced_content')->entity;
+    if ($referenced) {
+      $variables['slide_link_url'] = $referenced->toUrl()->toString();
+
+      // Check if entity has video (for the "Watch" badge).
+      if ($referenced->hasField('field_video') && !$referenced->get('field_video')->isEmpty()) {
+        $variables['is_video'] = TRUE;
+      }
+      // Also check media field for video bundle.
+      if ($referenced->hasField('field_image') && !$referenced->get('field_image')->isEmpty()) {
+        $media = $referenced->get('field_image')->entity;
+        if ($media && $media->bundle() === 'remote_video') {
+          $variables['is_video'] = TRUE;
+        }
+      }
+    }
+  }
+  elseif ($paragraph->hasField('field_link_url') && !$paragraph->get('field_link_url')->isEmpty()) {
+    $link = $paragraph->get('field_link_url')->first();
+    $variables['slide_link_url'] = $link->getUrl()->toString();
+  }
+}
+
+
+// ==========================================================================
+// 1. REPLACE the existing atomic_artsci_preprocess_block() with this version.
+//    It merges the old logic + the new LB styles mapper.
+// ==========================================================================
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function atomic_artsci_preprocess_block(&$variables) {
+$variables['atomic_artsci_container_settings'] = theme_get_setting('layout.container');
+
+  // ------------------------------------------------------------------
+  // LB Styles → Twig variable mapping
+  // ------------------------------------------------------------------
+  $style_classes = _atomic_artsci_get_lb_style_classes($variables);
+
+  // Defaults for ALL LB style variables.
+  $lb_defaults = [
+    // Color / Background
+    'bg_color' => NULL,
+    'bg_image_treatment' => NULL,
+    // Typography
+    'text_alignment' => NULL,
+    'title_color' => NULL,
+    'heading_size' => NULL,
+    'pre_title_style' => NULL,
+    'text_size' => NULL,
+    // Layout / Positioning
+    'layout_columns' => NULL,
+    'display_mode' => NULL,
+    'image_alignment' => NULL,
+    'image_offset' => FALSE,
+    'use_as_header' => FALSE,
+    'video_display' => NULL,
+    'carousel_size' => NULL,
+    'featured_size' => NULL,
+    'section_width' => NULL,
+    // Link / Button
+    'link_style' => NULL,
+    'link_as_button' => FALSE,
+    // Tabs
+    'tab_style' => NULL,
+    // Interactive
+    'hover_expand' => FALSE,
+    // Show / Hide
+    'show_search' => FALSE,
+    'show_view_toggle' => FALSE,
+    'show_date_browser' => FALSE,
+    'show_reset_button' => FALSE,
+    'show_ampersand' => FALSE,
+    'show_divider' => FALSE,
+  ];
+
+  // Set defaults.
+  foreach ($lb_defaults as $var => $default) {
+    $variables[$var] = $default;
+  }
+
+  // Class → variable map.
+  $style_map = [
+    // Background color
+    'bg--white'              => ['bg_color' => 'white'],
+    'bg--warm-gray'          => ['bg_color' => 'warm_gray'],
+    'bg--cool-gray'          => ['bg_color' => 'cool_gray'],
+    'bg--tan'                => ['bg_color' => 'tan'],
+    'bg--teal'               => ['bg_color' => 'teal'],
+    'bg--red'                => ['bg_color' => 'red'],
+
+    // Background image treatment
+    'bg-image--fullwidth'    => ['bg_image_treatment' => 'fullwidth'],
+    'bg-image--shield'       => ['bg_image_treatment' => 'shield'],
+
+    // Text alignment
+    'align--left'            => ['text_alignment' => 'left'],
+    'align--center'          => ['text_alignment' => 'center'],
+
+    // Title color
+    'title--black'           => ['title_color' => 'black'],
+    'title--red'             => ['title_color' => 'red'],
+
+    // Heading size
+    'heading--xl'            => ['heading_size' => 'xl'],
+
+    // Pre-title style
+    'pretitle--red-caps'     => ['pre_title_style' => 'red_caps'],
+    'pretitle--subtle'       => ['pre_title_style' => 'subtle'],
+
+    // Text size
+    'text--large'            => ['text_size' => 'large'],
+    'text--medium'           => ['text_size' => 'medium'],
+
+    // Layout columns
+    'layout--1col'           => ['layout_columns' => '1col'],
+    'layout--2col'           => ['layout_columns' => '2col'],
+
+    // Display mode
+    'display--grid'          => ['display_mode' => 'grid'],
+    'display--list'          => ['display_mode' => 'list'],
+
+    // Image alignment
+    'img--right'             => ['image_alignment' => 'right'],
+    'img--left'              => ['image_alignment' => 'left'],
+
+    // Image offset
+    'img--offset'            => ['image_offset' => TRUE],
+
+    // Use as header
+    'callout--as-header'     => ['use_as_header' => TRUE],
+
+    // Video display
+    'video--centered'        => ['video_display' => 'centered'],
+    'video--fullscreen'      => ['video_display' => 'fullscreen'],
+    'video--right'           => ['video_display' => 'right'],
+
+    // Carousel size
+    'carousel--large'        => ['carousel_size' => 'large'],
+    'carousel--mini'         => ['carousel_size' => 'mini'],
+    'carousel--paged'        => ['carousel_size' => 'paged'],
+    'carousel--stats'        => ['carousel_size' => 'stats'],
+
+    // Featured item size
+    'featured--large'        => ['featured_size' => 'large'],
+    'featured--small'        => ['featured_size' => 'small'],
+
+    // Section width
+    'section--contained'     => ['section_width' => 'contained'],
+    'section--full-width'    => ['section_width' => 'full_width'],
+
+    // Decorative vertical line
+    'deco-vline--top-red'    => ['deco_vline' => 'top_red'],
+    'deco-vline--top-black'  => ['deco_vline' => 'top_black'],
+    'deco-vline--bottom-red' => ['deco_vline' => 'bottom_red'],
+    'deco-vline--bottom-black' => ['deco_vline' => 'bottom_black'],
+
+    // Decorative horizontal line
+    'deco-hline--top'        => ['deco_hline' => 'top'],
+    'deco-hline--bottom-red' => ['deco_hline' => 'bottom_red'],
+
+    // Link style
+    'link--underline'        => ['link_style' => 'underline'],
+    'link--arrow'            => ['link_style' => 'arrow'],
+    'link--button'           => ['link_style' => 'button'],
+    'link--button-outline'   => ['link_style' => 'button_outline'],
+    'link--allcaps'          => ['link_style' => 'allcaps'],
+    'link--external'         => ['link_style' => 'external'],
+
+    // Link as button
+    'link-as--button'        => ['link_as_button' => TRUE],
+
+    // Tab style
+    'tabs--button'           => ['tab_style' => 'button'],
+    'tabs--line'             => ['tab_style' => 'line'],
+
+    // Hover
+    'hover--expand'          => ['hover_expand' => TRUE],
+    'hover--none'            => ['hover_expand' => FALSE],
+
+    // Show / Hide toggles
+    'show--search'           => ['show_search' => TRUE],
+    'show--view-toggle'      => ['show_view_toggle' => TRUE],
+    'show--date-browser'     => ['show_date_browser' => TRUE],
+    'show--reset'            => ['show_reset_button' => TRUE],
+    'show--ampersand'        => ['show_ampersand' => TRUE],
+    'show--divider'          => ['show_divider' => TRUE],
+  ];
+
+  // Apply class→variable mapping.
+  foreach ($style_classes as $class) {
+    if (isset($style_map[$class])) {
+      foreach ($style_map[$class] as $var => $value) {
+        $variables[$var] = $value;
+      }
+    }
+  }
+
+  // Featured Content: pass display mode to child paragraphs.
+  if ($variables['derivative_plugin_id'] === 'featured_content') {
+    if (isset($variables['elements']['content']['#block_content'])) {
+      $block_content = $variables['elements']['content']['#block_content'];
+      $display_mode = 'grid_2col';
+      if ($block_content->hasField('field_display_mode') && !$block_content->get('field_display_mode')->isEmpty()) {
+        $display_mode = $block_content->get('field_display_mode')->value;
+      }
+      // Store for the block template.
+      $variables['display_mode_value'] = $display_mode;
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // EXISTING block preprocess logic (keep everything below unchanged
+  // from your current theme file — menu blocks, banner, button,
+  // statistic, collection, quote, etc.)
+  // ------------------------------------------------------------------
+
+  // ... [KEEP ALL YOUR EXISTING derivative_plugin_id LOGIC HERE] ...
+  // The code for menus, artsci_banner, artsci_button, artsci_statistic,
+  // artsci_collection, artsci_quote, page_title_hero, etc. stays as-is.
+  // Only the LB style mapper section above is new.
+
+  // ------------------------------------------------------------------
+  // NEW: Block-specific preprocess for Artsci blocks
+  // ------------------------------------------------------------------
+  $derivative = $variables['derivative_plugin_id'] ?? '';
+
+  // Component Tabs: extract tab nav data from paragraphs.
+  if ($derivative === 'component_tabs') {
+    _atomic_artsci_preprocess_component_tabs($variables);
+  }
+  if (in_array($variables['base_plugin_id'], [
+    'system_menu_block',
+    'menu_block',
+  ])) {
+
+    // Add the region to the block's available attributes.
+    if (isset($variables['elements']['#id'])) {
+      $region = Block::load($variables['elements']['#id'])->getRegion();
+      if ($region === 'footer_second') {
+        $variables['attributes']['class'][] = 'footer__links';
+        $variables['attributes']['class'][] = 'footer__links--nav';
+      }
+            if ($region === 'footer_first') {
+        $variables['attributes']['class'][] = 'footer__links';
+        $variables['attributes']['class'][] = 'footer__links--icon';
+      }
+    }
+
+    switch ($variables['derivative_plugin_id']) {
+      case 'external-quick-links':
+        $variables['attributes']['class'][] = 'menu--group';
+        break;
+      case 'block-atomic-artsci-subscribeblock':
+      case 'block-atomic-artsci-footerprimary':
+        $variables['attributes']['class'][] = 'footer__links';
+        $variables['attributes']['class'][] = 'footer__links--nav';
+        break;
+      case 'top-links':
+        $variables['attributes']['class'][] = 'menu--top';
+        $variables['attributes']['class'][] = 'nav';
+        break;
+
+      case 'search-links':
+        $variables['attributes']['class'][] = 'menu--quick-links';
+        break;
+
+      case 'main':
+        // Initialize a static counter variable.
+        static $block_counter = 0;
+        // Make the block title available to pass to accessible-menu.init.js.
+        if (isset($variables['elements']['content']['#title'])) {
+          $block_title = $variables['elements']['content']['#title']['#markup'];
+          $block_counter++;
+
+          // Create a unique identifier for the block using the counter.
+          $block_identifier = 'block-' . $block_counter;
+
+          // Set the data-block-name attribute with the unique identifier.
+          $variables['attributes']['data-block-name'] = $block_identifier;
+
+          if ($variables['configuration']['label_type'] == 'block') {
+            $block_title = t('Section');
+          }
+
+          // Use the unique identifier as the key in the drupalSettings array.
+          $variables['#attached']['drupalSettings']['block_title'][$block_identifier] = $block_title;
+        }
+        break;
+
+    }
+  }
+
+  // Add the system breadcrumb to the page title hero block.
+  if ($variables['derivative_plugin_id'] === 'artsci_page_title_hero') {
+    $block_manager = \Drupal::service('plugin.manager.block');
+    $config = [];
+    $plugin_block = $block_manager->createInstance('system_breadcrumb_block', $config);
+
+    $variables['page_title'] = NULL;
+    $variables['body_summary'] = NULL;
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof NodeInterface) {
+      $variables['page_title'] = $node->getTitle();
+
+      // Add the body summary for page title hero.
+      if ($node->hasField('body') && !$node->get('body')->isEmpty()) {
+        $variables['body_summary'] = $node->get('body')->view([
+          'type' => 'text_summary_or_trimmed',
+          'label' => 'hidden',
+          'settings' => ['trim_length' => 300],
+        ]);
+      }
+    }
+    else {
+      $request = \Drupal::request();
+      $route_match = \Drupal::routeMatch();
+      $variables['page_title'] = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+    }
+
+    $variables['breadcrumb'] = $plugin_block->build();
+  }
+
+  if ($variables['derivative_plugin_id'] === 'artsci_banner') {
+    $block = $variables['elements']['content']['#block_content'];
+
+    // Check for layout builder styles and
+    // extract media overlay and set variable for banner template.
+    if (!empty($variables['elements']['#layout_builder_style'])) {
+      $styles = $variables['elements']['#layout_builder_style'];
+
+      $media_overlay = array_values(array_filter(
+        $styles,
+        function ($value) {
+          return is_string($value) && str_starts_with($value, 'media_overlay_');
+        }
+      ))[0] ?? '';
+
+      $variables['layout_builder_style_media_overlay'] = $media_overlay;
+    }
+
+    // Remove headline classes from attributes.
+    $variables['headline_classes'] = array_filter($variables['elements']['#attributes']['class'], function ($v) {
+      return str_starts_with($v, 'headline');
+    });
+
+    // Remove button classes from attributes.
+    $variables['button_classes'] = array_filter($variables['elements']['#attributes']['class'], function ($v) {
+      return str_starts_with($v, 'bttn');
+    });
+
+    // Add banner--video class if bundle is a video.
+    // @todo revisit this class when https://github.com/artsci/artsci/issues/721 is completed.
+    if ($block->hasField('field_artsci_banner_image')) {
+      if (!$block->get('field_artsci_banner_image')->isEmpty()) {
+        $bundle_value = $block->get('field_artsci_banner_image')
+          ->first()
+          ->get('entity')
+          ->getValue();
+        if ($bundle_value) {
+          $bundle_type = $block->get('field_artsci_banner_image')
+            ->first()
+            ->get('entity')
+            ->getValue()
+            ->bundle();
+          if ($bundle_type === 'video') {
+            $variables['attributes']['class'][] = 'banner--video';
+          }
+        }
+      }
+    }
+
+    // Process links for the banner block.
+    if (isset($variables['elements']['content']['field_artsci_banner_link'])) {
+      $links = [];
+
+      foreach (Element::children($variables['elements']['content']['field_artsci_banner_link']) as $delta) {
+        $link = $variables['elements']['content']['field_artsci_banner_link'][$delta];
+
+        $url = $link['#url'] ?? NULL;
+        $title = $link['#title'] ?? NULL;
+
+        if ($url) {
+          if (LinkHelper::shouldClearTitle($title)) {
+            $title = NULL;
+          }
+
+          $links[] = [
+            'link_url' => $url->toString(),
+            'link_text' => $title,
+          ];
+        }
+      }
+
+      $variables['links'] = $links;
+    }
+  }
+
+  if ($variables['derivative_plugin_id'] === 'artsci_button') {
+    if (isset($variables['elements']['content']['field_artsci_button_link'])) {
+      $links = [];
+      foreach (Element::children($variables['elements']['content']['field_artsci_button_link']) as $delta) {
+        $link = $variables['elements']['content']['field_artsci_button_link'][$delta];
+        $links[] = [
+          'link_url' => $link['#url']->toString(),
+          'link_text' => $link['#title'],
+        ];
+      }
+      $variables['links'] = $links;
+    }
+  }
+
+  // Check if the hover effect should be applied on the stat block.
+  if ($variables['derivative_plugin_id'] === 'artsci_statistic') {
+    $class_array = $variables['elements']['#attributes']['class'] ?? [];
+    $variables['has_hover_effect'] = !in_array('stat--static', $class_array);
+  }
+
+  // Check if the collection view mode is accordion.
+  if ($variables['derivative_plugin_id'] === 'artsci_collection') {
+    // Get the block plugin instance.
+    // Check if the block is a configured block plugin.
+    if (isset($variables['elements']['content']['#block_content'])) {
+      // If it is, get the block content entity.
+      $block_content = $variables['elements']['content']['#block_content'];
+      // Set the block ID using the block content ID.
+      $variables['id'] = $block_content->id();
+    }
+    if ($variables['content']['#view_mode'] === 'accordion') {
+      $variables['is_accordion'] = TRUE;
+    }
+    elseif ($variables['content']['#view_mode'] === 'tab') {
+      $variables['is_tab'] = TRUE;
+    }
+  }
+
+  // Check for blockquote image placement.
+  if ($variables['derivative_plugin_id'] === 'artsci_quote' && isset($variables['elements']['#attributes']['class'])) {
+    $variables['has_image_below'] = !in_array('blockquote--img-above', $variables['elements']['#attributes']['class']);
+    $variables['has_image_above'] = !in_array('blockquote--img-below', $variables['elements']['#attributes']['class']);
+  }
+
+  // Add banner__text class for caption to receive banner text colors.
+  if ($variables['derivative_plugin_id'] === 'node:article:field_image_caption') {
+    $variables['attributes']['class'][] = 'banner__text';
+  }
+
+}
+
+
+/**
+ * Flatten LB styles from grouped or flat array into a simple list of IDs.
+ */
+function _atomic_artsci_flatten_lb_styles($style_data): array {
+  if (!is_array($style_data)) {
+    return [];
+  }
+
+  $styles = [];
+  foreach ($style_data as $value) {
+    if (is_array($value)) {
+      $styles = array_merge($styles, $value);
+    }
+    else {
+      $styles[] = $value;
+    }
+  }
+
+  return $styles;
+}
+
+// ==========================================================================
+// 2. NEW HELPER: Extract tab navigation data for component_tabs block.
+// ==========================================================================
+
+/**
+ * Helper for component_tabs block preprocess.
+ *
+ * Extracts tab titles and IDs from the tab_item paragraphs for rendering
+ * the tab navigation buttons in the block template.
+ */
+function _atomic_artsci_preprocess_component_tabs(array &$variables): void {
+  $variables['tab_nav'] = [];
+
+  if (!isset($variables['elements']['content']['#block_content'])) {
+    return;
+  }
+
+  $block_content = $variables['elements']['content']['#block_content'];
+  if (!$block_content->hasField('field_tabs') || $block_content->get('field_tabs')->isEmpty()) {
+    return;
+  }
+
+  foreach ($block_content->get('field_tabs') as $delta => $item) {
+    $paragraph = $item->entity;
+    if ($paragraph && $paragraph->hasField('field_tab_title')) {
+      $tab_id = 'tab-' . $paragraph->id();
+      $variables['tab_nav'][] = [
+        'id' => $tab_id,
+        'label' => $paragraph->get('field_tab_title')->value,
+        'active' => ($delta === 0),
+      ];
+    }
+  }
+}
+
+// ==========================================================================
+// 3. NEW: Paragraph preprocess for stat_card to inherit parent LB styles.
+// ==========================================================================
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--stat-card.
+ *
+ * Passes hover_expand and link_as_button from the parent card_collection
+ * block's LB styles down to each stat_card paragraph.
+ */
+function atomic_artsci_preprocess_paragraph__stat_card(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $parent = $paragraph->getParentEntity();
+
+  if (!$parent) {
+    return;
+  }
+
+  // The parent block_content's LB styles are already parsed in
+  // preprocess_block and added to the block wrapper attributes.
+  // For paragraphs, we check the parent's rendered classes.
+  $variables['hover_expand'] = FALSE;
+  $variables['link_as_button'] = FALSE;
+
+  // These will be passed from the block template via Twig include context
+  // if using {% embed %} or {% include %} with parent variables.
+  // Alternatively, check the parent block_content for stored styles.
+}
+
+// ==========================================================================
+// 4. NEW: Theme suggestions for new block types and paragraph types.
+// ==========================================================================
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for blocks.
+ *
+ * Adds inline_block suggestion based on block content bundle.
+ */
+function atomic_artsci_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  // This is likely already handled by core or an existing contrib,
+  // but ensure our new block types get proper suggestions.
+  if (isset($variables['elements']['content']['#block_content'])) {
+    $block_content = $variables['elements']['content']['#block_content'];
+    if ($block_content instanceof \Drupal\block_content\BlockContentInterface) {
+      $bundle = $block_content->bundle();
+      $suggestions[] = 'block__inline_block__' . $bundle;
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for paragraphs.
+ *
+ * Ensures paragraph templates follow the pattern:
+ *   paragraph--{bundle}--{view_mode}.html.twig
+ */
+function atomic_artsci_theme_suggestions_paragraph_alter(array &$suggestions, array $variables) {
+  $paragraph = $variables['elements']['#paragraph'] ?? NULL;
+  if ($paragraph instanceof \Drupal\paragraphs\ParagraphInterface) {
+    $bundle = $paragraph->bundle();
+    $view_mode = $variables['elements']['#view_mode'] ?? 'default';
+    // Ensure bundle-specific suggestion exists.
+    $suggestions[] = 'paragraph__' . $bundle;
+    $suggestions[] = 'paragraph__' . $bundle . '__' . $view_mode;
+  }
+}
+
+// ==========================================================================
+// 5. REFERENCE: Existing helper that should NOT be changed.
+// ==========================================================================
+// _atomic_artsci_get_lb_style_classes() — KEEP AS-IS from your existing theme.
+// It correctly extracts classes from both block_content entity and attributes.
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function atomic_artsci_element_info_alter(&$info) {
+  // Add pre-render callback to status_messages to ensure consistent rendering.
+  if (isset($info['status_messages'])) {
+    $info['status_messages']['#pre_render'][] = [ArtsciPreRender::class, 'messagePlaceholder'];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function atomic_artsci_form_alter(&$form, $form_state, $form_id) {
+  $skip_forms = [
+    'media_library_add_form_upload',
+    'views_exposed_form',
+  ];
+  if (!in_array($form_id, $skip_forms)) {
+    // Add 'form' class to all forms except media library.
+    $form['#attributes']['class'][] = 'form';
+  }
+
+  if (strpos($form_id, 'node_page_layout_builder_form') !== FALSE) {
+    $form['actions']['#attributes']['class'][] = 'form';
+    $form['layout_builder_message']['#attributes']['class'][] = 'form';
+  }
+
+  if (strpos($form_id, 'artsci_search_form') !== FALSE) {
+    $form['#attributes']['class'][] = 'artsci-search';
+  }
+
+  if (strpos($form_id, 'webform_submission') !== FALSE) {
+    $form['#attached']['library'][] = 'atomic_artsci/webforms';
+  }
+  if ($form_id === 'views_exposed_form' && strpos($form['#id'], 'views-exposed-form-media-library-widget') === 0) {
+    $form['#attached']['library'][] = 'claro/media_library.theme';
+    $form['#attached']['library'][] = 'claro/views';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function atomic_artsci_form_views_exposed_form_alter(&$form, $form_state, $form_id) {
+  // Views to exclude.
+  $excluded_views = ['media_library'];
+
+  // For all views with exposed filters.
+  if ($form_id === 'views_exposed_form') {
+
+    $view = $form_state->getStorage('view');
+    $current_view_id = $view['view']->id();
+
+    if (in_array($current_view_id, $excluded_views)) {
+      return;
+    }
+
+    $form['#attributes']['class'][] = 'form bg--gray';
+    $form['#attached']['library'][] = 'artsci_core/exposedFormEnhancements';
+    // Fixes a bug with BEF, details here:
+    // https://www.drupal.org/project/better_exposed_filters/issues/3264403#comment-14803047
+    foreach ($form as $k => $v) {
+      if (str_contains($k, '_collapsible')) {
+        $form[$k]['#open'] = FALSE;
+      }
+    }
+  }
+
+  // For these views specifically.
+  $view_ids = ['book_toc', 'book_search'];
+  $view = $form_state->getStorage('view');
+  if ($form_id === 'views_exposed_form' && in_array($view['view']->id(), $view_ids)) {
+    $form['#attributes']['class'][] = 'artsci-search';
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function atomic_artsci_page_attachments_alter(array &$page) {
+  $font = [
+    '#tag' => 'link',
+    '#attributes' => [
+      'rel' => 'preconnect',
+      'href' => 'https://fonts.googleapis.com',
+    ],
+    '#weight' => -888,
+  ];
+  $page['#attached']['html_head'][] = [$font, 'Preconnect'];
+  $font_crossorigin = [
+    '#tag' => 'link',
+    '#attributes' => [
+      'rel' => 'preconnect',
+      'href' => 'https://fonts.gstatic.com',
+      'crossorigin' => 'anonymous',
+    ],
+    '#weight' => -888,
+  ];
+  $page['#attached']['html_head'][] = [$font_crossorigin, 'Crossorigin'];
+
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function atomic_artsci_preprocess(&$variables, $hook) {
+  $variables['base_path'] = base_path();
+    /** @var \Drupal\Core\Extension\ExtensionPathResolver $path_resolver */
+  $path_resolver = \Drupal::service('extension.path.resolver');
+   $variables['logo_path'] = '/' . $path_resolver->getPath('theme', 'atomic_artsci') . '/images/logo-header.png';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function atomic_artsci_preprocess_html(&$variables) {
+  $config = \Drupal::config('system.site');
+  $variables['site_has_parent'] = $config->get('has_parent');
+  // Body class for top links.
+  // Load the atomic_artsci_toplinks block entity.
+  if (class_exists('\Drupal\block\Entity\Block')) {
+    $block = Block::load('atomic_artsci_toplinks');
+    if ($block) {
+      // Initialize a variable to count the number of enabled menu links.
+      $enabled_links = 0;
+      // Load the 'top-links' menu tree.
+      $menu_links = \Drupal::menuTree()->load('top-links', new MenuTreeParameters());
+      // Iterate through the menu links.
+      foreach ($menu_links as $menu_link) {
+        // If the link is disabled, skip to the next link.
+        if (!$menu_link->link->isEnabled()) {
+          continue;
+        }
+        // Increment the number of enabled links.
+        $enabled_links++;
+      }
+      // Check if there are any enabled links in the menu.
+      $has_enabled_links = ($enabled_links > 0);
+      // Add the 'has_enabled_links' variable to the variables array,
+      // to be used in templates.
+      $variables['has_enabled_links'] = $has_enabled_links;
+      // Add the 'has_top_links' variable to the variables array,
+      // to be used in templates.
+      // If there are enabled links, set the variable to 'has-top-links',
+      // otherwise set it to 'no-top-links'.
+      $variables['has_top_links'] = ($variables['site_has_parent'] || $has_enabled_links) ? 'has-top-links' : 'no-top-links';
+    }
+  }
+
+  // Body classes for sidebars.
+  if (isset($variables['page']['sidebar_first']) && isset($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('layout-page-sidebars-both');
+  }
+  elseif (isset($variables['page']['sidebar_first'])) {
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('layout-page-sidebars-first');
+  }
+  elseif (isset($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('layout-page-sidebars-second');
+  }
+  else {
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('layout-page-sidebars-none');
+  }
+
+  $sticky_class = 'header-not-sticky';
+  // Only set to sticky if it is set and nav_style is 'toggle'.
+  if (theme_get_setting('header.nav_style') === 'toggle' && theme_get_setting('header.sticky')) {
+    $sticky_class = 'header-sticky';
+  }
+
+  $variables['attributes']['class'][] = $sticky_class;
+
+  $toppage = 'no-top-scroll';
+  // Used for page by page basis display of scroll to top button.
+  if (theme_get_setting('header.toppage')) {
+    $toppage = 'top-scroll';
+  }
+  $variables['attributes']['class'][] = $toppage;
+
+  // Get header type for setting sticky padding for tertiary header.
+  $variables['header_type'] = theme_get_setting('header.type');
+
+  // Get header branding type.
+  $variables['header_branding'] = theme_get_setting('header.branding_options');
+
+  // Set a variable for whether layout builder is enabled.
+  $variables['layout_builder_enabled'] = FALSE;
+
+  $style_selector = theme_get_setting('style.style_selector');
+  if ($style_selector !== NULL && $style_selector !== 'brand') {
+    $variables['#attached']['library'][] = 'atomic_artsci/theme-overrides';
+  }
+
+  if (theme_get_setting('style.style_selector') === 'gray') {
+    $variables['attributes']['class'][] = 'off-brand';
+    $css = ':root {--brand-primary: #d7d7d7!important;}';
+    $variables['#attached']['html_head'][] = [
+      [
+        '#type' => 'html_tag',
+        '#tag' => 'style',
+        '#value' => $css,
+        '#attributes' => [
+          'type' => 'text/css',
+        ],
+        '#weight' => 100,
+      ],
+      'custom_css',
+    ];
+  }
+
+  // Only set 'text--serif' if 'fonts.font-family' setting is set to serif.
+  if (theme_get_setting('fonts.font-family') === 'serif') {
+    $variables['attributes']['class'][] = 'text--serif';
+    $variables['#attached']['library'][] = 'atomic_artsci/global-serif';
+  }
+
+  $route_match = \Drupal::routeMatch();
+
+  // Loop through entity types that we have allow per item layout customization.
+  foreach ([
+    'fragment' => FragmentInterface::class,
+    'node' => NodeInterface::class,
+  ] as $entity_type => $interface_class) {
+    // Check if an entity of that type is loaded at the current route.
+    $route_entity = $route_match->getParameter($entity_type);
+    // Check if the entity is an instance of the corresponding interface class.
+    if ($route_entity instanceof $interface_class) {
+      // Defensive coding check to make sure our helper class is available.
+      if (class_exists('\Drupal\layout_builder_custom\LayoutBuilderHelper')) {
+        // Set a variable indicating that the Layout Builder UI is loaded.
+        $variables['layout_builder_enabled'] = \Drupal::classResolver('\Drupal\layout_builder_custom\LayoutBuilderHelper')->layoutBuilderEnabled($route_entity);
+      }
+    }
+  }
+
+  if ($route_match->getRouteObject()?->getOption('_layout_builder')) {
+    // Add Layout Builder specific CSS settings.
+    $variables['#attached']['library'][] = 'atomic_artsci/layout-builder';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function atomic_artsci_preprocess_page(&$variables) {
+  // Load the site name out of configuration.
+  $config = \Drupal::config('system.site');
+  $variables['site_name'] = $config->get('name');
+  $variables['site_slogan'] = $config->get('slogan');
+
+  // These values will be populated automatically if artsci_core is enabled.
+  $variables['site_has_parent'] = $config->get('has_parent');
+  $variables['site_parent_name'] = $config->get('parent.name');
+  $variables['site_parent_url'] = $config->get('parent.url');
+
+  $variables['artsci_logo'] = TRUE;
+  $variables['is_off_brand'] = FALSE;
+
+  $style_selector = theme_get_setting('style.style_selector');
+  if (!empty($style_selector) && $style_selector !== 'brand') {
+    $variables['artsci_logo'] = FALSE;
+    $variables['is_off_brand'] = TRUE;
+  }
+
+  if (!theme_get_setting('logo.use_default')) {
+    $logo_path = theme_get_setting('logo.path');
+    if (!empty($logo_path)) {
+      $file_system = \Drupal::service('file_system');
+      $logo_uri = $file_system->realpath($logo_path);
+      $public_stream_wrapper = \Drupal::service('stream_wrapper.public');
+      $logo_url = $public_stream_wrapper->getExternalUrl($logo_uri);
+      $variables['logo_path'] = $logo_url;
+    }
+    else {
+      $variables['logo_path'] = '';
+    }
+  }
+
+  // Add variables for the image and path of the artsci block logo.
+  /** @var \Drupal\Core\Extension\ExtensionPathResolver $path_resolver */
+  $path_resolver = \Drupal::service('extension.path.resolver');
+  $variables['artsci_logo_path'] = '/' . $path_resolver->getPath('theme', 'atomic_artsci') . '/images/logo.svg#logo';
+  $variables['header_type'] = theme_get_setting('header.type');
+  $variables['header_nav'] = theme_get_setting('header.nav_style');
+  $variables['header_sticky'] = theme_get_setting('header.sticky');
+  $variables['header_toppage'] = theme_get_setting('header.toppage');
+  $variables['header_branding'] = theme_get_setting('header.branding_options');
+  $variables['footer_logo'] = theme_get_setting('header.footer_logo');
+  $variables['header_classes'] = [];
+  $name_length = strlen($variables['site_name']);
+
+  if ($variables['header_branding'] === 'regents' && $variables['footer_logo']) {
+    $variables['artsci_logo'] = TRUE;
+  }
+
+  // Back to top nav.
+  $excluded_back_top_nav_types = ['sign'];
+
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $variables['show_back_top_nav'] = TRUE;
+
+  if ($node && in_array($node->getType(), $excluded_back_top_nav_types)) {
+    $variables['show_back_top_nav'] = FALSE;
+  }
+
+  // If the site has a parent organization or the site name is more than 43
+  // characters, we force the site to use the 'below' header option.
+  if ($variables['site_has_parent'] || $name_length > 43) {
+    $variables['header_type'] = 'below';
+  }
+
+  $variables['artsci_url'] = Url::fromRoute('<front>')->toString();
+
+  // This is the homepage.
+  if (\Drupal::getContainer()->getParameter('site.path') === 'sites/artsci.edu') {
+    $variables['header_classes'][] = 'artsci-bar--full';
+    $variables['header_type'] = 'homepage';
+    $variables['artsci_url'] = \Drupal::request()->getSchemeAndHttpHost();
+  }
+  else {
+    switch ($variables['header_type']) {
+      case 'below':
+      case 'header--tertiary':
+        // @todo Remove this when config is updated for all sites.
+        $variables['header_classes'][] = 'artsci-bar--narrow';
+        $variables['header_type'] = 'below';
+        break;
+
+      case 'inline':
+      case 'header--secondary':
+        // @todo Remove this when config is updated for all sites.
+        $variables['header_classes'][] = 'artsci-bar--full';
+        $variables['header_type'] = 'inline';
+        break;
+    }
+  }
+
+  // Hide the search form by default.
+  $variables['artsci_search_form'] = FALSE;
+
+  if (\Drupal::service('module_handler')->moduleExists('artsci_search')) {
+    if (\Drupal::config('artsci_search.settings')->get('artsci_search.display_search')) {
+      $variables['artsci_search_form'] = TRUE;
+    }
+  }
+
+
+  // Set a variable for whether layout builder is enabled.
+  $variables['layout_builder_enabled'] = FALSE;
+  if (!empty($variables['node'])) {
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $variables['node'];
+    if ($node instanceof NodeInterface) {
+      if (class_exists('\Drupal\layout_builder_custom\LayoutBuilderHelper')) {
+        $variables['layout_builder_enabled'] = \Drupal::classResolver('\Drupal\layout_builder_custom\LayoutBuilderHelper')->layoutBuilderEnabled($node);
+      }
+    }
+  }
+  $current_route = \Drupal::routeMatch();
+  $fragment = $current_route->getParameter('fragment');
+  if ($fragment instanceof FragmentInterface) {
+    if (class_exists('\Drupal\layout_builder_custom\LayoutBuilderHelper')) {
+      $variables['layout_builder_enabled'] = \Drupal::classResolver('\Drupal\layout_builder_custom\LayoutBuilderHelper')->layoutBuilderEnabled($fragment);
+    }
+  }
+
+  $route_name = $current_route->getRouteName();
+
+  switch ($route_name) {
+    case 'artsci_search.search_results':
+      $variables['#attached']['library'][] = 'atomic_artsci/search-results';
+      break;
+
+    case 'artsci_events.single_controller.event':
+      $variables['#attached']['library'][] = 'atomic_artsci/artsci-events-single';
+      break;
+
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function atomic_artsci_preprocess_node(&$variables) {
+  /**
+   * @var \Drupal\node\Entity\Node $node
+   */
+  $node = $variables['node'];
+
+  if ($variables['view_mode'] === 'teaser') {
+    // Create heading_size variable for node teaser templates if a
+    // corresponding render property was set.
+    if (isset($variables['elements']['#heading_size'])) {
+      $variables['heading_size'] = $variables['elements']['#heading_size'];
+    }
+
+    // Add appropriate card styles for v2/3 teaser view modes.
+    // @todo Remove after v2 dies.
+    //   See https://github.com/artsci/artsci/issues/4948
+    $is_v2 = \Drupal::config('config_split.config_split.artsci_v2')->get('status');
+
+    if ($node->getType() === 'page') {
+      // Style stacked for Artsci v2, otherwise media right.
+      if ($is_v2) {
+        $variables['attributes']['class'][] = 'card--stacked';
+        $variables['media_classes'] = [
+          'media--widescreen',
+          'card__media--large',
+        ];
+      }
+
+    }
+  }
+
+  $admin_context = \Drupal::service('router.admin_context');
+  if (!$admin_context->isAdminRoute()) {
+    if (isset($variables['node'])) {
+      if (in_array($variables['node']->getType(), ['article', 'page'])) {
+        $block_manager = \Drupal::service('plugin.manager.block');
+        $config = [];
+        $plugin_block = $block_manager->createInstance('system_breadcrumb_block', $config);
+        $variables['breadcrumb'] = $plugin_block->build();
+      }
+    }
+    $node = \Drupal::routeMatch()->getParameter('node');
+    $node = ($node ?? \Drupal::routeMatch()->getParameter('node_preview'));
+
+    if ($node instanceof NodeInterface) {
+      $node = $variables['node'];
+      switch ($node->getType()) {
+        case 'person':
+          $variables['#attached']['library'][] = 'atomic_artsci/person';
+          break;
+
+        case 'event':
+          $variables['#attached']['library'][] = 'atomic_artsci/artsci-events-single';
+          $variables['#attached']['library'][] = 'atomic_artsci/person';
+          $variables['#attached']['library'][] = 'atomic_artsci/card';
+          break;
+      }
+      if (class_exists('\Drupal\layout_builder_custom\LayoutBuilderHelper')) {
+        $variables['layout_builder_enabled'] = \Drupal::classResolver('\Drupal\layout_builder_custom\LayoutBuilderHelper')->layoutBuilderEnabled($node);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for media.html.twig.
+ */
+function atomic_artsci_preprocess_media(array &$variables) {
+  /** @var \Drupal\media\Entity\Media $media */
+  $media = $variables['media'];
+
+  // Get the media entity's bundle (such as video, image, etc.)
+  $media_type = $variables['media']->bundle();
+
+  // $variables;
+  if ($media_type === 'video') {
+    $referring_item = $media->_referringItem;
+    if ($referring_item) {
+      /** @var \Drupal\Core\Field\EntityReferenceFieldItemList $referring_field */
+      $referring_field = $referring_item->getParent();
+      if ($referring_field) {
+        $parent = $referring_field->getParent();
+        if ($parent instanceof EntityAdapter) {
+          $parent_entity = $parent->getEntity();
+          if ($parent_entity instanceof BlockContent) {
+            // Flag for the template to add a decorative caption track.
+            $variables['content']['field_media_video_file'][0]['#attributes']['data-decorative'] = 'true';
+            // Play video inline instead of going to native player.
+            $variables['content']['field_media_video_file'][0]['#attributes']['playsinline'] = 'playsinline';
+            // @todo 2020/12/08 Add check to see if video is paused in 'artsci-video'
+            //   cookie and skip adding autoplay if so.
+            if ($parent_entity->hasField('field_artsci_banner_autoplay')) {
+              if ($parent_entity->get('field_artsci_banner_autoplay')->value) {
+                $variables['content']['field_media_video_file'][0]['#attributes']['autoplay'] = 'autoplay';
+              }
+            }
+
+            // Add a unique id to use for setting a video cookie.
+            if ($parent_entity_uuid = $parent_entity->uuid()) {
+              $variables['content']['field_media_video_file'][0]['#attributes']['data-video-cookie-id'] = $parent_entity_uuid;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ */
+function atomic_artsci_preprocess_field(&$variables) {
+  $variables['view_mode'] = $variables['element']['#view_mode'];
+
+  switch ($variables['field_name']) {
+    case 'field_artsci_image_caption':
+      foreach ($variables['items'] as &$item) {
+        $item['content'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'figcaption',
+          '#value' => $variables['element']['#object']->get('field_artsci_image_caption')->value,
+        ];
+      }
+      break;
+
+    case 'field_image':
+      // If this is a full view mode, set the page_featured_image variable, add
+      // the breadcrumb block to the variables, and add the caption to the
+      // variables.
+      if ($variables['view_mode'] === '_custom') {
+        $variables['page_featured_image'] = TRUE;
+
+        // Add breadcrumb block to variables.
+        $block_manager = \Drupal::service('plugin.manager.block');
+        $config = [];
+        $plugin_block = $block_manager->createInstance('system_breadcrumb_block', $config);
+        $variables['breadcrumb'] = $plugin_block->build();
+
+        // Set the caption if this is 'field_image'.
+        $caption = NULL;
+        // If the global caption is set on the media object,
+        // use that.
+        if (isset($variables['element'][0]) && isset($variables['element'][0]['#media'])) {
+          // If the caption is not set yet, attempt to set it from
+          // the 'field_image_caption' field.
+          if ((NULL !== $node = $variables['element']['#object']) && $node->hasField('field_image_caption')) {
+            $caption = $node->get('field_image_caption');
+          }
+          // If the global caption is set on the media object,
+          // and we didn't have a node-specific caption,
+          // use the media one.
+          /** @var \Drupal\media\Entity\Media $media */
+          $media = $variables['element'][0]['#media'];
+          if (!$caption && $media && $media->hasField('field_media_caption')) {
+            $caption = $media->get('field_media_caption');
+          }
+        }
+        // If the caption is not set yet, attempt to set it from
+        // the 'field_image_caption' field.
+        if ((!$caption || !$caption->count()) && (NULL !== $node = $variables['element']['#object']) && $node->hasField('field_image_caption')) {
+          $caption = $node->get('field_image_caption');
+        }
+
+        // If the caption has been set, render it
+        // and include the associated libraries.
+        if ($caption && $caption->count()) {
+          $caption = $caption->view();
+        }
+        else {
+          $caption = NULL;
+        }
+        $variables['caption'] = $caption;
+      }
+
+      break;
+  }
+
+  // Add an extra class variable to artsci_headline instances.
+  if ($variables['element']['#field_type'] === 'artsci_headline') {
+    $bundle = $variables['element']['#bundle'];
+    $variables['headline_class'] = str_replace('_', '-', $bundle) . '--headline';
+  }
+}
+
+/**
+ * Implements hook_preprocess_layout().
+ */
+function atomic_artsci_preprocess_layout(&$variables) {
+  $node = $variables['content']['#entity'] ?: NULL;
+  $route_matcher = \Drupal::routeMatch();
+  // If we don't have the node yet, attempt
+  // to grab it from the route.
+  // @todo Is this necessary? Possibly we can
+  //   remove it.
+  if (!$node) {
+    $node = $route_matcher->getParameter('node');
+    $node = ($node ?? $route_matcher->getParameter('node_preview'));
+  }
+  // If we have found a node instance, continue.
+  if ($node instanceof NodeInterface) {
+    /** @var \Drupal\Core\Layout\LayoutDefinition $layout */
+  $styles = _atomic_artsci_flatten_lb_styles(
+    $variables['settings']['layout_builder_styles_style'] ?? []
+  );
+
+  if (empty($styles)) {
+    return;
+  }
+
+  // Check for carousel activation using STYLE ENTITY IDs (not CSS classes).
+  // These match the `id:` values in the layout_builder_styles.style.*.yml files.
+  $carousel_style_ids = [
+    'section_carousel',
+    'carousel_per_page_1',
+    'carousel_per_page_2',
+    'carousel_per_page_3',
+    'carousel_per_page_4',
+    'carousel_per_page_5',
+  ];
+
+  foreach ($carousel_style_ids as $style_id) {
+    if (in_array($style_id, $styles)) {
+      $variables['#attached']['library'][] = 'atomic_artsci/section-carousel';
+      break;
+    }
+  }
+    $layout = $variables['layout'];
+
+    switch ($layout->id()) {
+      case 'layout_onecol':
+        // @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
+        $contains_menu = FALSE;
+
+        foreach (Element::children($variables['content']) as $region) {
+          // Loop through blocks in that region.
+          foreach (Element::children($variables['content'][$region]) as $block_uuid) {
+            if ($region === 'content'
+              && isset($variables['content'][$region][$block_uuid])
+              && isset($variables['content'][$region][$block_uuid]['#plugin_id'])
+            ) {
+              $plugin_id = $variables['content'][$region][$block_uuid]['#plugin_id'];
+              $unset_container_type_blocks = ['menu_block:main', 'inline_block:artsci_timeline'];
+              foreach ($unset_container_type_blocks as $unset_container_type_block) {
+                if (str_starts_with($plugin_id, $unset_container_type_block)) {
+                  // Add unset class.
+                  $variables['attributes']['class'][] = 'layout__region--unset-type';
+                  break;
+                }
+              }
+            }
+          }
+        }
+        break;
+
+      case 'layout_header':
+        $contains_title = FALSE;
+        $contains_background = FALSE;
+
+        $title_hidden = FALSE;
+        if ($node->hasField('field_publish_options') && !$node->get('field_publish_options')->isEmpty()) {
+          $publish_options = $node->get('field_publish_options')->getValue();
+          if (array_search('title_hidden', array_column($publish_options, 'value')) !== FALSE) {
+            $title_hidden = TRUE;
+          }
+        }
+
+        // Only run the following if 'featured_image_display'
+        // is not already set.
+        if (!isset($variables['featured_image_display'])) {
+          $variables['featured_image_display'] = FALSE;
+
+          if ($node->hasField('field_image')) {
+            // Check if the route matches 'layout_builder.defaults.node.view'.
+            // If it does, skip checking node properties.
+            if ($route_matcher->getRouteName() === 'layout_builder.defaults.node.view') {
+              $site_wide_setting = \Drupal::config("artsci_{$node->getType()}s.settings")->get('featured_image_display_default');
+              if ($site_wide_setting && $site_wide_setting !== 'do_not_display') {
+                // Use the site-wide default.
+                $variables['featured_image_display'] = $site_wide_setting;
+              }
+            }
+            else {
+              // Check if the featured image exists.
+              if (!$node->get('field_image')->isEmpty()) {
+                // Check value of 'field_featured_image_display'.
+                if ($node->hasField('field_featured_image_display') && !$node->field_featured_image_display->isEmpty()) {
+                  if ($node->field_featured_image_display->value !== 'do_not_display') {
+                    // Use the node setting.
+                    $variables['featured_image_display'] = $node->field_featured_image_display->value;
+                  }
+                }
+                else {
+                  $site_wide_setting = \Drupal::config("artsci_{$node->getType()}s.settings")->get('featured_image_display_default');
+                  if ($site_wide_setting && $site_wide_setting !== 'do_not_display') {
+                    // Use the site-wide default.
+                    $variables['featured_image_display'] = $site_wide_setting;
+                  }
+                }
+              }
+
+            }
+          }
+        }
+
+        if (!$variables['featured_image_display']) {
+          unset($variables['content']['background']);
+          // If we don't have a featured image,
+          // but have a featured image caption set,
+          // find it and unset it.
+          if ($node->hasField('field_image_caption') && !$node->field_image_caption?->isEmpty()) {
+            // Loop through regions in the layout.
+            foreach (Element::children($variables['content']) as $region) {
+              // Loop through blocks in that region.
+              foreach (Element::children($variables['content'][$region]) as $block_uuid) {
+                if ($region === 'content'
+                  && isset($variables['content'][$region][$block_uuid])
+                  && isset($variables['content'][$region][$block_uuid]['#plugin_id'])
+                ) {
+                  // Check if this block plugin_id matches the pattern for a
+                  // field_image_caption block.
+                  $plugin_id = $variables['content'][$region][$block_uuid]['#plugin_id'];
+                  $start_check = 'field_block:node:';
+                  $end_check = ':field_image_caption';
+                  if (str_starts_with($plugin_id, $start_check)
+                    && str_ends_with($plugin_id, $end_check)
+                  ) {
+                    unset($variables['content'][$region][$block_uuid]);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+        else {
+          $variables['attributes']['class'][] = 'banner--' . $variables['featured_image_display'];
+        }
+
+        // Loop through regions in the layout.
+        foreach (Element::children($variables['content']) as $region) {
+          // Loop through blocks in that region.
+          foreach (Element::children($variables['content'][$region]) as $block_uuid) {
+            if ($region === 'content'
+              && isset($variables['content'][$region][$block_uuid])
+              && isset($variables['content'][$region][$block_uuid]['#plugin_id'])
+            ) {
+              // Check if this block plugin_id matches the pattern for a
+              // page title block.
+              $plugin_id = $variables['content'][$region][$block_uuid]['#plugin_id'];
+              $start_check = 'field_block:node:';
+              $end_check = ':title';
+              if (substr($plugin_id, 0, strlen($start_check)) === $start_check
+                && substr($plugin_id, -strlen($end_check)) === $end_check
+              ) {
+                $contains_title = TRUE;
+                break;
+              }
+            }
+            elseif ($region === 'background') {
+              // If there is anything in this region, then we have a background.
+              if (!empty(Element::children($variables['content'][$region][$block_uuid]))) {
+                $contains_background = TRUE;
+                break;
+              }
+            }
+          }
+        }
+
+        if (!isset($variables['banner_settings'])) {
+          $variables['banner_settings'] = [];
+        }
+        $defaults = [
+          'transparent' => FALSE,
+          'horizontal_align' => 'left',
+          'vertical_align' => 'bottom',
+        ];
+
+        $variables['banner_settings'] = $variables['banner_settings'] + $defaults;
+
+        // Set default for banner gradient.
+        if ($variables['banner_settings']['transparent'] || $title_hidden) {
+          $variables['attributes']['class'][] = 'banner--overlay-none';
+        }
+        else {
+          $variables['attributes']['class'][] = 'banner--overlay-btt';
+        }
+
+        // Set other banner default classes.
+        $variables['attributes']['class'][] = 'banner--horizontal-' . $variables['banner_settings']['horizontal_align'];
+        $variables['attributes']['class'][] = 'banner--vertical-' . $variables['banner_settings']['vertical_align'];
+
+        if ($contains_title) {
+          $variables['attributes']['class'][] = 'layout--title';
+          if ($contains_background && $variables['featured_image_display']) {
+            $variables['attributes']['class'][] = 'layout--title--with-background';
+          }
+          else {
+            $variables['attributes']['class'][] = 'layout--onecol--no--background';
+          }
+
+          if ($title_hidden) {
+            $variables['attributes']['class'][] = 'layout--title--hidden';
+          }
+        }
+        break;
+
+      // Page with sidebar.
+      case 'layout_page':
+        if ($node->hasField('field_publish_options') && !$node->get('field_publish_options')->isEmpty()) {
+          $publish_options = $node->get('field_publish_options')->getValue();
+          if (array_search('no_sidebars', array_column($publish_options, 'value')) !== FALSE) {
+            // Remove sidebar regions.
+            $variables['attributes']['class'][] = 'sidebar-invisible';
+          }
+        }
+        break;
+
+    }
+
+    // Add artsci library if artsci_v2 config split is active.
+    // @todo Remove after v2 dies.
+    //   See https://github.com/artsci/artsci/issues/4948
+    $is_v2 = \Drupal::config('config_split.config_split.artsci_v2')->get('status');
+
+    if ($is_v2) {
+      $variables['#attached']['library'][] = 'atomic_artsci/artsci';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for layout__twocol__card_sidebar.
+ */
+function atomic_artsci_preprocess_layout__twocol__card_sidebar(&$variables) {
+  // Loop through the classes in the attributes array.
+  $bg_added = FALSE;
+  foreach ($variables['attributes']['class'] as $key => $class) {
+    // Check if the class starts with "media".
+    if (str_starts_with($class, 'media')) {
+      // Add the class to region_attributes.card_media.
+      // and remove it from attributes.
+      if (isset($variables['region_attributes']['card_media'])) {
+        $variables['region_attributes']['card_media']?->addClass($class);
+        unset($variables['attributes']['class'][$key]);
+      }
+    }
+    // Check if the class starts with "borderless".
+    if (str_starts_with($class, 'borderless')) {
+      // Add the class to no_border.
+      if ($class == 'borderless') {
+        $variables['no_border'] = $class;
+      }
+    }
+    // Check if the class starts with "border".
+    if (str_starts_with($class, 'border--')) {
+      // Add the class to no_border.
+      if ($class == 'border--left') {
+        $variables['border_left'] = $class;
+      }
+    }
+    // Check if it's a background class.
+    if (str_starts_with($class, 'bg--')) {
+      // If it's a specified background, include it,
+      // otherwise unset it from the section.
+      if ($class !== 'bg--none') {
+        $variables['card_background'] = $class;
+      }
+      else {
+        unset($variables['attributes']['class'][$key]);
+      }
+      $bg_added = TRUE;
+    }
+  }
+  // Default to bg--white unless we had specified
+  // a background (including bg--none).
+  if (!$bg_added) {
+    $variables['card_background'] = 'bg--white';
+  }
+}
+
+/**
+ * Helper: Extract LB Style CSS classes from block configuration.
+ */
+function _atomic_artsci_get_lb_style_classes(array $variables): array {
+  $classes = [];
+
+  // Method 1: From block content entity (inline blocks).
+  if (!empty($variables['content']['#block_content'])
+    && $variables['content']['#block_content'] instanceof BlockContentInterface) {
+    $block_content = $variables['content']['#block_content'];
+    if ($block_content->hasField('layout_builder_styles')) {
+      foreach ($block_content->get('layout_builder_styles') as $item) {
+        $style = $item->entity ?? NULL;
+        if ($style) {
+          $style_classes = explode(' ', $style->get('classes'));
+          $classes = array_merge($classes, $style_classes);
+        }
+      }
+    }
+  }
+
+  // Method 2: From attributes (LB Styles adds classes to wrapper).
+  if (!empty($variables['attributes']['class'])) {
+    $attr_classes = (array) $variables['attributes']['class'];
+    $classes = array_merge($classes, $attr_classes);
+  }
+
+  return array_unique($classes);
+}
+/**
+ * Implements hook_preprocess_block().
+ */
+function atomic_artsci_preprocess_block__inline_block__artsci_image(&$variables) {
+  $block = $variables['content']['#block_content'] ?? NULL;
+
+  if ($block && $block->hasField('field_artsci_image_image') && !$block->get('field_artsci_image_image')->isEmpty()) {
+    $media = $block->get('field_artsci_image_image')->entity;
+    if ($media) {
+      $variables['is_video'] = in_array($media->bundle(), ['remote_video', 'video']);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for the atomic_artsci_local_tasks block.
+ */
+function atomic_artsci_preprocess_block__atomic_artsci_local_tasks(&$variables) {
+  // Add the library to the block.
+  $variables['#attached']['library'][] = 'atomic_artsci/local-tasks';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block_content__artsci_collection__tab.html.twig.
+ */
+function atomic_artsci_preprocess_block_content__artsci_collection__tab(&$variables) {
+  $variables['tabs'] = [];
+  $items = $variables['elements']['field_artsci_collection_items']['#items'];
+  foreach ($items as $delta => $item) {
+    $id = $item->get('target_id')->getString();
+    $paragraph = \Drupal::service('entity_type.manager')
+      ->getStorage('paragraph')
+      ->load($id);
+    if ($paragraph instanceof ParagraphInterface) {
+      $label = $paragraph->get('field_collection_headline')->getString();
+      $variables['tabs'][$delta] = [
+        'id' => $id,
+        'label' => $label,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block_content__artsci_collection__accordion.html.twig.
+ */
+function atomic_artsci_preprocess_block__inline_block__artsci_collection(&$variables) {
+  $block = $variables['elements']['content']['#block_content'];
+  // If the value hasn't been set, or is set to multi-select,
+  // pass "true" for use in constructing the accordion.
+  // "False" designates a single-select accordion.
+  $variables['multiselect'] = (!isset($block->field_accordion_type->value) ||
+    $block->field_accordion_type->value === 'multi_select') ? 'true' : 'false';
+
+  // Prepare the accordion container classes, including
+  // our label color if needed.
+  $accordion_container_classes = ['accordion'];
+  // If more label colors become available in Artsci,
+  // update this to a match expression.
+  if ($block->field_accordion_label_color->value === 'white') {
+    $accordion_container_classes[] = 'accordion--white';
+  }
+  $variables['accordion_container_classes'] = implode(' ', $accordion_container_classes);
+
+  // Assemble the aria-owns attribute for the accordion.
+  $accordion_item_id = 'accordion-item-' . $block->id();
+  $items = Element::children($variables['elements']['content']['field_artsci_collection_items']);
+  $variables['aria_owns'] = [];
+  foreach ($items as $delta) {
+    $unique_id = $accordion_item_id . '-' . $delta;
+
+    // Set the unique ID to a stored value if it exists.
+    $paragraph = $variables['elements']['content']['field_artsci_collection_items'][$delta]['#paragraph'];
+    if ($paragraph->hasField('field_unique_id') && !$paragraph->get('field_unique_id')->isEmpty()) {
+      $unique_id = $paragraph->get('field_unique_id')->value;
+    }
+    $variables['aria_owns'][] = $unique_id;
+  }
+  // Convert this to a comma-separated string as that is how it will be printed
+  // in the template.
+  $variables['aria_owns'] = implode(' ', $variables['aria_owns']);
+
+  // Build tab navigation data when in tab view mode.
+  if (isset($variables['content']['#view_mode']) && $variables['content']['#view_mode'] === 'tab') {
+    $variables['tab_nav'] = [];
+    $items = Element::children($variables['elements']['content']['field_artsci_collection_items']);
+    foreach ($items as $delta) {
+      $paragraph = $variables['elements']['content']['field_artsci_collection_items'][$delta]['#paragraph'];
+      if ($paragraph instanceof ParagraphInterface && $paragraph->hasField('field_collection_headline')) {
+        $variables['tab_nav'][] = [
+          'id' => $block->id(),
+          'delta' => $delta,
+          'label' => $paragraph->get('field_collection_headline')->getString(),
+        ];
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function atomic_artsci_preprocess_menu(&$variables) {
+  switch ($variables['menu_name']) {
+    case 'top-links':
+      $variables['limit'] = theme_get_setting('header.top_links_limit');
+
+      // Remove nested children from menu items.
+      if (!empty($variables['items'])) {
+        foreach ($variables['items'] as &$item) {
+          unset($item['below']);
+        }
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_menu_local_task().
+ */
+function atomic_artsci_preprocess_menu_local_task(&$variables) {
+  $url = $variables['link']['#url'];
+
+  if ($url instanceof Url) {
+    $route_name = $url->getRouteName();
+
+    $supported_entity_types = [
+      'node',
+      'fragment',
+      'taxonomy_term',
+    ];
+
+    $route_icon_map = [];
+
+    foreach ($supported_entity_types as $entity_type) {
+      $route_icon_map['entity.' . $entity_type . '.canonical'] = 'view';
+      $route_icon_map['entity.' . $entity_type . '.edit_form'] = 'edit';
+      $route_icon_map['entity.' . $entity_type . '.latest_version'] = 'latest';
+      $route_icon_map['entity.' . $entity_type . '.delete_form'] = 'delete';
+      $route_icon_map['entity.' . $entity_type . '.version_history'] = 'history';
+      $route_icon_map['entity.' . $entity_type . '.entity_usage'] = 'usage';
+      $route_icon_map['entity.' . $entity_type . '.devel_load'] = 'devel';
+      $route_icon_map['entity.' . $entity_type . '.replicate'] = 'replicate';
+      $route_icon_map['layout_builder.overrides.' . $entity_type . '.view'] = 'layout';
+    }
+
+    // Set the icon if the route matches an entry in the map.
+    if (isset($route_icon_map[$route_name])) {
+      $variables['link']['#options']['attributes']['class'][] = 'local-task-icon';
+      $variables['link']['#options']['attributes']['class'][] = 'local-task-icon--' . $route_icon_map[$route_name];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function atomic_artsci_preprocess_paragraph(&$variables) {
+
+  $paragraph = $variables['paragraph'];
+  // Get the value of the collection headline field.
+  if ($paragraph->getType() == 'artsci_slide') {
+    $artsci_slide_headline = $paragraph->get('field_collection_headline')->getValue()[0]['value'];
+    // Strip tags.
+    $variables['slide_headline'] = strip_tags($artsci_slide_headline);
+  }
+
+  $admin_context = \Drupal::service('router.admin_context');
+  if (!$admin_context->isAdminRoute()) {
+    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $variables['paragraph'];
+
+    $collection_types = [
+      'artsci_slide' => 'field_artsci_slider_slides',
+      'artsci_collection_item' => 'field_artsci_collection_items',
+      'artsci_timeline_item' => 'field_artsci_timeline_items',
+    ];
+
+    if (in_array($paragraph->bundle(), array_keys($collection_types))) {
+      $items_field = $collection_types[$paragraph->bundle()];
+      $variables['delta'] = 0;
+
+      $parent = $paragraph->getParentEntity();
+      if ($parent instanceof ContentEntityInterface) {
+        $variables['parent_id'] = $parent->id();
+        if ($parent->hasField($items_field)) {
+          $id = $paragraph->id();
+          /**
+           * @var integer $delta
+           * @var \Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem $item
+           */
+          foreach ($parent->get($items_field)->getValue() as $delta => $item) {
+            if ($item['target_id'] === $id) {
+              $variables['delta'] = $delta;
+              break;
+            }
+          }
+        }
+        // This works for collections, sliders, and timeline not other blocks.
+        if ($parent->hasField('field_artsci_headline')) {
+          $headline_fields = $parent->get('field_artsci_headline')->getValue();
+          foreach ($headline_fields as $headline_field) {
+            // There isn't a headline, so use the child heading size field.
+            if (empty($headline_field['headline'])) {
+              $variables['h_size'] = $headline_field['child_heading_size'];
+            }
+            else {
+              $variables['h_size'] = HeadlineHelper::getHeadingSizeUp($headline_field['heading_size']);
+            }
+          }
+        }
+      }
+
+      // If our bundle is the collection item and we have a
+      // 'field_automatically_open' value set...
+      if ($paragraph->bundle() === 'artsci_collection_item') {
+        $variables['accordion_type'] = (!isset($parent->field_accordion_type->value) ||
+          $parent->field_accordion_type->value === 'multi_select') ? 'multi' : 'single';
+
+        if ($opened = $paragraph->field_automatically_open->value) {
+          // Pass a true or false based upon the value to the template.
+          // Template: docroot/themes/custom/atomic_artsci/atomic_artsci.theme .
+          $variables['field_automatically_open'] = ($opened) ? 'true' : 'false';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function atomic_artsci_preprocess_paragraph__artsci_collection_item(&$variables) {
+  /** @var Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
+
+  /** @var Drupal\Core\Routing\AdminContext $admin_context */
+  $admin_context = \Drupal::service('router.admin_context');
+
+  if (!$admin_context->isAdminRoute()) {
+
+    $block = $paragraph->getParentEntity();
+    if ($block instanceof ContentEntityInterface) {
+      $unique_id = 'accordion-item-' . $block->id() . '-' . $variables['delta'];
+      if ($paragraph->hasField('field_unique_id') && !$paragraph->get('field_unique_id')->isEmpty()) {
+        $unique_id = $paragraph->get('field_unique_id')->value;
+      }
+      $variables['accordion_item_id'] = $unique_id;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function atomic_artsci_preprocess_views_view(&$variables) {
+  $variables['more']['#options']['attributes']['class'] = [
+    'bttn',
+    'bttn--primary',
+    'bttn--caps',
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function atomic_artsci_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+
+  // Limit this to the 'person_custom' view using
+  // the 'students' display.
+  if ($view->id() === 'person_custom' && $view->current_display === 'students') {
+    $field = $variables['field'];
+    // Check that we're looking at the 'Advisor' field.
+    if ($field instanceof EntityField && $field->field === 'field_pt_student_advisor') {
+      // Check that we can access the person node.
+      if (isset($variables['row'])
+        && !is_null($node = $variables['row']->_entity)
+        && $node instanceof NodeInterface
+      ) {
+        // Check that we can access the Advisor entity reference.
+        if (!is_null($advisor_field = $node->field_pt_student_advisor) && $advisor = $advisor_field->entity) {
+          // Is the advisor hidden?
+          /** @var \Drupal\node\NodeInterface $advisor */
+          $hide_person = $advisor->get('field_person_hide')->value;
+
+          if ($hide_person) {
+            // Display advisor name as plain text.
+            $field->options['settings']['link'] = FALSE;
+            $variables['output'] = $variables['field']
+              ->advancedRender($variables['row']);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_file_link().
+ */
+function atomic_artsci_preprocess_file_link(&$variables) {
+  // Remove file link classes.
+  unset($variables['attributes']['class']);
+}
+
+/**
+ * Implements theme_preprocess_form().
+ */
+function atomic_artsci_preprocess_form(&$variables) {
+  // Add 'form' and 'artsci-search' classes to search-block-form.
+  if (isset($variables['attributes']['id']) && $variables['attributes']['id'] === 'search-block-form') {
+    $variables['attributes']['class'][] = 'form artsci-search';
+  }
+}
+
+/**
+ * Implements hook_preprocess_image().
+ */
+function atomic_artsci_preprocess_image(&$variables) {
+  if (isset($variables['attributes']) && isset($variables['attributes']['loading'])) {
+    $loading_attributes = $variables['attributes']['loading'];
+    if ($loading_attributes === "lazy") {
+      // Ensure $variables['attributes']['class'] is an array.
+      if (!isset($variables['attributes']['class']) || !is_array($variables['attributes']['class'])) {
+        $variables['attributes']['class'] = [];
+      }
+
+      $variables['attributes']['class'][] = 'lazyload';
+      $variables['#attached']['library'][] = 'atomic_artsci/lazy-load-animation';
+    }
+  }
+}
+
+/**
+ * Implements theme_preprocess_input().
+ */
+function atomic_artsci_preprocess_input(&$variables) {
+  if (isset($variables['element']['#name']) && $variables['element']['#name'] === 'search-terms') {
+    $variables['attributes']['class'] = [];
+  }
+
+  // Set the placeholder attribute for date inputs. The required format is
+  // always YYYY-MM-DD. This helps people input the date as a string for
+  // browsers that do not support the HTML date element.
+  if (isset($variables['element']['#type']) && $variables['element']['#type'] === 'date') {
+    $variables['attributes']['placeholder'] = 'YYYY-MM-DD';
+  }
+}
+
+/**
+ * Implements hook_preprocess_superfish_menu_items().
+ */
+function atomic_artsci_preprocess_superfish_menu_items(array &$variables) {
+  if (isset($variables['menu_items'])) {
+    foreach ($variables['menu_items'] as $i => $menu_item) {
+      if (isset($menu_item['link_menuparent'])) {
+        if ($menu_item['link']['#url']->isRouted() && $menu_item['link']['#url']->getRouteName() === '<nolink>') {
+          $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['tabindex'] = '0';
+        }
+
+        if ($variables['element']['#settings']['menu_type'] === 'vertical') {
+          $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['role'] = 'button';
+          $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['aria-haspopup'] = 'true';
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function atomic_artsci_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  $element = $variables['element'];
+  $suggestions[] = 'field__' . $element['#entity_type'] . '__' . $element['#field_name'] . '__' . $element['#bundle'] . '__' . $element['#view_mode'];
+}
+
+/**
+ * Implements hook_theme_suggestions_form_element_alter().
+ */
+function atomic_artsci_theme_suggestions_form_element_alter(array &$suggestions, array $variables) {
+  if (isset($variables['element']['#name']) && $variables['element']['#name'] === 'search-terms') {
+    $suggestions[] = $variables['theme_hook_original'] . '__artsci_search__search_terms';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestion_input_alter().
+ */
+function atomic_artsci_theme_suggestions_input_alter(&$suggestions, array $variables) {
+  $element = $variables['element'];
+
+  if (isset($element['#name']) && $element['#name'] === 'btnG') {
+    $suggestions[] = 'input__artsci_search__' . $element['#type'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestion_page_title_alter().
+ */
+function atomic_artsci_theme_suggestions_page_title_alter(array &$suggestions, array $variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  // Add page title suggestion for nodes.
+  if (!empty($node) && is_object($node)) {
+    $suggestions[] = 'page_title__node';
+  }
+}
+
+/**
+ * Implements hook_photoswipe_js_options_alter().
+ */
+function atomic_artsci_photoswipe_js_options_alter(array &$settings) {
+  // Disable's photoswipe's share links (twitter, fb, pintrest).
+  $settings['shareEl'] = FALSE;
 }

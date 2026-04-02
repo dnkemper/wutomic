@@ -1,0 +1,214 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.field--label-above,
+.field--label-inline {
+  .field--label-inline,
+  .field__label {
+    &::after {
+      content: ":";
+    }
+
+    &.headline {
+      &::after {
+        content: "";
+      }
+    }
+  }
+}
+
+.field--separator {
+  &:after {
+    content: '-';
+    color: variables.$gray;
+    margin: 0 variables.$xsm 0 variables.$sm;
+  }
+}
+
+.field.field--label-above {
+  line-height: 1.5;
+}
+
+.field__label {
+  font-weight: bold;
+  line-height: 1.7;
+  font-size: 1.2rem;
+  margin-bottom: variables.$xsm;
+
+  &--icon {
+    margin-right: variables.$sm;
+  }
+
+  &.headline {
+    line-height: 1;
+  }
+
+  [class*="card__"] &,
+  [class*="bttn"] & {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.field--label-inline {
+  margin-bottom: variables.$sm;
+  [class*="card__"] &,
+  .block-margin__default--removed & {
+    margin-bottom: 0;
+  }
+
+  .svg-inline--fa {
+    margin-right: 0.3rem;
+  }
+}
+
+.field--label-inline {
+  * {
+    display: inline;
+  }
+}
+
+.field__item {
+  line-height: 1.7;
+}
+
+.field__item {
+  margin-top: 0;
+
+  &.h1,
+  &.h2,
+  &.h3,
+  &.h4,
+  &.h5,
+  &.h6,
+  &.element--bold-intro,
+  &.element--light-intro {
+    line-height: inherit;
+  }
+
+  [class*="card__"] &,
+  [class*="bttn"] & {
+    font-size: inherit;
+    line-height: inherit;
+  }
+  @at-root {
+    div#{ &},
+    p#{&} {
+      font-size: 1.2rem;
+
+      .element--bold-intro &,
+      .element--light-intro &,
+      .h1 &,
+      .h2 &,
+      .h3 &,
+      .h4 &,
+      .h5 &,
+      .h6 & {
+        font-size: inherit;
+        line-height: inherit;
+      }
+    }
+  }
+}
+
+.field__item.headline {
+  line-height: 1;
+}
+
+.field--label-above {
+  margin-bottom: variables.$sm;
+
+  .block-margin__default--removed & {
+    margin-bottom: 0;
+  }
+
+  ul {
+    margin-top: 0;
+  }
+}
+
+.field--label-visually_hidden {
+  .svg-inline--fa {
+    margin-right: 0.3rem;
+  }
+
+  .field__items {
+    display: inline;
+    &.artsci-image-gallery {
+      display: grid;
+    }
+  }
+
+  .field__item {
+    display: inline;
+  }
+}
+
+.field--type-text-long.field--label-inline {
+  p {
+    display: inline;
+  }
+}
+
+.field--label-inline.field--type-link {
+  .link-title {
+    margin-right: variables.$xsm;
+  }
+}
+
+.field--label-hidden.field__items + .field--label-inline {
+  margin-top: variables.$sm;
+}
+
+.field--label-hidden.field__item + .field--label-hidden.field__item,
+.field--label-hidden.field__items + .field--label-hidden.field__item,
+.field--label-hidden.field__items + .field--label-hidden.field__items {
+  margin-bottom: variables.$sm;
+}
+
+.field--label-hidden.field__item + .field--label-hidden.field__item {
+  margin-top: variables.$sm;
+  .card__subtitle & {
+    margin-top: 0;
+  }
+  .element--three-column &,
+  .element--two-column & {
+    @include utilities.breakpoint(sm) {
+      margin-top: 0;
+    }
+  }
+}
+
+.field--label-hidden + .field--label-above,
+.field--label-hidden + .field--label-inline,
+.field--label-visually_hidden + .field--label-above {
+  margin-top: variables.$md;
+}
+
+.text-formatted.field--type-text {
+  div {
+    margin-bottom: variables.$sm;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+// Wrap long links by allow them to break mid-word. Global is too-scoped.
+.field--type-link {
+  word-break: break-word;
+}
+// Address styling.
+.field--type-address--inline {
+  br {
+    display: none;
+  }
+}
+.field p.address {
+  [class*="card__"] & {
+    font-size: 1.1rem;
+  }
+  .organization {
+    font-weight: variables.$font-weight-bold;
+  }
+}

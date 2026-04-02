@@ -1,0 +1,30 @@
+@use '../../abstracts/variables';
+@use '../../abstracts/_utilities.scss';
+
+// Currently not in use.
+
+.menu--account {
+  .menu {
+    display: flex;
+    @include utilities.margin(variables.$top: variables.$md, variables.$left: 0, variables.$bottom: variables.$sm);
+    li {
+      display: flex;
+      a {
+        display: block;
+        text-decoration: none;
+        color: variables.$dark-gray;
+        border: 1px solid variables.$gray-light;
+        border-right: none;
+        @include utilities.padding(variables.$top: variables.$sm, variables.$right: variables.$md, variables.$bottom: variables.$sm, variables.$left: variables.$md);
+        &:hover {
+          background: variables.$light;
+        }
+      }
+      &:last-child {
+        a {
+          border-right: 1px solid variables.$gray-light;
+        }
+      }
+    }
+  }
+}

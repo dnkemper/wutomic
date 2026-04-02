@@ -1,0 +1,67 @@
+{# Pre-footer (Calls to action) #}
+{% set pre_footer_rendered = page.pre_footer | render %}
+{% if pre_footer_rendered|striptags('<embed><hr><iframe><img><input><drupal-render-placeholder>')|trim %}
+  <aside class="content__container">
+    {{ page.pre_footer }}
+  </aside>
+{% endif %}
+
+<footer class="footer">
+  <div class="footer__container footer__container--flex">
+    <div class="footer__links footer__links--contact">
+    {# {% set test = "{{ base_path ~ directory }}/images/logo.svg" %} #}
+<img src="{{ base_path ~ directory }}/images/logo.svg" alt="Washington University in St. Louis">
+      {# {% if artsci_logo is not empty %} #}
+      {# {{ attach_library('atomic_artsci/logo') }} #}
+
+      {# {% if (header_branding == 'artsci' or footer_logo) %}
+      {% include '@atomic_artsci/artsci/logo.twig' with {
+        path: artsci_url,
+        logo_path_png: test,
+        logo_classes: 'logo--footer',
+        logo_id: 'footer',
+        is_homepage: is_homepage|default(false),
+      } %}
+
+      {% endif %}
+
+       {% endif %} #}
+
+      {% block site_slogan %}
+        {% if site_has_parent %}
+          <strong class="parent-site-name">
+            <a href="{{ site_parent_url }}">
+              {{ site_parent_name }}
+            </a>
+          </strong>
+        {% endif %}
+      {% endblock %}
+
+      {% if page.footer_first %}
+        {{ page.footer_first }}
+      {% endif %}
+
+      {% if footer_login_link %}
+        <div class="artsci-footer--login-link">
+          {{ login_url }}
+
+          <p>{{ footer_login_link }}</p>
+        </div>
+      {% endif %}
+
+
+
+    </div>
+
+    {% if page.footer_second %}
+      {{ page.footer_second }}
+    {% endif %}
+
+  </div>
+  <div class="footer__container">
+    {% if artsci_logo is not empty %}
+    {% include '@atomic_artsci/artsci/footer--socket-menu.twig' %}
+    {% endif %}
+  </div>
+
+</footer>

@@ -1,0 +1,155 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+
+// Set above admin toolbar and superfish.
+.joyride-tip-guide {
+  z-index: 550;
+
+  a {
+    background: transparent;
+
+    .btn.btn-primary.btn-block {
+      color: variables.$secondary;
+      margin-bottom: variables.$md;
+
+      &:hover,
+      &:focus {
+        color: variables.$secondary;
+      }
+    }
+  }
+}
+
+// Admin only styles
+.toolbar-menu {
+  font-size: unset;
+  li {
+    margin-bottom: 0;
+  }
+}
+
+// Hide header if off canvas tray is open
+.js-off-canvas-dialog-open header.artsci-bar {
+  display: none;
+}
+
+// admin toolbar style for sticky header.
+.header-sticky.toolbar-horizontal,
+.header-sticky.toolbar-vertical {
+  &.header--healthcare {
+    @include utilities.breakpoint(md) {
+      padding-top: 140px !important;
+    }
+  }
+  @include utilities.breakpoint(md) {
+    padding-top: 120px !important;
+  }
+
+  &.below {
+    @include utilities.breakpoint(md) {
+      padding-top: 160px !important;
+    }
+    &.header--healthcare {
+      @include utilities.breakpoint(md) {
+        padding-top: 190px !important;
+      }
+    }
+  }
+}
+
+.header-sticky.scroll-down.toolbar-horizontal,
+.header-sticky.scroll-down.toolbar-vertical {
+  @include utilities.breakpoint(md) {
+    padding-top: 80px !important;
+  }
+}
+
+.header-sticky.toolbar-horizontal.toolbar-tray-open {
+  &.header--healthcare {
+    @include utilities.breakpoint(md) {
+      padding-top: 180px !important;
+    }
+  }
+  @include utilities.breakpoint(md) {
+    padding-top: 160px !important;
+  }
+
+  &.below {
+    &.header--healthcare {
+      @include utilities.breakpoint(md) {
+        padding-top: 230px !important;
+      }
+    }
+    @include utilities.breakpoint(md) {
+      padding-top: 210px !important;
+    }
+  }
+}
+
+.header-sticky.toolbar-vertical.toolbar-tray-open {
+  @include utilities.breakpoint(md) {
+    header.artsci-bar {
+      padding-left: 15rem;
+    }
+  }
+}
+
+.header-sticky.toolbar-vertical,
+.header-sticky.toolbar-horizontal {
+  header.artsci-bar {
+    @include utilities.breakpoint(md) {
+      top: 39px;
+    }
+  }
+}
+
+.header-sticky.toolbar-horizontal.toolbar-tray-open {
+  header.artsci-bar {
+    @include utilities.breakpoint(md) {
+      top: 79px;
+    }
+  }
+}
+
+// Create more space in the header when the vertical toolbar is open.
+@media (min-width: 1200px) {
+  body.toolbar-vertical.toolbar-tray-open .search-wrapper {
+    margin-right: auto;
+  }
+
+  body.toolbar-vertical.toolbar-tray-open  .artsci-bar--full.toggle .site-name {
+    flex: 0 1 30%;
+  }
+
+  body.toolbar-vertical.toolbar-tray-open .search-overlay[aria-hidden=false] {
+    width: 90%;
+  }
+}
+
+// Adjust search wrapper when vertical toolbar is open.
+@media (min-width: 1350px) {
+  body.toolbar-vertical.toolbar-tray-open .search-wrapper {
+    margin-right: calc(60% - 50vw);
+  }
+}
+
+// Position top links if vertical toolbar is open.
+@media (min-width: 1550px) {
+  body.toolbar-vertical.toolbar-tray-open  .artsci-bar--full.toggle .site-name+.menu--top {
+    right: calc(41% - 40vw);
+  }
+}
+
+// Hide top links for edge case with vertical toolbar open.
+@media only screen and (min-width: 980px) and (max-width: 1200px) {
+  body.toolbar-vertical.toolbar-tray-open  .artsci-bar--full.toggle .site-name+.menu--top .menu {
+    display: none;
+  }
+}
+
+// Position mobile menu to make room for vertical toolbar.
+@media only screen and (min-width: 0) and (max-width: 980px) {
+  body.toolbar-vertical.toolbar-tray-open .o-canvas--open .o-canvas__drawer {
+    width: calc(100% - 15rem);
+  }
+}

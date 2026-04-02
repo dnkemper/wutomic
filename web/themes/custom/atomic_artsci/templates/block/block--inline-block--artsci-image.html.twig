@@ -1,0 +1,46 @@
+{{ attach_library('atomic_artsci/image') }}
+{{ attach_library('atomic_artsci/media') }}
+
+{%
+  set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+]
+%}
+{% set content_rendered = content|render %}
+{% if content_rendered is not empty %}
+  {% set has_caption = content.field_artsci_image_caption|render|striptags|trim is not empty %}
+  {% set wrapper_element = has_caption ? 'figure' : 'div' %}
+  <{{ wrapper_element }} {{ attributes.addClass(has_caption ? classes|merge(['caption']) : classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+  {% if content.field_artsci_image_link[0]['#url'] is not empty %}
+    <a href="{{ content.field_artsci_image_link[0]['#url']|render }}"
+       aria-label="{{ content.field_artsci_image_link[0]['#title']|render }}"
+       title="{{ content.field_artsci_image_link[0]['#title']|render }}">
+      {{ content.field_artsci_image_image }}
+    </a>
+    {{ content.field_artsci_image_caption }}
+  {% else %}
+    {% if is_video %}
+      <div class="media--video banner__media">
+        <div class="media__inner">
+          {{ content.field_artsci_image_image }}
+          <button class="media__play-btn" aria-label="{{ 'Play video'|t }}">
+            <span class="media__play-icon">
+              <i role="presentation" class="fas fa-play"></i>
+            </span>
+          </button>
+        </div>
+      </div>
+    {% else %}
+      {{ content.field_artsci_image_image }}
+    {% endif %}
+    {{ content.field_artsci_image_caption }}
+  {% endif %}
+  </{{ wrapper_element }}>
+{% endif %}

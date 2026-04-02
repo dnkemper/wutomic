@@ -1,0 +1,23 @@
+// ==========================================================================
+// DECORATIVE ELEMENTS — LB Styles for vertical/horizontal lines
+// ==========================================================================
+
+.deco-vline {
+  width: 2px;
+  height: 40px;
+  margin-inline: auto;
+  position: relative;
+  z-index: 2;
+  &--top    { margin-bottom: var(--space-6); }
+  &--bottom { margin-top: var(--space-6); }
+  &--red    { background-color: var(--brand-red); }
+  &--black  { background-color: var(--color-black); }
+}
+
+.deco-hline {
+  border: 0;
+  height: 1px;
+  background: var(--color-gray-300);
+  margin: var(--space-8) 0;
+  &--red { background: var(--brand-red); height: 2px; }
+}

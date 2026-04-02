@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Block: Anchor Links (anchor_links)
+ * Jira: AA-32
+ *
+ * No LB Styles.
+ */
+#}
+{% set classes = [
+  'block',
+  'block--anchor-links',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+] %}
+
+<nav{{ attributes.addClass(classes) }} aria-label="On this page">
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  <div class="anchor-links__container">
+    {{ content.field_links }}
+  </div>
+</nav>

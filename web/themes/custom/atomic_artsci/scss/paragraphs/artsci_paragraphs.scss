@@ -1,0 +1,297 @@
+@use 'sass:color';
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+// @use '_artsci_paragraphs_background_overrides.scss';
+
+.paragraph--type--section.has-section-image {
+
+  .paragraph--type--blockquote,
+  .paragraph--type--text,
+  .paragraph--type--webform {
+    padding: 1.25rem;
+    background-color: variables.$white;
+  }
+}
+
+.paragraph--type--section.has-section-image,
+.paragraph--type--section.has-section-image.bg-dark,
+.paragraph--type--section.bg-dark,
+.paragraph--type--section.has-section-image.bg-black,
+.paragraph--type--section.bg-black,
+.paragraph--type--section.has-section-image.bg-yellow,
+.paragraph--type--section.bg-yellow,
+.paragraph--type--section.has-section-image.bg-light,
+.paragraph--type--section.bg-light {
+
+  .paragraph--type--text.bg-black,
+  .paragraph--type--webform.bg-black {
+    background-color: variables.$secondary;
+    color: variables.$white;
+
+    &.semi-transparent {
+      background-color: rgba(248, 249, 250, 0.8) !important;
+    }
+  }
+
+  .paragraph--type--text.bg-dark,
+  .paragraph--type--webform.bg-dark {
+    background-color: variables.$brand-cool-gray;
+    color: variables.$white;
+
+    &.semi-transparent {
+      background-color: rgba(52, 58, 64, 0.8) !important;
+    }
+  }
+
+  .paragraph--type--text.bg-light,
+  .paragraph--type--webform.bg-light {
+    background-color: variables.$light;
+    color: variables.$dark-gray;
+
+    &.semi-transparent {
+      background-color: rgba(248, 249, 250, 0.8) !important;
+    }
+  }
+
+  .paragraph--type--text.bg-yellow,
+  .paragraph--type--webform.bg-yellow {
+    background-color: variables.$primary;
+    color: variables.$dark-gray;
+
+    &.semi-transparent {
+      background-color: rgba(255, 205, 0, 0.8) !important;
+    }
+  }
+}
+
+.paragraph.bg-yellow,
+.paragraph.bg-light {
+  color: variables.$dark-gray;
+}
+
+.paragraph.bg-dark,
+.paragraph.bg-black {
+  color: variables.$white;
+}
+
+.paragraph.semi-transparent {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.paragraph.bg-light.semi-transparent {
+  background-color: rgba(248, 249, 250, 0.8) !important;
+}
+
+.paragraph.bg-yellow.semi-transparent {
+  background-color: rgba(255, 205, 0, 0.8) !important;
+}
+
+.paragraph.bg-dark.semi-transparent {
+  background-color: rgba(52, 58, 64, 0.8) !important;
+  color: variables.$white;
+}
+
+.paragraph.bg-black.semi-transparent {
+  background-color: rgba(21, 21, 21, 0.8) !important;
+  color: variables.$white;
+}
+
+.paragraph--type--section.bg-dark,
+.paragraph--type--section.bg-black {
+
+  .paragraph--type--accordion,
+  .paragraph--type--card,
+  .paragraph--type--articles,
+  .paragraph--type--featured-content,
+  .paragraph--type--carousel {
+    color: initial;
+  }
+}
+
+// Breaks in Internet Explorer!
+//.paragraph--type--card {
+//  display: flex;
+//}
+.paragraph--type--card {
+  .card-body {
+    min-height: 1px;
+  }
+}
+
+// Card spacing
+
+.card__author+.field--name-field-card-body {
+  margin-top: variables.$md;
+}
+
+.field--name-field-card-body {
+  p+p {
+    margin-top: variables.$md;
+  }
+}
+
+// paragraphs
+
+.paragraph {
+  &.paragraph--type--text {
+    margin-bottom: 1rem;
+  }
+
+  &.paragraph--type--card {
+    @include utilities.breakpoint(sm) {
+      margin-bottom: 2.5rem;
+    }
+  }
+}
+
+
+div.example2 p.special {
+  color: green;
+}
+
+.paragraph--type--section {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-bottom: 0;
+  margin-bottom: 0;
+
+  @include utilities.breakpoint(sm) {
+    padding-top: 1.5rem;
+  }
+
+  &.has-section-image {
+    padding-top: 0;
+  }
+
+  &.bg-light,
+  &.bg-dark,
+  &.bg-black,
+  &.bg-yellow {
+    //padding-top: variables.$desktop-width-gutter;
+    margin-bottom: 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.field__item:first-child .paragraph--type--section {
+  @include utilities.breakpoint(sm) {
+    padding-top: 0;
+  }
+}
+
+.paragraph--type--text {
+  //padding-top: variables.$gutter;
+  padding-bottom: variables.$gutter;
+
+  &.bg-light {
+    padding: variables.$desktop-width-gutter;
+  }
+}
+
+.media--type-image-background.media--view-mode-edgy {
+  &.contextual-region {
+    position: unset;
+  }
+
+  picture {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+
+.media--type-image-background.media--view-mode-edgy picture>img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+// Set padding for first paragraph section
+.layout--page--paragraph .block-field-blocknodepagefield-page-content-block .field__item:first-child .paragraph--type--section {
+  padding-top: variables.$gutter;
+
+  .paragraph--type--text.col-md-12 {
+    padding-top: 0;
+
+    &[class*="bg-"] {
+      padding-top: variables.$gutter;
+    }
+  }
+}
+
+// Set margin for first paragraph section below page title if using bg color
+.layout--page--paragraph .block-field-blocknodepagefield-page-content-block .field__item:first-child .paragraph--type--section {
+
+  &.bg-light:first-child,
+  &.bg-dark:first-child,
+  &.bg-black:first-child,
+  &.bg-yellow:first-child {
+    margin-top: variables.$gutter;
+  }
+}
+
+// @todo Remove if unnecessary.
+//.layout--page--paragraph.title-invisible .block-field-blocknodepagefield-page-content-block .field__item:first-child .paragraph--type--section {
+//
+//  &.bg-light:first-child,
+//  &.bg-dark:first-child,
+//  &.bg-black:first-child,
+//  &.bg-yellow:first-child {
+//    margin-top: 0;
+//  }
+//}
+
+.layout--onecol--background+.layout--page--paragraph .block-field-blocknodepagefield-page-content-block .field__item:first-child .paragraph--type--section {
+
+  &.bg-light:first-child,
+  &.bg-dark:first-child,
+  &.bg-black:first-child,
+  &.bg-yellow:first-child {
+    margin-top: 0;
+  }
+}
+
+.layout--onecol--no--background+.layout--page--paragraph .block-field-blocknodepagefield-page-content-block .field__item:first-child .paragraph--type--section {
+
+  &.bg-light:first-child,
+  &.bg-dark:first-child,
+  &.bg-black:first-child,
+  &.bg-yellow:first-child {
+    margin-top: variables.$gutter;
+  }
+}
+
+.layout--onecol--no--background+.layout__container.page__container--edge.layout--no-sidebar:not([class*=bg-]) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/*
+   * @todo Should this be moved to scss/layouts/onecol.scss or
+   *   scss/layouts/onecol--background.scss?
+   */
+
+// Removes container padding from paragraph pages like https://hawkeyemarchingband.artsci.ddev.site/auditions
+.layout__container {
+  &.layout--onecol--no--background:not([class*="layout--title"]),
+  &.layout--no-sidebar,
+  &.layout--has-sidebar.sidebar-invisible {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// Override field.css sizing.
+div.field__item .paragraph--type--events .card__description,
+.paragraph--type--articles .artsci-articles .card .field--name-body {
+  font-size: initial;
+}
+

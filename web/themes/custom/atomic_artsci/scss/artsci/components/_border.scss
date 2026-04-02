@@ -1,0 +1,10 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+
+.border {
+  @include utilities.border;
+}
+
+.borderless {
+  border: none!important;
+}

@@ -1,0 +1,118 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+@use '../admin/_off-canvas.scss';
+@use '../admin/_chosen.scss';
+@use '../admin/_lb-direct-add.scss';
+@use '../admin/_lb-lock.scss';
+@use '../admin/_toolbar.scss';
+@use '../admin/_claro.scss';
+@use '../admin/_ui_icons.scss';
+
+@import '../../../../../core/themes/claro/css/components/dropbutton.css';
+
+.artsci-headline--container {
+  border: 1px solid #999;
+  padding: 0 10px;
+}
+
+.node-preview-container {
+  position: relative;
+  margin-bottom: 1em;
+  padding: variables.$md 0;
+  border-bottom: 2px solid variables.$warning;
+  background: variables.$warning-light;
+
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .js-hide {
+      display: none;
+    }
+  }
+
+  .node-preview-backlink {
+    @include utilities.bttn;
+    @include utilities.bttn--primary;
+    @include utilities.bttn--focus;
+    font-family: variables.$font-family-caps-bold;
+  }
+}
+
+// Override first child margin rule.
+.headline.h2:not(:first-child), h2.headline:not(:first-child) {
+  margin-top: 0;
+}
+
+.content__container {
+  // Add a container to edit forms.
+  .block-local-tasks-block,
+  .block-help-block,
+  .form-type-vertical-tabs,
+  #edit-moderation-state-0 {
+    @include utilities.container-width;
+  }
+}
+
+// Admin styles for full-width and mixed setting for local drupal admin blocks
+.content__full {
+  .block-local-tasks-block,
+  .block-help-block,
+  .form-actions,
+  .form-type-vertical-tabs {
+    margin-right: variables.$gutter;
+    margin-left: variables.$gutter;
+  }
+}
+
+// Set a minimum height for smallest height components.
+.layout-builder .layout-builder-block.block-inline-blockartsci-card .card.borderless:not([class*="bg--"]) {
+  min-height: 120px;
+}
+
+// Set minimum height for edge and chrome browsers.
+.ui-dialog #drupal-modal.ui-dialog-content.ui-widget-content {
+  min-height: 70vh!important;
+}
+
+// Overrides for older browsers until https://github.com/w3c/csswg-drafts/issues/10544 is the standard.
+// @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
+// Unset container-type for regions that use absolute positioning.
+// lb-direct-add.
+.layout-builder .column-container {
+  container-type: unset;
+}
+
+// Container queries.
+// @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
+.layout-builder .layout-builder-block.block-inline-blockartsci-text-area:has(.media--view-mode-vertical),
+.layout-builder .layout-builder-block.block-inline-blockartsci-card,
+.layout-builder .layout-builder-block.block-inline-blockartsci-event,
+.layout-builder .layout-builder-block.block-inline-blockfeatured-content .column-container,
+.layout-builder .layout-builder-block.block-inline-blockartsci-events .column-container,
+.layout-builder .layout-builder-block.block-inline-blockartsci-banner {
+  container-type: inline-size;
+  container-name: column;
+}
+
+// @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
+// This fixes an issue with the banner--stacked not displaying correctly when the container
+// query is applied directly to the banner.
+.layout-builder .layout-builder-block.banner--stacked:not([class*="bg--"]) {
+  display: block;
+
+  @include utilities.container-query() {
+    display: flex;
+  }
+
+  .banner__content {
+    position: relative;
+    background: #fff;
+    height: 100%;
+    @include utilities.container-query() {
+      background: none;
+    }
+  }
+}

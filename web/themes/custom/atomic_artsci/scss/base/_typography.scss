@@ -1,0 +1,453 @@
+// Typography — imported into main.scss (see _reset.scss for base type)
+@use '../abstracts/utilities' as utilities;
+@use '../abstracts/variables' as *;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--font-weight-medium);
+  line-height: 1.125;
+  letter-spacing: 0;
+}
+
+h1, .h1 {
+  @include utilities.h1;
+}
+
+.h1 {
+  &.bold-headline--serif,
+  &.headline--serif {
+    @include utilities.h1;
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+h2, .h2 {
+  @include utilities.h2;
+  // Overriding the size for Zilla so that the size is equal to Roboto.
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
+  }
+}
+
+h3, .h3 {
+  @include utilities.h3;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.65rem, calc(1.0986vw + 1.238rem), 2.1375rem);
+  }
+}
+
+h4, .h4 {
+  @include utilities.h4;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.45rem, calc(0.8451vw + 1.1331rem), 1.825rem);
+  }
+}
+
+h5, .h5 {
+  @include utilities.h5;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.3rem, calc(0.7324vw + 1.0254rem), 1.625rem);
+  }
+}
+
+h6, .h6 {
+  @include utilities.h6;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.2rem, calc(0.507vw + 1.0099rem), 1.425rem);
+  }
+}
+
+ol {
+  list-style-position: outside;
+  font-size: var(--content-font-size);
+  @include utilities.margin($top: $md, $left: $lg, $bottom: $md);
+}
+
+ol:not([type]) {
+  list-style-type: decimal;
+}
+
+ol:not([type]).is-lower-alpha {
+  list-style-type: lower-alpha;
+}
+
+ol:not([type]).is-lower-roman {
+  list-style-type: lower-roman;
+}
+
+ol:not([type]).is-upper-alpha {
+  list-style-type: upper-alpha;
+}
+
+ol:not([type]).is-upper-roman {
+  list-style-type: upper-roman;
+}
+
+ul {
+  list-style: disc outside;
+  font-size: var(--content-font-size);
+  margin-top: 1.05rem;
+  margin-bottom: 1.05rem;
+  margin-left: 1.875rem;
+}
+
+ul li,
+ol li {
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+ul ul {
+  list-style-type: circle;
+}
+
+ul ul ul {
+  list-style-type: square;
+}
+
+ol ol, ol ul, ul ol, ul ul {
+  margin-top: 0;
+  margin-block-start: .75rem;
+  margin-bottom: 0;
+  margin-block-end: .75rem;
+}
+
+.element--list-none {
+  list-style: none;
+  li {
+    list-style: none;
+  }
+}
+
+dd {
+  @include utilities.margin($left: $lg);
+}
+
+
+.artsci-component--circle-list,
+.element--circle-list {
+  margin: 0 0 0 -13px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: circle-counter;
+
+  li li {
+    list-style-type: disc;
+    display: list-item;
+  }
+
+  >li {
+    position: relative;
+    min-height: 90px;
+    margin-bottom: 0.25rem;
+    list-style: none;
+    counter-increment: circle-counter;
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+
+    @include utilities.breakpoint(sm) {
+      margin-left: 115px;
+    }
+
+    &:before {
+      display: block;
+      margin: 0 auto;
+      top: 0px;
+      left: -100px;
+      width: 5rem;
+      height: 5rem;
+      padding-top: 35px;
+      content: counter(circle-counter);
+      text-align: center;
+      text-transform: uppercase;
+      color: black;
+      border: 2px solid $primary;
+      border-radius: 50%;
+      background-color: $primary;
+      box-shadow: inset 0px 0px 0px 10px white;
+      text-transform: uppercase;
+      font-family: $font-family-caps;
+      -webkit-font-smoothing: auto;
+      -moz-osx-font-smoothing: auto;
+      font-weight: bold;
+      font-size: 2.4rem;
+      line-height: 0;
+      box-sizing: border-box;
+
+      @include utilities.breakpoint(sm) {
+        position: absolute;
+        display: inline-block;
+        margin: 0 0.5rem 0;
+      }
+
+      .artsci-component--gray &,
+      .bg--gray & {
+        box-shadow: inset 0px 0px 0px 10px $light;
+      }
+    }
+  }
+}
+
+.element--circle-list>li,
+.artsci-component--circle-list>li {
+  display: block;
+  align-items: start;
+  padding-top: 1.275rem;
+}
+
+.element--circle-list h2,
+.artsci-component--circle-list h2,
+.element--circle-list h3,
+.artsci-component--circle-list h3,
+.element--circle-list h4,
+.artsci-component--circle-list h4,
+.element--circle-list h5,
+.artsci-component--circle-list h5,
+.element--circle-list h6,
+.artsci-component--circle-list h6 {
+  margin-bottom: 1.2rem;
+}
+
+.element--circle-list li a.bttn,
+.artsci-component--circle-list li a.bttn {
+  display: inline-block;
+}
+
+p,
+dl,
+ol,
+ul,
+blockquote,
+pre,
+table {
+  font-weight: $font-weight-normal;
+}
+
+p {
+  line-height: 1.7;
+  font-size: var(--content-font-size);
+  @include utilities.margin($bottom: $md, $top: 0);
+}
+
+a {
+  color: $link-color;
+  text-decoration: underline;
+}
+
+figcaption {
+  font-size: 90%;
+  line-height: 1.5;
+}
+
+figure img {
+  display: inline-block;
+  @include utilities.margin($bottom: $md);
+}
+
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: $md;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+small {
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 1.3;
+
+  &.small--inline {
+    display: inline;
+  }
+}
+
+sup,
+sub {
+  font-size: 75%;
+}
+
+mark {
+  background-color: $primary;
+}
+
+pre {
+  font-family: $font-family-serif;
+  line-height: 1.5;
+}
+
+.is-small {
+  font-size: $small-font-size;
+}
+
+.is-medium {
+  font-size: $h6-font-size;
+}
+
+.is-large {
+  font-size: $h4-font-size;
+}
+
+.margin-top {
+  margin-top: $sm-md;
+}
+
+.image {
+  position: relative;
+  display: block;
+}
+
+.image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.element--two-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 2;
+    column-gap: $desktop-width-gutter;
+  }
+}
+
+.element--three-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 3;
+    column-gap: $desktop-width-gutter;
+  }
+}
+
+hr {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-separator {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: $gutter 0;
+}
+
+.element--spacer-thin {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-gold {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: 1.25rem 0;
+  &:after {
+    content: "";
+    display: block;
+    width: 33%;
+    height: 6px;
+    margin: 0;
+    background: $primary;
+  }
+  &--centered {
+    &:after {
+      margin: 0 auto;
+    }
+  }
+  [class*="bg-"] & {
+    border: none;
+  }
+  .bg-pattern--brain-reversed &,
+  .bg--gold--pattern--brain &,
+  .bg--gold & {
+    &:after {
+      background: #fff;
+    }
+  }
+}
+
+// Bold intro component class
+
+.artsci-component--bold-intro,
+.element--bold-intro {
+  font-family: $font-family-serif;
+  font-weight: $font-weight-medium-bold;
+  line-height: 1.3;
+  font-size: 2.2rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.2
+  font-size: clamp(1.6rem, calc(1.3521vw + 1.093rem), 2.2rem);
+  margin-top: 0;
+}
+
+.artsci-component--light-intro,
+.element--light-intro {
+  font-weight: $font-weight-light;
+  line-height: 1.4;
+  font-size: 2.1rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.1
+  font-size: clamp(1.6rem, calc(1.1268vw + 1.1775rem), 2.1rem);
+  margin-top: 0;
+}
+
+// mark
+mark {
+  background-color: $primary;
+  padding: 0.1em;
+
+  // Nested class for deletion styling
+  &.deletion {
+    background-color: $danger-light;
+  }
+
+  // Accessibility pseudo-elements for screen readers
+  &::before,
+  &::after {
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  &::before {
+    content: " [highlight start] ";
+  }
+
+  &::after {
+    content: " [highlight end] ";
+  }
+
+  .bg--gold & {
+    background-color: #fff;
+    color: $artsci-black;
+
+    &.deletion {
+      background-color: $artsci-black;
+      color: $artsci-gold;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.paragraph--type--image-gallery {
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  a.photoswipe {
+    flex: 220px 1 1;
+
+    @include utilities.breakpoint(page-container) {
+      //flex: 320px 1 1;
+    }
+    &:hover,
+    &:focus {
+      img {
+        opacity: 0.6;
+      }
+    }
+
+    img {
+      object-fit: cover;
+      height: 220px;
+    }
+  }
+}
+
+.paragraph--type--image-gallery.masonry {
+  display: block;
+  column-count: 2;
+  column-gap: 1.5rem;
+
+  @include utilities.breakpoint(sm) {
+    column-count: 3;
+  }
+
+  @include utilities.breakpoint(page-container) {
+    column-count: 4;
+  }
+
+  a.photoswipe {
+    flex: none;
+    display: inline-block;
+    margin: 0 0 1.5rem;
+    width: 100%;
+
+    img {
+      object-fit: unset;
+      height: auto;
+    }
+  }
+}
+

@@ -20,7 +20,7 @@
  * - placeholder_token: The token for generating head, css, js and js-bottom
  *   placeholders.
  *
- * @see \Drupal\Core\Theme\ThemePreprocess::preprocessHtml()
+ * @see template_preprocess_html()
  */
 #}
 {%
@@ -29,10 +29,15 @@
     not root_path ? 'path-frontpage' : 'path-' ~ root_path|clean_class,
     node_type ? 'page-node-type-' ~ node_type|clean_class,
     db_offline ? 'db-offline',
+    header_type,
+    has_top_links,
+    layout_builder_enabled ? 'layout-builder-enabled' : 'layout-builder-disabled',
+    header_branding == 'uihc' ? 'header--healthcare' : ''
   ]
 %}
+
 <!DOCTYPE html>
-<html{{ html_attributes }}>
+<html{{ html_attributes.addclass('no-js') }}>
   <head>
     <head-placeholder token="{{ placeholder_token }}">
     <title>{{ head_title|safe_join(' | ') }}</title>
@@ -40,16 +45,21 @@
     <js-placeholder token="{{ placeholder_token }}">
   </head>
   <body{{ attributes.addClass(body_classes) }}>
-    {#
-      Keyboard navigation/accessibility link to main content section in
-      page.html.twig.
-    #}
-    <a href="#main-content" class="visually-hidden focusable skip-link">
-      {{ 'Skip to main content'|t }}
-    </a>
-    {{ page_top }}
-    {{ page }}
-    {{ page_bottom }}
-    <js-bottom-placeholder token="{{ placeholder_token }}">
+
+<div class="skip-link-region" role="region" aria-label="skip-link">
+  <a href="#main-content" class="visually-hidden focusable skip-link" role="link" aria-label="skip to main content">
+    {{ 'Skip to main content'|t }}
+  </a>
+</div>
+
+{% set artsci_attribute = create_attribute() %}
+{% set header_classes = ['artsci__container'] %}
+
+{{ page_top }}
+{{ page }}
+{% if page_bottom %}
+  <div {{ artsci_attribute.addClass(header_classes) }}>{{ page_bottom }}</div>
+{% endif %}
+<js-bottom-placeholder token="{{ placeholder_token }}">
   </body>
 </html>

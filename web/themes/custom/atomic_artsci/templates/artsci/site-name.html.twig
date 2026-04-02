@@ -1,0 +1,11 @@
+{% if site_name %}
+  <h1 class="site-name">
+    {% if site_url %}
+    <a href="{{ site_url }}">
+      {% endif %}
+      {{ site_name }}
+      {% if site_url %}
+    </a>
+    {% endif %}
+  </h1>
+{% endif %}

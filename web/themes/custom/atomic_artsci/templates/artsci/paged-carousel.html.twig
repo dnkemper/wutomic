@@ -1,0 +1,86 @@
+{#
+/**
+ * @file
+ * Artsci paged carousel component.
+ *
+ * Used for both standard paged and stats variants.
+ * The extra_class variable allows stats mode to add .artsci-carousel--stats.
+ *
+ * Variables:
+ *   - carousel_id, pre_title, title, slides, slide_count
+ *   - pre_title_style, bg_color, deco_vline
+ *   - loop, autoplay, per_page, extra_class
+ */
+#}
+{% set carousel_id     = carousel_id|default('paged-carousel') %}
+{% set slide_count     = slide_count|default(0) %}
+{% set pre_title_style = pre_title_style|default('red_caps') %}
+{% set bg_color        = bg_color|default('') %}
+{% set deco_vline      = deco_vline|default('') %}
+{% set extra_class     = extra_class|default('') %}
+{% set per_page        = per_page|default(3) %}
+
+{% set carousel_classes = [
+  'artsci-carousel',
+  'artsci-carousel--paged',
+  extra_class,
+  bg_color ? 'bg--' ~ bg_color : '',
+]|filter(v => v is not empty) %}
+
+<div class="{{ carousel_classes|join(' ') }}"
+     data-artsci-carousel
+     data-carousel-size="paged"
+     {% if loop|default(false) %}data-carousel-loop="true"{% endif %}
+     {% if autoplay|default(0) > 0 %}data-carousel-autoplay="{{ autoplay }}"{% endif %}
+     {% if per_page != 3 %}data-carousel-per-page="{{ per_page }}"{% endif %}
+     id="{{ carousel_id }}">
+
+  {% if deco_vline and deco_vline starts with 'top' %}
+    <div class="deco-vline deco-vline--top {{ deco_vline == 'top_red' ? 'deco-vline--red' : 'deco-vline--black' }}" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="artsci-carousel__inner">
+
+    <div class="artsci-carousel__header">
+      <div class="artsci-carousel__header-text">
+        {% if pre_title is defined and pre_title is not empty %}
+          <div class="artsci-carousel__pre-title {{ pre_title_style == 'subtle' ? 'pretitle--subtle' : 'pretitle--red-caps' }}">
+            {{ pre_title }}
+          </div>
+        {% endif %}
+
+        {% if title is defined and title is not empty %}
+          <h2 class="artsci-carousel__title">{{ title }}</h2>
+        {% endif %}
+      </div>
+
+      {% if slide_count > 1 %}
+        <div class="artsci-carousel__nav">
+          <button class="artsci-carousel__arrow artsci-carousel__arrow--prev" data-carousel-prev aria-label="Previous page" aria-controls="{{ carousel_id }}">
+            <span class="fas fa-chevron-left" aria-hidden="true"></span>
+          </button>
+          <button class="artsci-carousel__arrow artsci-carousel__arrow--next" data-carousel-next aria-label="Next page" aria-controls="{{ carousel_id }}">
+            <span class="fas fa-chevron-right" aria-hidden="true"></span>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="artsci-carousel__viewport" data-carousel-viewport>
+      <div class="artsci-carousel__track" data-carousel-track>
+        {% block slides %}
+          {{ slides }}
+        {% endblock %}
+      </div>
+    </div>
+
+    {% if slide_count > 1 %}
+      <div class="artsci-carousel__dots" data-carousel-dots aria-label="Carousel pagination"></div>
+    {% endif %}
+
+  </div>
+
+  {% if deco_vline and deco_vline starts with 'bottom' %}
+    <div class="deco-vline deco-vline--bottom {{ deco_vline == 'bottom_red' ? 'deco-vline--red' : 'deco-vline--black' }}" aria-hidden="true"></div>
+  {% endif %}
+</div>

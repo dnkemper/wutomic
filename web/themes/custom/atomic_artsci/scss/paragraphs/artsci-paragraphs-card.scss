@@ -1,0 +1,44 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.paragraph--type--card {
+    .card__body .field--name-field-card-body {
+        h2, h3, h4, h5, h6 {
+          color: variables.$secondary;
+        }
+        blockquote {
+            color: variables.$secondary;
+            border-color: variables.$primary;
+        }
+
+        a:not(.btn):not(.bttn):not(.button) {
+            color: initial;
+            span {
+             color: initial;
+            }
+        }
+
+        a.btn-primary {
+           @include utilities.bttn--primary;
+            border: 1px solid variables.$primary;
+           @include utilities.bttn--focus;
+
+            &:after {
+                background-color: variables.$secondary;
+            }
+           span {
+            color: variables.$secondary !important;
+           }
+        }
+
+        a.btn:not(.btn-primary) {
+           @include utilities.bttn--secondary;
+            border: 1px solid variables.$secondary;
+           @include utilities.bttn--focus;
+           span {
+            color: variables.$white !important;
+           }
+        }
+    }
+
+}

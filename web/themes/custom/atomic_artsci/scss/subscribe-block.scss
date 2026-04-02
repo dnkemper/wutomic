@@ -1,0 +1,135 @@
+/**
+ * @file
+ * Styles for the Ampersand newsletter subscribe block.
+ *
+ * Designed for placement in the footer region on a dark background.
+ */
+input#subscribe-email {
+    background: unset;
+    border: unset;
+    border-bottom: 2px solid gray;
+}
+.subscribe-block {
+  button.subscribe-block__submit {
+    background: none;
+    border: none;
+}
+svg.svg-inline--fa.fa-arrow-right {
+    fill: white;
+    color: white;
+    background: black;
+}
+p.subscribe-block__subheading {
+    font-family: IvyStyle Sans;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 200%;
+    letter-spacing: 0%;
+    color: white;
+}
+p.subscribe-block__heading {
+    font-family: IvyStyle Sans;
+    font-weight: 600;
+    font-size: 18px;
+    color: white;
+    line-height: 200%;
+    letter-spacing: 0%;
+}
+input#subscribe-email {
+    background: unset;
+    border: unset;
+    border-bottom: 2px solid gray;
+}
+  max-width: 600px;
+
+  &__heading {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0 0 0.25rem;
+    color: #fff;
+  }
+
+  &__subheading {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0 0 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: stretch;
+  }
+
+  &__input {
+    flex: 1;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: #fff;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: none;
+    border-radius: 0;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    &:focus {
+      border-color: #fff;
+    }
+  }
+
+  &__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    padding: 0;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-left: none;
+    border-radius: 0;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &--loading {
+      opacity: 0.5;
+      cursor: wait;
+    }
+  }
+
+  &__arrow {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  .svg-inline--fa {
+    width: 1rem;
+    height: 1rem;
+  }
+  &__messages {
+    min-height: 1.5em;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+
+    &--success {
+      color: #a8d5a2;
+    }
+
+    &--error {
+      color: #f5a8a8;
+    }
+  }
+}

@@ -1,0 +1,243 @@
+// ==========================================================================
+// Section Carousel
+// ==========================================================================
+// CSS handles slide widths. JS only handles translateX.
+// ==========================================================================
+
+@use '../abstracts/variables' as *;
+
+// --------------------------------------------------------------------------
+// Core: Viewport & Track
+// --------------------------------------------------------------------------
+
+.section--carousel {
+  // Need this so the carousel has a measurable width.
+  overflow: hidden;
+}
+
+.artsci-carousel__viewport {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.artsci-carousel__track {
+  display: flex;
+  gap: 1.5rem;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
+}
+
+.artsci-carousel__slide {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+// --------------------------------------------------------------------------
+// Slide Widths — Set by CSS per-page classes
+// --------------------------------------------------------------------------
+// These are the critical rules. CSS calc() is always correct because
+// percentages resolve against the viewport container width.
+//
+// Formula: (100% - (N-1) * gap) / N
+// Gap matches the track's gap: 1.5rem
+// --------------------------------------------------------------------------
+
+$carousel-gap: 1.5rem;
+
+// Default (no per-page class) = 3
+.section--carousel .artsci-carousel__slide {
+  width: calc((100% - #{$carousel-gap} * 2) / 3);
+  flex: 0 0 calc((100% - #{$carousel-gap} * 2) / 3);
+}
+
+.carousel-per-page--1 .artsci-carousel__slide {
+  width: 100%;
+  flex: 0 0 100%;
+}
+
+.carousel-per-page--2 .artsci-carousel__slide {
+  width: calc((100% - #{$carousel-gap}) / 2);
+  flex: 0 0 calc((100% - #{$carousel-gap}) / 2);
+}
+
+.carousel-per-page--3 .artsci-carousel__slide {
+  width: calc((100% - #{$carousel-gap} * 2) / 3);
+  flex: 0 0 calc((100% - #{$carousel-gap} * 2) / 3);
+}
+
+.carousel-per-page--4 .artsci-carousel__slide {
+  width: calc((100% - #{$carousel-gap} * 3) / 4);
+  flex: 0 0 calc((100% - #{$carousel-gap} * 3) / 4);
+}
+
+.carousel-per-page--5 .artsci-carousel__slide {
+  width: calc((100% - #{$carousel-gap} * 4) / 5);
+  flex: 0 0 calc((100% - #{$carousel-gap} * 4) / 5);
+}
+
+// Responsive overrides via data attribute set by JS.
+// JS sets data-responsive-per-page on resize.
+@media (max-width: 991px) {
+  .section--carousel .artsci-carousel__slide {
+    width: calc((100% - #{$carousel-gap}) / 2);
+    flex: 0 0 calc((100% - #{$carousel-gap}) / 2);
+  }
+
+  .carousel-per-page--1 .artsci-carousel__slide {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+}
+
+@media (max-width: 575px) {
+  .section--carousel .artsci-carousel__slide {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+}
+
+// --------------------------------------------------------------------------
+// No-scroll (fewer slides than per-page)
+// --------------------------------------------------------------------------
+
+.artsci-carousel--no-scroll {
+  .artsci-carousel__track {
+    transition: none;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Controls
+// --------------------------------------------------------------------------
+
+.artsci-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+// --------------------------------------------------------------------------
+// Arrows
+// --------------------------------------------------------------------------
+
+.artsci-carousel__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid $gray-300;
+  border-radius: 50%;
+  background: transparent;
+  color: $gray-700;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $primary;
+    color: $primary;
+    background-color: rgba($primary, 0.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &[disabled] {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Dots
+// --------------------------------------------------------------------------
+
+.artsci-carousel__dots {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.artsci-carousel__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: $gray-300;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background: $gray-500;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+
+  &--active {
+    background: $primary;
+    transform: scale(1.2);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Section Modifiers
+// --------------------------------------------------------------------------
+
+.section--carousel-peek {
+  .artsci-carousel__viewport {
+    padding-right: 40px;
+  }
+}
+
+.section--carousel-dark {
+  .artsci-carousel__arrow {
+    border-color: rgba(#fff, 0.4);
+    color: #fff;
+
+    &:hover,
+    &:focus-visible {
+      border-color: #fff;
+      background-color: rgba(#fff, 0.1);
+    }
+  }
+
+  .artsci-carousel__dot {
+    background: rgba(#fff, 0.3);
+
+    &--active {
+      background: #fff;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// Responsive
+// --------------------------------------------------------------------------
+
+@media (max-width: 575px) {
+  .artsci-carousel__track {
+    gap: 1rem;
+  }
+
+  .artsci-carousel__controls {
+    margin-top: 1rem;
+  }
+}

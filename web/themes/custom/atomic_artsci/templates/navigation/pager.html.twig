@@ -5,7 +5,6 @@
  *
  * Available variables:
  * - heading_id: Pagination heading ID.
- * - pagination_heading_level: The heading level to use for the pager.
  * - items: List of pager items.
  *   The list is keyed by the following elements:
  *   - first: Item for the first page; not present on the first page of results.
@@ -28,12 +27,12 @@
  *     at the first page.
  *   - next: Present if the visible list of pages ends before the last page.
  *
- * @see \Drupal\Core\Pager\PagerPreprocess::preprocessPager()
+ * @see template_preprocess_pager()
  */
 #}
 {% if items %}
-  <nav class="pager" role="navigation" aria-labelledby="{{ heading_id }}">
-    <{{ pagination_heading_level }} id="{{ heading_id }}" class="visually-hidden">{{ 'Pagination'|t }}</{{ pagination_heading_level }}>
+  <nav class="pager list-container__item--full" role="navigation" aria-labelledby="{{ heading_id }}">
+    <div id="{{ heading_id }}" class="visually-hidden">{{ 'Pagination'|t }}</div>
     <ul class="pager__items js-pager__items">
       {# Print first item if we are not on the first page. #}
       {% if items.first %}
@@ -67,7 +66,7 @@
           {% endif %}
           <a href="{{ item.href }}" title="{{ title }}"{{ item.attributes|without('href', 'title') }}>
             <span class="visually-hidden">
-              {{ 'Page'|t }}
+              {{ current == key ? 'Current page'|t : 'Page'|t }}
             </span>
             {{- key -}}
           </a>

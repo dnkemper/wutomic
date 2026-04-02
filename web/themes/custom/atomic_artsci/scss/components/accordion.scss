@@ -1,0 +1,145 @@
+// ==========================================================================
+// Component: Accordion / Collection
+// ==========================================================================
+
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+// === Accordion === //
+.accordion {
+  --trans-time: 0.2s;
+  --accordion-label-color: var(--artsci-light);
+  --accordion-label-color-hover: #{variables.$lighter-gray};
+  --accordion-outline-color: var(--artsci-gray-cool);
+  --accordion-border-color: var(--artsci-gray-light);
+
+  details {
+    &[open] {
+      summary {
+        i, svg {
+          transform: rotate(0deg) translate(0px, 0.1em);
+        }
+      }
+    }
+  }
+
+  summary {
+    list-style: none;
+    background-color: var(--accordion-label-color);
+    display: flex;
+    cursor: pointer;
+
+    &:hover, &:focus {
+      background-color: var(--accordion-label-color-hover);
+      outline: 1px solid var(--accordion-outline-color);
+    }
+
+    &::-webkit-details-marker {
+      visibility: hidden;
+    }
+
+    i, svg {
+      transition: all var(--trans-time) ease-in-out;
+      width: variables.$h5-font-size;
+      height: variables.$h5-font-size;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: -0.3rem 0 0 auto;
+      border-radius: 50%;
+      transition-property: transform, background-color;
+      background-color: transparent;
+      transform: rotate(-180deg) translate(0px, -0.1em);
+      color: #BA0C2F;
+    }
+  }
+
+  .accordion__heading :is(h2, h3, h4, h5, h6) {
+    all: inherit;
+    border: none;
+    display: flex;
+    font-size: variables.$content-font-size;
+    font-weight: variables.$font-weight-bold;
+    padding: variables.$md;
+    width: 100%;
+    align-items: center;
+    cursor: pointer;
+
+    &:focus {
+      outline: 2px auto -webkit-focus-ring-color;
+    }
+  }
+
+  .accordion__content {
+    background-color: variables.$white;
+    padding: variables.$md;
+    border-top: 1px solid var(--accordion-border-color);
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul li,
+  ol li,
+  p {
+    font-size: 1.3rem;
+  }
+
+  table ul li,
+  table ol li,
+  table p {
+    font-size: inherit;
+  }
+}
+
+// === Accordion item === //
+.accordion__item {
+  border: 1px solid var(--accordion-border-color);
+
+  &:not(:first-child) {
+    margin-top: 1rem;
+  }
+}
+
+// === Accordion modifiers === //
+.accordion--white {
+  --accordion-label-color: #{variables.$white};
+  --accordion-label-color-hover: var(--artsci-light);
+  --accordion-outline-color: var(--artsci-gray-mid);
+  --accordion-border-color: var(--artsci-gray-light);
+}
+
+// === Collection accordion === //
+.collection--accordion .accordion__content {
+  background-color: variables.$white;
+
+  &:not([hidden]) {
+    display: flow-root;
+  }
+
+  blockquote {
+    border-color: variables.$primary;
+    color: variables.$secondary;
+
+    a {
+      color: variables.$link-color;
+    }
+  }
+}
+
+details.accordion__item summary {
+  white-space: wrap;
+}
+
+.accordion .accordion__item {
+  margin: 1rem 0 0;
+}
+
+.accordion .accordion__heading {
+  color: variables.$secondary;
+}
+
+.accordion .accordion__heading button.border {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}

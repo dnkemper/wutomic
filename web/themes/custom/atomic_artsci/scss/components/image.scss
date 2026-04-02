@@ -1,0 +1,27 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+
+.block-inline-blockartsci-image {
+  img {
+    width: 100%;
+  }
+  a:focus-visible img {
+    outline: 1px solid blue;
+  }
+  a:focus-visible img,
+  a:hover img {
+    opacity: .6;
+  }
+}
+
+figure.block-inline-blockartsci-image.caption {
+  @include utilities.breakpoint(sm) {
+    width: 100%;
+    height: min-content;
+  }
+  &.element--cover {
+    @include utilities.breakpoint(sm) {
+      height: auto;
+    }
+  }
+}

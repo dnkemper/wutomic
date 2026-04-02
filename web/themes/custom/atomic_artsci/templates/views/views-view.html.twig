@@ -25,7 +25,7 @@
  * - attachment_after: An optional attachment view to be displayed after the
  *   view content.
  * - dom_id: Unique id for every view being printed to give unique class for
- *   JavaScript.
+ *   Javascript.
  *
  * @see template_preprocess_views_view()
  */
@@ -37,8 +37,16 @@
     'view-id-' ~ id,
     'view-display-id-' ~ display_id,
     dom_id ? 'js-view-dom-id-' ~ dom_id,
+    'list-container',
   ]
 %}
+{{ attach_library('atomic_artsci/views') }}
+{{ attach_library('atomic_artsci/view-display-people') }}
+{{ attach_library('atomic_artsci/view-articles-archive') }}
+{{ attach_library('atomic_artsci/view-page-articles') }}
+{{ attach_library('atomic_artsci/node-type-article') }}
+{{ attach_library('atomic_artsci/paragraphs-lists') }}
+{{ attach_library('atomic_artsci/view-taxonomy-term') }}
 <div{{ attributes.addClass(classes) }}>
   {{ title_prefix }}
   {% if title %}
@@ -51,7 +59,8 @@
     </div>
   {% endif %}
   {% if exposed %}
-    <div class="view-filters">
+    {% set views_filter_attributes = views_filter_attributes ?: create_attribute() %}
+    <div {{ views_filter_attributes.addclass(views_filter_classes, 'view-filters') }}>
       {{ exposed }}
     </div>
   {% endif %}
@@ -62,7 +71,8 @@
   {% endif %}
 
   {% if rows %}
-    <div class="view-content">
+    {% set views_content_attributes = views_content_attributes ?: create_attribute() %}
+    <div {{ views_content_attributes.addclass(views_content_classes, 'view-content list-container__inner') }}>
       {{ rows }}
     </div>
   {% elseif empty %}

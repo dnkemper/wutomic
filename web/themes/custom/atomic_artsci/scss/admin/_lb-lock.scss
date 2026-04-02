@@ -1,0 +1,7 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+// lb_lock module overrides.
+
+.layout-builder-block-locked:not(b) {
+  padding: 0;
+}

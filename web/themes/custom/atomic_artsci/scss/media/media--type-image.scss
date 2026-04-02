@@ -1,0 +1,102 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+
+// Media alignment
+
+  .align-right.embedded-entity,
+  .align-right .embedded-entity {
+    @include utilities.breakpoint(sm) {
+      margin-left: variables.$gutter;
+    }
+  }
+
+  .align-left.embedded-entity,
+  .align-left .embedded-entity {
+    @include utilities.breakpoint(sm) {
+      margin-right: variables.$gutter;
+    }
+  }
+
+
+.align-center {
+  text-align: center;
+}
+
+.embedded-entity.align-center {
+
+  .media--type-image,
+  .field--name-field-media-image {
+    margin: 0 auto;
+  }
+}
+
+.field--name-field-media-image {
+  min-width: 1px;
+}
+
+// Add paragraph spacing if placed inline with media.
+.media--type-image,
+.media--video,
+.media--type-panopto {
+  + p {
+    margin-top: 1rem;
+    @include utilities.breakpoint(sm) {
+      margin-top: 0;
+    }
+  }
+}
+
+// Full width images
+.media--type-image {
+  // Add fade-in for lazy images.
+  img {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+  }
+
+  &--full {
+    img {
+      width: 100%;
+    }
+  }
+  &--full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    img {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+    }
+  }
+}
+
+.block-field-blocknodepagebody,
+.block-inline-blockartsci-text-area {
+  [class*="media--type-"] {
+    position: relative;
+  }
+}
+
+// Absolutely position caption if cover option is selected on image block.
+figure.element--cover {
+  position: relative;
+  &.caption {
+    margin-bottom: 0;
+    display: block;
+  }
+  figcaption {
+    position: absolute;
+    bottom: 0;
+    color: #fff;
+    background: rgba(0,0,0,.7);
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    margin: 0;
+    p {
+      margin: 0;
+      + p {
+        margin-top: 1rem;
+      }
+    }
+  }
+}

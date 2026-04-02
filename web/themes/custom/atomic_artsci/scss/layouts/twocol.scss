@@ -1,0 +1,94 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.layout--twocol {
+  .layout__region--main,
+  .layout__region-container {
+    display: grid;
+    &.card {
+      display: block;
+    }
+  }
+  .layout__spacing_container {
+    @include utilities.grid-base;
+  }
+  &[class*="twocol--33-67"] {
+    .layout__spacing_container {
+      @include utilities.breakpoint(md) {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 0;
+        .layout__region--first {
+          grid-area: 1 / 1 / 6 / 2;
+        }
+        .layout__region--second {
+          grid-area: 1 / 2 / 6 / 4;
+          @include utilities.inner-grid(67);
+        }
+      }
+    }
+  }
+  &[class*="twocol--67-33"] {
+    .layout__spacing_container {
+      @include utilities.breakpoint(md) {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 0;
+        .layout__region--first,
+        .layout__region--main {
+          grid-area: 1 / 1 / 6 / 3;
+          @include utilities.inner-grid(67);
+        }
+        .layout__region--second,
+        .layout__region-container {
+          grid-area: 1 / 3 / 6 / 4;
+        }
+      }
+    }
+  }
+  &[class*="twocol--25-75"] {
+    .layout__spacing_container {
+      @include utilities.breakpoint(md) {
+        grid-template-columns: repeat(4, 1fr);
+        row-gap: 0;
+        .layout__region--first {
+          grid-area: 1 / 1 / 6 / 2;
+        }
+        .layout__region--second {
+          grid-area: 1 / 2 / 6 / 5;
+          @include utilities.inner-grid(75);
+        }
+      }
+    }
+  }
+  &[class*="twocol--75-25"] {
+    .layout__spacing_container {
+      @include utilities.breakpoint(md) {
+        grid-template-columns: repeat(4, 1fr);
+        row-gap: 0;
+        .layout__region--first {
+          grid-area: 1 / 1 / 6 / 4;
+          @include utilities.inner-grid(75);
+        }
+        .layout__region--second {
+          grid-area: 1 / 4 / 6 / 5;
+        }
+      }
+    }
+  }
+  &[class*="twocol--50-50"] {
+    .layout__spacing_container {
+      @include utilities.breakpoint(md) {
+        @include utilities.twocol-grid;
+      }
+    }
+  }
+  &.column-spacing__removed {
+    .layout__spacing_container {
+      gap: 0;
+      column-gap: 0;
+    }
+  }
+}
+
+.layout__region details.set[open] {
+  order: -1;
+}

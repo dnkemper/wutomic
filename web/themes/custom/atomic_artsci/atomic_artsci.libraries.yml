@@ -1,113 +1,651 @@
-base:
-  version: VERSION
+global-styling:
+  js:
+    assets/js/atomic_artsci.js: {}
+  css:
+    base:
+      assets/css/global.css: {}
+      /libraries/fontawesome/css/all.min.css: {}
+      https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,700&family=Zilla+Slab:wght@400;600;700&family=Antonio:wght@100;300;700&display=swap: { type: external, minified: false }
+    layout:
+      assets/css/components/page-layouts.css: {}
+    component:
+      assets/css/subscribe-block.css: {}
+      assets/css/components/button.css: {}
+      assets/css/components/form/forms.css: {}
+      assets/css/components/typography/headings.css: {}
+      assets/css/components/typography/lists.css: {}
+      assets/css/components/alert.css: {}
+      assets/css/components/pagination.css: {}
+      assets/css/components/typography/paragraph.css: {}
+      assets/css/components/form/search.css: {}
+      assets/css/components/breadcrumbs.css: {}
+      assets/css/components/brand-bar.css: {}
+      assets/css/components/footer.css: {}
+      assets/css/components/menus/superfish/superfish.css: {}
+      assets/css/components/menus/main-menu.css: {}
+      assets/css/components/menus/top.css: {}
+      assets/css/components/menus/quick.css: {}
+      assets/css/components/artsci-bar.css: {}
+      assets/css/components/image-gallery-block.css: {}
+      assets/css/fields/fields.css: {}
+      assets/css/components/background.css: { weight: 200 }
+      assets/css/components/grid.css: {}
+    theme:
+      assets/css/theme/print.css: { media: print }
+  dependencies:
+    - core/jquery
+    - core/once
+typekit:
+  css:
+    base:
+      https://use.typekit.net/ual3ogb.css: { type: external, minified: true }
+# Third-party libraries
+# Accessible Menu
+accessible-menu:
+  js:
+    /libraries/accessible-menu/dist/accessible-menu.js: {}
+    assets/js/accessible-menu.init.js: {}
+# Slick
+slick:
+  css:
+    theme:
+      /libraries/slick-carousel/slick/slick.css: {}
+  js:
+    /libraries/slick-carousel/slick/slick.min.js: {}
+  dependencies:
+    - core/jquery
+# UIDS.
+status-messages:
+  js:
+    assets/js/artsci.status-messages.js: {}
+message:
+  js:
+    assets/js/message.theme.js: {}
+  dependencies:
+    - atomic_artsci/status-messages
+
+accordion:
   css:
     component:
-      css/components/action-links.css:
-        weight: -10
-      css/components/breadcrumb.css:
-        weight: -10
-      css/components/button.css:
-        weight: -10
-      css/components/container-inline.css:
-        weight: -10
-      css/components/details.css:
-        weight: -10
-      css/components/exposed-filters.css:
-        weight: -10
-      css/components/field.css:
-        weight: -10
-      css/components/form.css:
-        weight: -10
-      css/components/icons.css:
-        weight: -10
-      css/components/inline-form.css:
-        weight: -10
-      css/components/link.css:
-        weight: -10
-      css/components/links.css:
-        weight: -10
-      css/components/menu.css:
-        weight: -10
-      css/components/more-link.css:
-        weight: -10
-      css/components/pager.css:
-        weight: -10
-      css/components/tabledrag.css:
-        weight: -10
-      css/components/tableselect.css:
-        weight: -10
-      css/components/tabs.css:
-        weight: -10
-      css/components/textarea.css:
-        weight: -10
-      css/components/ui-dialog.css:
-        weight: -10
-dialog:
-  version: VERSION
+      assets/css/components/accordion.css: {}
+      assets/css/paragraphs/artsci_paragraphs_accordion.css: {}
+  js:
+    js/accordion-init.js: { attributes: { type: module } }
+tabs:
   css:
     component:
-      css/components/dialog.css:
-        weight: -10
-dropbutton:
-  version: VERSION
+      assets/css/components/tabs.css: {}
+  js:
+    js/tabs.js: {}
+video-cookie:
+  js:
+    assets/js/video-cookie.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/js-cookie
+    - atomic_artsci/video
+slider:
   css:
     component:
-      css/components/dropbutton.css:
-        weight: -10
-file:
-  version: VERSION
+      assets/css/components/slider.css: {}
+      assets/css/components/banner.css: {}
+  js:
+    assets/js/slider.js: {}
+remote-video:
   css:
     component:
-      css/components/file.css:
-        weight: -10
-image-widget:
-  version: VERSION
+      assets/css/components/video/video-utilities.css: {}
+lazy-load-animation:
+  js:
+    assets/js/lazy_load_animation.js: {}
+video:
+  js:
+    assets/js/video.js: {}
+hero:
   css:
     component:
-      css/components/image-widget.css: {  }
-indented:
-  version: VERSION
+      assets/css/components/hero.css: {}
+event:
   css:
     component:
-      css/components/indented.css: {  }
-messages:
-  version: VERSION
+      assets/css/components/event.css: {}
+aggregator-feed:
   css:
     component:
-      css/components/messages.css:
-        weight: -10
-node:
-  version: VERSION
+      assets/css/content/aggregator-feed.css: {}
+hero-block-video:
+  js:
+    assets/js/video.js: {}
+    assets/js/video-cookie.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/js-cookie
+vertical-video:
   css:
     component:
-      css/components/node.css:
-        weight: -10
-progress:
-  version: VERSION
+      assets/css/components/video/vertical.css: {}
+  js:
+    assets/js/vertical.js: {}
+highlight:
   css:
     component:
-      css/components/progress.css:
-        weight: -10
-drupal.tablesort:
-  version: VERSION
+      assets/css/components/highlight.css: {}
+click-a11y:
+  js:
+    assets/js/click-a11y-init.js: { attributes: { type: module } }
+banner:
   css:
     component:
-      css/components/tablesort.css:
-        weight: -10
-item-list:
-  version: VERSION
+      assets/css/components/banner.css: {}
+  dependencies:
+    - atomic_artsci/click-a11y
+card:
   css:
     component:
-      css/components/item-list.css:
-        weight: -10
-search-results:
-  version: VERSION
+      assets/css/components/card.css: {}
+      assets/css/paragraphs/artsci-paragraphs-card.css: {}
+  dependencies:
+    - atomic_artsci/click-a11y
+media:
   css:
     component:
-      css/components/search-results.css: {  }
-user:
-  version: VERSION
+      assets/css/components/media.css: { weight: 1 }
+image:
   css:
     component:
-      css/components/user.css:
-        weight: -10
+      assets/css/components/image.css: {}
+tags:
+  css:
+    component:
+      assets/css/components/tags.css: {}
+related:
+  css:
+    component:
+      assets/css/components/related.css: {}
+cta:
+  css:
+    component:
+      assets/css/components/cta.css: {}
+stat:
+  css:
+    component:
+      assets/css/components/stat.css: {}
+timeline:
+  css:
+    component:
+      assets/css/components/timeline.css: {}
+  js:
+    assets/js/scroll.js: {}
+top-scroll:
+  css:
+    component:
+      assets/css/components/top-scroll.css: {}
+main-menu:
+  css:
+    component:
+      assets/css/components/menus/main-menu.css: {}
+mega-menu:
+  css:
+    component:
+      assets/css/components/menus/superfish/mega-menu.css: {}
+horizontal-menu:
+  css:
+    component:
+      assets/css/components/menus/superfish/horizontal-menu.css: {}
+local-tasks:
+  css:
+    component:
+      assets/css/components/menus/local-tasks.css: {}
+artsci-events-single:
+  css:
+    component:
+      assets/css/content/artsci-event-single.css: {}
+paragraphs-lists:
+  css:
+    component:
+      assets/css/paragraphs/artsci-paragraphs-lists.css: {}
+paragraphs-carousel:
+  css:
+    component:
+      assets/css/paragraphs/artsci_paragraphs_carousel.css: {}
+  js:
+    assets/js/carousel.js: {}
+  dependencies:
+    - atomic_artsci/slick
+    - core/jquery
+    - core/once
+paragraphs-featured-content:
+  css:
+    component:
+      assets/css/paragraphs/featured-content.css: {}
+paragraphs-image-gallery:
+  css:
+    component:
+      assets/css/paragraphs/artsci_paragraphs_image_gallery.css: {}
+paragraphs:
+  css:
+    component:
+      assets/css/paragraphs/artsci_paragraphs.css: {}
+paragraphs-text:
+  css:
+    component:
+      assets/css/paragraphs/artsci-paragraphs_text.css: {}
+paragraphs-webform:
+  css:
+    component:
+      assets/css/paragraphs/artsci-paragraphs-webform.css: {}
+chosen:
+  css:
+    component:
+      assets/css/components/form/chosen.css: {}
+view-articles-list:
+  css:
+    component:
+      assets/css/views/view-articles--list.css: {}
+view-events-list:
+  css:
+    component:
+      assets/css/views/view-events--list.css: {}
+view-articles-archive:
+  css:
+    component:
+      assets/css/views/view-display-id-block_articles_archive.css: {}
+view-page-articles:
+  css:
+    component:
+      assets/css/views/view-display-id-page_articles.css: {}
+view-display-people:
+  css:
+    component:
+      assets/css/views/view-display-id-people.css: {}
+view-taxonomy-term:
+  css:
+    component:
+      assets/css/views/view-taxonomy-term.css: {}
+view-taxonomy-term-colleges:
+  css:
+    component:
+      assets/css/views/view-taxonomy-term-colleges.css: {}
+view-bef:
+  css:
+    component:
+      assets/css/views/bef/view-bef.css: {}
+view-calendar:
+  css:
+    component:
+      assets/css/views/view-calendar.css: {}
+views:
+  css:
+    component:
+      assets/css/views/views.css: {}
+webforms:
+  css:
+    component:
+      assets/css/webforms/webforms.css: {}
+embed:
+  css:
+    component:
+      assets/css/components/embed.css: {}
+embedded-entity:
+  css:
+    component:
+      assets/css/media/embedded-entity.css: {}
+media-type-image:
+  css:
+    component:
+      assets/css/media/media--type-image.css: {}
+field-uip-title:
+  css:
+    component:
+      assets/css/fields/field--name-field-uip-title.css: {}
+fields:
+  css:
+    component:
+      assets/css/fields/fields.css: {}
+node-type-article:
+  css:
+    component:
+      assets/css/content/node--type--article.css: {}
+node-type-page:
+  css:
+    component:
+      assets/css/content/node--type--page.css: {}
+node-type-person:
+  css:
+    component:
+      assets/css/content/node--type--person.css: {}
+node-view-teaser:
+  css:
+    component:
+      assets/css/content/node--view-mode-teaser.css: {}
+caption:
+  css:
+    component:
+      assets/css/components/caption.css: {}
+callout:
+  css:
+    component:
+      assets/css/components/callout.css: {}
+      assets/css/components/inline.css: {}
+admin:
+  js:
+    assets/js/ckeditor-off-canvas-reset-overrides.js:  { }
+  css:
+    component:
+      assets/css/admin.css: { weight: 200 }
+region_item:
+  css:
+    component:
+      assets/css/components/region_item.css: {}
+# Layout Builder UI
+layout-builder:
+  css:
+    component:
+      assets/css/layout-builder.css: { weight: -500}
+sftouchscreen:
+  js:
+    assets/js/sftouchscreen.js: {}
+  dependencies:
+    - superfish/init
+person:
+  css:
+    theme:
+      assets/css/content/person.css: {}
+global-serif:
+  css:
+    component:
+      assets/css/components/typography/global-serif.css: {}
+
+# CSS libraries for Layout plugins.
+# One column
+onecol:
+  css:
+    theme:
+      assets/css/layouts/onecol.css: {}
+# One column with background
+onecol--background:
+  css:
+    theme:
+      assets/css/layouts/onecol--background.css: {}
+# One column with region
+onecol--fixed:
+  css:
+    theme:
+      assets/css/layouts/onecol--fixed.css: {}
+# Two column
+twocol:
+  css:
+    theme:
+      assets/css/layouts/twocol.css: {}
+# Three column
+threecol:
+  css:
+    theme:
+      assets/css/layouts/threecol.css: {}
+# Four column
+fourcol:
+  css:
+    theme:
+      assets/css/layouts/fourcol.css: {}
+# Left sidebar default page layout
+page--left-sidebar:
+  css:
+    theme:
+      assets/css/layouts/page--left-sidebar.css: {}
+# Off-brand theme
+theme-overrides:
+  css:
+    component:
+      assets/css/theme-overrides.css: {}
+# ==========================================================================
+# ATOMIC ARTSCI — Library Definitions for New Blocks
+# ==========================================================================
+#
+# ADD these to your existing atomic_artsci.libraries.yml.
+#
+# Architecture:
+#   - Global CSS (main.css) contains: abstracts, base, layout, utilities
+#   - Component CSS is loaded per-template via {{ attach_library() }}
+#   - Each component library maps to one SCSS partial → one CSS file
+#
+# CSS file paths assume compilation outputs to: assets/css/
+# JS file paths: assets/js/
+# ==========================================================================
+
+
+# ==========================================================================
+# GLOBAL — loaded on every page (already have this, update if needed)
+# ==========================================================================
+# global-styles:
+#   css:
+#     base:
+#       assets/css/main.css: {}
+#   dependencies:
+#     - core/drupal
+
+
+# ==========================================================================
+# BLOCK COMPONENTS — loaded per-template
+# ==========================================================================
+
+artsci-collection:
+  css:
+    component:
+      assets/css/components/blocks/collection.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-image-callout:
+  css:
+    component:
+      assets/css/components/blocks/image-callout.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-content-block:
+  css:
+    component:
+      assets/css/components/blocks/content-block.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-call-to-action:
+  css:
+    component:
+      assets/css/components/blocks/call-to-action.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-video-block:
+  css:
+    component:
+      assets/css/components/blocks/video-block.css: {}
+  dependencies:
+    - core/drupal
+
+blockquote:
+  css:
+    component:
+      assets/css/artsci/components/blockquote.css: {}
+
+artsci-card-collection:
+  css:
+    component:
+      assets/css/components/blocks/card-collection.css: {}
+  dependencies:
+    - core/drupal
+    - atomic_artsci/stat
+
+artsci-banner-block:
+  css:
+    component:
+      assets/css/components/blocks/banner-block.css: {}
+  dependencies:
+    - core/drupal
+    - atomic_artsci/banner
+
+artsci-ampersand-banner:
+  css:
+    component:
+      assets/css/components/blocks/ampersand-banner.css: {}
+  dependencies:
+    - core/drupal
+
+# artsci-media-carousel:
+#   css:
+#     component:
+#       assets/css/components/blocks/media-carousel.css: {}
+#   dependencies:
+#     - core/drupal
+#     - atomic_artsci/slider
+
+artsci-component-tabs:
+  css:
+    component:
+      assets/css/components/blocks/component-tabs.css: {}
+  js:
+    assets/js/component-tabs.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+artsci-gallery:
+  css:
+    component:
+      assets/css/components/blocks/gallery.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-social-embed:
+  css:
+    component:
+      assets/css/components/blocks/social-embed.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-anchor-links:
+  css:
+    component:
+      assets/css/components/blocks/anchor-links.css: {}
+  dependencies:
+    - core/drupal
+
+
+# ==========================================================================
+# PARAGRAPH COMPONENTS — loaded via block library dependencies
+# ==========================================================================
+
+artsci-featured-item:
+  css:
+    component:
+      assets/css/components/paragraphs/featured-item.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-stat-card:
+  css:
+    component:
+      assets/css/components/paragraphs/stat-card.css: {}
+  dependencies:
+    - core/drupal
+
+artsci-gallery-item:
+  css:
+    component:
+      assets/css/components/paragraphs/gallery-item.css: {}
+  dependencies:
+    - core/drupal
+
+# =====================================================================
+# CAROUSEL LIBRARIES — add/replace these in atomic_artsci.libraries.yml
+# =====================================================================
+
+# Unified carousel JS + shared base CSS (arrows, dots, deco lines)
+# Loaded by ALL carousel block templates
+artsci-carousel:
+  css:
+    component:
+      assets/css/components/carousel-base.css: {}
+  js:
+    js/artsci-carousel.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+# Large fan carousel (teal bg, 3-card fan)
+artsci-carousel-large:
+  css:
+    component:
+      assets/css/components/carousel-large.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Mini carousel (compact sidebar widget)
+artsci-carousel-mini:
+  css:
+    component:
+      assets/css/components/carousel-mini.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Paged carousel (N cards per page with dots)
+artsci-carousel-paged:
+  css:
+    component:
+      assets/css/components/paged-carousel.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Stories carousel (portrait scroll cards)
+artsci-stories-carousel:
+  css:
+    component:
+      assets/css/components/stories-carousel.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Stats carousel (big numbers, paged — extends paged carousel)
+artsci-stats-carousel:
+  css:
+    component:
+      assets/css/components/stats-carousel.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel-paged
+
+# Featured content block (all grid display modes)
+artsci-featured-content:
+  css:
+    component:
+      assets/css/components/featured-content.css: {}
+  dependencies:
+    - core/drupal
+
+# =====================================================================
+# DELETE these old entries (replaced above):
+# =====================================================================
+#
+# artsci-carousel:          ← REPLACED (was pointing to old JS/CSS)
+# stories-carousel:         ← REPLACED by artsci-stories-carousel
+# artsci-media-carousel:    ← Keep if media carousel block still exists
+# artsci-paged-carousel:    ← REPLACED by artsci-carousel-paged
+
+section-carousel:
+  version: 1.x
+  css:
+    component:
+      css/components/section-carousel.css: {}
+  js:
+    js/section-carousel.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+# Card overlay styles (loaded when card--overlay LB style is used)
+card-overlay:
+  version: 1.x
+  css:
+    component:
+      css/components/card-overlay.css: {}
+

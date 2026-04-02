@@ -1,0 +1,15 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.layout--onecol .layout__region {
+  width: 100%;
+  @include utilities.inner-grid(100);
+}
+
+.layout--onecol {
+  display: flex;
+
+  .layout__spacing_container {
+    flex-basis: 100%;
+  }
+}

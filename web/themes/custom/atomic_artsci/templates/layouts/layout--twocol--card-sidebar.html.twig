@@ -46,7 +46,7 @@
         subtitle: content.card_subtitle,
         meta: content.card_meta,
       } %}
-      {% embed '@atomic_artsci/atomic/card.html.twig' with card only %}
+      {% embed '@atomic_artsci/artsci/card.html.twig' with card only %}
         {% block media %}
           {% if content.card_media is not empty %}
             {{ attach_library('atomic_artsci/media') }}

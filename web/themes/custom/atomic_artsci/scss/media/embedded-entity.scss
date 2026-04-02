@@ -1,0 +1,107 @@
+@use '../abstracts/variables';
+@use '../abstracts/utilities';
+
+.embedded-entity {
+  max-width: 100%;
+  margin-bottom: 0;
+
+  figure & {
+    margin-bottom: 0;
+  }
+
+  figcaption {
+    margin-top: variables.$sm;
+  }
+}
+
+
+.embedded-entity+p {
+  margin-top: variables.$md !important;
+}
+
+.embedded-entity.align-center,
+.media.align-center {
+  .field--name-field-media-oembed-video iframe,
+  .field--name-field-media-instagram iframe {
+    margin: 0 auto !important;
+  }
+}
+
+figure.caption {
+  display: block;
+  margin: 0;
+  margin-bottom: .5rem;
+
+  &.align-center {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @include utilities.breakpoint(sm) {
+    display: table;
+  }
+
+  figcaption {
+    display: block;
+    max-width: none;
+    caption-side: bottom;
+    font-size: 95%;
+    margin-block-start: .5rem;
+    margin-block-end: 1.5rem;
+
+    p {
+      font-size: 95%;
+    }
+
+    @include utilities.breakpoint(sm) {
+      display: table-caption;
+    }
+  }
+}
+
+.align-left,
+figure.align-left,
+.align-left.embedded-entity,
+.align-left .embedded-entity {
+  float: none;
+  margin: 0;
+
+  @include utilities.breakpoint(sm) {
+    margin-right: 1.5rem;
+    margin-bottom: .5rem;
+    float: left;
+  }
+}
+
+.align-right,
+figure.align-right,
+.align-right.embedded-entity,
+.align-right .embedded-entity {
+  float: none;
+  margin: 0;
+
+  @include utilities.breakpoint(sm) {
+    margin-left: 1.5rem;
+    margin-bottom: .5rem;
+    float: right;
+  }
+}
+
+figure.caption .embedded-entity+figcaption {
+  font-size: 90%;
+  color: variables.$gray;
+  margin-top: variables.$sm;
+  margin-bottom: variables.$sm;
+}
+
+figure.caption.align-right .embedded-entity+figcaption {
+  @include utilities.breakpoint(sm) {
+    text-align: right;
+  }
+}
+
+.alert {
+  figure.caption .embedded-entity+figcaption {
+    color: variables.$gray;
+  }
+}

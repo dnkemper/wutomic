@@ -10,7 +10,7 @@
  * - description: Description text for the form element.
  * - required: An indicator for whether the associated form element is required.
  *
- * @see \Drupal\Core\Datetime\DatePreprocess::preprocessDatetimeWrapper()
+ * @see template_preprocess_datetime_wrapper()
  */
 #}
 {%
@@ -21,7 +21,7 @@
   ]
 %}
 {% if title %}
-  <h4{{ title_attributes.addClass(title_classes) }}>{{ title }}</h4>
+  <label{{ title_attributes.addClass(title_classes) }}>{{ title }}</label>
 {% endif %}
 {{ content }}
 {% if errors %}

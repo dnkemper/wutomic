@@ -1,0 +1,55 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+.aggregator-item {
+  .field--name-author {
+    display: inline-block;
+  }
+}
+
+.aggregator-feed {
+
+  .feed-description {
+    margin: 0 0 variables.$sm;
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: variables.$font-weight-medium;
+    line-height: 1.2;
+    padding-top: variables.$md;
+
+    a {
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .field--type-timestamp {
+    display: table;
+    margin-bottom: variables.$desktop-width-gutter;
+
+    .field__item {
+      font-weight: variables.$font-weight-light;
+    }
+
+    .field__label {
+      &:after {
+        content: ":";
+        padding-right: variables.$xsm;
+      }
+    }
+
+    >* {
+      display: inline;
+    }
+  }
+
+  .feed-icon {
+    @include utilities.bttn;
+    @include utilities.bttn--primary;
+    font-family: variables.$font-family-caps-bold;
+  }
+}

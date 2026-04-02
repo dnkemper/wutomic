@@ -1,26 +1,40 @@
-name: atomic_artsci
+name: Atomic Artsci
 type: theme
-'base theme': stable9
-version: 1.0.0
-libraries:
-  - atomic_artsci/base
-  - atomic_artsci/messages
-  - core/normalize
+base theme: classy
+description: A flexible theme with a responsive, mobile-first layout.
+package: Custom
+core_version_requirement: ^11 || ^12
+dependencies:
+  - classy:classy
+libraries-override:
+  classy/base: false
+  superfish/superfish_touchscreen: atomic_artsci/sftouchscreen
 libraries-extend:
-  user/drupal.user:
-    - atomic_artsci/user
-  core/drupal.dropbutton:
-    - atomic_artsci/dropbutton
-  core/drupal.dialog:
-    - atomic_artsci/dialog
-  file/drupal.file:
-    - atomic_artsci/file
-  core/drupal.item-list:
-    - atomic_artsci/item-list
-  core/drupal.progress:
-    - atomic_artsci/progress
-  core/drupal.tablesort:
-    - atomic_artsci/drupal.tablesort
-description: ''
-core_version_requirement: ^11
-generator: 'starterkit_theme:11.3.3'
+  core/drupal.message:
+    - atomic_artsci/message
+libraries:
+  - atomic_artsci/typekit
+  - atomic_artsci/global-styling
+  - atomic_artsci/layouts
+favicon:
+  use_default: false
+  path: favicon.ico
+regions:
+  page_top: 'Page top'
+  header: 'Header'
+  alert: 'Alert'
+  action_menu: 'Action menu'
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  under_search: 'Under search'
+  search: 'Search'
+  featured: 'Featured'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  after_content: 'After content'
+  pre_footer: 'Pre-footer'
+  footer_first: 'Footer under logo'
+  footer_second: 'Footer menus'
+  page_bottom: 'Page bottom'

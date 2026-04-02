@@ -1,0 +1,29 @@
+@use '../abstracts/variables';
+@use '../abstracts/_utilities.scss';
+
+@include utilities.breakpoint(sm) {
+  .content__container.after_content {
+    position: fixed;
+    width: 100%;
+    bottom: -1px;
+    // LB add block tray is z:100.
+    z-index: 99;
+    transition: box-shadow 0.15s ease-in-out;
+    box-shadow: 0 5px 10px #3333338a;
+  }
+}
+
+.region-after-content {
+  .block.bttn--row:not([class*="bttn--full"])  {
+
+    .bttn {
+      margin-bottom: 0;
+
+      + .bttn {
+        @include utilities.breakpoint(sm) {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
