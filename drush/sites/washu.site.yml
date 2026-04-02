@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.fe371c4f-02fb-43c8-a8cb-264f36f65f8c.drush.in
+  user: dev.fe371c4f-02fb-43c8-a8cb-264f36f65f8c
+  uri: dev-washu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.fe371c4f-02fb-43c8-a8cb-264f36f65f8c.drush.in
+  user: test.fe371c4f-02fb-43c8-a8cb-264f36f65f8c
+  uri: test-washu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.fe371c4f-02fb-43c8-a8cb-264f36f65f8c.drush.in
+  user: test.fe371c4f-02fb-43c8-a8cb-264f36f65f8c
+  uri: test-washu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.fe371c4f-02fb-43c8-a8cb-264f36f65f8c.drush.in
+  user: live.fe371c4f-02fb-43c8-a8cb-264f36f65f8c
+  uri: live-washu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.fe371c4f-02fb-43c8-a8cb-264f36f65f8c.drush.in
+  user: live.fe371c4f-02fb-43c8-a8cb-264f36f65f8c
+  uri: live-washu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

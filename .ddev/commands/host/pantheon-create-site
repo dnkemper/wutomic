@@ -1,0 +1,276 @@
+#!/bin/bash
+
+## Description: Create a new multisite on Pantheon
+## Usage: pantheon-create-site
+## Example: ddev pantheon-create-site
+
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+echo -e "\n${yellow}Creating new Pantheon multisite${NC}\n"
+
+# Get site information
+read -p "Site machine name (e.g., 'biology'): " SITE_NAME
+SITE_NAME=$(echo "$SITE_NAME" | sed 's/^wustl-//')  # Remove wustl- prefix if present
+FULL_SITE_NAME="wustl-${SITE_NAME}"
+
+# Domain pattern selection
+echo ""
+echo "${blue}Select the domain pattern for this site:${NC}"
+PS3="Domain pattern: "
+select DOMAIN_PATTERN in "${SITE_NAME}.wustl.edu" "${SITE_NAME}.artsci.wustl.edu" "${SITE_NAME}.washu.edu" "${SITE_NAME}.artsci.washu.edu"; do
+  if [[ -n "$DOMAIN_PATTERN" ]]; then
+    SITE_DIR="$DOMAIN_PATTERN"
+    break
+  else
+    echo "${red}Invalid selection. Please try again.${NC}"
+  fi
+done
+
+# Determine dev/stage subdomains based on pattern
+case "$SITE_DIR" in
+  *.artsci.wustl.edu)
+    DEV_DOMAIN="${SITE_NAME}.artscidev.wustl.edu"
+    STAGE_DOMAIN="${SITE_NAME}.artscistage.wustl.edu"
+    LIVE_DOMAIN="${SITE_NAME}.artsci.wustl.edu"
+    ;;
+  *.wustl.edu)
+    DEV_DOMAIN="${SITE_NAME}.dev.wustl.edu"
+    STAGE_DOMAIN="${SITE_NAME}.stage.wustl.edu"
+    LIVE_DOMAIN="${SITE_NAME}.wustl.edu"
+    ;;
+  *.artsci.washu.edu)
+    DEV_DOMAIN="${SITE_NAME}.artscidev.washu.edu"
+    STAGE_DOMAIN="${SITE_NAME}.artscistage.washu.edu"
+    LIVE_DOMAIN="${SITE_NAME}.artsci.washu.edu"
+    ;;
+  *.washu.edu)
+    DEV_DOMAIN="${SITE_NAME}.dev.washu.edu"
+    STAGE_DOMAIN="${SITE_NAME}.stage.washu.edu"
+    LIVE_DOMAIN="${SITE_NAME}.washu.edu"
+    ;;
+esac
+
+echo ""
+echo "${yellow}Verify dev/stage/live domains:${NC}"
+echo "${blue}  Dev:${NC}   $DEV_DOMAIN"
+echo "${blue}  Stage:${NC} $STAGE_DOMAIN"
+echo "${blue}  Live:${NC}  $LIVE_DOMAIN"
+echo ""
+read -p "Are these correct? (Y/N, or type custom dev domain): " domain_confirm
+if [[ ! $domain_confirm =~ ^[Yy]$ ]] && [[ -n "$domain_confirm" ]] && [[ "$domain_confirm" != "N" ]] && [[ "$domain_confirm" != "n" ]]; then
+  # User typed a custom dev domain — ask for all three
+  DEV_DOMAIN="$domain_confirm"
+  read -p "Stage domain: " STAGE_DOMAIN
+  read -p "Live domain: " LIVE_DOMAIN
+elif [[ $domain_confirm =~ ^[Nn]$ ]]; then
+  read -p "Dev domain: " DEV_DOMAIN
+  read -p "Stage domain: " STAGE_DOMAIN
+  read -p "Live domain: " LIVE_DOMAIN
+fi
+
+read -p "Site display name (default: $SITE_NAME): " DISPLAY_NAME
+DISPLAY_NAME=${DISPLAY_NAME:-$SITE_NAME}
+
+read -p "Site email (default: ${SITE_NAME}@wustl.edu): " SITE_EMAIL
+SITE_EMAIL=${SITE_EMAIL:-"${SITE_NAME}@wustl.edu"}
+
+read -p "Contact us URL (default: https://${SITE_DIR}/contact-us): " CONTACT_URL
+CONTACT_URL=${CONTACT_URL:-"https://${SITE_DIR}/contact-us"}
+
+read -p "Need a config split? (y/n): " NEED_SPLIT
+if [[ $NEED_SPLIT =~ ^[Yy]$ ]]; then
+  read -p "Config split ID: " CONFIG_SPLIT_ID
+fi
+
+echo ""
+echo "${yellow}========================================${NC}"
+echo "${blue}Site name:${NC}     $FULL_SITE_NAME"
+echo "${blue}Site dir:${NC}      $SITE_DIR"
+echo "${blue}Display name:${NC}  $DISPLAY_NAME"
+echo "${blue}Email:${NC}         $SITE_EMAIL"
+echo "${blue}Dev domain:${NC}    $DEV_DOMAIN"
+echo "${blue}Stage domain:${NC}  $STAGE_DOMAIN"
+echo "${blue}Live domain:${NC}   $LIVE_DOMAIN"
+if [[ $NEED_SPLIT =~ ^[Yy]$ ]]; then
+  echo "${blue}Config split:${NC}  $CONFIG_SPLIT_ID"
+fi
+echo "${yellow}========================================${NC}"
+echo ""
+read -p "Create this site? (Y/N): " confirm
+if [[ ! $confirm =~ ^[Yy]$ ]]; then
+  echo "${yellow}Cancelled${NC}"
+  exit 0
+fi
+
+# 1. Create site on Pantheon
+echo -e "\n${blue}Step 1: Creating site on Pantheon...${NC}"
+terminus site:create "$FULL_SITE_NAME" "$DISPLAY_NAME" "washu-deps-arts-and-science-d10" \
+  --org="washington-university-in-st-louis-arts-sciences"
+
+if [ $? -ne 0 ]; then
+  echo "${red}Failed to create site on Pantheon${NC}"
+  exit 1
+fi
+
+echo "${green}✓ Site created on Pantheon${NC}"
+
+# 2. Set connection mode to Git
+echo -e "\n${blue}Step 2: Setting connection mode to Git...${NC}"
+terminus connection:set "$FULL_SITE_NAME.dev" git
+
+# 3. Create local site directory structure
+echo -e "\n${blue}Step 3: Creating local site directory...${NC}"
+mkdir -p "web/sites/${SITE_DIR}"
+mkdir -p "config/${SITE_NAME}"
+
+# 4. Copy default site files
+echo -e "\n${blue}Step 4: Copying site structure...${NC}"
+if [ -d "web/sites/default" ]; then
+  cp -r web/sites/default/* "web/sites/${SITE_DIR}/"
+  rm -f "web/sites/${SITE_DIR}/settings.php"
+  rm -f "web/sites/${SITE_DIR}/local.settings.php"
+  rm -rf "web/sites/${SITE_DIR}/files"
+fi
+
+# 5. Create settings.php
+echo -e "\n${blue}Step 5: Creating settings.php...${NC}"
+
+# Escape dots for regex in trusted host patterns
+SITE_DIR_ESCAPED="${SITE_DIR//./\\.}"
+
+cat > "web/sites/${SITE_DIR}/settings.php" << EOF
+<?php
+
+/**
+ * @file
+ * Pantheon-specific settings for ${SITE_DIR} multisite.
+ */
+
+// Include Pantheon settings
+if (file_exists(__DIR__ . '/../../sites/default/settings.pantheon.php')) {
+  include __DIR__ . '/../../sites/default/settings.pantheon.php';
+}
+
+// Database configuration
+if (isset(\$_ENV['PANTHEON_ENVIRONMENT'])) {
+  \$databases['default']['default'] = [
+    'database' => 'pantheon',
+    'username' => 'pantheon',
+    'password' => \$_SERVER['DB_PASSWORD'],
+    'host' => \$_SERVER['DB_HOST'],
+    'port' => \$_SERVER['DB_PORT'],
+    'driver' => 'mysql',
+    'prefix' => '',
+    'collation' => 'utf8mb4_general_ci',
+  ];
+}
+
+// Config directory
+\$settings['config_sync_directory'] = '../config/${SITE_NAME}';
+
+// Trusted host patterns
+\$settings['trusted_host_patterns'] = [
+  '^${SITE_DIR_ESCAPED}\$',
+  '^.+\\.pantheonsite\\.io\$',
+  '^.+\\.wustl\\.edu\$',
+  '^.+\\.washu\\.edu\$',
+];
+
+// Hash salt
+if (file_exists(__DIR__ . '/../../sites/default/salt.txt')) {
+  \$settings['hash_salt'] = file_get_contents(__DIR__ . '/../../sites/default/salt.txt');
+}
+EOF
+
+# Add config split if requested
+if [[ $NEED_SPLIT =~ ^[Yy]$ ]]; then
+  cat >> "web/sites/${SITE_DIR}/settings.php" << EOF
+
+// Config split
+\$config['config_split.config_split.${CONFIG_SPLIT_ID}']['status'] = TRUE;
+EOF
+fi
+
+echo "${green}✓ settings.php created${NC}"
+
+# 6. Update sites.php
+echo -e "\n${blue}Step 6: Updating sites.php...${NC}"
+cat >> "web/sites/sites.php" << EOF
+
+// Directory aliases for ${SITE_DIR}
+\$sites['${SITE_NAME}.ddev.site'] = '${SITE_DIR}';
+\$sites['${DEV_DOMAIN}'] = '${SITE_DIR}';
+\$sites['${STAGE_DOMAIN}'] = '${SITE_DIR}';
+\$sites['${LIVE_DOMAIN}'] = '${SITE_DIR}';
+\$sites['dev-${FULL_SITE_NAME}.pantheonsite.io'] = '${SITE_DIR}';
+\$sites['test-${FULL_SITE_NAME}.pantheonsite.io'] = '${SITE_DIR}';
+\$sites['live-${FULL_SITE_NAME}.pantheonsite.io'] = '${SITE_DIR}';
+EOF
+
+echo "${green}✓ sites.php updated${NC}"
+
+# 7. Create Drush aliases
+echo -e "\n${blue}Step 7: Creating Drush aliases...${NC}"
+mkdir -p drush/sites
+
+cat > "drush/sites/${SITE_NAME}.site.yml" << EOF
+dev:
+  uri: https://${DEV_DOMAIN}
+  host: dev-${FULL_SITE_NAME}.pantheonsite.io
+  user: \${env.TERMINUS_USER}
+  root: /code/web
+  paths:
+    files: sites/${SITE_DIR}/files
+
+test:
+  uri: https://${STAGE_DOMAIN}
+  host: test-${FULL_SITE_NAME}.pantheonsite.io
+  user: \${env.TERMINUS_USER}
+  root: /code/web
+  paths:
+    files: sites/${SITE_DIR}/files
+
+live:
+  uri: https://${LIVE_DOMAIN}
+  host: live-${FULL_SITE_NAME}.pantheonsite.io
+  user: \${env.TERMINUS_USER}
+  root: /code/web
+  paths:
+    files: sites/${SITE_DIR}/files
+
+local:
+  uri: https://${SITE_NAME}.ddev.site
+  root: /var/www/html/web
+  paths:
+    files: sites/${SITE_DIR}/files
+EOF
+
+echo "${green}✓ Drush aliases created${NC}"
+
+# 8. Update shared content OPML (if exists)
+if [ -f "web/modules/custom/shared_content/shared_content_opml.xml" ]; then
+  echo -e "\n${blue}Step 8: Updating shared content OPML...${NC}"
+
+  NEW_OUTLINE="    <!--${SITE_NAME}-->\n    <outline text=\"${SITE_NAME} Articles\" xmlUrl=\"https://${SITE_DIR}/shared-content/articles\" feedSource=\"${SITE_DIR}\" feedContentType=\"Article\"/>\n    <outline text=\"${SITE_NAME} Books\" xmlUrl=\"https://${SITE_DIR}/shared-content/books\" feedSource=\"${SITE_DIR}\" feedContentType=\"Book\"/>\n    <outline text=\"${SITE_NAME} Events\" xmlUrl=\"https://${SITE_DIR}/shared-content/events\" feedSource=\"${SITE_DIR}\" feedContentType=\"Event\"/>\n    <outline text=\"${SITE_NAME} Person\" xmlUrl=\"https://${SITE_DIR}/shared-content/people\" feedSource=\"${SITE_DIR}\" feedContentType=\"Person\"/>"
+
+  perl -i -pe "s/(<!--New-->)/${NEW_OUTLINE}\n\$1/" web/modules/custom/shared_content/shared_content_opml.xml
+  echo "${green}✓ OPML updated${NC}"
+fi
+
+echo ""
+echo "${green}========================================${NC}"
+echo "${green}Site creation complete!${NC}"
+echo "${green}========================================${NC}"
+echo ""
+echo "${yellow}Next steps:${NC}"
+echo "1. Review and commit changes: ${blue}git add . && git commit -m 'Add new multisite: ${FULL_SITE_NAME}'${NC}"
+echo "2. Push to upstream: ${blue}git push origin master${NC}"
+echo "3. Apply upstream updates: ${blue}ddev upstream-update-all --filter=${FULL_SITE_NAME}${NC}"
+echo "4. Install Drupal: ${blue}ddev pantheon-install-profile ${FULL_SITE_NAME} dev${NC}"
+echo "5. Set up DNS/domains in Pantheon dashboard"
+echo ""

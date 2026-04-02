@@ -1,0 +1,92 @@
+#!/bin/bash
+## Description: Run sync to sync down a database and files to your local environment.
+## Usage: sync [environment] [target_alias]
+
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%T")
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0) # no color; turn off all attributes
+
+# Show info about this script, and setup PS4 for prefix of each trace line from "set -x"
+echo -e "\n\n${yellow}>>>>>${NC} ${magenta}${NOW}${NC} ${green}Running ${BASH_SOURCE}${NC} ${yellow}<<<<<${NC}\n"
+PS4='${yellow}>>${NC} ${magenta}$(TZ=America/Chicago date +%H:%M:%S.%3N)${NC} ${green}(${LINENO}) ${FUNCNAME[0]:+${FUNCNAME[0]}(): }${NC}'
+
+# Function to map numerical input to environment names
+get_environment_name() {
+  case $1 in
+    1) echo "dev";;
+    2) echo "stage";;
+    3) echo "prod";;
+    dev|stage|prod) echo "$1";;
+    *) echo ""; echo "${red}Invalid environment selection${NC}";;
+  esac
+}
+
+# Function to prompt the user for inputs
+prompt_for_inputs() {
+  # Prompt the user to select the target environment (dev, stage, or prod)
+  PS3="Select the number or environment you want to sync from: "
+  options=("dev" "stage" "prod")
+
+  select environment in "${options[@]}"; do
+    environment=$(get_environment_name "$REPLY")
+    if [[ -n "$environment" ]]; then
+      # Default target_alias to "olympian" and ask the user if it's okay
+      read -p "Enter the alias for the $environment environment (default: olympian): " target_alias
+      target_alias=${target_alias:-"olympian"} # Default to "olympian" if input is empty
+
+      read -p "The selected alias is '$target_alias'. Is this okay? (Y/N): " alias_confirmation
+      if [[ $alias_confirmation =~ ^[Yy]$ ]]; then
+        # Return selected environment and alias
+        echo "$environment" "$target_alias"
+        return
+      fi
+    else
+      echo "${red}Invalid selection. Please try again.${NC}"
+    fi
+  done
+}
+
+# Check if environment and target_alias are provided as arguments
+if [ -z "$1" ] || [ -z "$2" ]; then
+  # Prompt the user for inputs
+  read environment target_alias <<< $(prompt_for_inputs)
+else
+  # Use provided arguments
+  environment=$(get_environment_name "$1")
+  if [[ -z "$environment" ]]; then
+    echo "${red}Invalid environment argument${NC}"
+    exit 1
+  fi
+  target_alias=$2
+fi
+
+# Running commands with selected target alias
+set +x; echo -e "Running commands with target alias: ${blue}$target_alias${NC}"; set -x
+# Backup database
+set +x; echo -e "${blue}Backing up database to $target_alias-sync-backup-$NOW.sql${NC}"; set -x
+drush sql-dump > $target_alias-sync-backup-$NOW.sql
+set +x; echo -e "${blue}Dropping local database${NC}"; set -x
+drush sql-drop -y
+set +x; echo -e "${blue}Syncing database with $target_alias environment${NC}"; set -x
+drush sql-sync "@$environment.$target_alias" @self -y
+set +x; echo -e "${blue}Copying files and directories from $target_alias environment${NC}"; set -x
+drush rsync "@$environment.$target_alias":%files @self:%files --yes
+set +x; echo -e "${blue}Running database updates${NC}"; set -x
+drush updb --yes
+set +x; echo -e "${blue}Updating Composer packages${NC}"; set -x
+composer update --lock
+composer install
+set +x; echo -e "${blue}Enabling local config split${NC}"; set -x
+drush php-eval 'field_purge_batch(1000);'
+drush config-split:activate local --yes
+set +x; echo -e "${blue}Importing configuration from $target_alias environment${NC}"; set -x
+drush cim --source=../config/default --yes
+set +x; echo -e "${blue}Clearing Drupal cache and setting development mode${NC}"; set -x
+drush php:eval "\Drupal::keyValue('development_settings')->setMultiple(['disable_rendered_output_cache_bins' => TRUE, 'twig_debug' => TRUE, 'twig_cache_disable' => TRUE]);"
+drush cr
+set +x; echo -e "${blue}Opening local environment in a web browser${NC}"; set -x
+drush uli --uri=https://default.ddev.site/

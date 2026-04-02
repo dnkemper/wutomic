@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.85398821-c1e7-4a88-9775-da6eef1fef19.drush.in
+  user: dev.85398821-c1e7-4a88-9775-da6eef1fef19
+  uri: dev-wustl-quantumleaps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.85398821-c1e7-4a88-9775-da6eef1fef19.drush.in
+  user: test.85398821-c1e7-4a88-9775-da6eef1fef19
+  uri: test-wustl-quantumleaps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.85398821-c1e7-4a88-9775-da6eef1fef19.drush.in
+  user: test.85398821-c1e7-4a88-9775-da6eef1fef19
+  uri: test-wustl-quantumleaps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.85398821-c1e7-4a88-9775-da6eef1fef19.drush.in
+  user: live.85398821-c1e7-4a88-9775-da6eef1fef19
+  uri: live-wustl-quantumleaps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.85398821-c1e7-4a88-9775-da6eef1fef19.drush.in
+  user: live.85398821-c1e7-4a88-9775-da6eef1fef19
+  uri: live-wustl-quantumleaps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

@@ -1,0 +1,55 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://artsciadvising.ddev.site'
+  paths:
+    files: sites/default/files
+
+dev:
+  host: appserver.dev.e3d17c87-7dab-40cf-b18c-a541c8e1cd60.drush.in
+  user: dev.e3d17c87-7dab-40cf-b18c-a541c8e1cd60
+  uri: dev-wustl-artsciadvising.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.e3d17c87-7dab-40cf-b18c-a541c8e1cd60.drush.in
+  user: test.e3d17c87-7dab-40cf-b18c-a541c8e1cd60
+  uri: test-wustl-artsciadvising.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.e3d17c87-7dab-40cf-b18c-a541c8e1cd60.drush.in
+  user: test.e3d17c87-7dab-40cf-b18c-a541c8e1cd60
+  uri: test-wustl-artsciadvising.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.e3d17c87-7dab-40cf-b18c-a541c8e1cd60.drush.in
+  user: live.e3d17c87-7dab-40cf-b18c-a541c8e1cd60
+  uri: live-wustl-artsciadvising.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.e3d17c87-7dab-40cf-b18c-a541c8e1cd60.drush.in
+  user: live.e3d17c87-7dab-40cf-b18c-a541c8e1cd60
+  uri: live-wustl-artsciadvising.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

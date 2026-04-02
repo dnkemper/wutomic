@@ -1,0 +1,146 @@
+#!/bin/bash
+
+## Description: Create backups for all Pantheon sites (or filtered subset)
+## Usage: pantheon-backup [environment] [flags]
+## Example: ddev pantheon-backup
+## Example: ddev pantheon-backup live
+## Example: ddev pantheon-backup live --filter="artsci"
+## Example: ddev pantheon-backup --all-envs
+
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+
+echo -e "\n\n${yellow}>>>>>${NC} ${magenta}${NOW}${NC} ${green}Pantheon Backup${NC} ${yellow}<<<<<${NC}\n"
+
+# Defaults
+KEEP_FOR=30
+FILTER=""
+ALL_ENVS=false
+ENVIRONMENT=""
+
+# Parse flags
+POSITIONAL_ARGS=()
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --filter=*|-f=*) FILTER="${1#*=}" ;;
+    --filter|-f) FILTER="$2"; shift ;;
+    --keep-for=*) KEEP_FOR="${1#*=}" ;;
+    --all-envs) ALL_ENVS=true ;;
+    *) POSITIONAL_ARGS+=("$1") ;;
+  esac
+  shift
+done
+set -- "${POSITIONAL_ARGS[@]}"
+
+# Get environment
+if [ "$ALL_ENVS" = false ]; then
+  if [ -z "$1" ]; then
+    echo "${blue}Which environment would you like to backup?${NC}"
+    read -p "Environment (dev/test/live) [live]: " ENVIRONMENT
+    ENVIRONMENT=${ENVIRONMENT:-live}
+  else
+    case $1 in
+      dev) ENVIRONMENT="dev";;
+      stage|test) ENVIRONMENT="test";;
+      prod|live) ENVIRONMENT="live";;
+      *) echo "${red}Invalid environment: $1${NC}"; exit 1;;
+    esac
+  fi
+fi
+
+# Check terminus
+if ! command -v terminus &> /dev/null; then
+  echo "${red}Error: Terminus CLI not found.${NC}"
+  exit 1
+fi
+if ! terminus auth:whoami &> /dev/null; then
+  echo "${red}Error: Not authenticated with Terminus.${NC}"
+  exit 1
+fi
+
+# Get sites
+echo "${blue}Fetching Pantheon sites...${NC}"
+SITES=$(terminus site:list --format=list --field=name 2>/dev/null | sort)
+
+if [[ -z "$SITES" ]]; then
+  echo "${red}No sites found.${NC}"
+  exit 1
+fi
+
+if [[ -n "$FILTER" ]]; then
+  SITES=$(echo "$SITES" | grep -i "$FILTER")
+  if [[ -z "$SITES" ]]; then
+    echo "${red}No sites matched filter: ${FILTER}${NC}"
+    exit 1
+  fi
+fi
+
+SITE_COUNT=$(echo "$SITES" | wc -l | tr -d ' ')
+
+if [ "$ALL_ENVS" = true ]; then
+  ENVS=("dev" "test" "live")
+  echo "${yellow}Backing up ${SITE_COUNT} sites across ALL environments (dev, test, live)${NC}"
+else
+  ENVS=("$ENVIRONMENT")
+  echo "${yellow}Backing up ${SITE_COUNT} sites on ${ENVIRONMENT}${NC}"
+fi
+echo "${yellow}Backups will be kept for ${KEEP_FOR} days${NC}"
+echo ""
+
+# Track results
+SUCCESSFUL=0
+FAILED=0
+SKIPPED=0
+FAILED_SITES=()
+
+CURRENT=0
+for SITE in $SITES; do
+  CURRENT=$((CURRENT + 1))
+
+  for ENV in "${ENVS[@]}"; do
+    echo "${magenta}[${CURRENT}/${SITE_COUNT}]${NC} ${blue}Backing up ${SITE}.${ENV}...${NC}"
+
+    # Check if environment exists
+    if ! terminus env:info "$SITE.$ENV" &>/dev/null 2>&1; then
+      echo "${yellow}  ⏭ Environment '$ENV' not found, skipping${NC}"
+      SKIPPED=$((SKIPPED + 1))
+      continue
+    fi
+
+    if terminus backup:create "$SITE.$ENV" --element=all --keep-for=$KEEP_FOR 2>/dev/null; then
+      echo "${green}  ✓ Backup created${NC}"
+      SUCCESSFUL=$((SUCCESSFUL + 1))
+    else
+      echo "${red}  ✗ Backup failed${NC}"
+      FAILED=$((FAILED + 1))
+      FAILED_SITES+=("${SITE}.${ENV}")
+    fi
+  done
+done
+
+# Summary
+END_TIME=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+
+echo ""
+echo "${green}========================================${NC}"
+echo "${green}Backup Summary${NC}"
+echo "${green}========================================${NC}"
+echo "${green}Successful: $SUCCESSFUL${NC}"
+echo "${yellow}Skipped: $SKIPPED${NC}"
+if [ $FAILED -gt 0 ]; then
+  echo "${red}Failed: $FAILED${NC}"
+  echo "${red}Failed backups:${NC}"
+  for FAILED_SITE in "${FAILED_SITES[@]}"; do
+    echo "${red}  - $FAILED_SITE${NC}"
+  done
+fi
+echo "${blue}Started: $NOW${NC}"
+echo "${blue}Ended: $END_TIME${NC}"
+echo "${green}========================================${NC}"
+echo ""

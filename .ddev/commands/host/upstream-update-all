@@ -1,0 +1,363 @@
+#!/bin/bash
+
+## Description: Apply upstream updates to all Pantheon sites (excludes wustl-pantheon and wustl-artsci)
+## Usage: upstream-update-all [flags]
+## Example: ddev upstream-update-all
+## Example: ddev upstream-update-all --yes
+## Example: ddev upstream-update-all --filter="artsci"
+## Example: ddev upstream-update-all --dry-run
+## Example: ddev upstream-update-all --yes --deploy-test
+## Example: ddev upstream-update-all --yes --deploy-test --deploy-live
+## Flags: [{"Name":"yes","Shorthand":"y","Usage":"Skip confirmation prompts"},{"Name":"filter","Shorthand":"f","Usage":"Only process sites matching this string"},{"Name":"dry-run","Shorthand":"d","Usage":"Check for updates without applying them"},{"Name":"deploy-test","Usage":"After applying upstream updates, deploy dev to test"},{"Name":"deploy-live","Usage":"After deploying to test, deploy test to live"}]
+
+# Colors for output
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m'
+
+# ──────────────────────────────────────────────
+# Sites to EXCLUDE from upstream updates
+# ──────────────────────────────────────────────
+EXCLUDED_SITES=(
+    "wustl-myprehealth"
+    "wustl-artsci"
+    "wustl-artsci-nu"
+)
+
+# Parse flags
+AUTO_YES=false
+FILTER=""
+DRY_RUN=false
+DEPLOY_TEST=false
+DEPLOY_LIVE=false
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --yes|-y) AUTO_YES=true ;;
+        --filter=*|-f=*) FILTER="${1#*=}" ;;
+        --filter|-f) FILTER="$2"; shift ;;
+        --dry-run|-d) DRY_RUN=true ;;
+        --deploy-test) DEPLOY_TEST=true ;;
+        --deploy-live) DEPLOY_LIVE=true; DEPLOY_TEST=true ;;  # live implies test
+        *) echo -e "${RED}Unknown option: $1${NC}"; exit 1 ;;
+    esac
+    shift
+done
+
+# Check if a site is in the excluded list
+is_excluded() {
+    local site="$1"
+    for excluded in "${EXCLUDED_SITES[@]}"; do
+        if [[ "$site" == "$excluded" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Run drush cim only if there are pending config changes
+run_cim_if_needed() {
+    local site="$1"
+    local env="$2"
+    local php_mem="--php-options=-d memory_limit=512M"
+
+    echo -e "  ${YELLOW}Checking for pending config changes on ${env}...${NC}"
+    CIM_STATUS=$(terminus drush "${site}.${env}" -- cst "$php_mem" 2>&1)
+
+    if echo "$CIM_STATUS" | grep -qi "update\|create\|delete"; then
+        echo -e "  ${YELLOW}Config changes detected, importing...${NC}"
+        if terminus drush "${site}.${env}" -- cim -y "$php_mem" 2>&1; then
+            echo -e "  ${GREEN}✅ Config imported on ${env}${NC}"
+            terminus drush "${site}.${env}" -- cr "$php_mem" 2>&1
+            return 0
+        else
+            echo -e "  ${RED}❌ Config import failed on ${env}${NC}"
+            return 1
+        fi
+    else
+        echo -e "  ${GREEN}No config changes to import on ${env}${NC}"
+        return 0
+    fi
+}
+
+# Check if terminus is available
+if ! command -v terminus &> /dev/null; then
+    echo -e "${RED}Error: Terminus CLI is not installed or not in PATH.${NC}"
+    exit 1
+fi
+
+# Check if authenticated
+if ! terminus auth:whoami &> /dev/null; then
+    echo -e "${RED}Error: Not authenticated with Terminus. Run 'terminus auth:login' first.${NC}"
+    exit 1
+fi
+
+START_TIME=$(date +%s)
+
+# Get all site names
+echo -e "${YELLOW}Fetching site list from Pantheon...${NC}"
+SITES=$(terminus site:list --format=list --field=name 2>/dev/null)
+
+if [[ -z "$SITES" ]]; then
+    echo -e "${RED}No sites found on your Pantheon account.${NC}"
+    exit 1
+fi
+
+# Apply filter if provided
+if [[ -n "$FILTER" ]]; then
+    SITES=$(echo "$SITES" | grep -i "$FILTER")
+    if [[ -z "$SITES" ]]; then
+        echo -e "${RED}No sites matched filter: ${FILTER}${NC}"
+        exit 1
+    fi
+    echo -e "${CYAN}Filtered to sites matching: ${FILTER}${NC}"
+fi
+
+# Count sites
+TOTAL_SITES=$(echo "$SITES" | wc -l | tr -d ' ')
+EXCLUDE_COUNT=0
+for SITE in $SITES; do
+    if is_excluded "$SITE"; then
+        EXCLUDE_COUNT=$((EXCLUDE_COUNT + 1))
+    fi
+done
+SITE_COUNT=$((TOTAL_SITES - EXCLUDE_COUNT))
+
+echo -e "${CYAN}Found ${SITE_COUNT} site(s) to check (${EXCLUDE_COUNT} excluded).${NC}"
+if [[ ${#EXCLUDED_SITES[@]} -gt 0 ]]; then
+    echo -e "${CYAN}Excluding: ${EXCLUDED_SITES[*]}${NC}"
+fi
+if [[ "$DEPLOY_TEST" == true ]]; then
+    echo -e "${YELLOW}Will deploy to test after applying upstream updates${NC}"
+fi
+if [[ "$DEPLOY_LIVE" == true ]]; then
+    echo -e "${YELLOW}Will deploy to live after deploying to test${NC}"
+fi
+echo ""
+
+# Track results
+UPDATED=()
+SKIPPED=()
+FAILED=()
+NO_UPDATES=()
+DEPLOY_TEST_SUCCESS=()
+DEPLOY_TEST_FAILED=()
+DEPLOY_LIVE_SUCCESS=()
+DEPLOY_LIVE_FAILED=()
+CIM_TEST_SUCCESS=()
+CIM_TEST_FAILED=()
+CIM_TEST_SKIPPED=()
+CIM_LIVE_SUCCESS=()
+CIM_LIVE_FAILED=()
+CIM_LIVE_SKIPPED=()
+
+CURRENT=0
+for SITE in $SITES; do
+    if is_excluded "$SITE"; then
+        continue
+    fi
+
+    CURRENT=$((CURRENT + 1))
+    echo -e "${CYAN}[${CURRENT}/${SITE_COUNT}]${NC} ${YELLOW}Checking:${NC} ${SITE}"
+
+    # Check for available upstream updates
+    UPDATES=$(terminus upstream:updates:list "${SITE}.dev" 2>&1)
+
+    if echo "$UPDATES" | grep -qi "no updates\|No available updates"; then
+        echo -e "  ${GREEN}✓ Up to date${NC}"
+        NO_UPDATES+=("$SITE")
+        echo ""
+        continue
+    fi
+
+    echo -e "  ${YELLOW}⬆ Updates available${NC}"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo -e "  ${CYAN}(dry run - skipping apply)${NC}"
+        SKIPPED+=("$SITE")
+        echo ""
+        continue
+    fi
+
+    # Confirm unless --yes flag
+    if [[ "$AUTO_YES" != true ]]; then
+        read -p "  Apply updates to ${SITE}? (y/n/a=all remaining): " CONFIRM
+        case "$CONFIRM" in
+            a|A) AUTO_YES=true ;;
+            y|Y) ;;
+            *)
+                echo -e "  ${YELLOW}Skipped${NC}"
+                SKIPPED+=("$SITE")
+                echo ""
+                continue
+                ;;
+        esac
+    fi
+
+    # Apply upstream updates
+    echo -e "  ${YELLOW}Applying updates to dev...${NC}"
+    if terminus upstream:updates:apply "${SITE}.dev" --accept-upstream --updatedb 2>&1; then
+        echo -e "  ${GREEN}✅ Updated dev successfully${NC}"
+        UPDATED+=("$SITE")
+
+        # Deploy to test if requested
+        if [[ "$DEPLOY_TEST" == true ]]; then
+            echo -e "  ${YELLOW}Deploying dev → test...${NC}"
+            if terminus env:deploy "${SITE}.test" --cc --updatedb --note="Upstream update $(date +%Y-%m-%d)" 2>&1; then
+                echo -e "  ${GREEN}✅ Deployed to test${NC}"
+                DEPLOY_TEST_SUCCESS+=("$SITE")
+
+                # Run cim on test if needed
+                if run_cim_if_needed "$SITE" "test"; then
+                    if echo "$CIM_STATUS" | grep -qi "update\|create\|delete"; then
+                        CIM_TEST_SUCCESS+=("$SITE")
+                    else
+                        CIM_TEST_SKIPPED+=("$SITE")
+                    fi
+                else
+                    CIM_TEST_FAILED+=("$SITE")
+                fi
+
+                # Deploy to live if requested
+                if [[ "$DEPLOY_LIVE" == true ]]; then
+                    echo -e "  ${MAGENTA}Deploying test → live...${NC}"
+                    if terminus env:deploy "${SITE}.live" --cc --updatedb --note="Upstream update $(date +%Y-%m-%d)" 2>&1; then
+                        echo -e "  ${GREEN}✅ Deployed to live${NC}"
+                        DEPLOY_LIVE_SUCCESS+=("$SITE")
+
+                        # Run cim on live if needed
+                        if run_cim_if_needed "$SITE" "live"; then
+                            if echo "$CIM_STATUS" | grep -qi "update\|create\|delete"; then
+                                CIM_LIVE_SUCCESS+=("$SITE")
+                            else
+                                CIM_LIVE_SKIPPED+=("$SITE")
+                            fi
+                        else
+                            CIM_LIVE_FAILED+=("$SITE")
+                        fi
+                    else
+                        echo -e "  ${RED}❌ Failed to deploy to live${NC}"
+                        DEPLOY_LIVE_FAILED+=("$SITE")
+                    fi
+                fi
+            else
+                echo -e "  ${RED}❌ Failed to deploy to test${NC}"
+                DEPLOY_TEST_FAILED+=("$SITE")
+            fi
+        fi
+    else
+        echo -e "  ${RED}❌ Failed to update${NC}"
+        FAILED+=("$SITE")
+    fi
+    echo ""
+done
+
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+MINUTES=$((ELAPSED / 60))
+SECONDS=$((ELAPSED % 60))
+
+# Summary
+echo ""
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+echo -e "${CYAN}  UPSTREAM UPDATE SUMMARY${NC}"
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+
+if [[ ${#UPDATED[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Updated dev (${#UPDATED[@]}):${NC}"
+    for s in "${UPDATED[@]}"; do echo -e "  ✅ $s"; done
+fi
+
+if [[ ${#DEPLOY_TEST_SUCCESS[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Deployed to test (${#DEPLOY_TEST_SUCCESS[@]}):${NC}"
+    for s in "${DEPLOY_TEST_SUCCESS[@]}"; do echo -e "  ✅ $s"; done
+fi
+
+if [[ ${#CIM_TEST_SUCCESS[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Config imported on test (${#CIM_TEST_SUCCESS[@]}):${NC}"
+    for s in "${CIM_TEST_SUCCESS[@]}"; do echo -e "  ✅ $s"; done
+fi
+
+if [[ ${#CIM_TEST_SKIPPED[@]} -gt 0 ]]; then
+    echo -e "${GREEN}No config changes on test (${#CIM_TEST_SKIPPED[@]}):${NC}"
+    for s in "${CIM_TEST_SKIPPED[@]}"; do echo -e "  ✓ $s"; done
+fi
+
+if [[ ${#DEPLOY_LIVE_SUCCESS[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Deployed to live (${#DEPLOY_LIVE_SUCCESS[@]}):${NC}"
+    for s in "${DEPLOY_LIVE_SUCCESS[@]}"; do echo -e "  ✅ $s"; done
+fi
+
+if [[ ${#CIM_LIVE_SUCCESS[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Config imported on live (${#CIM_LIVE_SUCCESS[@]}):${NC}"
+    for s in "${CIM_LIVE_SUCCESS[@]}"; do echo -e "  ✅ $s"; done
+fi
+
+if [[ ${#CIM_LIVE_SKIPPED[@]} -gt 0 ]]; then
+    echo -e "${GREEN}No config changes on live (${#CIM_LIVE_SKIPPED[@]}):${NC}"
+    for s in "${CIM_LIVE_SKIPPED[@]}"; do echo -e "  ✓ $s"; done
+fi
+
+if [[ ${#NO_UPDATES[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Already up to date (${#NO_UPDATES[@]}):${NC}"
+    for s in "${NO_UPDATES[@]}"; do echo -e "  ✓ $s"; done
+fi
+
+if [[ ${#SKIPPED[@]} -gt 0 ]]; then
+    echo -e "${YELLOW}Skipped (${#SKIPPED[@]}):${NC}"
+    for s in "${SKIPPED[@]}"; do echo -e "  ⏭ $s"; done
+fi
+
+if [[ ${#FAILED[@]} -gt 0 ]]; then
+    echo -e "${RED}Failed upstream apply (${#FAILED[@]}):${NC}"
+    for s in "${FAILED[@]}"; do echo -e "  ❌ $s"; done
+fi
+
+if [[ ${#DEPLOY_TEST_FAILED[@]} -gt 0 ]]; then
+    echo -e "${RED}Failed deploy to test (${#DEPLOY_TEST_FAILED[@]}):${NC}"
+    for s in "${DEPLOY_TEST_FAILED[@]}"; do echo -e "  ❌ $s"; done
+fi
+
+if [[ ${#CIM_TEST_FAILED[@]} -gt 0 ]]; then
+    echo -e "${RED}Failed config import on test (${#CIM_TEST_FAILED[@]}):${NC}"
+    for s in "${CIM_TEST_FAILED[@]}"; do echo -e "  ❌ $s"; done
+fi
+
+if [[ ${#DEPLOY_LIVE_FAILED[@]} -gt 0 ]]; then
+    echo -e "${RED}Failed deploy to live (${#DEPLOY_LIVE_FAILED[@]}):${NC}"
+    for s in "${DEPLOY_LIVE_FAILED[@]}"; do echo -e "  ❌ $s"; done
+fi
+
+if [[ ${#CIM_LIVE_FAILED[@]} -gt 0 ]]; then
+    echo -e "${RED}Failed config import on live (${#CIM_LIVE_FAILED[@]}):${NC}"
+    for s in "${CIM_LIVE_FAILED[@]}"; do echo -e "  ❌ $s"; done
+fi
+
+echo ""
+echo -e "${CYAN}Total time: ${MINUTES}m ${SECONDS}s${NC}"
+
+# Retry commands for failures
+if [[ ${#FAILED[@]} -gt 0 ]] || [[ ${#DEPLOY_TEST_FAILED[@]} -gt 0 ]] || [[ ${#DEPLOY_LIVE_FAILED[@]} -gt 0 ]] || [[ ${#CIM_TEST_FAILED[@]} -gt 0 ]] || [[ ${#CIM_LIVE_FAILED[@]} -gt 0 ]]; then
+    echo ""
+    echo -e "${YELLOW}To retry failed sites manually:${NC}"
+    for s in "${FAILED[@]}"; do
+        echo "  terminus upstream:updates:apply ${s}.dev --accept-upstream --updatedb"
+    done
+    for s in "${DEPLOY_TEST_FAILED[@]}"; do
+        echo "  terminus env:deploy ${s}.test --cc --updatedb"
+    done
+    for s in "${CIM_TEST_FAILED[@]}"; do
+        echo "  terminus drush ${s}.test -- cim -y --php-options='-d memory_limit=512M' && terminus drush ${s}.test -- cr"
+    done
+    for s in "${DEPLOY_LIVE_FAILED[@]}"; do
+        echo "  terminus env:deploy ${s}.live --cc --updatedb"
+    done
+    for s in "${CIM_LIVE_FAILED[@]}"; do
+        echo "  terminus drush ${s}.live -- cim -y --php-options='-d memory_limit=512M' && terminus drush ${s}.live -- cr"
+    done
+fi
+
+echo ""

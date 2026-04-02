@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.bcb5d386-a46e-4455-ae7f-1051957ad0b3.drush.in
+  user: dev.bcb5d386-a46e-4455-ae7f-1051957ad0b3
+  uri: dev-wustl-strategicplan.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.bcb5d386-a46e-4455-ae7f-1051957ad0b3.drush.in
+  user: test.bcb5d386-a46e-4455-ae7f-1051957ad0b3
+  uri: test-wustl-strategicplan.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.bcb5d386-a46e-4455-ae7f-1051957ad0b3.drush.in
+  user: test.bcb5d386-a46e-4455-ae7f-1051957ad0b3
+  uri: test-wustl-strategicplan.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.bcb5d386-a46e-4455-ae7f-1051957ad0b3.drush.in
+  user: live.bcb5d386-a46e-4455-ae7f-1051957ad0b3
+  uri: live-wustl-strategicplan.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.bcb5d386-a46e-4455-ae7f-1051957ad0b3.drush.in
+  user: live.bcb5d386-a46e-4455-ae7f-1051957ad0b3
+  uri: live-wustl-strategicplan.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

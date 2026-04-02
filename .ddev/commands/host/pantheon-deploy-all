@@ -1,0 +1,192 @@
+#!/bin/bash
+
+## Description: Deploy all Pantheon sites between environments (dev→test or test→live)
+## Usage: pantheon-deploy-all [target-environment] [flags]
+## Example: ddev pantheon-deploy-all test
+## Example: ddev pantheon-deploy-all live --yes
+## Example: ddev pantheon-deploy-all test --filter="artsci" --dry-run
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m'
+
+# Sites to EXCLUDE
+EXCLUDED_SITES=(
+    "wustl-myprehealth"
+    "wustl-artsci"
+)
+
+# Parse flags
+AUTO_YES=false
+FILTER=""
+DRY_RUN=false
+TARGET_ENV=""
+
+POSITIONAL_ARGS=()
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --yes|-y) AUTO_YES=true ;;
+        --filter=*|-f=*) FILTER="${1#*=}" ;;
+        --filter|-f) FILTER="$2"; shift ;;
+        --dry-run|-d) DRY_RUN=true ;;
+        *) POSITIONAL_ARGS+=("$1") ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL_ARGS[@]}"
+
+# Get target environment
+if [ -z "$1" ]; then
+    echo -e "${YELLOW}Which environment do you want to deploy TO?${NC}"
+    select env in "test (from dev)" "live (from test)"; do
+        case $REPLY in
+            1) TARGET_ENV="test"; break;;
+            2) TARGET_ENV="live"; break;;
+            *) echo -e "${RED}Invalid selection${NC}";;
+        esac
+    done
+else
+    case $1 in
+        test|stage) TARGET_ENV="test";;
+        live|prod) TARGET_ENV="live";;
+        *) echo -e "${RED}Invalid environment. Use: test or live${NC}"; exit 1;;
+    esac
+fi
+
+if [[ "$TARGET_ENV" == "test" ]]; then
+    SOURCE_ENV="dev"
+else
+    SOURCE_ENV="test"
+fi
+
+is_excluded() {
+    local site="$1"
+    for excluded in "${EXCLUDED_SITES[@]}"; do
+        if [[ "$site" == "$excluded" ]]; then return 0; fi
+    done
+    return 1
+}
+
+# Check terminus
+if ! command -v terminus &> /dev/null; then
+    echo -e "${RED}Error: Terminus CLI not found.${NC}"
+    exit 1
+fi
+if ! terminus auth:whoami &> /dev/null; then
+    echo -e "${RED}Error: Not authenticated with Terminus.${NC}"
+    exit 1
+fi
+
+START_TIME=$(date +%s)
+
+# Get sites
+echo -e "${YELLOW}Fetching site list from Pantheon...${NC}"
+SITES=$(terminus site:list --format=list --field=name 2>/dev/null)
+
+if [[ -z "$SITES" ]]; then
+    echo -e "${RED}No sites found.${NC}"
+    exit 1
+fi
+
+if [[ -n "$FILTER" ]]; then
+    SITES=$(echo "$SITES" | grep -i "$FILTER")
+    if [[ -z "$SITES" ]]; then
+        echo -e "${RED}No sites matched filter: ${FILTER}${NC}"
+        exit 1
+    fi
+    echo -e "${CYAN}Filtered to sites matching: ${FILTER}${NC}"
+fi
+
+# Count
+TOTAL=$(echo "$SITES" | wc -l | tr -d ' ')
+EXCLUDE_COUNT=0
+for SITE in $SITES; do
+    is_excluded "$SITE" && EXCLUDE_COUNT=$((EXCLUDE_COUNT + 1))
+done
+SITE_COUNT=$((TOTAL - EXCLUDE_COUNT))
+
+echo -e "${CYAN}Deploying ${SOURCE_ENV} → ${TARGET_ENV} on ${SITE_COUNT} sites${NC}"
+
+# Extra safety for live
+if [[ "$TARGET_ENV" == "live" ]] && [[ "$DRY_RUN" == false ]]; then
+    echo ""
+    echo -e "${RED}⚠️  WARNING: You are about to deploy ALL sites to PRODUCTION ⚠️${NC}"
+    read -p "Type 'DEPLOY ALL TO LIVE' to confirm: " live_confirm
+    if [[ "$live_confirm" != "DEPLOY ALL TO LIVE" ]]; then
+        echo -e "${YELLOW}Cancelled.${NC}"
+        exit 0
+    fi
+fi
+
+# Track results
+SUCCESS=()
+FAILED=()
+SKIPPED=()
+
+CURRENT=0
+for SITE in $SITES; do
+    is_excluded "$SITE" && continue
+
+    CURRENT=$((CURRENT + 1))
+    echo -e "${CYAN}[${CURRENT}/${SITE_COUNT}]${NC} ${YELLOW}${SITE}${NC}: ${SOURCE_ENV} → ${TARGET_ENV}"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo -e "  ${CYAN}(dry run - skipping)${NC}"
+        SKIPPED+=("$SITE")
+        continue
+    fi
+
+    if [[ "$AUTO_YES" != true ]]; then
+        read -p "  Deploy? (y/n/a=all remaining): " CONFIRM
+        case "$CONFIRM" in
+            a|A) AUTO_YES=true ;;
+            y|Y) ;;
+            *) echo -e "  ${YELLOW}Skipped${NC}"; SKIPPED+=("$SITE"); continue ;;
+        esac
+    fi
+
+    if terminus env:deploy "${SITE}.${TARGET_ENV}" --cc --updatedb --note="Batch deploy $(date +%Y-%m-%d)" 2>&1; then
+        echo -e "  ${GREEN}✅ Success${NC}"
+        SUCCESS+=("$SITE")
+    else
+        echo -e "  ${RED}❌ Failed${NC}"
+        FAILED+=("$SITE")
+    fi
+    echo ""
+done
+
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+MINUTES=$((ELAPSED / 60))
+SECONDS=$((ELAPSED % 60))
+
+# Summary
+echo ""
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+echo -e "${CYAN}  DEPLOY SUMMARY: ${SOURCE_ENV} → ${TARGET_ENV}${NC}"
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+
+if [[ ${#SUCCESS[@]} -gt 0 ]]; then
+    echo -e "${GREEN}Deployed (${#SUCCESS[@]}):${NC}"
+    for s in "${SUCCESS[@]}"; do echo -e "  ✅ $s"; done
+fi
+if [[ ${#SKIPPED[@]} -gt 0 ]]; then
+    echo -e "${YELLOW}Skipped (${#SKIPPED[@]}):${NC}"
+    for s in "${SKIPPED[@]}"; do echo -e "  ⏭ $s"; done
+fi
+if [[ ${#FAILED[@]} -gt 0 ]]; then
+    echo -e "${RED}Failed (${#FAILED[@]}):${NC}"
+    for s in "${FAILED[@]}"; do echo -e "  ❌ $s"; done
+    echo ""
+    echo -e "${YELLOW}Retry commands:${NC}"
+    for s in "${FAILED[@]}"; do
+        echo "  terminus env:deploy ${s}.${TARGET_ENV} --cc --updatedb"
+    done
+fi
+
+echo ""
+echo -e "${CYAN}Total time: ${MINUTES}m ${SECONDS}s${NC}"
+echo ""

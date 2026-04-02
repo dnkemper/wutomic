@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a.drush.in
+  user: dev.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a
+  uri: dev-wustl-olympian.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a.drush.in
+  user: test.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a
+  uri: test-wustl-olympian.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a.drush.in
+  user: test.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a
+  uri: test-wustl-olympian.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a.drush.in
+  user: live.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a
+  uri: live-wustl-olympian.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a.drush.in
+  user: live.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a
+  uri: live-wustl-olympian.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

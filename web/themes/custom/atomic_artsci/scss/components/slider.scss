@@ -1,4 +1,4 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
 .slider__slide:first-child:focus-within {
@@ -183,6 +183,7 @@
     }
   }
 }
+
 
 // @todo Make this better.
 .slider__teaser {

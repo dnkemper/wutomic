@@ -1,0 +1,55 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+
+dev:
+  host: appserver.dev.02b4e913-198a-42ab-8143-670d991e8438.drush.in
+  user: dev.02b4e913-198a-42ab-8143-670d991e8438
+  uri: dev-wustl-economics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.02b4e913-198a-42ab-8143-670d991e8438.drush.in
+  user: test.02b4e913-198a-42ab-8143-670d991e8438
+  uri: test-wustl-economics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.02b4e913-198a-42ab-8143-670d991e8438.drush.in
+  user: test.02b4e913-198a-42ab-8143-670d991e8438
+  uri: test-wustl-economics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.02b4e913-198a-42ab-8143-670d991e8438.drush.in
+  user: live.02b4e913-198a-42ab-8143-670d991e8438
+  uri: live-wustl-economics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.02b4e913-198a-42ab-8143-670d991e8438.drush.in
+  user: live.02b4e913-198a-42ab-8143-670d991e8438
+  uri: live-wustl-economics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

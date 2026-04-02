@@ -1,0 +1,183 @@
+#!/bin/bash
+
+## Description: Install Drupal with artsci profile on a Pantheon site
+## Usage: pantheon-install-profile [site-name] [environment]
+## Example: ddev pantheon-install-profile wustl-hdw dev
+
+# Load .env file if it exists
+# Find the git root directory
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+
+if [ -z "$REPO_ROOT" ]; then
+  REPO_ROOT=$PWD
+fi
+
+ENV_FILE="${REPO_ROOT}/.env"
+
+if [ -f "$ENV_FILE" ]; then
+  echo "${blue}Loading environment variables from: ${ENV_FILE}${NC}"
+  set -a
+  source "$ENV_FILE"
+  set +a
+else
+  echo "${yellow}No .env file found at: ${ENV_FILE}${NC}"
+fi
+
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+# Normalize site name
+normalize_site_name() {
+  local site=$1
+  if [[ $site == wustl-* ]]; then
+    echo "$site"
+  else
+    echo "wustl-$site"
+  fi
+}
+
+# Get site
+if [ -z "$1" ]; then
+  echo "${blue}Fetching your Pantheon sites...${NC}"
+  sites=($(terminus site:list --format=list --field=name 2>/dev/null | grep "^wustl-" | sort))
+  
+  PS3="Select the site: "
+  select site in "${sites[@]}"; do
+    if [[ -n "$site" ]]; then
+      SITE_NAME="$site"
+      break
+    fi
+  done
+else
+  SITE_NAME=$(normalize_site_name "$1")
+fi
+
+# Get environment
+if [ -z "$2" ]; then
+  PS3="Select environment: "
+  select env in "dev" "test" "live"; do
+    PANTHEON_ENV="$env"
+    break
+  done
+else
+  case $2 in
+    dev|1) PANTHEON_ENV="dev";;
+    stage|test|2) PANTHEON_ENV="test";;
+    prod|live|3) PANTHEON_ENV="live";;
+    *) echo "${red}Invalid environment${NC}"; exit 1;;
+  esac
+fi
+
+# Get site directory name from sites.php or guess
+SITE_DIR=$(echo "$SITE_NAME" | sed 's/^wustl-//')
+SITE_DIR="${SITE_DIR}.wustl.edu"
+
+# Get details
+read -p "Site display name (default: $SITE_DIR): " DISPLAY_NAME
+DISPLAY_NAME=${DISPLAY_NAME:-$SITE_DIR}
+
+read -p "Site email (default: ${SITE_DIR}@wustl.edu): " SITE_EMAIL
+SITE_EMAIL=${SITE_EMAIL:-"${SITE_DIR}@wustl.edu"}
+
+read -p "Contact us URL (default: https://${SITE_DIR}/contact-us): " CONTACT_URL
+CONTACT_URL=${CONTACT_URL:-"https://${SITE_DIR}/contact-us"}
+
+read -p "Admin password (default: from \$SECRET env var): " ADMIN_PASSWORD
+ADMIN_PASSWORD=${ADMIN_PASSWORD:-${SECRET:-"admin123"}}
+
+echo ""
+echo "${yellow}========================================${NC}"
+echo "${blue}Site:${NC} $SITE_NAME.$PANTHEON_ENV"
+echo "${blue}Display name:${NC} $DISPLAY_NAME"
+echo "${blue}Email:${NC} $SITE_EMAIL"
+echo "${yellow}========================================${NC}"
+echo ""
+read -p "Install Drupal on this site? (Y/N): " confirm
+if [[ ! $confirm =~ ^[Yy]$ ]]; then
+  echo "${yellow}Cancelled${NC}"
+  exit 0
+fi
+
+# Check for environment variables
+if [ -z "$WEBTEAM" ] || [ -z "$COMMUNICATIONS" ]; then
+  echo "${yellow}Warning: WEBTEAM and COMMUNICATIONS env vars not set${NC}"
+  read -p "Continue without creating admin users? (Y/N): " continue_confirm
+  if [[ ! $continue_confirm =~ ^[Yy]$ ]]; then
+    exit 0
+  fi
+fi
+
+echo -e "\n${blue}Step 1: Installing Drupal...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- site:install artsci \
+  --site-name="$DISPLAY_NAME" \
+  --site-mail="$SITE_EMAIL" \
+  --account-name=asdrupal \
+  --account-pass="$ADMIN_PASSWORD" \
+  --yes
+
+echo -e "\n${blue}Step 2: Importing configuration (first pass)...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- cim -y
+
+echo -e "\n${blue}Step 3: Importing configuration (second pass)...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- cim -y
+
+echo -e "\n${blue}Step 4: Enabling artsci_content module...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- pm:enable artsci_content -y
+
+echo -e "\n${blue}Step 5: Setting site configuration...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- config:set system.site name "$DISPLAY_NAME" -y
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- config:set system.site mail "$SITE_EMAIL" -y
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- config:set system.site contact_us_url "$CONTACT_URL" -y
+
+echo -e "\n${blue}Step 6: Setting admin password...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:password asdrupal "$ADMIN_PASSWORD"
+
+# Add webteam and communications users if env vars are set
+if [ -n "$WEBTEAM" ] && [ -n "$COMMUNICATIONS" ]; then
+  echo -e "\n${blue}Step 7: Creating admin users...${NC}"
+  
+  IFS=',' read -ra WEBTEAM_USERS <<< "$WEBTEAM"
+  IFS=',' read -ra COMM_USERS <<< "$COMMUNICATIONS"
+  
+  # Add webteam as administrators
+  for USERNAME in "${WEBTEAM_USERS[@]}"; do
+    USERNAME=$(echo "$USERNAME" | xargs)
+    EMAIL="${USERNAME}@wustl.edu"
+    
+    echo "  Adding administrator: $USERNAME"
+    terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:information "$USERNAME" --format=json 2>/dev/null
+    if [ $? -ne 0 ]; then
+      terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:create "$USERNAME" --mail="$EMAIL"
+    fi
+    terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:role:add administrator "$USERNAME"
+  done
+  
+  # Add communications users
+  for USERNAME in "${COMM_USERS[@]}"; do
+    USERNAME=$(echo "$USERNAME" | xargs)
+    EMAIL="${USERNAME}@wustl.edu"
+    
+    echo "  Adding communications: $USERNAME"
+    terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:information "$USERNAME" --format=json 2>/dev/null
+    if [ $? -ne 0 ]; then
+      terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:create "$USERNAME" --mail="$EMAIL"
+    fi
+    terminus drush "$SITE_NAME.$PANTHEON_ENV" -- user:role:add communications "$USERNAME"
+  done
+fi
+
+echo -e "\n${blue}Step 8: Clearing cache...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- cr
+
+echo -e "\n${blue}Step 9: Generating login link...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- uli
+
+echo ""
+echo "${green}========================================${NC}"
+echo "${green}Installation complete!${NC}"
+echo "${green}========================================${NC}"
+echo ""

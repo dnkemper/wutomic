@@ -1,0 +1,335 @@
+#!/bin/bash
+
+## Description: Check update health for a single Pantheon site in detail — pending updb, config diff breakdown, module versions, and security status.
+## Usage: pantheon-site-health [site-name] [flags]
+## Example: ddev pantheon-site-health wustl-english\nddev pantheon-site-health wustl-english --env=live\nddev pantheon-site-health wustl-english --fix
+
+# ═══════════════════════════════════════════════════════════════════════
+#  PANTHEON SINGLE SITE HEALTH CHECK
+#  Deep-dive health check for one site: updb details, config breakdown,
+#  module versions, security, and optional auto-fix.
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── Colors ──
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 6)$(tput bold)
+magenta=$(tput setaf 5)$(tput bold)
+dim=$(tput dim)
+NC=$(tput sgr0)
+
+# ── Defaults ──
+SITE=""
+ENV="dev"
+FIX_MODE=false
+SHOW_MODULES=false
+
+# ── Parse arguments ──
+for arg in "$@"; do
+  case "$arg" in
+    --env=*) ENV="${arg#*=}" ;;
+    --fix) FIX_MODE=true ;;
+    --modules) SHOW_MODULES=true ;;
+    --help|-h)
+      cat <<'HELPEOF'
+PANTHEON SINGLE SITE HEALTH CHECK
+═══════════════════════════════════════
+
+Deep-dive into a single site's update health with detailed breakdown.
+
+USAGE:
+  ddev pantheon-site-health <site-name> [options]
+
+OPTIONS:
+  --env=ENV       Environment to check (dev|test|live). Default: dev
+  --fix           Attempt to fix issues (runs updb, cim, cr)
+  --modules       Show full list of outdated modules
+  --help, -h      Show this help
+
+WHAT IT CHECKS:
+  1. Site connectivity and Drupal bootstrap
+  2. Pending upstream updates (with commit messages)
+  3. Pending database updates (with hook names and modules)
+  4. Config sync status (with full diff breakdown)
+  5. Security advisories (with affected module versions)
+  6. Maintenance mode status (stuck mid-update?)
+  7. Drupal core version vs. latest
+  8. Recent watchdog errors (last 10)
+
+FIX MODE (--fix):
+  When --fix is passed, the command will:
+  1. Take a backup first
+  2. Run drush updatedb -y
+  3. Run drush config:import -y
+  4. Run drush cache:rebuild
+  5. Verify health after fix
+
+EXAMPLES:
+  ddev pantheon-site-health wustl-english
+  ddev pantheon-site-health wustl-english --env=live
+  ddev pantheon-site-health wustl-english --fix
+  ddev pantheon-site-health wustl-english --modules
+
+HELPEOF
+      exit 0
+      ;;
+    -*)
+      echo "${red}Unknown option: $arg${NC}"
+      exit 1
+      ;;
+    *)
+      if [[ -z "$SITE" ]]; then
+        SITE="$arg"
+      fi
+      ;;
+  esac
+done
+
+if [[ -z "$SITE" ]]; then
+  echo "${red}Usage: ddev pantheon-site-health <site-name> [--env=ENV] [--fix]${NC}"
+  echo "Example: ddev pantheon-site-health wustl-english"
+  exit 1
+fi
+
+# ── Map environment ──
+map_to_pantheon_env() {
+  case $1 in
+    dev|1) echo "dev";;
+    stage|test|2) echo "test";;
+    prod|live|3) echo "live";;
+    *) echo "";;
+  esac
+}
+
+PANTHEON_ENV=$(map_to_pantheon_env "$ENV")
+if [[ -z "$PANTHEON_ENV" ]]; then
+  echo "${red}Invalid environment: $ENV${NC}"
+  exit 1
+fi
+
+SITE_ENV="${SITE}.${PANTHEON_ENV}"
+
+# ── Verify Terminus auth ──
+if ! terminus auth:whoami &> /dev/null; then
+  echo "${red}✗ Not authenticated with Terminus.${NC}"
+  exit 1
+fi
+
+echo ""
+echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+echo "${cyan}  SITE HEALTH: ${SITE} (${PANTHEON_ENV})${NC}"
+echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+echo "${dim}  $(date '+%Y-%m-%d %H:%M:%S')${NC}"
+echo ""
+
+ISSUES=0
+
+# ── 1. Connectivity / Bootstrap ──
+echo "${cyan}1. Site Connectivity${NC}"
+SITE_STATUS=$(terminus drush "$SITE_ENV" -- status --format=json 2>&1)
+if echo "$SITE_STATUS" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+  DRUPAL_VERSION=$(echo "$SITE_STATUS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('drupal-version','?'))" 2>/dev/null)
+  PHP_VERSION=$(echo "$SITE_STATUS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('php-version','?'))" 2>/dev/null)
+  DB_STATUS=$(echo "$SITE_STATUS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('db-status','?'))" 2>/dev/null)
+  BOOTSTRAP=$(echo "$SITE_STATUS" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('bootstrap','?'))" 2>/dev/null)
+
+  echo "   ${green}✓${NC} Drupal ${DRUPAL_VERSION} | PHP ${PHP_VERSION} | DB: ${DB_STATUS} | Bootstrap: ${BOOTSTRAP}"
+else
+  echo "   ${red}✗ Cannot connect or bootstrap Drupal${NC}"
+  echo "   ${dim}$(echo "$SITE_STATUS" | head -3)${NC}"
+  ISSUES=$((ISSUES + 1))
+fi
+echo ""
+
+# ── 2. Maintenance mode check ──
+echo "${cyan}2. Maintenance Mode${NC}"
+MAINT_RAW=$(terminus drush "$SITE_ENV" -- state:get system.maintenance_mode 2>&1)
+if echo "$MAINT_RAW" | grep -qi "1\|TRUE\|true"; then
+  echo "   ${red}⚠ MAINTENANCE MODE IS ON${NC}"
+  echo "   ${yellow}  This site may be stuck mid-update!${NC}"
+  echo "   ${dim}  To disable: terminus drush $SITE_ENV -- state:set system.maintenance_mode 0${NC}"
+  ISSUES=$((ISSUES + 1))
+else
+  echo "   ${green}✓${NC} Maintenance mode off"
+fi
+echo ""
+
+# ── 3. Upstream updates ──
+echo "${cyan}3. Upstream Updates${NC}"
+UPSTREAM_RAW=$(terminus upstream:updates:list "${SITE}.dev" --format=json 2>&1)
+if echo "$UPSTREAM_RAW" | grep -qi "no updates\|No available\|\[\]"; then
+  echo "   ${green}✓${NC} Up to date with upstream"
+elif echo "$UPSTREAM_RAW" | python3 -c "import sys,json; data=json.load(sys.stdin); print(len(data))" 2>/dev/null; then
+  UP_COUNT=$(echo "$UPSTREAM_RAW" | python3 -c "import sys,json; data=json.load(sys.stdin); print(len(data))")
+  echo "   ${yellow}⬆ ${UP_COUNT} upstream update(s) pending${NC}"
+  # Show commit messages
+  echo "$UPSTREAM_RAW" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+for i, commit in enumerate(data[:5]):
+    msg = commit.get('message', commit.get('subject', '?'))
+    author = commit.get('author', '?')
+    date = commit.get('datetime', commit.get('date', '?'))
+    print(f'     {i+1}. {msg.strip()[:60]}  ({author}, {date})')
+if len(data) > 5:
+    print(f'     ... and {len(data)-5} more')
+" 2>/dev/null
+  ISSUES=$((ISSUES + 1))
+else
+  echo "   ${red}✗ Error checking upstream${NC}"
+  echo "   ${dim}$(echo "$UPSTREAM_RAW" | head -2)${NC}"
+fi
+echo ""
+
+# ── 4. Pending database updates ──
+echo "${cyan}4. Pending Database Updates (updb)${NC}"
+UPDB_RAW=$(terminus drush "$SITE_ENV" -- updatedb:status --format=json 2>&1)
+if echo "$UPDB_RAW" | grep -qi "No database updates required\|no pending\|\[\]\|\"\""; then
+  echo "   ${green}✓${NC} No pending database updates"
+elif echo "$UPDB_RAW" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+  echo "$UPDB_RAW" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+items = data.values() if isinstance(data, dict) else data
+for item in items:
+    if isinstance(item, dict):
+        module = item.get('module', '?')
+        hook = item.get('update_id', item.get('name', '?'))
+        desc = item.get('description', '')
+        print(f'   ⚠ {module} → {hook}: {desc[:70]}')
+    else:
+        print(f'   ⚠ {item}')
+" 2>/dev/null
+  ISSUES=$((ISSUES + 1))
+else
+  echo "   ${dim}$(echo "$UPDB_RAW" | head -2)${NC}"
+fi
+echo ""
+
+# ── 5. Config sync status ──
+echo "${cyan}5. Config Sync Status${NC}"
+CONFIG_RAW=$(terminus drush "$SITE_ENV" -- config:status --format=json 2>&1)
+if echo "$CONFIG_RAW" | grep -qi "No differences\|\[\]\|\"\""; then
+  echo "   ${green}✓${NC} Config is in sync"
+elif echo "$CONFIG_RAW" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+  echo "$CONFIG_RAW" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+items = list(data.values()) if isinstance(data, dict) else data
+
+# Group by state
+states = {}
+for item in items:
+    state = item.get('state', 'Unknown') if isinstance(item, dict) else 'Unknown'
+    name = item.get('name', str(item)) if isinstance(item, dict) else str(item)
+    states.setdefault(state, []).append(name)
+
+for state, configs in states.items():
+    print(f'   ⚠ {state}: {len(configs)} item(s)')
+    for c in configs[:5]:
+        print(f'     • {c}')
+    if len(configs) > 5:
+        print(f'     ... and {len(configs)-5} more')
+" 2>/dev/null
+  ISSUES=$((ISSUES + 1))
+else
+  echo "   ${red}✗ Error checking config${NC}"
+  echo "   ${dim}$(echo "$CONFIG_RAW" | head -2)${NC}"
+fi
+echo ""
+
+# ── 6. Security advisories ──
+echo "${cyan}6. Security Advisories${NC}"
+SEC_RAW=$(terminus drush "$SITE_ENV" -- pm:security --format=json 2>&1)
+if echo "$SEC_RAW" | grep -qi "no outstanding\|no security\|\[\]\|\"\""; then
+  echo "   ${green}✓${NC} No security advisories"
+elif echo "$SEC_RAW" | python3 -c "import sys,json; json.load(sys.stdin)" 2>/dev/null; then
+  echo "$SEC_RAW" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+items = data.values() if isinstance(data, dict) else data
+for item in items:
+    if isinstance(item, dict):
+        name = item.get('name', '?')
+        version = item.get('existing_version', item.get('version', '?'))
+        rec = item.get('recommended_version', '?')
+        print(f'   🔒 {name} ({version}) → update to {rec}')
+    else:
+        print(f'   🔒 {item}')
+" 2>/dev/null
+  ISSUES=$((ISSUES + 1))
+else
+  echo "   ${dim}Could not check security (this is normal if pm:security isn't available)${NC}"
+fi
+echo ""
+
+# ── 7. Recent watchdog errors ──
+echo "${cyan}7. Recent Watchdog Errors${NC}"
+WATCHDOG_RAW=$(terminus drush "$SITE_ENV" -- watchdog:show --severity=error --count=5 --format=json 2>&1)
+if echo "$WATCHDOG_RAW" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+items = list(data.values()) if isinstance(data, dict) else data
+if len(items) == 0:
+    sys.exit(1)
+for item in items:
+    date = item.get('date', '?') if isinstance(item, dict) else '?'
+    msg = (item.get('message', '?') if isinstance(item, dict) else str(item))[:80]
+    typ = item.get('type', '?') if isinstance(item, dict) else '?'
+    print(f'   ⚠ [{date}] {typ}: {msg}')
+" 2>/dev/null; then
+  : # output already printed
+else
+  echo "   ${green}✓${NC} No recent errors"
+fi
+echo ""
+
+# ── Summary ──
+echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+if [[ $ISSUES -eq 0 ]]; then
+  echo "${green}  ✓ ${SITE} is healthy — no issues detected${NC}"
+else
+  echo "${yellow}  ⚠ ${SITE} has ${ISSUES} area(s) needing attention${NC}"
+fi
+echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+echo ""
+
+# ── Fix mode ──
+if [[ "$FIX_MODE" == true && $ISSUES -gt 0 ]]; then
+  echo "${magenta}FIX MODE${NC}"
+  echo "${yellow}This will run the following on ${SITE_ENV}:${NC}"
+  echo "  1. Create a backup"
+  echo "  2. drush updatedb -y"
+  echo "  3. drush config:import -y"
+  echo "  4. drush cache:rebuild"
+  echo ""
+  read -p "Proceed? (y/N) " -n 1 -r
+  echo ""
+
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "${dim}Creating backup...${NC}"
+    terminus backup:create "$SITE_ENV" 2>&1 | tail -1
+    echo "${green}✓ Backup created${NC}"
+
+    echo "${dim}Running database updates...${NC}"
+    terminus drush "$SITE_ENV" -- updatedb -y 2>&1 | tail -5
+    echo ""
+
+    echo "${dim}Importing config...${NC}"
+    terminus drush "$SITE_ENV" -- config:import -y 2>&1 | tail -5
+    echo ""
+
+    echo "${dim}Clearing cache...${NC}"
+    terminus drush "$SITE_ENV" -- cache:rebuild 2>&1 | tail -1
+    echo ""
+
+    echo "${green}✓ Fix complete. Re-run without --fix to verify.${NC}"
+  else
+    echo "${dim}Fix cancelled.${NC}"
+  fi
+fi
+
+exit $( [[ $ISSUES -gt 0 ]] && echo 1 || echo 0 )

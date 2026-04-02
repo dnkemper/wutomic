@@ -1,0 +1,517 @@
+#!/bin/bash
+
+## Description: Check update health across all Pantheon sites — upstream updates, pending database updates, config sync status, and module security advisories.
+## Usage: pantheon-update-health [flags] [arguments]
+## Example: ddev pantheon-update-health\nddev pantheon-update-health --env=live\nddev pantheon-update-health --filter=english --verbose\nddev pantheon-update-health --json > report.json\nddev pantheon-update-health --check=upstream,updb\nddev pantheon-update-health --sites="wustl-english wustl-hdw"
+
+# ═══════════════════════════════════════════════════════════════════════
+#  PANTHEON UPDATE HEALTH CHECK
+#  Checks: upstream updates, pending updb, config status, module security
+#  Output: Color-coded table with per-site health status
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── Colors ──
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 6)$(tput bold)
+magenta=$(tput setaf 5)$(tput bold)
+dim=$(tput dim)
+NC=$(tput sgr0)
+
+# ── Defaults ──
+ENV="dev"
+FILTER=""
+VERBOSE=false
+JSON_OUTPUT=false
+CHECKS="all"
+SPECIFIC_SITES=""
+LOG_DIR="${HOME}/.ddev-update-logs"
+TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+PARALLEL_JOBS=5
+
+# ── Parse arguments ──
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --env=*) ENV="${1#*=}"; shift ;;
+    --filter=*) FILTER="${1#*=}"; shift ;;
+    --verbose) VERBOSE=true; shift ;;
+    --json) JSON_OUTPUT=true; shift ;;
+    --checks=*) CHECKS="${1#*=}"; shift ;;
+    --sites=*) SPECIFIC_SITES="${1#*=}"; shift ;;
+    --parallel=*) PARALLEL_JOBS="${1#*=}"; shift ;;
+    --log-dir=*) LOG_DIR="${1#*=}"; shift ;;
+    --help|-h)
+      cat <<'HELPEOF'
+PANTHEON UPDATE HEALTH CHECK
+═══════════════════════════════════════
+
+Scans Pantheon sites and reports on update health: upstream updates,
+pending database updates (updb), config sync status, and module security.
+
+USAGE:
+  ddev pantheon-update-health [options]
+
+OPTIONS:
+  --env=ENV          Environment to check (dev|test|live). Default: dev
+  --filter=PATTERN   Only check sites matching pattern
+  --sites="a b c"    Only check specific sites (space-separated)
+  --checks=LIST      Comma-separated checks to run. Options:
+                       upstream  — Pending upstream updates
+                       updb      — Pending database updates (drush updatedb:status)
+                       config    — Config sync status (drush config:status)
+                       security  — Module security advisories (composer audit)
+                       all       — Run all checks (default)
+  --verbose          Show detailed output for each check
+  --json             Output results as JSON (pipe to file or jq)
+  --parallel=N       Number of parallel checks (default: 5)
+  --log-dir=PATH     Directory for log files (default: ~/.ddev-update-logs)
+  --help, -h         Show this help
+
+EXAMPLES:
+  ddev pantheon-update-health
+      Full health check on all sites (dev environment)
+
+  ddev pantheon-update-health --env=live --checks=updb,config
+      Check only updb and config status on live
+
+  ddev pantheon-update-health --filter=english --verbose
+      Verbose check on sites matching "english"
+
+  ddev pantheon-update-health --json > health-report.json
+      Export full report as JSON
+
+  ddev pantheon-update-health --sites="wustl-english wustl-hdw"
+      Check only specific sites
+
+HELPEOF
+      exit 0
+      ;;
+    *)
+      echo "${red}Unknown option: $1${NC}"
+      echo "Use --help for usage information."
+      exit 1
+      ;;
+  esac
+done
+
+# ── Map environment ──
+map_to_pantheon_env() {
+  case $1 in
+    dev|1) echo "dev";;
+    stage|test|2) echo "test";;
+    prod|live|3) echo "live";;
+    *) echo "";;
+  esac
+}
+
+PANTHEON_ENV=$(map_to_pantheon_env "$ENV")
+if [[ -z "$PANTHEON_ENV" ]]; then
+  echo "${red}Invalid environment: $ENV${NC}"
+  echo "Use: dev, test, or live"
+  exit 1
+fi
+
+# ── Check which checks to run ──
+RUN_UPSTREAM=false
+RUN_UPDB=false
+RUN_CONFIG=false
+RUN_SECURITY=false
+
+if [[ "$CHECKS" == "all" ]]; then
+  RUN_UPSTREAM=true
+  RUN_UPDB=true
+  RUN_CONFIG=true
+  RUN_SECURITY=true
+else
+  IFS=',' read -ra CHECK_LIST <<< "$CHECKS"
+  for check in "${CHECK_LIST[@]}"; do
+    case "$check" in
+      upstream) RUN_UPSTREAM=true ;;
+      updb) RUN_UPDB=true ;;
+      config) RUN_CONFIG=true ;;
+      security) RUN_SECURITY=true ;;
+      *) echo "${yellow}⚠ Unknown check: $check (skipping)${NC}" ;;
+    esac
+  done
+fi
+
+# ── Verify Terminus auth ──
+if ! terminus auth:whoami &> /dev/null; then
+  echo "${red}✗ Not authenticated with Terminus.${NC}"
+  echo "  Run: terminus auth:login"
+  exit 1
+fi
+TERMINUS_USER=$(terminus auth:whoami --field=email 2>/dev/null)
+if [[ "$JSON_OUTPUT" != true ]]; then
+  echo "${green}✓ Authenticated as: ${TERMINUS_USER}${NC}"
+fi
+
+# ── Gather site list ──
+if [[ -n "$SPECIFIC_SITES" ]]; then
+  SITES=($SPECIFIC_SITES)
+else
+  SITES=()
+  while IFS= read -r line; do
+    [[ -n "$line" ]] && SITES+=("$line")
+  done < <(terminus site:list --format=list --field=name 2>/dev/null | sort)
+fi
+
+if [[ -n "$FILTER" ]]; then
+  FILTERED=()
+  for s in "${SITES[@]}"; do
+    if [[ "$s" == *"$FILTER"* ]]; then
+      FILTERED+=("$s")
+    fi
+  done
+  SITES=("${FILTERED[@]}")
+fi
+
+SITE_COUNT=${#SITES[@]}
+if [[ $SITE_COUNT -eq 0 ]]; then
+  echo "${red}No sites found.${NC}"
+  exit 1
+fi
+
+# ── Create log directory ──
+mkdir -p "$LOG_DIR"
+LOG_FILE="${LOG_DIR}/health-check_${TIMESTAMP}.log"
+
+# ── Header ──
+if [[ "$JSON_OUTPUT" != true ]]; then
+  echo ""
+  echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+  echo "${cyan}  PANTHEON UPDATE HEALTH CHECK${NC}"
+  echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+  echo "${dim}  Environment: ${PANTHEON_ENV}  |  Sites: ${SITE_COUNT}  |  $(date '+%Y-%m-%d %H:%M:%S')${NC}"
+  echo "${dim}  Checks: $(echo "$CHECKS" | tr ',' ', ')${NC}"
+  echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+  echo ""
+fi
+
+# ── Check a single site (called per-site) ──
+check_site() {
+  local SITE="$1"
+  local SITE_ENV="${SITE}.${PANTHEON_ENV}"
+
+  local STATUS_UPSTREAM="—"
+  local STATUS_UPDB="—"
+  local STATUS_CONFIG="—"
+  local STATUS_SECURITY="—"
+  local DETAILS_UPSTREAM=""
+  local DETAILS_UPDB=""
+  local DETAILS_CONFIG=""
+  local DETAILS_SECURITY=""
+  local HAS_ISSUES=false
+
+  # ── Upstream check ──
+  if [[ "$RUN_UPSTREAM" == true ]]; then
+    UPSTREAM_RAW=$(terminus upstream:updates:list "${SITE}.dev" --format=json 2>&1)
+    if echo "$UPSTREAM_RAW" | grep -qi "no updates\|No available\|\[\]"; then
+      STATUS_UPSTREAM="${green}✓ Current${NC}"
+    elif echo "$UPSTREAM_RAW" | grep -qi "error\|not found\|could not"; then
+      STATUS_UPSTREAM="${red}✗ Error${NC}"
+      DETAILS_UPSTREAM="Could not check upstream status"
+      HAS_ISSUES=true
+    else
+      UPDATE_COUNT=$(echo "$UPSTREAM_RAW" | python3 -c "import sys,json; data=json.load(sys.stdin); print(len(data))" 2>/dev/null || echo "?")
+      STATUS_UPSTREAM="${yellow}⬆ ${UPDATE_COUNT} pending${NC}"
+      DETAILS_UPSTREAM="$UPDATE_COUNT upstream update(s) available"
+      HAS_ISSUES=true
+    fi
+  fi
+
+  # ── Database updates check ──
+  if [[ "$RUN_UPDB" == true ]]; then
+    UPDB_RAW=$(terminus drush "$SITE_ENV" -- updatedb:status --format=json 2>&1)
+    if echo "$UPDB_RAW" | grep -qi "No database updates required\|no pending updates\|\[\]\|\"\""; then
+      STATUS_UPDB="${green}✓ Current${NC}"
+    elif echo "$UPDB_RAW" | grep -qi "error\|exception\|not found\|drush was not found"; then
+      STATUS_UPDB="${red}✗ Error${NC}"
+      DETAILS_UPDB="Could not run updatedb:status — $(echo "$UPDB_RAW" | head -1)"
+      HAS_ISSUES=true
+    else
+      PENDING_HOOKS=$(echo "$UPDB_RAW" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, dict):
+        print(len(data))
+    elif isinstance(data, list):
+        print(len(data))
+    else:
+        print('?')
+except:
+    print('?')
+" 2>/dev/null || echo "?")
+      STATUS_UPDB="${red}⚠ ${PENDING_HOOKS} pending${NC}"
+      DETAILS_UPDB="$PENDING_HOOKS pending database update(s)"
+      HAS_ISSUES=true
+    fi
+  fi
+
+  # ── Config sync check ──
+  if [[ "$RUN_CONFIG" == true ]]; then
+    CONFIG_RAW=$(terminus drush "$SITE_ENV" -- config:status --format=json 2>&1)
+    if echo "$CONFIG_RAW" | grep -qi "No differences\|\[\]\|\"\""; then
+      STATUS_CONFIG="${green}✓ In sync${NC}"
+    elif echo "$CONFIG_RAW" | grep -qi "error\|exception\|not found\|drush was not found"; then
+      STATUS_CONFIG="${red}✗ Error${NC}"
+      DETAILS_CONFIG="Could not run config:status — $(echo "$CONFIG_RAW" | head -1)"
+      HAS_ISSUES=true
+    else
+      CONFIG_DIFF_COUNT=$(echo "$CONFIG_RAW" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, dict):
+        print(len(data))
+    elif isinstance(data, list):
+        print(len(data))
+    else:
+        print('?')
+except:
+    print('?')
+" 2>/dev/null || echo "?")
+      # Categorize the diffs
+      ONLY_DB=$(echo "$CONFIG_RAW" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    items = data.values() if isinstance(data, dict) else data
+    db_only = sum(1 for i in items if 'Only in DB' in str(i.get('state', '') if isinstance(i, dict) else i))
+    disk_only = sum(1 for i in items if 'Only in sync' in str(i.get('state', '') if isinstance(i, dict) else i))
+    diff = sum(1 for i in items if 'Different' in str(i.get('state', '') if isinstance(i, dict) else i))
+    parts = []
+    if db_only: parts.append(f'{db_only} db-only')
+    if disk_only: parts.append(f'{disk_only} sync-only')
+    if diff: parts.append(f'{diff} different')
+    print(', '.join(parts) if parts else f'{len(list(data.values() if isinstance(data, dict) else data))} diff(s)')
+except:
+    print('? diffs')
+" 2>/dev/null || echo "? diffs")
+      STATUS_CONFIG="${yellow}⚠ ${CONFIG_DIFF_COUNT} diff(s)${NC}"
+      DETAILS_CONFIG="Config differences: $ONLY_DB"
+      HAS_ISSUES=true
+    fi
+  fi
+
+  # ── Security advisories check ──
+  if [[ "$RUN_SECURITY" == true ]]; then
+    SEC_RAW=$(terminus drush "$SITE_ENV" -- pm:security --format=json 2>&1)
+    if echo "$SEC_RAW" | grep -qi "There are no outstanding security\|no security\|\[\]\|\"\""; then
+      STATUS_SECURITY="${green}✓ Secure${NC}"
+    elif echo "$SEC_RAW" | grep -qi "error\|exception\|not found\|drush was not found"; then
+      STATUS_SECURITY="${red}✗ Error${NC}"
+      DETAILS_SECURITY="Could not run pm:security"
+      HAS_ISSUES=true
+    else
+      SEC_COUNT=$(echo "$SEC_RAW" | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+    if isinstance(data, dict):
+        print(len(data))
+    elif isinstance(data, list):
+        print(len(data))
+    else:
+        print('?')
+except:
+    print('?')
+" 2>/dev/null || echo "?")
+      STATUS_SECURITY="${red}🔒 ${SEC_COUNT} advisory${NC}"
+      DETAILS_SECURITY="$SEC_COUNT security advisory/ies"
+      HAS_ISSUES=true
+    fi
+  fi
+
+  # ── Output ──
+  echo "RESULT|${SITE}|${STATUS_UPSTREAM}|${STATUS_UPDB}|${STATUS_CONFIG}|${STATUS_SECURITY}|${HAS_ISSUES}|${DETAILS_UPSTREAM}|${DETAILS_UPDB}|${DETAILS_CONFIG}|${DETAILS_SECURITY}"
+}
+
+# ── JSON output mode ──
+if [[ "$JSON_OUTPUT" == true ]]; then
+  echo "["
+  FIRST=true
+  ISSUES_COUNT=0
+
+  for SITE in "${SITES[@]}"; do
+    RESULT=$(check_site "$SITE")
+    IFS='|' read -r _ SITE_NAME S_UP S_UPDB S_CONF S_SEC HAS_ISSUES D_UP D_UPDB D_CONF D_SEC <<< "$RESULT"
+
+    # Strip color codes for JSON
+    S_UP=$(echo -e "$S_UP" | sed 's/\x1b\[[0-9;]*m//g')
+    S_UPDB=$(echo -e "$S_UPDB" | sed 's/\x1b\[[0-9;]*m//g')
+    S_CONF=$(echo -e "$S_CONF" | sed 's/\x1b\[[0-9;]*m//g')
+    S_SEC=$(echo -e "$S_SEC" | sed 's/\x1b\[[0-9;]*m//g')
+
+    if [[ "$HAS_ISSUES" == "true" ]]; then
+      ISSUES_COUNT=$((ISSUES_COUNT + 1))
+    fi
+
+    if [[ "$FIRST" == true ]]; then
+      FIRST=false
+    else
+      echo ","
+    fi
+
+    cat <<JSONEOF
+  {
+    "site": "$SITE_NAME",
+    "environment": "$PANTHEON_ENV",
+    "upstream": "$(echo "$S_UP" | xargs)",
+    "database_updates": "$(echo "$S_UPDB" | xargs)",
+    "config_status": "$(echo "$S_CONF" | xargs)",
+    "security": "$(echo "$S_SEC" | xargs)",
+    "has_issues": $HAS_ISSUES,
+    "details": {
+      "upstream": "$D_UP",
+      "database_updates": "$D_UPDB",
+      "config": "$D_CONF",
+      "security": "$D_SEC"
+    }
+  }
+JSONEOF
+  done
+
+  echo ""
+  echo "]"
+  exit 0
+fi
+
+# ── Table header ──
+# Build dynamic column header
+HEADER="%-35s"
+DIVIDER="%-35s"
+HEADER_ARGS=("SITE")
+DIVIDER_ARGS=("$(printf '%0.s─' {1..33})")
+
+if [[ "$RUN_UPSTREAM" == true ]]; then
+  HEADER+=" %-16s"
+  DIVIDER+=" %-16s"
+  HEADER_ARGS+=("UPSTREAM")
+  DIVIDER_ARGS+=("$(printf '%0.s─' {1..14})")
+fi
+if [[ "$RUN_UPDB" == true ]]; then
+  HEADER+=" %-16s"
+  DIVIDER+=" %-16s"
+  HEADER_ARGS+=("DB UPDATES")
+  DIVIDER_ARGS+=("$(printf '%0.s─' {1..14})")
+fi
+if [[ "$RUN_CONFIG" == true ]]; then
+  HEADER+=" %-18s"
+  DIVIDER+=" %-18s"
+  HEADER_ARGS+=("CONFIG")
+  DIVIDER_ARGS+=("$(printf '%0.s─' {1..16})")
+fi
+if [[ "$RUN_SECURITY" == true ]]; then
+  HEADER+=" %-16s"
+  DIVIDER+=" %-16s"
+  HEADER_ARGS+=("SECURITY")
+  DIVIDER_ARGS+=("$(printf '%0.s─' {1..14})")
+fi
+
+printf "${cyan}${HEADER}${NC}\n" "${HEADER_ARGS[@]}"
+printf "${dim}${DIVIDER}${NC}\n" "${DIVIDER_ARGS[@]}"
+
+# ── Counters ──
+TOTAL=0
+ISSUES=0
+ISSUE_SITES=()
+ERRORS=0
+
+# ── Process each site ──
+for SITE in "${SITES[@]}"; do
+  TOTAL=$((TOTAL + 1))
+
+  # Progress indicator (to stderr so it doesn't interfere with output)
+  if [[ "$VERBOSE" == true ]]; then
+    echo -ne "${dim}  [${TOTAL}/${SITE_COUNT}] Checking ${SITE}...${NC}\r" >&2
+  fi
+
+  RESULT=$(check_site "$SITE")
+  IFS='|' read -r _ SITE_NAME S_UP S_UPDB S_CONF S_SEC HAS_ISSUES D_UP D_UPDB D_CONF D_SEC <<< "$RESULT"
+
+  # Print table row
+  ROW="%-35s"
+  ROW_ARGS=("$SITE_NAME")
+
+  if [[ "$RUN_UPSTREAM" == true ]]; then
+    ROW+=" %-16b"
+    ROW_ARGS+=("$S_UP")
+  fi
+  if [[ "$RUN_UPDB" == true ]]; then
+    ROW+=" %-16b"
+    ROW_ARGS+=("$S_UPDB")
+  fi
+  if [[ "$RUN_CONFIG" == true ]]; then
+    ROW+=" %-18b"
+    ROW_ARGS+=("$S_CONF")
+  fi
+  if [[ "$RUN_SECURITY" == true ]]; then
+    ROW+=" %-16b"
+    ROW_ARGS+=("$S_SEC")
+  fi
+
+  printf "${ROW}\n" "${ROW_ARGS[@]}"
+
+  # Verbose details
+  if [[ "$VERBOSE" == true && "$HAS_ISSUES" == "true" ]]; then
+    [[ -n "$D_UP" ]] && echo "    ${dim}↳ Upstream: ${D_UP}${NC}"
+    [[ -n "$D_UPDB" ]] && echo "    ${dim}↳ DB: ${D_UPDB}${NC}"
+    [[ -n "$D_CONF" ]] && echo "    ${dim}↳ Config: ${D_CONF}${NC}"
+    [[ -n "$D_SEC" ]] && echo "    ${dim}↳ Security: ${D_SEC}${NC}"
+  fi
+
+  if [[ "$HAS_ISSUES" == "true" ]]; then
+    ISSUES=$((ISSUES + 1))
+    ISSUE_SITES+=("$SITE_NAME")
+  fi
+
+  # Log to file
+  echo "[$(date '+%H:%M:%S')] $SITE_NAME | upstream=$D_UP | updb=$D_UPDB | config=$D_CONF | security=$D_SEC" >> "$LOG_FILE"
+done
+
+# ── Summary ──
+echo ""
+echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+echo "${cyan}  SUMMARY${NC}"
+echo "${cyan}════════════════════════════════════════════════════════════════════${NC}"
+echo ""
+echo "  Total sites checked: ${TOTAL}"
+
+if [[ $ISSUES -eq 0 ]]; then
+  echo "  ${green}✓ All sites healthy — no issues detected${NC}"
+else
+  echo "  ${yellow}⚠ Sites with issues: ${ISSUES}/${TOTAL}${NC}"
+  echo ""
+  echo "  ${yellow}Sites needing attention:${NC}"
+  for s in "${ISSUE_SITES[@]}"; do
+    echo "    ${yellow}• ${s}${NC}"
+  done
+fi
+
+echo ""
+echo "  ${dim}Log saved: ${LOG_FILE}${NC}"
+echo ""
+
+# ── Suggested next steps ──
+if [[ $ISSUES -gt 0 ]]; then
+  echo "${cyan}  Suggested next steps:${NC}"
+  if [[ "$RUN_UPSTREAM" == true ]]; then
+    echo "    ${dim}Apply upstream updates:${NC}  ddev upstream-update-all"
+  fi
+  if [[ "$RUN_UPDB" == true ]]; then
+    echo "    ${dim}Run pending updb:${NC}       ddev pantheon-drush-all ${PANTHEON_ENV} 'updb -y'"
+  fi
+  if [[ "$RUN_CONFIG" == true ]]; then
+    echo "    ${dim}Import config:${NC}          ddev pantheon-drush-all ${PANTHEON_ENV} 'cim -y'"
+  fi
+  if [[ "$RUN_SECURITY" == true ]]; then
+    echo "    ${dim}Update insecure mods:${NC}   composer update --with-dependencies"
+  fi
+  echo ""
+fi
+
+exit $( [[ $ISSUES -gt 0 ]] && echo 1 || echo 0 )

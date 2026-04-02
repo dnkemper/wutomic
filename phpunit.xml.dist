@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="docroot/core/tests/bootstrap.php" colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutChangesToGlobalState="true"
+         printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter">
+  <php>
+    <!-- Set error reporting to E_ALL. -->
+    <ini name="error_reporting" value="32767"/>
+    <!-- Do not limit the amount of memory tests take to run. -->
+    <ini name="memory_limit" value="-1"/>
+    <!-- Example SIMPLETEST_BASE_URL value: http://localhost -->
+    <env name="SIMPLETEST_BASE_URL" value="http://127.0.0.1:8888"/>
+    <!-- Example SIMPLETEST_DB value: mysql://username:password@localhost/databasename#table_prefix -->
+    <env name="SIMPLETEST_DB" value="mysql://root@localhost/drupal"/>
+    <!-- Example BROWSERTEST_OUTPUT_DIRECTORY value: /path/to/webroot/sites/simpletest/browser_output -->
+    <env name="BROWSERTEST_OUTPUT_DIRECTORY" value=""/>
+    <!-- To disable deprecation testing completely uncomment the next line. -->
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
+    <!-- Example for changing the driver class for mink tests MINK_DRIVER_CLASS value: 'Drupal\FunctionalJavascriptTests\DrupalSelenium2Driver' -->
+    <!-- Example for changing the driver args to mink tests MINK_DRIVER_ARGS value: '["http://127.0.0.1:8510"]' -->
+    <!-- Example for changing the driver args to phantomjs tests MINK_DRIVER_ARGS_PHANTOMJS value: '["http://127.0.0.1:8510"]' -->
+    <!-- Example for changing the driver args to webdriver tests MINK_DRIVER_ARGS_WEBDRIVER value: '["firefox", null, "http://localhost:4444/wd/hub"]' -->
+  </php>
+  <testsuites>
+    <testsuite name="application">
+      <directory>./tests/phpunit/</directory>
+    </testsuite>
+    <testsuite name="layout_builder_custom">
+      <directory>./docroot/modules/custom/layout_builder_custom/tests/</directory>
+    </testsuite>
+    <testsuite name="sitenow">
+      <directory>./docroot/profiles/custom/sitenow/tests/</directory>
+    </testsuite>
+    <testsuite name="sitenow_intranet">
+      <directory>./docroot/modules/custom/sitenow_intranet/tests/</directory>
+    </testsuite>
+    <testsuite name="uartsci_alerts">
+      <directory>./docroot/modules/custom/uartsci_alerts/tests/</directory>
+    </testsuite>
+    <testsuite name="uartsci_core">
+      <directory>./docroot/modules/custom/uartsci_core/tests/</directory>
+    </testsuite>
+    <testsuite name="uartsci_maui">
+      <directory>./docroot/modules/custom/uartsci_maui/tests/</directory>
+    </testsuite>
+    <testsuite name="uartsci_profiles">
+      <directory>./docroot/modules/custom/uartsci_profiles/tests/</directory>
+    </testsuite>
+    <testsuite name="uartsci_search">
+      <directory>./docroot/modules/custom/uartsci_search/tests/</directory>
+    </testsuite>
+  </testsuites>
+  <listeners>
+    <listener class="\Drupal\Tests\Listeners\DrupalListener">
+    </listener>
+    <!-- The Symfony deprecation listener has to come after the Drupal listener -->
+    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
+    </listener>
+  </listeners>
+</phpunit>

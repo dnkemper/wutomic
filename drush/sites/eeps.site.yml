@@ -1,0 +1,55 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+
+dev:
+  host: appserver.dev.ceae56f3-bed2-4606-bb4f-6a4fb57c266f.drush.in
+  user: dev.ceae56f3-bed2-4606-bb4f-6a4fb57c266f
+  uri: dev-wustl-eeps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.ceae56f3-bed2-4606-bb4f-6a4fb57c266f.drush.in
+  user: test.ceae56f3-bed2-4606-bb4f-6a4fb57c266f
+  uri: test-wustl-eeps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.ceae56f3-bed2-4606-bb4f-6a4fb57c266f.drush.in
+  user: test.ceae56f3-bed2-4606-bb4f-6a4fb57c266f
+  uri: test-wustl-eeps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.ceae56f3-bed2-4606-bb4f-6a4fb57c266f.drush.in
+  user: live.ceae56f3-bed2-4606-bb4f-6a4fb57c266f
+  uri: live-wustl-eeps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.ceae56f3-bed2-4606-bb4f-6a4fb57c266f.drush.in
+  user: live.ceae56f3-bed2-4606-bb4f-6a4fb57c266f
+  uri: live-wustl-eeps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

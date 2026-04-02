@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f.drush.in
+  user: dev.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f
+  uri: dev-wustl-myprehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f.drush.in
+  user: test.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f
+  uri: test-wustl-myprehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f.drush.in
+  user: test.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f
+  uri: test-wustl-myprehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f.drush.in
+  user: live.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f
+  uri: live-wustl-myprehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f.drush.in
+  user: live.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f
+  uri: live-wustl-myprehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

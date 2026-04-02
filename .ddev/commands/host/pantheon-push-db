@@ -1,0 +1,164 @@
+#!/bin/bash
+
+## Description: Push local DDEV database to Pantheon
+## Usage: pantheon-push-db [site-name] [environment]
+## Example: ddev pantheon-push-db wustl-hdw dev
+## Example: ddev pantheon-push-db hdw test
+
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+
+echo -e "\n\n${yellow}>>>>>${NC} ${magenta}${NOW}${NC} ${green}Pantheon Database Push${NC} ${yellow}<<<<<${NC}\n"
+
+# Normalize site name
+normalize_site_name() {
+  local site=$1
+  if [[ $site == wustl-* ]]; then
+    echo "$site"
+  else
+    echo "wustl-$site"
+  fi
+}
+
+# Get site
+if [ -z "$1" ]; then
+  echo "${blue}Fetching your Pantheon sites...${NC}"
+  sites=($(terminus site:list --format=list --field=name 2>/dev/null | grep "^wustl-" | sort))
+
+  PS3="Select the site: "
+  select site in "${sites[@]}"; do
+    if [[ -n "$site" ]]; then
+      SITE_NAME="$site"
+      break
+    fi
+  done
+else
+  SITE_NAME=$(normalize_site_name "$1")
+fi
+
+# Get environment — only dev or test allowed
+if [ -z "$2" ]; then
+  PS3="Select environment: "
+  select env in "dev" "test"; do
+    PANTHEON_ENV="$env"
+    break
+  done
+else
+  case $2 in
+    dev|1) PANTHEON_ENV="dev";;
+    stage|test|2) PANTHEON_ENV="test";;
+    *) echo "${red}Can only push to dev or test environments${NC}"; exit 1;;
+  esac
+fi
+
+# Safety check
+if [[ "$PANTHEON_ENV" == "live" ]]; then
+  echo "${red}Cannot push database to live environment for safety${NC}"
+  exit 1
+fi
+
+# Verify Terminus authentication
+echo -e "${blue}Verifying Terminus authentication...${NC}"
+if ! terminus auth:whoami &>/dev/null; then
+  echo "${red}Not authenticated with Terminus. Please run: terminus auth:login${NC}"
+  exit 1
+fi
+
+# Verify the site exists
+if ! terminus site:info "$SITE_NAME" &>/dev/null; then
+  echo "${red}Site '$SITE_NAME' not found on Pantheon.${NC}"
+  exit 1
+fi
+
+echo ""
+echo "${yellow}========================================${NC}"
+echo "${red}WARNING: This will REPLACE the database on:${NC}"
+echo "${blue}Site:${NC} $SITE_NAME"
+echo "${blue}Environment:${NC} $PANTHEON_ENV"
+echo "${yellow}========================================${NC}"
+echo ""
+read -p "Are you absolutely sure? Type 'YES' to continue: " confirm
+if [[ "$confirm" != "YES" ]]; then
+  echo "${yellow}Cancelled${NC}"
+  exit 0
+fi
+
+DUMP_FILE="local-db-export-${NOW}.sql.gz"
+
+# Export local database
+echo -e "\n${blue}Step 1: Exporting local database...${NC}"
+ddev drush sql-dump | gzip > "${DUMP_FILE}"
+
+# Verify file was created and has content
+if [ ! -f "$DUMP_FILE" ] || [ ! -s "$DUMP_FILE" ]; then
+  echo "${red}Failed to export database — file is empty or missing${NC}"
+  rm -f "$DUMP_FILE"
+  exit 1
+fi
+
+FILE_SIZE=$(ls -lh "$DUMP_FILE" | awk '{print $5}')
+echo "${green}✓ Database exported: ${DUMP_FILE} (${FILE_SIZE})${NC}"
+
+# Create backup on Pantheon first (safety net)
+echo -e "\n${blue}Step 2: Creating backup on Pantheon (safety)...${NC}"
+terminus backup:create "$SITE_NAME.$PANTHEON_ENV" --element=db --keep-for=30
+
+# Wake the environment if it's asleep
+echo -e "\n${blue}Step 3: Waking environment...${NC}"
+terminus env:wake "$SITE_NAME.$PANTHEON_ENV" 2>/dev/null || true
+
+# Set connection mode to SFTP (required for imports)
+echo -e "\n${blue}Step 4: Setting connection mode to SFTP...${NC}"
+terminus connection:set "$SITE_NAME.$PANTHEON_ENV" sftp 2>/dev/null || true
+
+# Import database using terminus
+echo -e "\n${blue}Step 5: Importing database to Pantheon...${NC}"
+echo "${yellow}This may take several minutes depending on database size...${NC}"
+
+if terminus import:database "$SITE_NAME.$PANTHEON_ENV" "$DUMP_FILE" --yes; then
+  echo "${green}✓ Database imported to Pantheon${NC}"
+else
+  echo "${red}Failed to import database via terminus import:database${NC}"
+  echo "${yellow}Trying alternative method via drush...${NC}"
+
+  # Alternative: pipe directly via drush
+  gunzip -c "$DUMP_FILE" | terminus drush "$SITE_NAME.$PANTHEON_ENV" -- sql-cli
+  if [ $? -eq 0 ]; then
+    echo "${green}✓ Database imported via drush sql-cli${NC}"
+  else
+    echo "${red}Database import failed with both methods${NC}"
+    echo "${yellow}Keeping dump file for manual import: ${DUMP_FILE}${NC}"
+    exit 1
+  fi
+fi
+
+# Run post-import tasks
+echo -e "\n${blue}Step 6: Running database updates on Pantheon...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- updb -y
+
+echo -e "\n${blue}Step 7: Clearing cache on Pantheon...${NC}"
+terminus drush "$SITE_NAME.$PANTHEON_ENV" -- cr
+
+# Set connection mode back to Git
+echo -e "\n${blue}Step 8: Setting connection mode back to Git...${NC}"
+terminus connection:set "$SITE_NAME.$PANTHEON_ENV" git 2>/dev/null || true
+
+# Clean up local dump file
+rm -f "$DUMP_FILE"
+echo "${green}✓ Cleaned up local dump file${NC}"
+
+echo ""
+echo "${green}========================================${NC}"
+echo "${green}Database push complete!${NC}"
+echo "${green}========================================${NC}"
+echo ""
+echo "${yellow}Next steps:${NC}"
+echo "1. Test the site: ${blue}https://$PANTHEON_ENV-${SITE_NAME}.pantheonsite.io${NC}"
+echo "2. Generate login: ${blue}terminus drush ${SITE_NAME}.${PANTHEON_ENV} -- uli${NC}"
+echo ""

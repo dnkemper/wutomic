@@ -1,0 +1,432 @@
+#!/bin/bash
+
+## Description: Download database and/or files from Pantheon (optionally import locally)
+## Usage: pantheon-download [site-name] [environment] [flags]
+## Example: ddev pantheon-download wustl-johnmaxwulfing prod
+## Example: ddev pantheon-download johnmaxwulfing test --db-only
+## Example: ddev pantheon-download johnmaxwulfing test --files-only
+## Example: ddev pantheon-download johnmaxwulfing prod --import
+## Example: ddev pantheon-download johnmaxwulfing prod --db-only --import
+## Example: ddev pantheon-download (interactive mode)
+## Options: --db-only | --files-only | --create-backup | --import | --keep
+
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+# Default flags
+DOWNLOAD_DB=true
+DOWNLOAD_FILES=true
+CREATE_BACKUP=false
+IMPORT_LOCAL=false
+KEEP_FILES=false
+
+SETTINGS_FILE="web/sites/default/settings.php"
+
+# ──────────────────────────────────────────────
+# CONFIG SPLIT MAP
+# Returns space-separated list of split machine names for a site.
+# Key is the short site name (without wustl- prefix).
+# Add new sites here as needed.
+# ──────────────────────────────────────────────
+get_config_splits() {
+  case "$1" in
+    artsciadvising)  echo "secure_content" ;;
+    johnmaxwulfing)  echo "coin" ;;
+    artsciportal)    echo "webform_upload secure_content" ;;
+    *)               echo "" ;;
+  esac
+}
+
+# Show info about this script
+echo -e "\n\n${yellow}>>>>>${NC} ${magenta}${NOW}${NC} ${green}Pantheon Download${NC} ${yellow}<<<<<${NC}\n"
+
+# Function to normalize site name (add wustl- prefix if missing)
+normalize_site_name() {
+  local site=$1
+  if [[ $site == wustl-* ]]; then
+    echo "$site"
+  else
+    echo "wustl-$site"
+  fi
+}
+
+# Function to get short name (without wustl- prefix)
+get_short_name() {
+  echo "${1#wustl-}"
+}
+
+# Function to map environment names to Pantheon environments
+map_to_pantheon_env() {
+  case $1 in
+    dev|1) echo "dev";;
+    stage|test|2) echo "test";;
+    prod|live|3) echo "live";;
+    *) echo ""; echo "${red}Invalid environment selection${NC}";;
+  esac
+}
+
+# Function to get list of Pantheon sites
+get_pantheon_sites() {
+  terminus site:list --format=list --field=name 2>/dev/null | grep "^wustl-" | sort
+}
+
+# Function to prompt for site selection
+prompt_for_site() {
+  echo "${blue}Fetching your Pantheon sites...${NC}" >&2
+  sites=($(get_pantheon_sites))
+
+  if [ ${#sites[@]} -eq 0 ]; then
+    echo "${red}No Pantheon sites found. Please check your Terminus authentication.${NC}" >&2
+    exit 1
+  fi
+
+  echo "" >&2
+  echo "${green}Available Pantheon sites:${NC}" >&2
+  PS3="Select the site number you want to download from: "
+
+  select site in "${sites[@]}"; do
+    if [[ -n "$site" ]]; then
+      echo "$site"
+      return
+    else
+      echo "${red}Invalid selection. Please try again.${NC}" >&2
+    fi
+  done
+}
+
+# Function to prompt for environment selection
+prompt_for_environment() {
+  PS3="Select the environment you want to download from: "
+  options=("dev" "stage (test)" "prod (live)")
+
+  select env_option in "${options[@]}"; do
+    case $REPLY in
+      1) echo "dev"; return;;
+      2) echo "test"; return;;
+      3) echo "live"; return;;
+      *) echo "${red}Invalid selection. Please try again.${NC}";;
+    esac
+  done
+}
+
+# Function to enable config splits in default/settings.php
+enable_config_splits() {
+  local short_name=$1
+  local splits
+  splits=$(get_config_splits "$short_name")
+
+  if [[ -z "$splits" ]]; then
+    return
+  fi
+
+  if [ ! -f "$SETTINGS_FILE" ]; then
+    echo -e "${yellow}Warning: $SETTINGS_FILE not found, cannot enable config splits${NC}"
+    return
+  fi
+
+  echo -e "${blue}Enabling config splits for ${short_name}: ${splits}${NC}"
+
+  for split in $splits; do
+    local config_key="config_split.config_split.${split}"
+
+    if grep -q "\\\$config\['${config_key}'\]\['status'\] = FALSE" "$SETTINGS_FILE"; then
+      perl -i -pe "s/\\\$config\['${config_key}'\]\['status'\] = FALSE;/\\\$config['${config_key}']['status'] = TRUE;/" "$SETTINGS_FILE"
+      echo -e "${green}  ✓ Enabled split: ${split} (FALSE → TRUE)${NC}"
+    elif grep -q "\\\$config\['${config_key}'\]\['status'\] = TRUE" "$SETTINGS_FILE"; then
+      echo -e "${green}  ✓ Split already enabled: ${split}${NC}"
+    else
+      echo "" >> "$SETTINGS_FILE"
+      echo "\$config['${config_key}']['status'] = TRUE;" >> "$SETTINGS_FILE"
+      echo -e "${green}  ✓ Added split: ${split}${NC}"
+    fi
+  done
+}
+
+# Function to reset config splits back to FALSE in default/settings.php
+reset_config_splits() {
+  local short_name=$1
+  local splits
+  splits=$(get_config_splits "$short_name")
+
+  if [[ -z "$splits" ]]; then
+    return
+  fi
+
+  if [ ! -f "$SETTINGS_FILE" ]; then
+    return
+  fi
+
+  echo -e "${blue}Resetting config splits back to FALSE in default/settings.php...${NC}"
+
+  for split in $splits; do
+    local config_key="config_split.config_split.${split}"
+
+    if grep -q "\\\$config\['${config_key}'\]\['status'\] = TRUE" "$SETTINGS_FILE"; then
+      perl -i -pe "s/\\\$config\['${config_key}'\]\['status'\] = TRUE;/\\\$config['${config_key}']['status'] = FALSE;/" "$SETTINGS_FILE"
+      echo -e "${green}  ✓ Reset split: ${split} (TRUE → FALSE)${NC}"
+    fi
+  done
+}
+
+# Parse flags first
+POSITIONAL_ARGS=()
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --db-only)
+      DOWNLOAD_FILES=false
+      shift
+      ;;
+    --files-only)
+      DOWNLOAD_DB=false
+      shift
+      ;;
+    --create-backup)
+      CREATE_BACKUP=true
+      shift
+      ;;
+    --import)
+      IMPORT_LOCAL=true
+      shift
+      ;;
+    --keep)
+      KEEP_FILES=true
+      shift
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# Restore positional parameters
+set -- "${POSITIONAL_ARGS[@]}"
+
+# Parse arguments or prompt for inputs
+if [ -z "$1" ]; then
+  SITE_NAME=$(prompt_for_site)
+  PANTHEON_ENV=$(prompt_for_environment)
+else
+  SITE_NAME=$(normalize_site_name "$1")
+
+  if [ -z "$2" ]; then
+    PANTHEON_ENV=$(prompt_for_environment)
+  else
+    PANTHEON_ENV=$(map_to_pantheon_env "$2")
+    if [[ -z "$PANTHEON_ENV" ]]; then
+      echo "${red}Invalid environment argument. Use: dev, stage, or prod${NC}"
+      exit 1
+    fi
+  fi
+fi
+
+# Get short name for config split lookup
+SHORT_NAME=$(get_short_name "$SITE_NAME")
+SPLITS_FOR_SITE=$(get_config_splits "$SHORT_NAME")
+
+# Verify Terminus authentication early
+echo -e "${blue}Verifying Terminus authentication...${NC}"
+if ! terminus auth:whoami &>/dev/null; then
+  echo "${red}Not authenticated with Terminus. Please run: terminus auth:login${NC}"
+  exit 1
+fi
+
+# Verify the site exists on Pantheon
+echo -e "${blue}Verifying site exists on Pantheon...${NC}"
+if ! terminus site:info "$SITE_NAME" &>/dev/null; then
+  echo "${red}Site '$SITE_NAME' not found on Pantheon.${NC}"
+  echo "${yellow}Available sites:${NC}"
+  get_pantheon_sites
+  exit 1
+fi
+
+# Confirm selections
+echo ""
+echo "${yellow}========================================${NC}"
+echo "${blue}Site:${NC} $SITE_NAME"
+echo "${blue}Environment:${NC} $PANTHEON_ENV"
+echo "${blue}Download Database:${NC} $DOWNLOAD_DB"
+echo "${blue}Download Files:${NC} $DOWNLOAD_FILES"
+echo "${blue}Create New Backup:${NC} $CREATE_BACKUP"
+echo "${blue}Import Locally:${NC} $IMPORT_LOCAL"
+if [ "$IMPORT_LOCAL" = true ]; then
+  echo "${blue}Keep Downloads After Import:${NC} $KEEP_FILES"
+fi
+if [[ -n "$SPLITS_FOR_SITE" ]]; then
+  echo "${blue}Config Splits:${NC} ${SPLITS_FOR_SITE}"
+fi
+echo "${yellow}========================================${NC}"
+echo ""
+
+# Create backup on Pantheon if requested
+if [ "$CREATE_BACKUP" = true ]; then
+  echo -e "${blue}Creating backup on Pantheon...${NC}"
+
+  if [ "$DOWNLOAD_DB" = true ] && [ "$DOWNLOAD_FILES" = true ]; then
+    terminus backup:create "$SITE_NAME.$PANTHEON_ENV" --element=all --keep-for=7
+  elif [ "$DOWNLOAD_DB" = true ]; then
+    terminus backup:create "$SITE_NAME.$PANTHEON_ENV" --element=db --keep-for=7
+  elif [ "$DOWNLOAD_FILES" = true ]; then
+    terminus backup:create "$SITE_NAME.$PANTHEON_ENV" --element=files --keep-for=7
+  fi
+fi
+
+# Track what was downloaded for import step
+DB_FILENAME=""
+FILES_FILENAME=""
+DB_DOWNLOADED=false
+FILES_DOWNLOADED=false
+
+# Download database
+if [ "$DOWNLOAD_DB" = true ]; then
+  DB_FILENAME="$SITE_NAME-$PANTHEON_ENV-db-$NOW.sql.gz"
+  echo -e "${blue}Downloading database to $DB_FILENAME...${NC}"
+
+  if terminus backup:get "$SITE_NAME.$PANTHEON_ENV" --element=db --to="$DB_FILENAME"; then
+    DB_SIZE=$(ls -lh "$DB_FILENAME" 2>/dev/null | awk '{print $5}')
+    echo -e "${green}✓ Database downloaded ($DB_SIZE)${NC}"
+    echo -e "${yellow}File saved to:${NC} $DB_FILENAME"
+    DB_DOWNLOADED=true
+  else
+    echo "${red}Database download failed${NC}"
+  fi
+fi
+
+# Download files
+if [ "$DOWNLOAD_FILES" = true ]; then
+  FILES_FILENAME="$SITE_NAME-$PANTHEON_ENV-files-$NOW.tar.gz"
+  echo -e "${blue}Downloading files to $FILES_FILENAME...${NC}"
+
+  if terminus backup:get "$SITE_NAME.$PANTHEON_ENV" --element=files --to="$FILES_FILENAME"; then
+    FILES_SIZE=$(ls -lh "$FILES_FILENAME" 2>/dev/null | awk '{print $5}')
+    echo -e "${green}✓ Files downloaded ($FILES_SIZE)${NC}"
+    echo -e "${yellow}File saved to:${NC} $FILES_FILENAME"
+    FILES_DOWNLOADED=true
+  else
+    echo "${red}Files download failed${NC}"
+  fi
+fi
+
+# Import locally if requested
+if [ "$IMPORT_LOCAL" = true ]; then
+  echo ""
+  echo "${yellow}========================================${NC}"
+  echo "${blue}Importing to local DDEV environment...${NC}"
+  echo "${yellow}========================================${NC}"
+  ddev dev-settings
+  # Import database
+  if [ "$DB_DOWNLOADED" = true ]; then
+    echo -e "\n${blue}Backing up current local database...${NC}"
+    ddev drush sql-dump > "$SITE_NAME-local-backup-$NOW.sql" 2>/dev/null
+    echo "${green}✓ Local backup saved to: $SITE_NAME-local-backup-$NOW.sql${NC}"
+
+    echo -e "${blue}Dropping local database...${NC}"
+    ddev drush sql-drop -y
+
+    echo -e "${blue}Importing database...${NC}"
+    if gunzip < "$DB_FILENAME" | ddev drush sql-cli; then
+      echo -e "${green}✓ Database imported successfully${NC}"
+    else
+      echo "${red}Database import failed${NC}"
+      echo "${yellow}You can retry manually: gunzip < $DB_FILENAME | ddev drush sql-cli${NC}"
+    fi
+  fi
+
+  # Import files
+  if [ "$FILES_DOWNLOADED" = true ]; then
+    echo -e "\n${blue}Extracting files to web/sites/default/files/...${NC}"
+    mkdir -p web/sites/default/files
+
+    if tar -xzf "$FILES_FILENAME" --strip-components=1 -C "web/sites/default/files/"; then
+      echo -e "${green}✓ Files extracted successfully${NC}"
+    else
+      echo "${yellow}Strip-components failed, trying without...${NC}"
+      tar -xzf "$FILES_FILENAME" -C "web/sites/default/files/" 2>/dev/null
+      echo -e "${green}✓ Files extracted${NC}"
+    fi
+  fi
+
+  # Post-import tasks
+  if [ "$DB_DOWNLOADED" = true ]; then
+    echo -e "\n${blue}Running post-import tasks...${NC}"
+
+    echo -e "${blue}Running database updates...${NC}"
+    ddev drush updb --yes
+
+    echo -e "${blue}Installing composer dependencies...${NC}"
+    ddev composer install --no-interaction
+
+    # Enable development settings if command exists
+    if ddev help dev-settings &>/dev/null 2>&1; then
+      echo -e "${blue}Enabling development settings...${NC}"
+      ddev dev-settings
+    fi
+
+    # Enable config splits BEFORE config import
+    enable_config_splits "$SHORT_NAME"
+
+    echo -e "${blue}Importing configuration...${NC}"
+    if ! ddev drush cim --yes; then
+      echo "${yellow}Config import had errors, but continuing...${NC}"
+    fi
+
+    # Activate local config split if available
+    if ddev drush pm:list --status=enabled --format=list 2>/dev/null | grep -q "config_split"; then
+      ddev drush config-split:activate local --yes 2>/dev/null || true
+    fi
+
+    # Reset config splits back to FALSE so other sites aren't affected
+    reset_config_splits "$SHORT_NAME"
+
+    echo -e "${blue}Clearing cache...${NC}"
+    ddev drush cr
+
+    echo -e "${blue}Generating login link...${NC}"
+    ddev drush uli
+  fi
+
+  # Clean up downloaded files unless --keep was passed
+  if [ "$KEEP_FILES" = false ]; then
+    echo -e "\n${blue}Cleaning up downloaded files...${NC}"
+    [ -n "$DB_FILENAME" ] && [ -f "$DB_FILENAME" ] && rm "$DB_FILENAME" && echo "  Removed $DB_FILENAME"
+    [ -n "$FILES_FILENAME" ] && [ -f "$FILES_FILENAME" ] && rm "$FILES_FILENAME" && echo "  Removed $FILES_FILENAME"
+    echo "${green}✓ Cleaned up${NC}"
+  else
+    echo ""
+    echo "${yellow}Downloaded files kept:${NC}"
+    [ -n "$DB_FILENAME" ] && [ -f "$DB_FILENAME" ] && echo "  DB:    $DB_FILENAME"
+    [ -n "$FILES_FILENAME" ] && [ -f "$FILES_FILENAME" ] && echo "  Files: $FILES_FILENAME"
+  fi
+fi
+
+echo ""
+echo "${green}========================================${NC}"
+if [ "$IMPORT_LOCAL" = true ]; then
+  echo "${green}Download + Import completed!${NC}"
+else
+  echo "${green}Download completed!${NC}"
+fi
+echo "${green}========================================${NC}"
+echo ""
+
+# Show manual import hints only if we didn't import
+if [ "$IMPORT_LOCAL" = false ]; then
+  if [ "$DB_DOWNLOADED" = true ]; then
+    echo "${yellow}To import the database:${NC}"
+    echo "  gunzip < $DB_FILENAME | ddev drush sql-cli"
+    echo ""
+  fi
+  if [ "$FILES_DOWNLOADED" = true ]; then
+    echo "${yellow}To extract the files:${NC}"
+    echo "  tar -xzf $FILES_FILENAME --strip-components=1 -C web/sites/default/files/"
+    echo ""
+  fi
+  echo "${yellow}Or re-run with --import to do it all at once:${NC}"
+  echo "  ddev pantheon-download $SITE_NAME $PANTHEON_ENV --import"
+  echo ""
+fi

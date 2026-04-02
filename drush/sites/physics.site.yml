@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.e49b113a-b9ac-4c93-8879-072fee680342.drush.in
+  user: dev.e49b113a-b9ac-4c93-8879-072fee680342
+  uri: dev-wustl-physics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.e49b113a-b9ac-4c93-8879-072fee680342.drush.in
+  user: test.e49b113a-b9ac-4c93-8879-072fee680342
+  uri: test-wustl-physics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.e49b113a-b9ac-4c93-8879-072fee680342.drush.in
+  user: test.e49b113a-b9ac-4c93-8879-072fee680342
+  uri: test-wustl-physics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.e49b113a-b9ac-4c93-8879-072fee680342.drush.in
+  user: live.e49b113a-b9ac-4c93-8879-072fee680342
+  uri: live-wustl-physics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.e49b113a-b9ac-4c93-8879-072fee680342.drush.in
+  user: live.e49b113a-b9ac-4c93-8879-072fee680342
+  uri: live-wustl-physics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

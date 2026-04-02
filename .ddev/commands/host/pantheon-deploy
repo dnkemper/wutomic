@@ -1,0 +1,162 @@
+#!/bin/bash
+
+## Description: Deploy a single Pantheon site between environments (dev→test, test→live)
+## Usage: pantheon-deploy [site-name] [target-environment]
+## Example: ddev pantheon-deploy wustl-hdw test
+## Example: ddev pantheon-deploy hdw live
+## Example: ddev pantheon-deploy (interactive)
+
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+echo -e "\n\n${yellow}>>>>>${NC} ${magenta}${NOW}${NC} ${green}Pantheon Deploy${NC} ${yellow}<<<<<${NC}\n"
+
+# Normalize site name
+normalize_site_name() {
+  local site=$1
+  if [[ $site == wustl-* ]]; then
+    echo "$site"
+  else
+    echo "wustl-$site"
+  fi
+}
+
+# Map environment
+map_to_pantheon_env() {
+  case $1 in
+    dev|1) echo "dev";;
+    stage|test|2) echo "test";;
+    prod|live|3) echo "live";;
+    *) echo "";;
+  esac
+}
+
+# Get site name
+if [ -z "$1" ]; then
+  echo "${blue}Fetching your Pantheon sites...${NC}"
+  sites=($(terminus site:list --format=list --field=name 2>/dev/null | grep "^wustl-" | sort))
+
+  if [ ${#sites[@]} -eq 0 ]; then
+    echo "${red}No Pantheon sites found.${NC}"
+    exit 1
+  fi
+
+  PS3="Select the site to deploy: "
+  select site in "${sites[@]}"; do
+    if [[ -n "$site" ]]; then
+      SITE_NAME="$site"
+      break
+    fi
+  done
+else
+  SITE_NAME=$(normalize_site_name "$1")
+fi
+
+# Get target environment
+if [ -z "$2" ]; then
+  PS3="Deploy to which environment? "
+  select env in "test (from dev)" "live (from test)"; do
+    case $REPLY in
+      1) TARGET_ENV="test"; break;;
+      2) TARGET_ENV="live"; break;;
+      *) echo "${red}Invalid selection${NC}";;
+    esac
+  done
+else
+  TARGET_ENV=$(map_to_pantheon_env "$2")
+  if [[ -z "$TARGET_ENV" ]]; then
+    echo "${red}Invalid environment. Use: test or live${NC}"
+    exit 1
+  fi
+fi
+
+# Can't deploy "to dev" — dev gets code from git push or upstream apply
+if [[ "$TARGET_ENV" == "dev" ]]; then
+  echo "${red}Cannot deploy TO dev. Dev gets code from git push or upstream updates.${NC}"
+  echo "${yellow}Try: ddev upstream-update ${SITE_NAME}${NC}"
+  exit 1
+fi
+
+# Determine source environment
+if [[ "$TARGET_ENV" == "test" ]]; then
+  SOURCE_ENV="dev"
+elif [[ "$TARGET_ENV" == "live" ]]; then
+  SOURCE_ENV="test"
+fi
+
+# Verify Terminus authentication
+echo -e "${blue}Verifying Terminus authentication...${NC}"
+if ! terminus auth:whoami &>/dev/null; then
+  echo "${red}Not authenticated with Terminus. Please run: terminus auth:login${NC}"
+  exit 1
+fi
+
+# Verify site exists
+if ! terminus site:info "$SITE_NAME" &>/dev/null; then
+  echo "${red}Site '$SITE_NAME' not found on Pantheon.${NC}"
+  exit 1
+fi
+
+# Show pending changes
+echo -e "${blue}Checking for pending changes on ${SOURCE_ENV}...${NC}"
+PENDING=$(terminus env:diffstat "${SITE_NAME}.${TARGET_ENV}" 2>&1)
+echo "$PENDING"
+
+# Confirm
+echo ""
+echo "${yellow}========================================${NC}"
+echo "${blue}Site:${NC} $SITE_NAME"
+echo "${blue}Deploy:${NC} $SOURCE_ENV → $TARGET_ENV"
+echo "${yellow}========================================${NC}"
+echo ""
+
+# Extra safety for live deployments
+if [[ "$TARGET_ENV" == "live" ]]; then
+  echo "${red}⚠️  WARNING: You are deploying to PRODUCTION ⚠️${NC}"
+  echo ""
+  read -p "Type 'DEPLOY TO LIVE' to confirm: " live_confirm
+  if [[ "$live_confirm" != "DEPLOY TO LIVE" ]]; then
+    echo "${yellow}Deployment cancelled.${NC}"
+    exit 0
+  fi
+else
+  read -p "Continue? (Y/N): " confirm
+  if [[ ! $confirm =~ ^[Yy]$ ]]; then
+    echo "${yellow}Cancelled${NC}"
+    exit 0
+  fi
+fi
+
+# Build deploy command
+DEPLOY_FLAGS="--cc --updatedb --note=\"Deploy ${NOW}\""
+
+# Deploy
+echo -e "\n${blue}Deploying ${SOURCE_ENV} → ${TARGET_ENV} on ${SITE_NAME}...${NC}"
+if terminus env:deploy "${SITE_NAME}.${TARGET_ENV}" --cc --updatedb --note="Deploy ${NOW}"; then
+  echo "${green}✅ Successfully deployed to ${TARGET_ENV}${NC}"
+else
+  echo "${red}❌ Deployment failed${NC}"
+  exit 1
+fi
+
+# Post-deploy: clear cache
+echo -e "${blue}Clearing cache...${NC}"
+terminus drush "${SITE_NAME}.${TARGET_ENV}" -- cr
+
+# Verify site is responding
+echo -e "${blue}Checking site status...${NC}"
+terminus drush "${SITE_NAME}.${TARGET_ENV}" -- status --fields=bootstrap 2>/dev/null
+
+echo ""
+echo "${green}========================================${NC}"
+echo "${green}Deployment complete!${NC}"
+echo "${green}========================================${NC}"
+echo ""
+echo "${yellow}Site URL:${NC} https://${TARGET_ENV}-${SITE_NAME}.pantheonsite.io"
+echo "${yellow}Login:${NC} terminus drush ${SITE_NAME}.${TARGET_ENV} -- uli"
+echo ""

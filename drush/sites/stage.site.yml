@@ -1,0 +1,720 @@
+washu:
+  host: appserver.test.fe371c4f-02fb-43c8-a8cb-264f36f65f8c.drush.in
+  user: test.fe371c4f-02fb-43c8-a8cb-264f36f65f8c
+  uri: test-washu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+washu-humanities:
+  host: appserver.test.2b117aa3-0631-46e5-bef1-d80731dfeafe.drush.in
+  user: test.2b117aa3-0631-46e5-bef1-d80731dfeafe
+  uri: test-washu-humanities.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+afas:
+  host: appserver.test.83f24b3c-c536-4dd8-9d00-7aeb982be335.drush.in
+  user: test.83f24b3c-c536-4dd8-9d00-7aeb982be335
+  uri: test-wustl-afas.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+amcs:
+  host: appserver.test.a91f69ad-79dd-4d63-b29d-b00092f67980.drush.in
+  user: test.a91f69ad-79dd-4d63-b29d-b00092f67980
+  uri: test-wustl-amcs.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+anthropology:
+  host: appserver.test.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9.drush.in
+  user: test.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9
+  uri: test-wustl-anthropology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+arthistory:
+  host: appserver.test.3ffc0f6b-5db6-438b-ad27-9077d0cca6d2.drush.in
+  user: test.3ffc0f6b-5db6-438b-ad27-9077d0cca6d2
+  uri: test-wustl-arthistory.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+artsci:
+  host: appserver.test.7ba76e26-3473-4eae-996c-768d8b511a23.drush.in
+  user: test.7ba76e26-3473-4eae-996c-768d8b511a23
+  uri: test-wustl-artsci.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+artsci-nu:
+  host: appserver.test.8093651f-fe35-4e08-b372-15c2499ab473.drush.in
+  user: test.8093651f-fe35-4e08-b372-15c2499ab473
+  uri: test-wustl-artsci-nu.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+artsciadvising:
+  host: appserver.test.e3d17c87-7dab-40cf-b18c-a541c8e1cd60.drush.in
+  user: test.e3d17c87-7dab-40cf-b18c-a541c8e1cd60
+  uri: test-wustl-artsciadvising.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+artsciportal:
+  host: appserver.test.6ee2f227-c0f1-44bf-887c-35de86cba9bf.drush.in
+  user: test.6ee2f227-c0f1-44bf-887c-35de86cba9bf
+  uri: test-wustl-artsciportal.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+biology:
+  host: appserver.test.63c83f3a-bc58-4756-933e-d4e7e7e93865.drush.in
+  user: test.63c83f3a-bc58-4756-933e-d4e7e7e93865
+  uri: test-wustl-biology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+buildingartsci:
+  host: appserver.test.43e51a80-3b05-465d-bbee-c46c18eecbaa.drush.in
+  user: test.43e51a80-3b05-465d-bbee-c46c18eecbaa
+  uri: test-wustl-buildingartsci.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+chemistry:
+  host: appserver.test.d9d65292-63d1-495c-9f72-dab038dbb098.drush.in
+  user: test.d9d65292-63d1-495c-9f72-dab038dbb098
+  uri: test-wustl-chemistry.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+classics:
+  host: appserver.test.4bec968a-6560-49d2-893c-1a11e4c088c0.drush.in
+  user: test.4bec968a-6560-49d2-893c-1a11e4c088c0
+  uri: test-wustl-classics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+collegewriting:
+  host: appserver.test.24272fc4-02e5-4ca3-a898-160addcef5fe.drush.in
+  user: test.24272fc4-02e5-4ca3-a898-160addcef5fe
+  uri: test-wustl-collegewriting.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+complitandthought:
+  host: appserver.test.f04e107f-de76-49fe-abc5-e13401d5c2d0.drush.in
+  user: test.f04e107f-de76-49fe-abc5-e13401d5c2d0
+  uri: test-wustl-complitandthought.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+ealc:
+  host: appserver.test.817aa822-97ac-4c53-8256-9a31c4ddb49f.drush.in
+  user: test.817aa822-97ac-4c53-8256-9a31c4ddb49f
+  uri: test-wustl-ealc.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+economics:
+  host: appserver.test.02b4e913-198a-42ab-8143-670d991e8438.drush.in
+  user: test.02b4e913-198a-42ab-8143-670d991e8438
+  uri: test-wustl-economics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+education:
+  host: appserver.test.84ed9134-6cd2-45e2-8d14-abf84bbe8b81.drush.in
+  user: test.84ed9134-6cd2-45e2-8d14-abf84bbe8b81
+  uri: test-wustl-education.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+eeps:
+  host: appserver.test.ceae56f3-bed2-4606-bb4f-6a4fb57c266f.drush.in
+  user: test.ceae56f3-bed2-4606-bb4f-6a4fb57c266f
+  uri: test-wustl-eeps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+english:
+  host: appserver.test.cc5bc300-cde5-4d8d-93f5-229eaaab896d.drush.in
+  user: test.cc5bc300-cde5-4d8d-93f5-229eaaab896d
+  uri: test-wustl-english.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+enst:
+  host: appserver.test.0f99b511-af27-45f6-aafd-6f7c213727cf.drush.in
+  user: test.0f99b511-af27-45f6-aafd-6f7c213727cf
+  uri: test-wustl-enst.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+fellowshipsoffice:
+  host: appserver.test.b2ee7d7f-d7be-42a9-9160-211f73d235d0.drush.in
+  user: test.b2ee7d7f-d7be-42a9-9160-211f73d235d0
+  uri: test-wustl-fellowshipsoffice.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+fms:
+  host: appserver.test.8ecd1a9e-ae80-4ced-999e-3103c1b75835.drush.in
+  user: test.8ecd1a9e-ae80-4ced-999e-3103c1b75835
+  uri: test-wustl-fms.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+forms:
+  host: appserver.test.c83f28ef-e068-4d11-a1f2-f0e76754a1f2.drush.in
+  user: test.c83f28ef-e068-4d11-a1f2-f0e76754a1f2
+  uri: test-wustl-forms.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+globalstudies:
+  host: appserver.test.0c1ab938-1c89-4663-acca-66418c328ce9.drush.in
+  user: test.0c1ab938-1c89-4663-acca-66418c328ce9
+  uri: test-wustl-globalstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+gradstudies:
+  host: appserver.test.9840d67d-9529-4c91-8875-1e1abe33f63a.drush.in
+  user: test.9840d67d-9529-4c91-8875-1e1abe33f63a
+  uri: test-wustl-gradstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+graduation:
+  host: appserver.test.2c97ad0d-8dca-4f48-a32b-96ffd2f1a5f7.drush.in
+  user: test.2c97ad0d-8dca-4f48-a32b-96ffd2f1a5f7
+  uri: test-wustl-graduation.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+hdw:
+  host: appserver.test.fef4b3d0-2a0a-4c81-bb39-db71df8d3910.drush.in
+  user: test.fef4b3d0-2a0a-4c81-bb39-db71df8d3910
+  uri: test-wustl-hdw.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+history:
+  host: appserver.test.f790981e-db41-4464-b48c-a84e4ec50c9d.drush.in
+  user: test.f790981e-db41-4464-b48c-a84e4ec50c9d
+  uri: test-wustl-history.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+holdthatthought:
+  host: appserver.test.235069cc-14b9-4a60-a15b-2a787ae538a9.drush.in
+  user: test.235069cc-14b9-4a60-a15b-2a787ae538a9
+  uri: test-wustl-holdthatthought.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+humanities:
+  host: appserver.test.a6d00a6f-3920-4e85-87ec-ca3c4642217e.drush.in
+  user: test.a6d00a6f-3920-4e85-87ec-ca3c4642217e
+  uri: test-wustl-humanities.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+immersivetech:
+  host: appserver.test.49a74df3-1fc1-4381-be8b-0cc98133cd13.drush.in
+  user: test.49a74df3-1fc1-4381-be8b-0cc98133cd13
+  uri: test-wustl-immersivetech.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+insideartsci:
+  host: appserver.test.b06f7e2c-b78c-4062-8030-a53de792f7b0.drush.in
+  user: test.b06f7e2c-b78c-4062-8030-a53de792f7b0
+  uri: test-wustl-insideartsci.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+itartsci:
+  host: appserver.test.c4249740-ac19-4cb0-8661-89dd0079fa7b.drush.in
+  user: test.c4249740-ac19-4cb0-8661-89dd0079fa7b
+  uri: test-wustl-itartsci.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+jimes:
+  host: appserver.test.bc510edc-0d53-49d1-9da8-b20e246cd805.drush.in
+  user: test.bc510edc-0d53-49d1-9da8-b20e246cd805
+  uri: test-wustl-jimes.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+johnmaxwulfing:
+  host: appserver.test.66de9a8f-0cdf-4788-8fc2-4db7f9a4f0a5.drush.in
+  user: test.66de9a8f-0cdf-4788-8fc2-4db7f9a4f0a5
+  uri: test-wustl-johnmaxwulfing.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+lasprogram:
+  host: appserver.test.099b9b24-d967-4f50-9fa4-390ff3797af2.drush.in
+  user: test.099b9b24-d967-4f50-9fa4-390ff3797af2
+  uri: test-wustl-lasprogram.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+linguistics:
+  host: appserver.test.0ed398a0-0126-4aa1-9703-9f59f1cca4b5.drush.in
+  user: test.0ed398a0-0126-4aa1-9703-9f59f1cca4b5
+  uri: test-wustl-linguistics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+literacies:
+  host: appserver.test.04bc974c-a166-4c7b-a396-67bcb94f640c.drush.in
+  user: test.04bc974c-a166-4c7b-a396-67bcb94f640c
+  uri: test-wustl-literacies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+literaryarts:
+  host: appserver.test.d35a3b23-0f57-4eb5-a485-a4863b4241eb.drush.in
+  user: test.d35a3b23-0f57-4eb5-a485-a4863b4241eb
+  uri: test-wustl-literaryarts.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+math:
+  host: appserver.test.4b46f848-e09a-419c-988b-dcb6ace06664.drush.in
+  user: test.4b46f848-e09a-419c-988b-dcb6ace06664
+  uri: test-wustl-math.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+mcss:
+  host: appserver.test.bd72a427-f941-4bdf-897b-7c74c10db907.drush.in
+  user: test.bd72a427-f941-4bdf-897b-7c74c10db907
+  uri: test-wustl-mcss.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+mindfulness:
+  host: appserver.test.489894ec-4982-4da5-b779-8e919674aadf.drush.in
+  user: test.489894ec-4982-4da5-b779-8e919674aadf
+  uri: test-wustl-mindfulness.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+movingstories:
+  host: appserver.test.8a11d47b-01ef-4992-b2b1-b69b96ceba99.drush.in
+  user: test.8a11d47b-01ef-4992-b2b1-b69b96ceba99
+  uri: test-wustl-movingstories.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+music:
+  host: appserver.test.3fd2b276-8792-4729-b7a5-604fabd3748f.drush.in
+  user: test.3fd2b276-8792-4729-b7a5-604fabd3748f
+  uri: test-wustl-music.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+myprehealth:
+  host: appserver.test.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f.drush.in
+  user: test.8a945fc2-ee8f-41b2-9d6b-a7f914ad120f
+  uri: test-wustl-myprehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+olympian:
+  host: appserver.test.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a.drush.in
+  user: test.dcb3dd47-14b4-4910-8a0d-27b1af2dab1a
+  uri: test-wustl-olympian.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+overseas:
+  host: appserver.test.e3a5bb3d-a25b-436a-97f9-29c694a05fa0.drush.in
+  user: test.e3a5bb3d-a25b-436a-97f9-29c694a05fa0
+  uri: test-wustl-overseas.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+pad:
+  host: appserver.test.3aa8b29f-0f53-45d2-a6e4-063b3e134aa3.drush.in
+  user: test.3aa8b29f-0f53-45d2-a6e4-063b3e134aa3
+  uri: test-wustl-pad.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+philosophy:
+  host: appserver.test.0556b67e-5038-489e-959f-cb8abf64a25a.drush.in
+  user: test.0556b67e-5038-489e-959f-cb8abf64a25a
+  uri: test-wustl-philosophy.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+physics:
+  host: appserver.test.e49b113a-b9ac-4c93-8879-072fee680342.drush.in
+  user: test.e49b113a-b9ac-4c93-8879-072fee680342
+  uri: test-wustl-physics.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+pnp:
+  host: appserver.test.8a4fbfe3-8bb1-48a4-b735-5f24e0d0f7df.drush.in
+  user: test.8a4fbfe3-8bb1-48a4-b735-5f24e0d0f7df
+  uri: test-wustl-pnp.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+polisci:
+  host: appserver.test.b6a0ac5b-182b-460d-9cd5-4e4569ecbf01.drush.in
+  user: test.b6a0ac5b-182b-460d-9cd5-4e4569ecbf01
+  uri: test-wustl-polisci.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+postbaccpremed:
+  host: appserver.test.3e0a9096-d017-4df4-bb21-79058cd00c3c.drush.in
+  user: test.3e0a9096-d017-4df4-bb21-79058cd00c3c
+  uri: test-wustl-postbaccpremed.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+precollege:
+  host: appserver.test.1b86ab91-46f8-46d5-a7ba-e5f16f210a7a.drush.in
+  user: test.1b86ab91-46f8-46d5-a7ba-e5f16f210a7a
+  uri: test-wustl-precollege.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prehealth:
+  host: appserver.test.b7d66624-916e-4ab8-b1f9-6d3afea79375.drush.in
+  user: test.b7d66624-916e-4ab8-b1f9-6d3afea79375
+  uri: test-wustl-prehealth.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+psych:
+  host: appserver.test.bbe9e6c1-af20-4e05-9593-6f4f083be78d.drush.in
+  user: test.bbe9e6c1-af20-4e05-9593-6f4f083be78d
+  uri: test-wustl-psych.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+publichealthandsociety:
+  host: appserver.test.f972b116-83e1-4eed-8e28-89eb749d53d5.drush.in
+  user: test.f972b116-83e1-4eed-8e28-89eb749d53d5
+  uri: test-wustl-publichealthandsociety.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+quantumleaps:
+  host: appserver.test.85398821-c1e7-4a88-9775-da6eef1fef19.drush.in
+  user: test.85398821-c1e7-4a88-9775-da6eef1fef19
+  uri: test-wustl-quantumleaps.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+religiousstudies:
+  host: appserver.test.134dd098-a9bb-4ffe-a89d-373aaf455626.drush.in
+  user: test.134dd098-a9bb-4ffe-a89d-373aaf455626
+  uri: test-wustl-religiousstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+rll:
+  host: appserver.test.6b0b9f68-0935-4e78-8f3c-46c14032a4b7.drush.in
+  user: test.6b0b9f68-0935-4e78-8f3c-46c14032a4b7
+  uri: test-wustl-rll.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+sds:
+  host: appserver.test.dc1aa693-1c03-4f1f-8118-945578302fdd.drush.in
+  user: test.dc1aa693-1c03-4f1f-8118-945578302fdd
+  uri: test-wustl-sds.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+slavery:
+  host: appserver.test.e0436c17-7e20-4bd8-96cc-08a40fc8bea6.drush.in
+  user: test.e0436c17-7e20-4bd8-96cc-08a40fc8bea6
+  uri: test-wustl-slavery.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+sociology:
+  host: appserver.test.abb51bc9-38a6-4ca4-82a2-8399fa9937f8.drush.in
+  user: test.abb51bc9-38a6-4ca4-82a2-8399fa9937f8
+  uri: test-wustl-sociology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+strategicplan:
+  host: appserver.test.bcb5d386-a46e-4455-ae7f-1051957ad0b3.drush.in
+  user: test.bcb5d386-a46e-4455-ae7f-1051957ad0b3
+  uri: test-wustl-strategicplan.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+summersession:
+  host: appserver.test.cf1a96e9-59b3-4c18-938a-bdf9a6e9e205.drush.in
+  user: test.cf1a96e9-59b3-4c18-938a-bdf9a6e9e205
+  uri: test-wustl-summersession.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+transdisciplinaryfutures:
+  host: appserver.test.1a984ced-df79-4504-aafa-d3fd7563b31a.drush.in
+  user: test.1a984ced-df79-4504-aafa-d3fd7563b31a
+  uri: test-wustl-transdisciplinaryfutures.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+triads:
+  host: appserver.test.89983384-42aa-4332-a73b-0f9760a654a5.drush.in
+  user: test.89983384-42aa-4332-a73b-0f9760a654a5
+  uri: test-wustl-triads.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+undergradresearch:
+  host: appserver.test.f6dfbb16-c7e8-4668-9108-79f50de0f44d.drush.in
+  user: test.f6dfbb16-c7e8-4668-9108-79f50de0f44d
+  uri: test-wustl-undergradresearch.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+wc:
+  host: appserver.test.371cecd0-d6b3-4a00-b591-7da61f91aae0.drush.in
+  user: test.371cecd0-d6b3-4a00-b591-7da61f91aae0
+  uri: test-wustl-wc.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+wgss:
+  host: appserver.test.3eb64c1a-f408-4b10-9a60-7e96d0b2a09e.drush.in
+  user: test.3eb64c1a-f408-4b10-9a60-7e96d0b2a09e
+  uri: test-wustl-wgss.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+

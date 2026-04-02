@@ -1,5 +1,5 @@
-@use '../abstracts/variables';
-@use '../abstracts/utilities';
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
 // lb_lock module overrides.
 
 .layout-builder-block-locked:not(b) {

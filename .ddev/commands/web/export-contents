@@ -1,0 +1,11 @@
+#!/bin/bash
+
+## Description: Export demo contents
+## Usage: export-contents
+
+rm -rf profiles/custom/artsci/modules/artsci_content/content
+drush dcer file --folder=profiles/custom/artsci/modules/artsci_content/content
+drush dcer media --folder=profiles/custom/artsci/modules/artsci_content/content
+drush dcer taxonomy_term --folder=profiles/custom/artsci/modules/artsci_content/content
+drush dcer node --folder=profiles/custom/artsci/modules/artsci_content/content
+drush dcer menu_link_content --folder=profiles/custom/artsci/modules/artsci_content/content

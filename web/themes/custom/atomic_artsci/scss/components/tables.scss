@@ -1,5 +1,6 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
+
 //// Table Elements
 table[border] {
   border-style: solid;

@@ -1,0 +1,20 @@
+#!/bin/bash
+## Description: Run build and watch script on custom module olympian_core
+## Usage: watch-module
+
+# Show info about this script, and setup PS4 for prefix of each trace line from "set -x"
+echo -e "\n\n$(tput setaf 3)$(tput bold)>>>>> $(tput setaf 5)$(TZ=America/Chicago date +"%Y-%m-%d-%T") $(tput setaf 2)Running ${BASH_SOURCE} $(tput setaf 3)<<<<<$(tput sgr0)\n"
+PS4='$(tput setaf 3)$(tput bold)>> $(tput setaf 5)$(TZ=America/Chicago date +%H:%M:%S.%3N) $(tput setaf 2)[watch-module:${LINENO}]$(tput sgr0) '
+set -x
+
+# Show node version
+node -v
+
+# Reinstall all node packages
+cd /var/www/html/web/modules/custom/olympian_core && rm -rf node_modules
+yarn
+
+# set the SHELL variable before running watch, to avoid chokidar-cli errors
+# (chokidar is used for watching file changes in package.json scripts)
+# (see https://github.com/open-cli-tools/chokidar-cli/issues/62)
+SHELL=/bin/bash yarn run watch

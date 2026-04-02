@@ -1,0 +1,23 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  uri: 'https://artscidev.wustl.edu'
+  root: /var/www/html/d9main/web/
+  paths:
+    files: files
+    drush-script: /var/www/html/d9main/vendor/bin/drush
+stage:
+  uri: 'https://artscistage.wustl.edu'
+  root: /var/www/html/d9main/web/
+  paths:
+    files: files
+    drush-script: /var/www/html/d9main/vendor/bin/drush
+prod:
+  uri: 'https://artsciprod.wustl.edu'
+  root: /var/www/html/d9main/web/
+  paths:
+    files: files
+    drush-script: /var/www/html/d9main/vendor/bin/drush

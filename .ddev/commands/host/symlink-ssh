@@ -1,0 +1,44 @@
+#!/bin/bash
+
+## Description: Create SSH symlink in DDEV homeadditions for Terminus authentication
+## Usage: symlink-ssh
+## Example: ddev symlink-ssh
+
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+red=$(tput setaf 1)$(tput bold)
+NC=$(tput sgr0)
+
+HOMEADDITIONS=".ddev/homeadditions"
+
+# Create homeadditions directory if it doesn't exist
+if [ ! -d "$HOMEADDITIONS" ]; then
+  mkdir -p "$HOMEADDITIONS"
+  echo "${green}Created $HOMEADDITIONS directory${NC}"
+fi
+
+# Check if SSH directory exists on host
+if [ ! -d "$HOME/.ssh" ]; then
+  echo "${red}Error: ~/.ssh directory not found on host${NC}"
+  exit 1
+fi
+
+# Remove existing symlink if it's broken
+if [ -L "$HOMEADDITIONS/.ssh" ] && [ ! -e "$HOMEADDITIONS/.ssh" ]; then
+  rm "$HOMEADDITIONS/.ssh"
+  echo "${yellow}Removed broken symlink${NC}"
+fi
+
+# Create symlink if it doesn't already exist
+if [ -L "$HOMEADDITIONS/.ssh" ]; then
+  echo "${yellow}SSH symlink already exists${NC}"
+  ls -la "$HOMEADDITIONS/.ssh"
+else
+  cd "$HOMEADDITIONS" || exit 1
+  ln -sf ~/.ssh .ssh
+  echo "${green}✓ SSH symlink created successfully${NC}"
+  echo "${green}  $HOMEADDITIONS/.ssh → ~/.ssh${NC}"
+fi
+
+echo ""
+echo "${yellow}Note: Run 'ddev restart' for changes to take effect${NC}"

@@ -1,5 +1,6 @@
-@use '../../../abstracts/variables';
+@use '../../../abstracts/_variables.scss';
 @use '../../../abstracts/_utilities.scss';
+
 .block-superfish .sf-menu.sf-mega-menu ul {
   @include utilities.breakpoint(md) {
     background: #f1f1f1 !important;

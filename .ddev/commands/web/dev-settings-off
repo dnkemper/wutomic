@@ -1,0 +1,25 @@
+#!/bin/bash
+
+## Description: Settings for local development: disable twig cache and rendered-output cache.
+## Usage: dev-settings-off [alias]
+## Example: "ddev dev-settings-off" or "ddev dev-settings-off @self"
+
+# Show info about this script, and setup PS4 for prefix of each trace line from "set -x"
+echo -e "\n$(tput setaf 3)$(tput bold)>>>>> $(tput setaf 5)$(TZ=America/Chicago date +"%Y-%m-%d-%T") $(tput setaf 2)Running ${BASH_SOURCE} $(tput setaf 3)<<<<<$(tput sgr0)"
+PS4='$(tput setaf 3)$(tput bold)>> $(tput setaf 5)$(TZ=America/Chicago date +%H:%M:%S.%3N) $(tput setaf 2)[dev-settings:${LINENO}]$(tput sgr0) '
+
+# Runs D10 command for disabling rendered-output cache and twig cache, and for enabling twig debug mode.
+# This takes the place of the following pre-D10.3 commands:
+#   drush state:set twig_debug TRUE
+#   drush state:set disable_rendered_output_cache_bins TRUE
+#   drush state:set twig_development_mode TRUE
+#   drush state:set twig_cache_disable TRUE
+#
+# Only need this script so you could do a `ddev dev-settings` as needed.
+# Otherwise, doing it like this fails: `ddev drush php:eval "\Drupal::keyValue('development_settings') blahblah"`.
+# If your script is using drush directly (instead of `ddev drush...`), then just paste the commands below into your script.
+
+set -x
+drush $@ php:eval "\Drupal::keyValue('development_settings')->setMultiple(['disable_rendered_output_cache_bins' => FALSE, 'twig_debug' => FALSE, 'twig_cache_disable' => FALSE]);"
+set +x
+echo -e "$(tput setaf 3)$(tput bold)>>>>> $(tput setaf 5)$(TZ=America/Chicago date +"%Y-%m-%d-%T") $(tput setaf 2)Finished ${BASH_SOURCE} $(tput setaf 3)<<<<<$(tput sgr0)\n"

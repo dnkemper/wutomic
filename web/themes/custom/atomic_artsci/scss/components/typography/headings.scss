@@ -1,6 +1,6 @@
-@use '../../abstracts/variables';
-@use '../../abstracts/utilities';
-@use '../../abstracts/headline-mixins' as headline-mixins;
+@use '../../abstracts/_variables.scss';
+@use '../../abstracts/_utilities.scss';
+@use '../../abstracts/headline-mixins.scss' as headline-mixins;
 
 h1,
 h2,
@@ -18,15 +18,10 @@ h1, .h1 {
 }
 
 .h1 {
-  &.bold-headline--serif {
-    @include utilities.h1;
-    font-weight: variables.$font-weight-bold;
-  }
-}
-.h1 {
+  &.bold-headline--serif,
   &.headline--serif {
     @include utilities.h1;
-    font-weight: variables.$font-weight-medium-bold;
+    font-weight: variables.$font-weight-bold;
   }
 }
 
@@ -70,67 +65,6 @@ h6, .h6 {
     font-size: clamp(1.2rem, calc(0.507vw + 1.0099rem), 1.425rem);
   }
 }
-
-h1 {
-  margin-top: 0;
-  margin-bottom: 0;
-  .path-taxonomy & {
-    margin-bottom: variables.$sm;
-  }
-}
-
-.page-title.page-title--no-breadcrumbs {
-  margin-top: 1.75rem;
-}
-
-body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-title {
-  margin-bottom: 1.5rem;
-}
-
-.page-title.headline--serif {
-  font-weight: variables.$font-weight-medium-bold;
-  .banner & {
-    margin-bottom: 0;
-  }
-}
-
-.hero .page-title.bold-headline--serif {
-  font-weight: variables.$font-weight-medium-bold;
-}
-
-.headline.block__headline {
-  margin-bottom: 1.25rem;
-}
-
-.bold-headline--underline,
-.headline--underline {
-  &.text-align-center,
-  .text-align-center & {
-    &:after {
-      margin-right: auto;
-      margin-left: auto;
-    }
-  }
-}
-
-.bg-pattern--brain-black [class*="bg--gray"] .bold-headline--underline,
-.bg-pattern--brain-black [class*="bg--gray"] .headline--underline,
-[class*="bg--black"] [class*="bg--gray"]  .bold-headline--underline,
-[class*="bg--black"] [class*="bg--gray"] .headline--underline,
-.bg-pattern--brain-reversed [class*="bg--gray"] .bold-headline--underline,
-.bg-pattern--brain-reversed [class*="bg--gray"] .headline--underline,
-[class*="bg--gold"] [class*="bg--gray"] .bold-headline--underline,
-[class*="bg--gold"] [class*="bg--gray"] .headline--underline,
-.bg-pattern--brain-reversed [class*="bg--white"] .bold-headline--underline,
-.bg-pattern--brain-reversed [class*="bg--white"] .headline--underline,
-[class*="bg--gold"] [class*="bg--white"] .bold-headline--underline,
-[class*="bg--gold"] [class*="bg--white"] .headline--underline {
-  &:after {
-    background: variables.$primary;
-  }
-}
-
-// @todo Remove `.bold-headline` variations.
 
 .bold-headline,
 .headline {
@@ -230,3 +164,61 @@ h6, .h6 {
   }
 }
 
+h1 {
+  margin-top: 0;
+  margin-bottom: 0;
+  .path-taxonomy & {
+    margin-bottom: variables.$sm;
+  }
+}
+
+.page-title.page-title--no-breadcrumbs {
+  margin-top: 1.75rem;
+}
+
+body:not(.page-node-type-article, .page-node-type-page) #block-atomic-artsci-page-title {
+  margin-bottom: 1.5rem;
+}
+
+.page-title.headline--serif {
+  font-weight: variables.$font-weight-medium-bold;
+  .banner & {
+    margin-bottom: 0;
+  }
+}
+
+.hero .page-title.bold-headline--serif {
+  font-weight: variables.$font-weight-bold;
+}
+
+.headline.block__headline {
+  margin-bottom: 1.25rem;
+}
+
+.bold-headline--underline,
+.headline--underline {
+  &.text-align-center,
+  .text-align-center & {
+    &:after {
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+}
+
+.bg-pattern--brain-black [class*="bg--gray"] .bold-headline--underline,
+.bg-pattern--brain-black [class*="bg--gray"] .headline--underline,
+[class*="bg--black"] [class*="bg--gray"]  .bold-headline--underline,
+[class*="bg--black"] [class*="bg--gray"] .headline--underline,
+.bg-pattern--brain-reversed [class*="bg--gray"] .bold-headline--underline,
+.bg-pattern--brain-reversed [class*="bg--gray"] .headline--underline,
+[class*="bg--gold"] [class*="bg--gray"] .bold-headline--underline,
+[class*="bg--gold"] [class*="bg--gray"] .headline--underline,
+.bg-pattern--brain-reversed [class*="bg--white"] .bold-headline--underline,
+.bg-pattern--brain-reversed [class*="bg--white"] .headline--underline,
+[class*="bg--gold"] [class*="bg--white"] .bold-headline--underline,
+[class*="bg--gold"] [class*="bg--white"] .headline--underline {
+  &:after {
+    background: variables.$primary;
+  }
+}

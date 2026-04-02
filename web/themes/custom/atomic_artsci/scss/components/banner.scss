@@ -1,4 +1,4 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
 // === Banner base === //
@@ -14,7 +14,7 @@
 
   display: flex;
   flex-basis: 100%;
-  // Default vertical alignment is centered.x
+  // Default vertical alignment is centered.
   align-items: center;
   // Default horizontal alignment is centered.
   justify-content: center;
@@ -201,23 +201,11 @@
 
 // === Pre-title === //
 .banner__pre-title {
-  font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 5%;
-    line-height: 150%;
-    margin: 15px 0;
-    margin-bottom: 1.05rem;
-    text-transform: uppercase;
-    font-family: #{variables.$font-family-sans-serif};
+  line-height: 1.1;
 
   &.headline.headline--serif {
-    font-weight: 600;
-    letter-spacing: 5%;
-    line-height: 150%;
-    margin-bottom: 1.05rem;
-    margin: 15px 0;
-    font-family: #{variables.$font-family-sans-serif};
-    text-transform: uppercase;
+    margin-bottom: 0;
+    font-weight: 500;
   }
 
   &.headline.headline--underline {
@@ -534,7 +522,6 @@ div:not([class*="bg--"]) {
 }
 // === End: Background colors === //
 
-
 .layout--onecol[class*=page__container--edge] .banner--horizontal-left .banner__content {
   @include utilities.breakpoint(page-container) {
     padding-left: 0;
@@ -586,7 +573,6 @@ div:not([class*="bg--"]) {
 }
 
 
-// @todo revisit these styles once https://github.com/artsci/artsci/issues/722 is completed.
 .banner--list {
   height: 100%;
   .headline--small {
@@ -599,7 +585,6 @@ div:not([class*="bg--"]) {
   }
 }
 
-// @todo incorporate this into https://github.com/artsci/artsci/issues/721.
 .banner--stacked {
   &.layout--onecol--background.banner--small {
     .media--image {

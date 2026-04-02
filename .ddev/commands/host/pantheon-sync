@@ -1,0 +1,279 @@
+#!/bin/bash
+
+## Description: Sync database and files from Pantheon to your local DDEV environment
+## Usage: pantheon-sync [site-name] [environment] [--skip-files] [--skip-backup]
+## Example: ddev pantheon-sync wustl-hdw prod
+## Example: ddev pantheon-sync hdw prod --skip-files
+## Example: ddev pantheon-sync hdw prod --skip-backup
+## Example: ddev pantheon-sync (interactive mode)
+
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0) # no color; turn off all attributes
+
+# Default flags
+SKIP_FILES=false
+SKIP_BACKUP=true
+SKIP_LOCAL_BACKUP=false
+
+# Show info about this script
+echo -e "\n\n${yellow}>>>>>${NC} ${magenta}${NOW}${NC} ${green}Running Pantheon Sync${NC} ${yellow}<<<<<${NC}\n"
+
+# Function to normalize site name (add wustl- prefix if missing)
+normalize_site_name() {
+  local site=$1
+  if [[ $site == wustl-* ]]; then
+    echo "$site"
+  else
+    echo "wustl-$site"
+  fi
+}
+
+# Function to map environment names to Pantheon environments
+map_to_pantheon_env() {
+  case $1 in
+    dev|1) echo "dev";;
+    stage|test|2) echo "test";;
+    prod|live|3) echo "live";;
+    *) echo ""; echo "${red}Invalid environment selection${NC}";;
+  esac
+}
+
+# Function to get list of Pantheon sites
+get_pantheon_sites() {
+  terminus site:list --format=list --field=name 2>/dev/null | grep "^wustl-" | sort
+}
+
+# Function to prompt for site selection
+prompt_for_site() {
+  echo "${blue}Fetching your Pantheon sites...${NC}" >&2
+  sites=($(get_pantheon_sites))
+  
+  if [ ${#sites[@]} -eq 0 ]; then
+    echo "${red}No Pantheon sites found. Please check your Terminus authentication.${NC}" >&2
+    exit 1
+  fi
+  
+  echo "" >&2
+  echo "${green}Available Pantheon sites:${NC}" >&2
+  PS3="Select the site number you want to sync from: "
+  
+  select site in "${sites[@]}"; do
+    if [[ -n "$site" ]]; then
+      echo "$site"
+      return
+    else
+      echo "${red}Invalid selection. Please try again.${NC}" >&2
+    fi
+  done
+}
+
+# Function to prompt for environment selection
+prompt_for_environment() {
+  PS3="Select the environment you want to sync from: "
+  options=("dev" "stage (test)" "prod (live)")
+  
+  select env_option in "${options[@]}"; do
+    case $REPLY in
+      1) echo "dev"; return;;
+      2) echo "test"; return;;
+      3) echo "live"; return;;
+      *) echo "${red}Invalid selection. Please try again.${NC}";;
+    esac
+  done
+}
+
+# Parse flags first
+POSITIONAL_ARGS=()
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --skip-files)
+      SKIP_FILES=true
+      shift
+      ;;
+    --skip-backup)
+      SKIP_BACKUP=true
+      shift
+      ;;
+    --skip-local-backup)
+      SKIP_LOCAL_BACKUP=true
+      shift
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# Restore positional parameters
+set -- "${POSITIONAL_ARGS[@]}"
+
+# Parse arguments or prompt for inputs
+if [ -z "$1" ]; then
+  # Interactive mode
+  SITE_NAME=$(prompt_for_site)
+  PANTHEON_ENV=$(prompt_for_environment)
+else
+  # Command-line arguments provided
+  SITE_NAME=$(normalize_site_name "$1")
+  
+  if [ -z "$2" ]; then
+    PANTHEON_ENV=$(prompt_for_environment)
+  else
+    PANTHEON_ENV=$(map_to_pantheon_env "$2")
+    if [[ -z "$PANTHEON_ENV" ]]; then
+      echo "${red}Invalid environment argument. Use: dev, stage, or prod${NC}"
+      exit 1
+    fi
+  fi
+fi
+
+# Verify Terminus authentication early
+echo -e "${blue}Verifying Terminus authentication...${NC}"
+if ! terminus auth:whoami &>/dev/null; then
+  echo "${red}Not authenticated with Terminus. Please run: terminus auth:login${NC}"
+  exit 1
+fi
+
+# Verify the site exists on Pantheon
+echo -e "${blue}Verifying site exists on Pantheon...${NC}"
+if ! terminus site:info "$SITE_NAME" &>/dev/null; then
+  echo "${red}Site '$SITE_NAME' not found on Pantheon.${NC}"
+  echo "${yellow}Available sites:${NC}"
+  get_pantheon_sites
+  exit 1
+fi
+
+# Confirm selections
+echo ""
+echo "${yellow}========================================${NC}"
+echo "${blue}Site:${NC} $SITE_NAME"
+echo "${blue}Environment:${NC} $PANTHEON_ENV"
+echo "${blue}Skip Files:${NC} $SKIP_FILES"
+echo "${blue}Skip Pantheon Backup:${NC} $SKIP_BACKUP"
+echo "${blue}Skip Local Backup:${NC} $SKIP_LOCAL_BACKUP"
+echo "${yellow}========================================${NC}"
+echo ""
+
+# Create backup of current database (unless skipped)
+if [ "$SKIP_LOCAL_BACKUP" = false ]; then
+  echo -e "${blue}Backing up current database to $SITE_NAME-sync-backup-$NOW.sql${NC}"
+  ddev export-db --gzip=false --file="$SITE_NAME-sync-backup-$NOW.sql"
+else
+  echo -e "${yellow}Skipping local database backup${NC}"
+fi
+
+# Create or check for recent backup on Pantheon
+if [ "$SKIP_BACKUP" = false ]; then
+  echo -e "${blue}Creating backup on Pantheon...${NC}"
+  terminus backup:create "$SITE_NAME.$PANTHEON_ENV" --element=all --keep-for=7
+else
+  echo -e "${yellow}Skipping Pantheon backup creation, using latest available backup${NC}"
+fi
+
+# Get the latest database backup
+echo -e "${blue}Getting database backup URL from Pantheon...${NC}"
+DB_BACKUP_URL=$(terminus backup:get "$SITE_NAME.$PANTHEON_ENV" --element=db)
+
+if [ -z "$DB_BACKUP_URL" ]; then
+  echo "${red}Failed to get database backup URL${NC}"
+  exit 1
+fi
+
+# Stream database import (much faster than download → extract → import)
+echo -e "${blue}Downloading and importing database from Pantheon...${NC}"
+echo -e "${blue}Downloading database backup...${NC}"
+curl -L "$DB_BACKUP_URL" -o "/tmp/$SITE_NAME-db-$NOW.sql.gz"
+
+if [ ! -s "/tmp/$SITE_NAME-db-$NOW.sql.gz" ]; then
+  echo "${red}Database download failed or file is empty${NC}"
+  exit 1
+fi
+
+echo -e "${blue}Importing database (this may take a few minutes)${NC}"
+if ddev import-db --file="/tmp/$SITE_NAME-db-$NOW.sql.gz"; then
+  echo -e "${green}Database imported successfully${NC}"
+  rm "/tmp/$SITE_NAME-db-$NOW.sql.gz"
+else
+  echo "${red}Database import failed${NC}"
+  exit 1
+fi
+# Sync files from Pantheon using backup method
+if [ "$SKIP_FILES" = false ]; then
+  echo -e "${blue}Downloading files backup from Pantheon...${NC}"
+  
+  # Ensure files directory exists
+  mkdir -p web/sites/default/files
+  
+  # Get files backup URL
+  FILES_BACKUP_URL=$(terminus backup:get "$SITE_NAME.$PANTHEON_ENV" --element=files)
+  
+  if [ -z "$FILES_BACKUP_URL" ]; then
+    echo "${red}Failed to get files backup URL${NC}"
+    exit 1
+  fi
+  
+  # Download files backup
+  echo -e "${blue}Downloading files archive...${NC}"
+  curl -L "$FILES_BACKUP_URL" -o "$SITE_NAME-pantheon-files-$NOW.tar.gz"
+  
+  # Extract directly to files directory
+  echo -e "${blue}Extracting files to web/sites/default/files/...${NC}"
+  
+  # Pantheon typically stores files in a files_[env] directory in the tar
+  # Extract and strip the leading directory component
+  tar -xzf "$SITE_NAME-pantheon-files-$NOW.tar.gz" --strip-components=1 -C "web/sites/default/files/"
+  
+  # Clean up tar file
+  rm "$SITE_NAME-pantheon-files-$NOW.tar.gz"
+  echo -e "${green}Files synced successfully${NC}"
+else
+  echo -e "${yellow}Skipping file sync (--skip-files flag set)${NC}"
+fi
+
+# Run database updates
+echo -e "${blue}Running database updates${NC}"
+ddev drush updb --yes
+
+# Update Composer
+echo -e "${blue}Updating Composer packages${NC}"
+ddev composer update --lock
+ddev composer install
+
+# Enable development settings
+echo -e "${blue}Enabling development settings${NC}"
+ddev dev-settings
+
+# Import configuration (with error handling)
+echo -e "${blue}Importing configuration${NC}"
+if ! ddev drush cim --yes; then
+  echo "${yellow}Config import had errors, but continuing...${NC}"
+fi
+ddev drush config-split:activate local --yes
+
+# Clear cache
+echo -e "${blue}Clearing Drupal cache${NC}"
+ddev drush cr
+
+# Generate one-time login link
+echo -e "${blue}Generating login link${NC}"
+ddev drush uli
+
+echo ""
+echo "${green}========================================${NC}"
+echo "${green}Sync completed successfully!${NC}"
+echo "${green}========================================${NC}"
+echo ""
+if [ "$SKIP_LOCAL_BACKUP" = false ]; then
+  echo "${yellow}Database backup saved to:${NC} $SITE_NAME-sync-backup-$NOW.sql"
+fi
+echo ""
+echo "${blue}Speed tip:${NC} Use ${yellow}--skip-files${NC} to sync only the database"
+echo "${blue}Speed tip:${NC} Use ${yellow}--skip-backup${NC} to use the latest existing Pantheon backup"
+echo "${blue}Speed tip:${NC} Use ${yellow}--skip-local-backup${NC} to skip backing up your local database"
+echo ""

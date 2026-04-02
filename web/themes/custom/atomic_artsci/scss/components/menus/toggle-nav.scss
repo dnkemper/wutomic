@@ -1,4 +1,4 @@
-@use '../../abstracts/variables';
+@use '../../abstracts/_variables.scss';
 @use '../../abstracts/_utilities.scss';
 
 // Previous artsci 3.x component styles.
@@ -291,7 +291,7 @@ body {
   background: #f1f1f1;
 }
 
-// atomic_artsci overrides.
+// artsci_base overrides.
 .o-canvas__group .region-primary-menu {
   height: auto;
 }

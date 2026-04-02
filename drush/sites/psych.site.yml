@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.bbe9e6c1-af20-4e05-9593-6f4f083be78d.drush.in
+  user: dev.bbe9e6c1-af20-4e05-9593-6f4f083be78d
+  uri: dev-wustl-psych.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.bbe9e6c1-af20-4e05-9593-6f4f083be78d.drush.in
+  user: test.bbe9e6c1-af20-4e05-9593-6f4f083be78d
+  uri: test-wustl-psych.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.bbe9e6c1-af20-4e05-9593-6f4f083be78d.drush.in
+  user: test.bbe9e6c1-af20-4e05-9593-6f4f083be78d
+  uri: test-wustl-psych.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.bbe9e6c1-af20-4e05-9593-6f4f083be78d.drush.in
+  user: live.bbe9e6c1-af20-4e05-9593-6f4f083be78d
+  uri: live-wustl-psych.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.bbe9e6c1-af20-4e05-9593-6f4f083be78d.drush.in
+  user: live.bbe9e6c1-af20-4e05-9593-6f4f083be78d
+  uri: live-wustl-psych.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

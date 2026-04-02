@@ -1,5 +1,6 @@
-@use '../../../abstracts/variables';
+@use '../../../abstracts/_variables.scss';
 @use '../../../abstracts/_utilities.scss';
+
 .region-primary-menu .menu,
 .sf-menu {
   list-style-type: none;
@@ -441,6 +442,7 @@ ul.sf-accordion ul:focus-within {
     text-decoration: underline;
     cursor: pointer;
     outline: none;
+    background: #e1e1e1;
   }
 
   &:hover {

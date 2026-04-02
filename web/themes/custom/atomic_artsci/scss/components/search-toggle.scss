@@ -1,4 +1,4 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
 $search-mobile-img-path: '../../images/search-white-01.svg';
@@ -465,7 +465,7 @@ $search-img-path: '../../images/search-01.svg';
   }
 }
 
-// atomic_artsci overrides.
+// artsci_base overrides.
 
 .search-overlay .artsci-search [type="submit"]::before {
   background-image: url($search-mobile-img-path);

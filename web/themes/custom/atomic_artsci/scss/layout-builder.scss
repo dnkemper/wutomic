@@ -1,4 +1,4 @@
-@use 'abstracts/_variables.scss';
+@use 'abstracts/variables.scss';
 @use 'abstracts/_utilities.scss';
 
 html {
@@ -418,7 +418,6 @@ div[data-drupal-selector="edit-moderation-state-0"] {
   padding: 0;
 }
 
-// @todo https://github.com/artsci/artsci/issues/768.
 blockquote.layout-builder-block {
   &.blockquote--right  {
     @include utilities.padding(variables.$top: variables.$xsm, variables.$bottom: variables.$xsm, variables.$left: variables.$lg);

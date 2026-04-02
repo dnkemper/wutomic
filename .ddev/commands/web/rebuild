@@ -1,0 +1,16 @@
+#!/bin/bash
+## Description: Run build script on custom theme olympian9
+## Usage: rebuild
+
+# Show info about this script, and setup PS4 for prefix of each trace line from "set -x"
+echo -e "\n\n$(tput setaf 3)$(tput bold)>>>>> $(tput setaf 5)$(TZ=America/Chicago date +"%Y-%m-%d-%T") $(tput setaf 2)Running ${BASH_SOURCE} $(tput setaf 3)<<<<<$(tput sgr0)\n"
+PS4='$(tput setaf 3)$(tput bold)>> $(tput setaf 5)$(TZ=America/Chicago date +%H:%M:%S.%3N) $(tput setaf 2)[rebuild:${LINENO}]$(tput sgr0) '
+set -x
+
+# Show node version
+node -v
+
+# Build css and js assests on the theme folder
+cd /var/www/html/web/themes/custom/olympian9
+yarn
+yarn run build

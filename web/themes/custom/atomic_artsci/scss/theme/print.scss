@@ -1,4 +1,4 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
 @page {
@@ -370,17 +370,17 @@ blockquote {
 ----------------------------------------- */
 .menu-wrapper,
 .nav--horizontal,
-#block-artsci-base-socialmedia,
+#block-atomic-artsci-socialmedia,
 .artsci-footer--login-link,
-#block-artsci-base-footerprimary,
-#block-artsci-base-footersecondary,
-#block-artsci-base-footer-tertiary,
+#block-atomic-artsci-footerprimary,
+#block-atomic-artsci-footersecondary,
+#block-atomic-artsci-footer-tertiary,
 .artsci-footer--login-link,
 .socket__menu li:not(:first-child),
 .custom-alert-wrapper,
 .hawk-alerts-wrapper,
 .search-wrapper,
-#block-artsci-base-toplinks,
+#block-atomic-artsci-toplinks,
 .parent-site-name,
 .breadcrumb,
 .artsci__container,

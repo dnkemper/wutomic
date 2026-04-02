@@ -1,7 +1,5 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
-
-// === Blockquote === //
 
 blockquote {
   font-weight: variables.$font-weight-normal;
@@ -399,7 +397,7 @@ blockquote {
 }
 
 // @todo Remove after v2 dies.
-//   See https://github.com/uiowa/uiowa/issues/4948
+//   See https://github.com/artsci/artsci/issues/4948
 .bg-yellow blockquote {
   border-color: #fff;
 }

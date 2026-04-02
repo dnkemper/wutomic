@@ -1,5 +1,5 @@
-@use '../abstracts/variables';
-@use '../abstracts/utilities';
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
 // lb_direct_add module overrides.
 
 .layout-builder__direct-add__toggle {

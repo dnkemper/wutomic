@@ -1,0 +1,23 @@
+local:
+  root: /var/www/html/web
+  uri: https://aggregator.ddev.site
+  paths:
+    files: sites/aggregator.artsci.wustl.edu/files
+dev:
+  uri: https://aggregator.artscidev.wustl.edu
+  root: /var/www/html/d9main/web
+  paths:
+    files: sites/aggregator.artsci.wustl.edu/files
+    drush-script: /var/www/html/d9main/vendor/bin/drush
+stage:
+  uri: https://aggregator.artscistage.wustl.edu
+  root: /var/www/html/d9main/web
+  paths:
+    files: sites/aggregator.artsci.wustl.edu/files
+    drush-script: /var/www/html/d9main/vendor/bin/drush
+prod:
+  uri: https://aggregator.artsci.wustl.edu
+  root: /var/www/html/d9main/web
+  paths:
+    files: sites/aggregator.artsci.wustl.edu/files
+    drush-script: /var/www/html/d9main/vendor/bin/drush

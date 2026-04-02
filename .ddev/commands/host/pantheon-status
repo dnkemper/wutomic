@@ -1,0 +1,107 @@
+#!/bin/bash
+
+## Description: Quick status check of Pantheon sites (upstream status, environment health)
+## Usage: pantheon-status [flags]
+## Example: ddev pantheon-status
+## Example: ddev pantheon-status --filter="hdw"
+## Example: ddev pantheon-status --check-upstream
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+# Parse flags
+FILTER=""
+CHECK_UPSTREAM=false
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --filter=*|-f=*) FILTER="${1#*=}" ;;
+        --filter|-f) FILTER="$2"; shift ;;
+        --check-upstream|-u) CHECK_UPSTREAM=true ;;
+        *) echo -e "${RED}Unknown option: $1${NC}"; exit 1 ;;
+    esac
+    shift
+done
+
+# Check terminus
+if ! terminus auth:whoami &> /dev/null; then
+    echo -e "${RED}Not authenticated with Terminus.${NC}"
+    exit 1
+fi
+
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+echo -e "${CYAN}  PANTHEON SITE STATUS${NC}"
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+echo ""
+
+# Get sites
+SITES=$(terminus site:list --format=list --field=name 2>/dev/null | sort)
+
+if [[ -n "$FILTER" ]]; then
+    SITES=$(echo "$SITES" | grep -i "$FILTER")
+fi
+
+SITE_COUNT=$(echo "$SITES" | wc -l | tr -d ' ')
+echo -e "${CYAN}Checking ${SITE_COUNT} sites...${NC}"
+echo ""
+
+# Counters
+UPSTREAM_PENDING=0
+TOTAL=0
+
+# Table header
+printf "%-35s %-8s %-8s %-8s" "SITE" "DEV" "TEST" "LIVE"
+if [[ "$CHECK_UPSTREAM" == true ]]; then
+    printf " %-15s" "UPSTREAM"
+fi
+echo ""
+printf "%-35s %-8s %-8s %-8s" "---" "---" "---" "---"
+if [[ "$CHECK_UPSTREAM" == true ]]; then
+    printf " %-15s" "---"
+fi
+echo ""
+
+for SITE in $SITES; do
+    TOTAL=$((TOTAL + 1))
+
+    printf "%-35s " "$SITE"
+
+    # Check each environment quickly via env:info
+    for ENV in dev test live; do
+        if terminus env:info "$SITE.$ENV" --field=initialized 2>/dev/null | grep -q "true"; then
+            printf "${GREEN}%-8s${NC}" "✓"
+        else
+            printf "${YELLOW}%-8s${NC}" "—"
+        fi
+    done
+
+    # Check upstream status if requested
+    if [[ "$CHECK_UPSTREAM" == true ]]; then
+        UPDATES=$(terminus upstream:updates:list "${SITE}.dev" 2>&1)
+        if echo "$UPDATES" | grep -qi "no updates\|No available"; then
+            printf "${GREEN}%-15s${NC}" "Up to date"
+        else
+            printf "${YELLOW}%-15s${NC}" "⬆ Available"
+            UPSTREAM_PENDING=$((UPSTREAM_PENDING + 1))
+        fi
+    fi
+
+    echo ""
+done
+
+# Summary
+echo ""
+echo -e "${CYAN}════════════════════════════════════════${NC}"
+echo -e "Total sites: ${TOTAL}"
+if [[ "$CHECK_UPSTREAM" == true ]]; then
+    echo -e "Sites with pending upstream updates: ${YELLOW}${UPSTREAM_PENDING}${NC}"
+    if [[ $UPSTREAM_PENDING -gt 0 ]]; then
+        echo ""
+        echo -e "${YELLOW}To apply all pending updates:${NC}"
+        echo "  ddev upstream-update-all"
+    fi
+fi
+echo ""

@@ -1,0 +1,54 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+dev:
+  host: appserver.dev.134dd098-a9bb-4ffe-a89d-373aaf455626.drush.in
+  user: dev.134dd098-a9bb-4ffe-a89d-373aaf455626
+  uri: dev-wustl-religiousstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+test:
+  host: appserver.test.134dd098-a9bb-4ffe-a89d-373aaf455626.drush.in
+  user: test.134dd098-a9bb-4ffe-a89d-373aaf455626
+  uri: test-wustl-religiousstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+stage:
+  host: appserver.test.134dd098-a9bb-4ffe-a89d-373aaf455626.drush.in
+  user: test.134dd098-a9bb-4ffe-a89d-373aaf455626
+  uri: test-wustl-religiousstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+live:
+  host: appserver.live.134dd098-a9bb-4ffe-a89d-373aaf455626.drush.in
+  user: live.134dd098-a9bb-4ffe-a89d-373aaf455626
+  uri: live-wustl-religiousstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
+prod:
+  host: appserver.live.134dd098-a9bb-4ffe-a89d-373aaf455626.drush.in
+  user: live.134dd098-a9bb-4ffe-a89d-373aaf455626
+  uri: live-wustl-religiousstudies.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

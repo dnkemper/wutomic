@@ -1,0 +1,51 @@
+local:
+  root: /var/www/html/web
+  uri: 'https://default.ddev.site'
+  paths:
+    files: sites/default/files
+
+dev:
+  host: appserver.dev.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9.drush.in
+  user: dev.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9
+  uri: dev-wustl-anthropology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+test:
+  host: appserver.test.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9.drush.in
+  user: test.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9
+  uri: test-wustl-anthropology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+stage:
+  host: appserver.test.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9.drush.in
+  user: test.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9
+  uri: test-wustl-anthropology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+live:
+  host: appserver.live.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9.drush.in
+  user: live.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9
+  uri: live-wustl-anthropology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+prod:
+  host: appserver.live.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9.drush.in
+  user: live.d5188077-b7ba-45b3-9a4f-04a6f0d8e5f9
+  uri: live-wustl-anthropology.pantheonsite.io
+  paths:
+    files: files
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false

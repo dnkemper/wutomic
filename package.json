@@ -1,0 +1,20 @@
+{
+  "name": "wutomic",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "ITS Web Services",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "web/themes/custom/*",
+      "web/sites/*/themes/*",
+      "web/modules/custom/**/*"
+    ]
+  },
+  "dependencies": {
+    "@percy/cli": "^1.30.10",
+    "requirejs": "^2.3.7"
+  },
+  "devDependencies": {}
+}

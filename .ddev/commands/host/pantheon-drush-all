@@ -1,0 +1,112 @@
+#!/bin/bash
+
+## Description: Run a Drush command on all Pantheon sites
+## Usage: pantheon-drush-all [environment] [drush-command]
+## Example: ddev pantheon-drush-all live "cr"
+## Example: ddev pantheon-drush-all live "amr"
+## Example: ddev pantheon-drush-all test "updb -y"
+## Example: ddev pantheon-drush-all dev "cim -y"
+NOW=$(TZ=America/Chicago date +"%Y-%m-%d-%H-%M-%S")
+red=$(tput setaf 1)$(tput bold)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)$(tput bold)
+blue=$(tput setaf 4)
+magenta=$(tput setaf 5)$(tput bold)
+NC=$(tput sgr0)
+
+# Function to map environment names
+map_to_pantheon_env() {
+  case $1 in
+    dev|1) echo "dev";;
+    stage|test|2) echo "test";;
+    prod|live|3) echo "live";;
+    *) echo "";;
+  esac
+}
+
+# Parse arguments
+if [ -z "$1" ]; then
+  echo "${red}Usage: ddev pantheon-drush-all [environment] [drush-command]${NC}"
+  echo "Example: ddev pantheon-drush-all live 'cr'"
+  exit 1
+fi
+
+PANTHEON_ENV=$(map_to_pantheon_env "$1")
+if [[ -z "$PANTHEON_ENV" ]]; then
+  echo "${red}Invalid environment. Use: dev, stage, or prod${NC}"
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  echo "${red}Please provide a Drush command to run${NC}"
+  exit 1
+fi
+
+DRUSH_CMD="$2"
+
+# Verify Terminus authentication
+if ! terminus auth:whoami &>/dev/null; then
+  echo "${red}Not authenticated with Terminus. Please run: terminus auth:login${NC}"
+  exit 1
+fi
+
+# Get list of sites
+echo "${blue}Fetching Pantheon sites...${NC}"
+SITES=($(terminus site:list --format=list --field=name 2>/dev/null | grep "^wustl-" | sort))
+
+if [ ${#SITES[@]} -eq 0 ]; then
+  echo "${red}No sites found${NC}"
+  exit 1
+fi
+
+echo "${green}Found ${#SITES[@]} sites${NC}"
+echo "${yellow}Environment:${NC} $PANTHEON_ENV"
+echo "${yellow}Command:${NC} drush $DRUSH_CMD"
+echo ""
+read -p "Continue? (Y/N): " confirm
+if [[ ! $confirm =~ ^[Yy]$ ]]; then
+  echo "${yellow}Cancelled${NC}"
+  exit 0
+fi
+
+# Track results
+SUCCESS_COUNT=0
+FAIL_COUNT=0
+FAILED_SITES=()
+
+echo ""
+echo "${blue}========================================${NC}"
+echo "${blue}Starting Drush command on all sites...${NC}"
+echo "${blue}========================================${NC}"
+echo ""
+
+# Loop through sites
+for SITE in "${SITES[@]}"; do
+  echo "${magenta}>>> Running on: $SITE.$PANTHEON_ENV${NC}"
+  
+  if terminus drush "$SITE.$PANTHEON_ENV" -- $DRUSH_CMD; then
+    echo "${green}✓ Success: $SITE${NC}"
+    ((SUCCESS_COUNT++))
+  else
+    echo "${red}✗ Failed: $SITE${NC}"
+    FAILED_SITES+=("$SITE")
+    ((FAIL_COUNT++))
+  fi
+  
+  echo ""
+done
+
+# Summary
+echo "${blue}========================================${NC}"
+echo "${green}Completed!${NC}"
+echo "${blue}========================================${NC}"
+echo "${green}Successful: $SUCCESS_COUNT${NC}"
+echo "${red}Failed: $FAIL_COUNT${NC}"
+
+if [ ${#FAILED_SITES[@]} -gt 0 ]; then
+  echo ""
+  echo "${red}Failed sites:${NC}"
+  for SITE in "${FAILED_SITES[@]}"; do
+    echo "  - $SITE"
+  done
+fi

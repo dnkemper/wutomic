@@ -1,5 +1,5 @@
-@use '../abstracts/variables';
-@use '../abstracts/utilities';
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
 
 // Fix for off-canvas dialog update button being hidden.
 .ui-dialog-off-canvas #drupal-off-canvas:not(.drupal-off-canvas-reset),

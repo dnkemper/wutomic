@@ -1,0 +1,10 @@
+'*':
+  host: appserver.${env-name}.ec6c6761-fb05-4905-bfed-904ce04061e1.drush.in
+  paths:
+    files: files
+  uri: ${env-name}-wustl-artscistage.pantheonsite.io
+  user: ${env-name}.ec6c6761-fb05-4905-bfed-904ce04061e1
+  ssh:
+    options: '-p 2222 -o "AddressFamily inet"'
+    tty: false
+
