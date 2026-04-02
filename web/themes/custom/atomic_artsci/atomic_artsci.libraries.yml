@@ -468,7 +468,7 @@ artsci-video-block:
 blockquote:
   css:
     component:
-      assets/css/artsci/components/blockquote.css: {}
+      assets/css/components/blockquote.css: {}
 
 artsci-card-collection:
   css:
