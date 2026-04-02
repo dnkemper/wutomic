@@ -1,0 +1,60 @@
+uuid: 41b0753f-d0b0-4833-9963-d319dae8ebe3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - webform
+_core:
+  default_config_hash: sIFcf8s0DbI2ilmXJaz2HcrpKtz_TGjWhMLBnhOWVc4
+label: Default
+id: default
+description: 'A default Linkit profile'
+matchers:
+  556010a3-e317-48b3-b4ed-854c10f4b950:
+    id: 'entity:node'
+    uuid: 556010a3-e317-48b3-b4ed-854c10f4b950
+    settings:
+      metadata: '[node:content-type] - /node/[node:nid] created by [node:author] | updated [node:changed:html_date] | [node:published_status]'
+      bundles: {  }
+      group_by_bundle: false
+      substitution_type: canonical
+      limit: 100
+      include_unpublished: true
+    weight: -10
+  71deb6e8-67cb-4ef3-ae69-36a3849daa32:
+    id: 'entity:media'
+    uuid: 71deb6e8-67cb-4ef3-ae69-36a3849daa32
+    settings:
+      metadata: 'type [media:field_media_file:entity:extension] | updated [media:field_media_file:entity:changed]'
+      bundles:
+        file: file
+      group_by_bundle: false
+      substitution_type: media
+      limit: 100
+    weight: -8
+  36a7abf7-f57a-4d95-8d57-cc8d6775ea87:
+    id: email
+    uuid: 36a7abf7-f57a-4d95-8d57-cc8d6775ea87
+    settings: {  }
+    weight: -7
+  257e7402-9995-423c-88f6-2d019f8341b5:
+    id: 'entity:webform'
+    uuid: 257e7402-9995-423c-88f6-2d019f8341b5
+    settings:
+      metadata: 'created by [webform:author]'
+      bundles: null
+      group_by_bundle: null
+      substitution_type: canonical
+      limit: 100
+    weight: -9
+  0e9b8ad1-3859-4091-a98d-b43961e53544:
+    id: front_page
+    uuid: 0e9b8ad1-3859-4091-a98d-b43961e53544
+    settings: {  }
+    weight: 0
+  6600552e-0bc5-4694-bcb3-56ac630ea011:
+    id: nolink
+    uuid: 6600552e-0bc5-4694-bcb3-56ac630ea011
+    settings: {  }
+    weight: 0

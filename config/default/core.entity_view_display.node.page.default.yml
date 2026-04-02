@@ -1,0 +1,77 @@
+uuid: fdc40299-7f59-482a-95ca-cf75e332bf3d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.page.body
+    - node.type.page
+  module:
+    - layout_builder
+    - layout_discovery
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          f748f39f-bc6e-4fed-83c8-ceb12599fac0:
+            uuid: f748f39f-bc6e-4fed-83c8-ceb12599fac0
+            region: content
+            configuration:
+              id: 'field_block:node:page:private'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: private
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          9bf29049-a7b4-4bef-83bc-35afea75ac48:
+            uuid: 9bf29049-a7b4-4bef-83bc-35afea75ac48
+            region: content
+            configuration:
+              id: 'field_block:node:page:body'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          e1d18c1f-2ee5-47b0-8fc5-7d2cde5e8c17:
+            uuid: e1d18c1f-2ee5-47b0-8fc5-7d2cde5e8c17
+            region: content
+            configuration:
+              id: 'extra_field_block:node:page:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
+_core:
+  default_config_hash: M_Y8L5tfmhx7DR143E05YyZSpvgil6VFvqcfBWykalg
+id: node.page.default
+targetEntityType: node
+bundle: page
+mode: default
+content: {  }
+hidden:
+  body: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  links: true
+  private: true
+  search_api_excerpt: true

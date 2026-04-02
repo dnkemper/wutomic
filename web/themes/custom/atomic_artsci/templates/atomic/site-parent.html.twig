@@ -1,0 +1,11 @@
+{% if parent_name %}
+  <div class="parent-site-name">
+    {% if parent_url %}
+    <a href="{{ parent_url }}">
+      {% endif %}
+      {{ parent_name }}
+      {% if parent_url %}
+    </a>
+    {% endif %}
+  </div>
+{% endif %}

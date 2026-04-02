@@ -1,0 +1,18 @@
+{{ attach_library('atomic_artsci/hero') }}
+
+<div class="hero hero__{{ hero_alignment }} {{ attributes ? attributes.class }}" {{ attributes ? attributes|without('class') }}>
+	{{ title_prefix }}
+	{{ title_suffix }}
+	{% block hero_footer %}
+	{% endblock hero_footer %}
+	<div class="hero__img{% if video_field and video_field is not empty %} media--video{% endif %}">
+		{% block hero_image %}
+		{% endblock %}
+	</div>
+	<div class="hero__container hero__container-{{ hero_alignment }}">
+		<div class="hero__content hero__content-{{ hero_alignment }}">
+			{% block hero_content %}
+			{% endblock %}
+		</div>
+	</div>
+</div>

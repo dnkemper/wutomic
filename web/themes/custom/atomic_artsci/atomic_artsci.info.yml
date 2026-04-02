@@ -1,0 +1,26 @@
+name: atomic_artsci
+type: theme
+'base theme': stable9
+version: 1.0.0
+libraries:
+  - atomic_artsci/base
+  - atomic_artsci/messages
+  - core/normalize
+libraries-extend:
+  user/drupal.user:
+    - atomic_artsci/user
+  core/drupal.dropbutton:
+    - atomic_artsci/dropbutton
+  core/drupal.dialog:
+    - atomic_artsci/dialog
+  file/drupal.file:
+    - atomic_artsci/file
+  core/drupal.item-list:
+    - atomic_artsci/item-list
+  core/drupal.progress:
+    - atomic_artsci/progress
+  core/drupal.tablesort:
+    - atomic_artsci/drupal.tablesort
+description: ''
+core_version_requirement: ^11
+generator: 'starterkit_theme:11.3.3'

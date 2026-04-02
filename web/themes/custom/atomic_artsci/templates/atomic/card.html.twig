@@ -1,0 +1,81 @@
+<div{{ attributes.addClass('card') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% block media %}
+    {% if media is not empty %}
+      <div {{ media_attributes.addClass('media') }}>
+        <div class="media__inner">
+          {% if linked_element == 'media' %}
+          <a href="{{ url }}">
+            {{ media }}
+          </a>
+          {% else %}
+            {{ media }}
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endblock %}
+
+  {% block body %}
+    <div class="card__body">
+      {% if pre_title is not empty %}
+      <div class="card__pre-title">
+        {{ pre_title }}
+      </div>
+      {% endif %}
+      {% block heading %}
+        {% if headline %}
+          <header>
+            {% include '@atomic_artsci/atomic/headline.html.twig' with headline only %}
+          </header>
+        {% endif %}
+      {% endblock %}
+
+      {% block details %}
+        {% if subtitle or meta is not empty %}
+          <div class="card__details">
+            {% block subtitle %}
+              {% if subtitle is not empty %}
+                <div class="card__subtitle">
+                  {{ subtitle }}
+                </div>
+              {% endif %}
+            {% endblock %}
+            {% block meta %}
+              {% if meta is not empty %}
+                <div class="card__meta">
+                  {{ meta }}
+                </div>
+              {% endif %}
+            {% endblock %}
+          </div>
+        {% endif %}
+      {% endblock %}
+
+      {% block content %}
+          {{ content }}
+      {% endblock %}
+
+      {% block button %}
+        {% if url is not empty and (link_text is not empty or link_indicator) %}
+          <footer>
+            {% if linked_element == 'button' %}
+              {# Display as a link. #}
+              <a {{ button_attributes }} href="{{ url }}">
+                {{ link_text }}
+                <i role="presentation" class="fas fa-arrow-right"></i>
+              </a>
+            {% else %}
+              {# Display as a pseudo-link. #}
+              <div {{ button_attributes }}>
+                {{ link_text }}
+                <i role="presentation" class="fas fa-arrow-right"></i>
+              </div>
+            {% endif %}
+          </footer>
+        {% endif %}
+      {% endblock %}
+    </div>
+  {% endblock %}
+</div>

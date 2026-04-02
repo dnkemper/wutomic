@@ -1,0 +1,129 @@
+layout_onecol:
+  label: 'Atomic Artsci - One column'
+  template: templates/layouts/layout--onecol
+  library: atomic_artsci/onecol
+  category: 'Columns: 1'
+  default_region: content
+  icon_map:
+    - [content]
+  regions:
+    content:
+      label: Content
+
+layout_twocol:
+  label: 'Atomic Artsci - Two column'
+  template: templates/layouts/layout--twocol
+  library: atomic_artsci/twocol
+  class: '\Drupal\layout_builder\Plugin\Layout\TwoColumnLayout'
+  category: 'Columns: 2'
+  default_region: first
+  icon_map:
+    - [first, second]
+  regions:
+    first:
+      label: First
+    second:
+      label: Second
+
+layout_threecol:
+  label: 'Atomic Artsci - Three column'
+  template: templates/layouts/layout--threecol
+  library: atomic_artsci/threecol
+  class: '\Drupal\layout_builder\Plugin\Layout\ThreeColumnLayout'
+  category: 'Columns: 3'
+  default_region: second
+  icon_map:
+    - [first, second, third]
+  regions:
+    first:
+      label: First
+    second:
+      label: Second
+    third:
+      label: Third
+
+layout_fourcol:
+  label: 'Atomic Artsci - Four column'
+  template: templates/layouts/layout--fourcol
+  library: atomic_artsci/fourcol
+  category: 'Columns: 4'
+  default_region: first
+  icon_map:
+    - [first, second, third, fourth]
+  regions:
+    first:
+      label: First
+    second:
+      label: Second
+    third:
+      label: Third
+    fourth:
+      label: Fourth
+
+layout_onecol_fixed:
+  label: 'Atomic Artsci - One column fixed'
+  template: templates/layouts/layout--onecol--fixed
+  library: atomic_artsci/onecol--fixed
+  category: 'Columns: 1'
+  default_region: content
+  icon_map:
+    - [content]
+  regions:
+    content:
+      label: Content
+
+layout_header:
+  label: 'Atomic Artsci - Header layout with background media'
+  template: templates/layouts/layout--onecol--background
+  library: atomic_artsci/onecol--background
+  category: 'Columns: 1'
+  default_region: content
+  icon_map:
+    - [content]
+  regions:
+    content:
+      label: Content
+    background:
+      label: Background
+
+layout_page:
+  label: 'Atomic Artsci - Page w/ left sidebar'
+  template: templates/layouts/layout--page--left-sidebar
+  library: atomic_artsci/page--left-sidebar
+  category: 'Columns: 2'
+  default_region: content
+  icon_map:
+    - [sidebar, content]
+  regions:
+    sidebar:
+      label: Sidebar
+    content:
+      label: Content
+
+layout_twocol_card_sidebar:
+  label: 'Atomic Artsci - Two column with card sidebar'
+  template: templates/layouts/layout--twocol--card-sidebar
+  library: atomic_artsci/twocol
+  category: 'Columns: 2'
+  icon_map:
+    - [main, card_media]
+    - [main, card_title]
+    - [main, card_subtitle]
+    - [main, card_meta]
+    - [main, card_content]
+    - [main, card_button]
+  regions:
+    main:
+      label: Content
+    card_media:
+      label: 'Card: Media'
+    card_title:
+      label: 'Card: Title'
+    card_subtitle:
+      label: 'Card: Subtitle'
+    card_meta:
+      label: 'Card: Meta'
+    card_content:
+      label: 'Card: Content'
+    card_button:
+      label: 'Card: Button'
