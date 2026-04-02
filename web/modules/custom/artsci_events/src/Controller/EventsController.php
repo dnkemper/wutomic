@@ -29,10 +29,10 @@ class EventsController extends ControllerBase {
     else {
       $event = artsci_events_load([], ['node', "{$event_id}.json"]);
 
-      // if (!isset($event['event']['event_instances'], $event['event']['event_instances'][$event_instance])) {
-      //   throw new NotFoundHttpException();
-      // }
-      // else {
+      if (!isset($event['event']['event_instances'], $event['event']['event_instances'][$event_instance])) {
+        throw new NotFoundHttpException();
+      }
+      else {
         return [
           '#theme' => 'artsci_events_single_event',
           '#event' => $event['event'],
@@ -41,7 +41,7 @@ class EventsController extends ControllerBase {
             'max-age' => 60,
           ],
         ];
-      // }
+      }
     }
   }
 

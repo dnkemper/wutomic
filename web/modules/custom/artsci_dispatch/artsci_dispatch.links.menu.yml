@@ -1,0 +1,6 @@
+artsci_dispatch.settings_form:
+  title: Dispatch
+  description: Manage Dispatch settings.
+  parent: system.admin_config_artsci
+  route_name: artsci_dispatch.settings_form
+  weight: 10

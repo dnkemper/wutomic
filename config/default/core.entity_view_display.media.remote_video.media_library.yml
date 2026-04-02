@@ -1,16 +1,15 @@
-uuid: a745a397-3b11-4c4a-99bf-ce594ce6523c
+uuid: 94b85165-d0c1-4920-af2f-9219ba38e5e4
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
     - field.field.media.remote_video.field_media_oembed_video
-    - image.style.medium
+    - field.field.media.remote_video.field_tags
+    - image.style.square__384_x_384
     - media.type.remote_video
   module:
     - image
-_core:
-  default_config_hash: PGGoP-hVkXe_S-GiJRAub4PHDu0KhMExylclrqjdJb4
 id: media.remote_video.media_library
 targetEntityType: media
 bundle: remote_video
@@ -20,8 +19,8 @@ content:
     type: image
     label: hidden
     settings:
-      image_style: medium
       image_link: ''
+      image_style: square__384_x_384
       image_loading:
         attribute: lazy
     third_party_settings: {  }
@@ -29,6 +28,11 @@ content:
     region: content
 hidden:
   created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   field_media_oembed_video: true
+  field_tags: true
   name: true
+  search_api_excerpt: true
   uid: true

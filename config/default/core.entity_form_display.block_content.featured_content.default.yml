@@ -1,0 +1,40 @@
+uuid: fe2b3188-87e6-4a61-a34d-9889082c115f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.featured_content
+    - field.field.block_content.featured_content.field_featured_content_item
+    - field.field.block_content.featured_content.field_artsci_headline
+  module:
+    - layout_builder_custom
+id: block_content.featured_content.default
+targetEntityType: block_content
+bundle: featured_content
+mode: default
+content:
+  field_featured_content_item:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_artsci_headline:
+    type: artsci_headline_widget
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

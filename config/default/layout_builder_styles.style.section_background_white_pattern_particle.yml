@@ -1,0 +1,20 @@
+uuid: 29338c71-b6a2-44d9-9662-8ea62b45a685
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_white_pattern_particle
+label: 'White - Particle pattern'
+classes: bg--white--pattern--particle
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 32

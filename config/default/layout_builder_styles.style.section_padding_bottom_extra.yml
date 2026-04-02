@@ -1,0 +1,22 @@
+uuid: 1eff2046-10f1-49c6-bff1-ba336f336884
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: ddlw_z1WDjipHIibdWQna1gMph3JZIfuuiyP8rckGJ4
+id: section_padding_bottom_extra
+label: 'Add extra bottom spacing'
+classes: section-padding__bottom-extra
+type: section
+group: spacing
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 61

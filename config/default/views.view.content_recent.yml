@@ -1,4 +1,4 @@
-uuid: 5aea6a93-7e49-4cff-89cf-c6aa46b3cc7b
+uuid: acb4ce65-ee40-4f60-b6d6-d31b62cf704f
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: YqZN5rc7XDQcFcInc8wkzuaHJmC5YvirhTmDcrarT6M
+  default_config_hash: sqwEJaSgef4rCaRMf-JdNAdV_kCICU1SfQh5Wl2sUrc
 id: content_recent
 label: 'Recent content'
 module: node
@@ -17,7 +17,7 @@ base_field: nid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: Master
     display_plugin: default
     position: 0
     display_options:

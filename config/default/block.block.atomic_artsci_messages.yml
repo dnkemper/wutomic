@@ -1,0 +1,22 @@
+uuid: 08a24efd-2480-409d-8133-81118fd3b689
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - atomic_artsci
+_core:
+  default_config_hash: DuJM4Lh6QZTaE9AeoWTsSfBIUhiDgdGoYNV4n04Q5jk
+id: atomic_artsci_messages
+theme: atomic_artsci
+region: alert
+weight: -11
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

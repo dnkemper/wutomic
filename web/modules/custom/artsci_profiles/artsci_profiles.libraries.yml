@@ -1,0 +1,52 @@
+styles:
+  css:
+    theme:
+      assets/css/styles.css: { }
+
+client.test:
+  remote: https://profiles-test.artsci.edu
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+    gpl-compatible: true
+  js:
+    js/artsci-profiles.js: {}
+    https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/vue-router@4.5/dist/vue-router.global.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/vue-demi@0.14/lib/index.iife.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/pinia@2.3/dist/pinia.iife.min.js: { type: external, minified: true }
+    https://profiles-test.artsci.edu/api/lib/profiles-client.umd.js: { type: external, minified: true }
+  dependencies:
+    - core/drupalSettings
+    - core/drupal
+    - core/once
+  css:
+    theme:
+      https://profiles-test.artsci.edu/api/lib/profiles-client.css: { type: external, minified: true }
+
+client.prod:
+  remote: https://profiles.artsci.edu
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+    gpl-compatible: true
+  js:
+    js/artsci-profiles.js: {}
+    https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/vue-router@4.5/dist/vue-router.global.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/vue-demi@0.14/lib/index.iife.min.js: { type: external, minified: true }
+    https://cdn.jsdelivr.net/npm/pinia@2.3/dist/pinia.iife.min.js: { type: external, minified: true }
+    https://profiles.artsci.edu/api/lib/profiles-client.umd.js: { type: external, minified: true }
+  dependencies:
+    - core/drupalSettings
+    - core/drupal
+    - core/once
+  css:
+    theme:
+      https://profiles.artsci.edu/api/lib/profiles-client.css: { type: external, minified: true }
+settings-form:
+  js:
+    js/artsci-profiles-settings-form.js: {}
+  css:
+    theme:
+      css/artsci-profiles-settings-form.css: {}

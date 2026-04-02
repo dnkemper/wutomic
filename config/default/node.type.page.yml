@@ -1,12 +1,36 @@
-uuid: edb1a2ca-84a7-42cf-b273-9e47e5a1b54b
+uuid: 29dc4ac0-fa4b-45da-b405-95cba2cbe9d1
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - menu_ui
+    - node_revision_delete
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - footer-primary
+      - footer-secondary
+      - footer-tertiary
+      - main
+    parent: 'main:'
+  node_revision_delete:
+    amount:
+      status: true
+      settings:
+        amount: 10
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
 _core:
-  default_config_hash: i0snV8Wj--OkRW12UdachUiYiz3FbeMwHu_pZYfzKLc
-name: 'Basic page'
+  default_config_hash: hs9nW8rf2ckLhmXkCgS7Yj5jIsdVZzTa2fLm7wfaL1M
+name: Page
 type: page
-description: "Use <em>basic pages</em> for your static content, such as an 'About us' page."
+description: "Use <em>pages</em> for your static content, such as an 'About us' page."
 help: null
 new_revision: true
 preview_mode: 1

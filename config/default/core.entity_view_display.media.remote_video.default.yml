@@ -1,14 +1,13 @@
-uuid: c3d7b106-3458-4805-b4f5-9b010df7cb0f
+uuid: 158d8568-ec40-4260-be5c-263c2b78fd40
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_tags
     - media.type.remote_video
   module:
     - media
-_core:
-  default_config_hash: ZdPcl2hPxl5pgv3pI-07R7h51OjeUeKJTy-ab1NfM34
 id: media.remote_video.default
 targetEntityType: media
 bundle: remote_video
@@ -27,6 +26,11 @@ content:
     region: content
 hidden:
   created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_tags: true
   name: true
+  search_api_excerpt: true
   thumbnail: true
   uid: true

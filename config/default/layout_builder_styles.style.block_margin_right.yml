@@ -1,0 +1,17 @@
+uuid: 2a93ec66-8b1b-482c-8fc5-3a67ed706972
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: PTe3KwCB7jnlU9tu8-VZTmkaR2v7m5ghWhr5X9SISxg
+id: block_margin_right
+label: Right
+classes: block-margin__right
+type: component
+group: margin
+block_restrictions:
+  - 'inline_block:artsci_spacer_separator'
+  - 'inline_block:artsci_text_area'
+  - webform_block
+layout_restrictions: {  }
+weight: -36

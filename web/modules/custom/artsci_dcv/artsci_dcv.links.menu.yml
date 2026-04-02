@@ -1,0 +1,5 @@
+artsci_dcv.settings:
+  title: 'Domain Control Validation'
+  description: 'Upload a file for domain control validation.'
+  parent: system.admin_config_artsci
+  route_name: artsci_dcv.settings

@@ -1,0 +1,5 @@
+artsci_alerts.settings_form:
+  title: 'Alerts'
+  parent: system.admin_config_artsci
+  description: 'Manage settings for alerts'
+  route_name: artsci_alerts.settings_form

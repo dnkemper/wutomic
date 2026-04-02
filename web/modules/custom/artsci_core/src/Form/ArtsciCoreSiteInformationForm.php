@@ -26,7 +26,7 @@ class ArtsciCoreSiteInformationForm extends SiteInformationForm {
       '#type' => 'checkbox',
       '#title' => $this->t('This site is part of a parent organization.'),
       '#default_value' => $site_config->get('has_parent'),
-      '#description' => $this->t('Show additional options for setting the parent organization website. Note: this setting is not necessary to show that a site is part of Washington University.'),
+      '#description' => $this->t('Show additional options for setting the parent organization website. Note: this setting is not necessary to show that a site is part of the University of Iowa.'),
     ];
 
     $form['site_information']['parent'] = [

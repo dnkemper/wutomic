@@ -108,22 +108,3 @@ function artsci_core_update_10001() {
       ->save();
   }
 }
-
-/**
- * Add allowed replicate content entities.
- */
-function artsci_core_update_10002() {
-  /** @var \Drupal\Core\Plugin\DefaultPluginManager $filters */
-
-  $config_factory = \Drupal::configFactory();
-  $config = $config_factory->getEditable('artsci_core.settings');
-
-  // This site has the 'artsci_v2' split in config,
-  // and it is enabled.
-    // Don't allow for any content types to be replicated.
-
-    // If it's not v2, then allow page and article.
-    $config
-      ->set('artsci_core.replicate_allowed', ['page', 'article'])
-      ->save();
-}

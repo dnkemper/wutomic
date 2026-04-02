@@ -1,0 +1,27 @@
+uuid: 4f7cec28-c38a-4648-aaf5-0b8e5d177206
+langcode: en
+status: true
+dependencies:
+  module:
+    - masquerade
+    - system
+  theme:
+    - claro
+id: claro_masquerade
+theme: claro
+region: content
+weight: -2
+provider: null
+plugin: masquerade
+settings:
+  id: masquerade
+  label: Masquerade
+  label_display: '0'
+  provider: masquerade
+  show_unmasquerade_link: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /admin/people

@@ -16,6 +16,6 @@ system.admin_config_artsci:
   path: '/admin/config/artsci'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: 'Arts & Sciences'
+    _title: 'Artsci'
   requirements:
     _permission: 'administer basic site settings'

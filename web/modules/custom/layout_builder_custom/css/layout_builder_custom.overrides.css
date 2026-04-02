@@ -106,8 +106,8 @@
   margin-right: 20px;
 }
 
-#drupal-off-canvas:not(.drupal-off-canvas-reset) .field--name-field-Artsci-card-title .form-select,
-#drupal-off-canvas-wrapper .field--name-field-Artsci-card-title .form-select {
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .field--name-field-artsci-card-title .form-select,
+#drupal-off-canvas-wrapper .field--name-field-artsci-card-title .form-select {
   padding: 5px 4px 4px 4px;
   margin-top: 4px;
 }

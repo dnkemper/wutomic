@@ -1,0 +1,16 @@
+name: Artsci Book
+description: Provides updated book module for the University of Iowa.
+package: University of Iowa
+
+type: module
+core_version_requirement: ^9 || ^10 || ^11
+
+dependencies:
+  - drupal:book
+  - drupal:views
+  - pathauto:pathauto
+  - drupal:search_api
+  - drupal:search_api_db
+  - drupal:views_tree
+
+php: 7.2

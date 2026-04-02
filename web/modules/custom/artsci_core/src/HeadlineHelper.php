@@ -38,7 +38,7 @@ class HeadlineHelper {
    * Get a list of valid heading styles as machine-name => class pairs.
    *
    * @todo Adjust how these classes are added.
-   * https://github.com/washu-artsci/artsci/pull/4834#discussion_r818129246
+   * https://github.com/artsci/artsci/pull/4834#discussion_r818129246
    */
   public static function getStyles() {
     return [

@@ -1,0 +1,8 @@
+uuid: a281c720-1355-46f7-b41d-f35d8ca5106a
+langcode: en
+status: true
+dependencies: {  }
+id: artsci_slider
+label: Slider
+revision: true
+description: 'A dynamic, animated component with slides that can be used to highlight key content.'

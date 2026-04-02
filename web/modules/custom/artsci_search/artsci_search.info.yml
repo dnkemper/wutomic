@@ -1,6 +1,6 @@
-name: Artsci Search
+name: University of Iowa Search
 type: module
-description: Provides search functionality for Artsci web sites.
-package: Custom
-core_version_requirement: ^10 || ^11
+description: Provides search functionality for University of Iowa web sites.
+package: University of Iowa
+core_version_requirement: ^9 || ^10 || ^11
 configure: artsci_search.settings_form

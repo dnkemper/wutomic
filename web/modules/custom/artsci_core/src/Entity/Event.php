@@ -42,10 +42,10 @@ class Event extends BlockContent implements RendersAsCardInterface {
     unset($build['field_artsci_event_link']);
 
     // Handle the title field.
-    if (isset($build['field_artsci_headline']) && count(Element::children($build['field_artsci_headline'])) > 0) {
-      $build['#title'] = $build['field_artsci_headline'][0]['#text'];
-      $build['#title_heading_size'] = $build['field_artsci_headline'][0]['#size'];
-      unset($build['field_artsci_headline']);
+    if (isset($build['field_artsci_event_title']) && count(Element::children($build['field_artsci_event_title'])) > 0) {
+      $build['#title'] = $build['field_artsci_event_title'][0]['#text'];
+      $build['#title_heading_size'] = $build['field_artsci_event_title'][0]['#size'];
+      unset($build['field_artsci_event_title']);
     }
   }
 

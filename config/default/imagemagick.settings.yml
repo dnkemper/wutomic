@@ -1,17 +1,12 @@
 _core:
-  default_config_hash: N-xOd1pralXTuyyJA47dtvXWWxz3STj0hvmr0umAFmk
-quality: 75
+  default_config_hash: yBklcYJqiyzlSPHHHKvoxew3sJTI62kS9lchdu1aa7E
+quality: 95
 binaries: imagemagick
 imagemagick_version: v6
 path_to_binaries: ''
-prepend: ''
+prepend: '-limit memory 256MB -limit map 512MB'
 log_warnings: true
 debug: false
-advanced:
-  density: 0
-  colorspace: '0'
-  profile: ''
-  coalesce: false
 image_formats:
   PNG:
     mime_type: image/png
@@ -32,17 +27,12 @@ image_formats:
     enabled: false
   WEBP:
     mime_type: image/webp
-  AVIF:
-    mime_type: image/avif
-    enabled: false
+    enabled: true
   TIFF:
     mime_type: image/tiff
     enabled: false
   PDF:
     mime_type: application/pdf
-    enabled: false
-  HEIC:
-    mime_type: image/heif
     enabled: false
   BMP:
     mime_type: image/x-ms-bmp
@@ -59,3 +49,9 @@ image_formats:
   ICO:
     mime_type: image/vnd.microsoft.icon
     enabled: false
+advanced:
+  density: 0
+  colorspace: '0'
+  profile: ''
+  coalesce: false
+locale: en_US.UTF-8

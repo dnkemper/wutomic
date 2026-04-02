@@ -1,0 +1,45 @@
+uuid: 5d9e2c0c-8b56-46cc-934d-9f571076e765
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.facebook.field_media_facebook
+    - field.field.media.facebook.field_tags
+    - image.style.square__384_x_384
+    - media.type.facebook
+  module:
+    - image
+id: media.facebook.media_library
+targetEntityType: media
+bundle: facebook
+mode: media_library
+content:
+  name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  thumbnail:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: square__384_x_384
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_media_facebook: true
+  field_tags: true
+  search_api_excerpt: true
+  uid: true

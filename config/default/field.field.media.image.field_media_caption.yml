@@ -7,6 +7,7 @@ dependencies:
     - filter.format.minimal
     - media.type.image
   module:
+    - allowed_formats
     - text
 id: media.image.field_media_caption
 field_name: field_media_caption
@@ -19,5 +20,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: { }
+  allowed_formats:
+    - minimal
 field_type: text_long

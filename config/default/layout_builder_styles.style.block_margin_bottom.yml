@@ -1,0 +1,18 @@
+uuid: efcf4693-a543-441a-bad5-ad2942fc29f4
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: Lr2ZW3LNz9VcsR355cLwzqHjfluLtVYY0acZ3DcSVUo
+id: block_margin_bottom
+label: Bottom
+classes: block-margin__bottom
+type: component
+group: margin
+block_restrictions:
+  - 'inline_block:artsci_collection'
+  - 'inline_block:artsci_spacer_separator'
+  - 'inline_block:artsci_text_area'
+  - webform_block
+layout_restrictions: {  }
+weight: -39

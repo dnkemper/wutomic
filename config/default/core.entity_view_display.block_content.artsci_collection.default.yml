@@ -1,0 +1,48 @@
+uuid: 4d0cfb39-8185-4a92-ae52-34a0ace2b46c
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_collection
+    - field.field.block_content.artsci_collection.field_accordion_label_color
+    - field.field.block_content.artsci_collection.field_accordion_type
+    - field.field.block_content.artsci_collection.field_artsci_collection_items
+    - field.field.block_content.artsci_collection.field_artsci_headline
+  module:
+    - entity_reference_revisions
+    - layout_builder_custom
+    - options
+id: block_content.artsci_collection.default
+targetEntityType: block_content
+bundle: artsci_collection
+mode: default
+content:
+  field_accordion_label_color:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_artsci_collection_items:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_artsci_headline:
+    type: artsci_headline_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_accordion_type: true
+  search_api_excerpt: true

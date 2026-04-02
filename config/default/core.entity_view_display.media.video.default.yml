@@ -1,36 +1,39 @@
-uuid: b8917fd9-f037-4b5a-a770-286815300257
+uuid: b1669c47-a96a-4fd9-add7-000eaf7ad67f
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.media.video.field_media_video_file
+    - field.field.media.video.field_tags
     - media.type.video
   module:
-    - file
-_core:
-  default_config_hash: _Ijpy91FdjhX4xVH3UY70PrzpqJghTgCyzoYyxMnqC0
+    - media_thumbnails_video
 id: media.video.default
 targetEntityType: media
 bundle: video
 mode: default
 content:
   field_media_video_file:
-    type: file_video
-    label: visually_hidden
+    type: file_video_extended
+    label: hidden
     settings:
-      controls: true
-      autoplay: false
-      loop: false
+      loop: '1'
       multiple_file_display_type: tags
-      muted: false
-      playsinline: false
-      width: 640
-      height: 480
+      muted: '1'
+      width: '1300'
+      height: '730'
+      controls: 0
+      autoplay: 0
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
   created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_tags: true
   name: true
+  search_api_excerpt: true
   thumbnail: true
   uid: true

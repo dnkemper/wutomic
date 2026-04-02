@@ -1,0 +1,53 @@
+uuid: 34e2b7f2-a99c-4eb7-a80e-0f30e3c793cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.webform_default
+  module:
+    - ckeditor5
+    - ckeditor_small_tag
+format: webform_default
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - heading
+      - '|'
+      - bold
+      - italic
+      - superscript
+      - subscript
+      - small
+      - '|'
+      - specialCharacters
+      - '|'
+      - numberedList
+      - bulletedList
+      - '|'
+      - link
+      - '|'
+      - indent
+      - outdent
+      - '|'
+      - blockQuote
+      - '|'
+      - sourceEditing
+  plugins:
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+    ckeditor5_list:
+      properties:
+        reversed: true
+        startIndex: true
+        styles: true
+      multiBlock: true
+    ckeditor5_sourceEditing:
+      allowed_tags: {  }
+image_upload:
+  status: false

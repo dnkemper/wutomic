@@ -1,0 +1,20 @@
+uuid: 3df46662-3779-4a6c-9af5-29330a2be4fe
+langcode: en
+status: true
+dependencies:
+  module:
+    - artsci_search
+  theme:
+    - atomic_artsci
+id: artscisearch
+theme: atomic_artsci
+region: search
+weight: 0
+provider: null
+plugin: artsci_search_form
+settings:
+  id: artsci_search_form
+  label: 'Artsci Search'
+  label_display: '0'
+  provider: artsci_search
+visibility: {  }

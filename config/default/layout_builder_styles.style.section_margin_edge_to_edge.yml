@@ -1,0 +1,22 @@
+uuid: 45e8691e-ce66-46c7-aa1b-600eaa03975e
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 5116NKNL4cxQj7AF1Jwr56kOq_Wqpqu6qLBjk73H9vE
+id: section_margin_edge_to_edge
+label: Edge-to-edge
+classes: page__container--edge
+type: section
+group: container
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 59

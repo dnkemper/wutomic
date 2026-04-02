@@ -1,0 +1,18 @@
+uuid: 269cfd13-19cc-40be-bdff-fda96b85fe7f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: e73ejgPRE5RNJEgWCe-qg0OZK6jQKFOU8YC9GDLXRfU
+id: block_margin_top
+label: Top
+classes: block-margin__top
+type: component
+group: margin
+block_restrictions:
+  - 'inline_block:artsci_collection'
+  - 'inline_block:artsci_spacer_separator'
+  - 'inline_block:artsci_text_area'
+  - webform_block
+layout_restrictions: {  }
+weight: -35

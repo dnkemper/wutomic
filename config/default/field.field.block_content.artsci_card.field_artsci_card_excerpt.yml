@@ -1,0 +1,29 @@
+uuid: 49fe08ad-5bab-4858-a49a-2bc0f8911e51
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_card
+    - field.storage.block_content.field_artsci_card_excerpt
+    - filter.format.minimal_plus
+    - filter.format.plain_text
+  module:
+    - allowed_formats
+    - text
+_core:
+  default_config_hash: d7-oWkJwADXKLY9QldFK28pif5n_srH-0UsqsZrZFrA
+id: block_content.artsci_card.field_artsci_card_excerpt
+field_name: field_artsci_card_excerpt
+entity_type: block_content
+bundle: artsci_card
+label: Excerpt
+description: 'Compose and display teaser or intro text for your content.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - minimal_plus
+    - plain_text
+field_type: text_long

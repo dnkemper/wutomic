@@ -1,0 +1,20 @@
+uuid: 4cc2ab00-16da-49f0-92ef-93097f289869
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_black_pattern_community
+label: 'Black - Community pattern'
+classes: bg--black--pattern--community
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: -14

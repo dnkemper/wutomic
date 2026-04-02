@@ -1,0 +1,3 @@
+administer artsci_alerts configuration:
+  title: 'Administer Artsci Alerts configuration'
+  description: 'Manage settings for University of Iowa Hawk Alerts.'

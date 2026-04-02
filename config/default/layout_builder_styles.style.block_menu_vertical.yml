@@ -1,0 +1,13 @@
+uuid: 92ed8389-0f4f-4a9d-806f-d339eeb618e8
+langcode: en
+status: true
+dependencies: {  }
+id: block_menu_vertical
+label: Vertical
+classes: menu-wrapper
+type: component
+group: menu_orientation
+block_restrictions:
+  - 'menu_block:main'
+layout_restrictions: {  }
+weight: -32

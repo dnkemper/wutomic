@@ -1,0 +1,61 @@
+uuid: 9118d710-5236-40c5-bf46-adcaa971b646
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_artsci_contact_address
+    - paragraphs.paragraphs_type.artsci_contact
+  module:
+    - address
+id: paragraph.artsci_contact.field_artsci_contact_address
+field_name: field_artsci_contact_address
+entity_type: paragraph
+bundle: artsci_contact
+label: Address
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    langcode: ''
+    country_code: US
+    administrative_area: ''
+    locality: ''
+    dependent_locality: null
+    postal_code: ''
+    sorting_code: null
+    address_line1: ''
+    address_line2: ''
+    organization: ''
+    given_name: ''
+    additional_name: null
+    family_name: ''
+default_value_callback: ''
+settings:
+  available_countries: {  }
+  langcode_override: ''
+  field_overrides:
+    givenName:
+      override: optional
+    additionalName:
+      override: optional
+    familyName:
+      override: optional
+    organization:
+      override: optional
+    addressLine1:
+      override: optional
+    addressLine2:
+      override: optional
+    postalCode:
+      override: optional
+    sortingCode:
+      override: optional
+    dependentLocality:
+      override: optional
+    locality:
+      override: optional
+    administrativeArea:
+      override: optional
+  fields: {  }
+field_type: address

@@ -1,0 +1,6 @@
+name: Artsci Area of Study
+type: module
+description: 'Area of study and related content types and functionality for the Artsci platform.'
+package: Artsci
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:

@@ -1,0 +1,13 @@
+services:
+  artsci_maui.api:
+    class: Drupal\artsci_maui\MauiApi
+    arguments: ['@http_client', '@logger.channel.artsci_maui', '@cache.artsci_maui', '@config.factory', ]
+  logger.channel.artsci_maui:
+    parent: logger.channel_base
+    arguments: [ 'artsci_maui' ]
+  cache.artsci_maui:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: ['artsci_maui']

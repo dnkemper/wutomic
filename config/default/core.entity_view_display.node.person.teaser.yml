@@ -1,0 +1,140 @@
+uuid: cd0dc47a-a721-4842-a61f-0af8e2d74a64
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.person.body
+    - field.field.node.person.field_image
+    - field.field.node.person.field_meta_tags
+    - field.field.node.person.field_person_contact_information
+    - field.field.node.person.field_person_credential
+    - field.field.node.person.field_person_education
+    - field.field.node.person.field_person_email
+    - field.field.node.person.field_person_first_name
+    - field.field.node.person.field_person_hide
+    - field.field.node.person.field_person_hometown
+    - field.field.node.person.field_person_last_name
+    - field.field.node.person.field_person_phone
+    - field.field.node.person.field_person_position
+    - field.field.node.person.field_person_research_areas
+    - field.field.node.person.field_person_type_status
+    - field.field.node.person.field_person_types
+    - field.field.node.person.field_person_website
+    - field.field.node.person.field_person_website_link_direct
+    - field.field.node.person.field_tags
+    - field.field.node.person.field_teaser
+    - field.field.node.person.rabbit_hole__settings
+    - node.type.person
+  module:
+    - link
+    - smart_trim
+    - telephone
+    - user
+id: node.person.teaser
+targetEntityType: node
+bundle: person
+mode: teaser
+content:
+  body:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 0
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+        token_browser: ''
+      summary_handler: full
+      trim_options:
+        text: false
+        trim_zero: true
+        replace_tokens: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: medium__square
+      link: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_person_credential:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_person_email:
+    type: email_mailto
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_person_phone:
+    type: telephone_link
+    label: visually_hidden
+    settings:
+      title: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_person_position:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_person_website:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+hidden:
+  content_moderation_control: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_meta_tags: true
+  field_person_contact_information: true
+  field_person_education: true
+  field_person_first_name: true
+  field_person_hide: true
+  field_person_hometown: true
+  field_person_last_name: true
+  field_person_research_areas: true
+  field_person_type_status: true
+  field_person_types: true
+  field_person_website_link_direct: true
+  field_tags: true
+  field_teaser: true
+  rabbit_hole__settings: true
+  search_api_excerpt: true

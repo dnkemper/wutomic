@@ -1,0 +1,25 @@
+uuid: 171be8d3-a087-41ae-92e2-0c2a08190201
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_hero
+    - field.storage.block_content.field_artsci_hero_excerpt
+  module:
+    - allowed_formats
+    - text
+_core:
+  default_config_hash: aBIlprsko6lIjoqdg_aR2AIa_45q4WMNIUHRxQR_sdA
+id: block_content.artsci_hero.field_artsci_hero_excerpt
+field_name: field_artsci_hero_excerpt
+entity_type: block_content
+bundle: artsci_hero
+label: Excerpt
+description: 'Enter descriptive text to provide context or additional details about the Hero block.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

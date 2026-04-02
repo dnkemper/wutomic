@@ -1,0 +1,22 @@
+uuid: 66c01bb5-2a25-47a5-966c-5bae45b87e6b
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: dZxefncOCSQ4E3FfGpEBheCG7m3zIElDU7oIWLrrNlI
+id: section_padding_top_extra
+label: 'Add extra top spacing'
+classes: section-padding__top-extra
+type: section
+group: spacing
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 62

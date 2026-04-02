@@ -1,0 +1,34 @@
+uuid: 83646ec9-f0a3-4273-ba9a-be5a07bf9d08
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_aggregator
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_count
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_feeds
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_pager
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_text
+    - field.field.block_content.artsci_aggregator.field_artsci_headline
+  module:
+    - layout_builder_custom
+id: block_content.artsci_aggregator.default
+targetEntityType: block_content
+bundle: artsci_aggregator
+mode: default
+content:
+  field_artsci_headline:
+    type: artsci_headline_formatter
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_artsci_aggregator_count: true
+  field_artsci_aggregator_feeds: true
+  field_artsci_aggregator_pager: true
+  field_artsci_aggregator_text: true
+  search_api_excerpt: true

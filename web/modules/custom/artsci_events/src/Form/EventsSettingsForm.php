@@ -3,7 +3,6 @@
 namespace Drupal\artsci_events\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\config_split\ConfigSplitManager;
@@ -42,8 +41,6 @@ class EventsSettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
-   *   The typed config manager.
    * @param \Drupal\pathauto\AliasCleanerInterface $pathauto_alias_cleaner
    *   The alias cleaner.
    * @param \Drupal\path_alias\AliasRepositoryInterface $aliasRepository
@@ -51,8 +48,8 @@ class EventsSettingsForm extends ConfigFormBase {
    * @param \Drupal\config_split\ConfigSplitManager $configSplitManager
    *   The config split manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, AliasCleanerInterface $pathauto_alias_cleaner, AliasRepositoryInterface $aliasRepository, ConfigSplitManager $configSplitManager) {
-    parent::__construct($config_factory, $typedConfigManager);
+  public function __construct(ConfigFactoryInterface $config_factory, AliasCleanerInterface $pathauto_alias_cleaner, AliasRepositoryInterface $aliasRepository, ConfigSplitManager $configSplitManager) {
+    parent::__construct($config_factory);
     $this->aliasCleaner = $pathauto_alias_cleaner;
     $this->aliasRepository = $aliasRepository;
     $this->configSplitManager = $configSplitManager;
@@ -64,7 +61,6 @@ class EventsSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('config.typed'),
       $container->get('pathauto.alias_cleaner'),
       $container->get('path_alias.repository'),
       $container->get('config_split.manager'),
@@ -176,14 +172,11 @@ class EventsSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     // Check if path already exists.
     $path = $form_state->getValue('artsci_events_single_event_path');
-
-    if (!empty($path)) {
-      // Clean up path first.
-      $path = $this->aliasCleaner->cleanString($path);
-      $path_exists = $this->aliasRepository->lookupByAlias('/' . $path, 'en');
-      if ($path_exists) {
-        $form_state->setErrorByName('artsci_events_single_event_path', $this->t('This path is already in-use.'));
-      }
+    // Clean up path first.
+    $path = $this->aliasCleaner->cleanString($path);
+    $path_exists = $this->aliasRepository->lookupByAlias('/' . $path, 'en');
+    if ($path_exists) {
+      $form_state->setErrorByName('path', $this->t('This path is already in-use.'));
     }
 
     parent::validateForm($form, $form_state);
@@ -194,11 +187,8 @@ class EventsSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $path = $form_state->getValue('artsci_events_single_event_path');
-
-    // Clean path only if not empty.
-    if (!empty($path)) {
-      $path = $this->aliasCleaner->cleanString($path);
-    }
+    // Clean path.
+    $path = $this->aliasCleaner->cleanString($path);
 
     $this->config('artsci_events.settings')
       ->set('event_link', $form_state->getValue('artsci_events_event_link'))

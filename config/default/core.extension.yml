@@ -1,24 +1,22 @@
 _core:
-  default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
+  default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
+  address: 0
   admin_toolbar: 0
   admin_toolbar_tools: 0
   administerusersbyrole: 0
   aggregator: 0
-  announcements_feed: 0
+  allowed_formats: 0
   antibot: 0
   automated_cron: 0
   better_exposed_filters: 0
-  big_pipe: 0
   bigmenu: 0
   block: 0
   block_content: 0
   breakpoint: 0
   captcha: 0
-  charts: 0
   ckeditor5: 0
-  comment: 0
-  components: 0
+  ckeditor_small_tag: 0
   config: 0
   config_ignore: 0
   config_inspector: 0
@@ -29,7 +27,7 @@ module:
   cshs: 0
   csv_serialization: 0
   ctools: 0
-  date_popup: 0
+  ctools_views: 0
   datetime: 0
   datetime_range: 0
   dblog: 0
@@ -42,6 +40,7 @@ module:
   editor: 0
   editor_advanced_link: 0
   entity_browser: 0
+  entity_browser_entity_form: 0
   entity_print: 0
   entity_reference_revisions: 0
   entity_reference_unpublished: 0
@@ -53,7 +52,9 @@ module:
   field_ui: 0
   file: 0
   file_mdm: 0
+  file_mdm_exif: 0
   filter: 0
+  find_text: 0
   focal_point: 0
   fontawesome: 0
   fragments: 0
@@ -72,42 +73,49 @@ module:
   jsonapi: 0
   jsonapi_extras: 0
   jsonapi_include: 0
+  inline_form_errors: 0
+  js_cookie: 0
   key: 0
   layout_builder: 0
+  layout_builder_expose_all_field_blocks: 0
   layout_builder_limit: 0
   layout_builder_lock: 0
-  layout_builder_modal: 0
   layout_builder_operation_link: 0
   layout_builder_restrictions: 0
   layout_builder_restrictions_by_region: 0
-  layout_builder_save_and_edit: 0
   layout_builder_styles: 0
   layout_discovery: 0
-  lazy: 0
   lb_direct_add: 0
-  leaflet: 0
   link: 0
   link_attributes: 0
+  link_attributes_menu_link_content: 0
   linkit: 0
+  linkit_attributes: 0
   linkit_media_library: 0
   mailer_transport: 0
   mailsystem: 0
   masquerade: 0
   media: 0
+  media_entity_facebook: 0
+  media_entity_file_replace: 0
+  media_entity_twitter: 0
   media_library: 0
-  media_library_form_element: 0
   media_library_theme_reset: 0
   media_thumbnails: 0
   media_thumbnails_video: 0
   memcache: 0
-  menu_admin_per_menu: 0
   menu_block: 0
   menu_breadcrumb: 0
-  menu_link_content: 0
-  menu_link_weight: 0
   menu_per_role: 0
   menu_ui: 0
   metatag: 0
+  metatag_extended_perms: 0
+  metatag_favicons: 0
+  metatag_mobile: 0
+  metatag_open_graph: 0
+  metatag_twitter_cards: 0
+  metatag_verification: 0
+  metatag_views: 0
   moderated_content_bulk_publish: 0
   mysql: 0
   node: 0
@@ -117,57 +125,87 @@ module:
   options: 0
   override_node_options: 0
   page_cache: 0
-  paragraphs: 0
   path: 0
   path_alias: 0
-  pathauto: 0
   photoswipe: 0
   private_content: 0
-  purge: 0
+  photoswipe_dynamic_caption: 0
+  phpass: 0
   rabbit_hole: 0
   redirect: 0
   replicate: 0
+  replicate_ui: 0
+  responsive_image: 0
+  responsive_table_filter: 0
   rest: 0
+  rh_node: 0
   robotstxt: 0
   scheduler: 0
   scheduler_content_moderation_integration: 0
+  schema_article: 0
   schema_metatag: 0
-  search: 0
+  schema_person: 0
+  schema_web_site: 0
   search_api: 0
-  search_api_autocomplete: 0
   serialization: 0
-  shortcut: 0
   simple_sitemap: 0
   simplei: 0
+  artsci_dcv: 0
+  artsci_dispatch: 0
+  artsci_media_wysiwyg: 0
+  artsci_pages: 0
+  artsci_people: 0
+  artsci_seo: 0
   smart_date: 0
+  smart_date_recur: 0
   smart_trim: 0
   sophron: 0
-  stage_file_proxy: 0
   superfish: 0
   symfony_mailer: 0
+  syslog: 0
   system: 0
+  table_header_scope_attribute: 0
   taxonomy: 0
   telephone: 0
   text: 0
   theme_permission: 0
   token: 0
   toolbar: 0
+  tour: 0
   turnstile: 0
   tvi: 0
   twig_tweak: 0
   update: 0
+  artsci_aggregator: 0
+  artsci_alerts: 0
+  artsci_core: 0
+  artsci_entities: 0
+  artsci_search: 0
   user: 0
   views_bulk_operations: 0
   views_core_entity_reference: 0
   views_data_export: 0
   views_ui: 0
   webform: 0
+  webform_ui: 0
   weight: 0
+  workbench_email: 0
   workflows: 0
+  layout_builder_custom: 1
+  menu_admin_per_menu: 1
+  menu_link_content: 1
+  pathauto: 1
+  artsci_articles: 1
+  artsci_events: 1
+  externalauth: 10
+  menu_link_weight: 10
   views: 10
-  standard: 1000
+  paragraphs: 11
+  artsci: 1000
 theme:
-  olivero: 0
+  stable: 0
+  classy: 0
+  atomic_artsci: 0
   claro: 0
   gin: 0
-profile: standard
+profile: artsci

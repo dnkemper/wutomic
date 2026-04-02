@@ -36,12 +36,11 @@ trait RendersAsCardTrait {
     // Check for override styles.
     $override_styles = $build['#override_styles'] ?? [];
 
-    // Merge default styles with override styles.
-    // Using array_merge so overrides replace defaults by key (e.g., media_format).
-    $styles = array_merge($this->getDefaultCardStyles(), $override_styles);
-
-    // Add all style classes.
-    foreach ($styles as $style) {
+    // Loop through combined default and override styles and add them.
+    foreach ([
+      ...$this->getDefaultCardStyles(),
+      ...$override_styles,
+    ] as $style) {
       $build['#attributes']['class'][] = $style;
     }
   }

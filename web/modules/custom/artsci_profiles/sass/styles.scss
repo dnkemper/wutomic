@@ -1,0 +1,104 @@
+@use "../../../../themes/custom/atomic_artsci/artsci/scss/abstracts/_variables.scss";
+@use "../../../../themes/custom/atomic_artsci/artsci/scss/abstracts/_utilities.scss";
+
+.breadcrumb {
+  list-style: none;
+  @include utilities.margin($top: variables.$sm, $right: 0, $bottom: variables.$sm, $left:0);
+  ol {
+    @extend %no-ul-list;
+  }
+}
+
+.breadcrumb::before,
+.breadcrumb::after {
+  display: table;
+  content: ' ';
+  flex:1 0 0;
+  order: 1;
+}
+
+.breadcrumb::after {
+  clear: both;
+}
+
+.breadcrumb li {
+  float: left;
+  cursor: default;
+  color: variables.$secondary;
+  font-size: variables.$small-font-size;
+}
+
+.breadcrumb li:not(:last-child)::after {
+  position: relative;
+  content: "/";
+  opacity: 1;
+  color: variables.$primary;
+  @include utilities.margin($top: 0, $right: variables.$sm, $bottom: 0, $left: variables.$sm);
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: variables.$secondary;
+}
+
+.breadcrumb a:hover,
+.breadcrumb a:focus {
+  text-decoration: underline;
+}
+
+.breadcrumb .disabled {
+  cursor: not-allowed;
+  color: variables.$gray-light;
+}
+
+#block-artsci-base-local-tasks nav {
+  border-bottom: none;
+}
+
+#uiprof {
+  h1 {
+    margin-bottom: 1rem;
+  }
+
+  h2 a {
+    text-decoration: none;
+  }
+
+  .crumbs {
+    @extend .breadcrumb;
+    li:before {
+      content: "";
+      margin-left: 0!important;
+      padding-right: 0!important;
+    }
+
+    a {
+      color: variables.$secondary!important;
+    }
+
+    &>li {
+      display: flex;
+    }
+  }
+
+  .svg-inline--fa.fa-w-16 {
+    color: variables.$secondary;
+  }
+
+  ol {
+    list-style-type: none;
+    margin-left: 0;
+  }
+
+  figure {
+    @include utilities.breakpoint(sm) {
+      margin: 0;
+    }
+  }
+
+  form {
+   input, select {
+     margin-bottom: 0;
+   }
+  }
+}

@@ -1,0 +1,16 @@
+uuid: 4e2be93a-90d1-4757-88dd-cead705747cd
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 3YxL6BonqkTWB6h5CSCKqjKEZDXjD_mQmYYLylDCMxY
+id: block_padding_all
+label: Default
+classes: block-padding__all
+type: component
+group: padding
+block_restrictions:
+  - 'inline_block:artsci_text_area'
+  - webform_block
+layout_restrictions: {  }
+weight: -30

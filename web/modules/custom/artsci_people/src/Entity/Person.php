@@ -64,7 +64,11 @@ class Person extends NodeBundleBase implements RendersAsCardInterface {
     // Process additional card mappings.
     $this->mapFieldsToCardBuild($build, [
       '#subtitle' => 'field_person_position',
-      '#meta' => [],
+      '#meta' => [
+        'field_person_email',
+        'field_person_phone',
+        'field_person_website',
+      ],
     ]);
 
     // Handle link directly to source functionality.

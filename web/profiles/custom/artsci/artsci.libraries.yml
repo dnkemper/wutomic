@@ -1,0 +1,53 @@
+admin-overrides:
+  css:
+    theme:
+      css/admin-overrides.css: {}
+
+global-scripts:
+  js:
+    js/artsci.behaviors.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery
+    - core/once
+
+chosen:
+  css:
+    theme:
+      /libraries/chosen/chosen.css: {}
+  js:
+    /libraries/chosen/chosen.jquery.js: {}
+    js/chosen.behaviors.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+
+get_clickid:
+  js:
+    js/get_clickid.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/drupal
+    - core/once
+
+vanilla-icon-picker-theme-default:
+  css:
+    theme:
+      /libraries/vanilla-icon-picker/dist/themes/default.min.css: {minified: true }
+
+vanilla-icon-picker-theme-bootstrap:
+  dependencies:
+    - artsci/vanilla-icon-picker-theme-default
+  css:
+    theme:
+      /libraries/vanilla-icon-picker/dist/themes/bootstrap-5.min.css: {minified: true }
+
+vanilla-icon-picker:
+  dependencies:
+    - core/drupal
+    - core/once
+    - artsci/vanilla-icon-picker-theme-default
+  js:
+    /libraries/vanilla-icon-picker/dist/icon-picker.min.js: {minified: true }
+    js/fontawesome_iconpicker_vanilla.js: {}

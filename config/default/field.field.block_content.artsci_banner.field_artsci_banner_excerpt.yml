@@ -1,0 +1,29 @@
+uuid: f132eec0-db22-42af-bd40-e97ff42755b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_banner
+    - field.storage.block_content.field_artsci_banner_excerpt
+    - filter.format.minimal
+    - filter.format.plain_text
+  module:
+    - allowed_formats
+    - text
+_core:
+  default_config_hash: R12wgVOfQanvzxQM2QVSOwZE86dXdnY1K6gGkV-7KlE
+id: block_content.artsci_banner.field_artsci_banner_excerpt
+field_name: field_artsci_banner_excerpt
+entity_type: block_content
+bundle: artsci_banner
+label: Excerpt
+description: 'Compose and display body copy.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - minimal
+    - plain_text
+field_type: text_long

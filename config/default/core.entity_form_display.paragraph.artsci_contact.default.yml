@@ -1,0 +1,42 @@
+uuid: 7639b9b5-60a8-4e84-866f-501c24ce2aa6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.artsci_contact.field_artsci_contact_address
+    - field.field.paragraph.artsci_contact.field_artsci_contact_label
+    - field.field.paragraph.artsci_contact.field_artsci_contact_phone
+    - paragraphs.paragraphs_type.artsci_contact
+  module:
+    - address
+    - telephone
+id: paragraph.artsci_contact.default
+targetEntityType: paragraph
+bundle: artsci_contact
+mode: default
+content:
+  field_artsci_contact_address:
+    type: address_default
+    weight: 1
+    region: content
+    settings:
+      wrapper_type: fieldset
+    third_party_settings: {  }
+  field_artsci_contact_label:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_artsci_contact_phone:
+    type: telephone_default
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

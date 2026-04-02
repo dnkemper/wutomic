@@ -189,9 +189,9 @@ function artsci_articles_preprocess_field(&$variables) {
   }
   if ($variables['element']['#field_name'] === 'field_gallery_images') {
     if ($variables['element']['#bundle'] === 'article') {
+      $variables['label_tag'] = 'h2';
       $variables['field_container_classes'] = 'artsci-image-gallery';
       artsci_core_set_title_attributes($variables, [
-        'h2',
         'block__headline',
         'headline',
         'headline--serif',
@@ -424,7 +424,7 @@ function artsci_articles_preprocess_views_view_unformatted(&$variables) {
           'card_media_position' => 'card--stacked',
           'bg' => 'bg--white',
           'media_format' => 'media--widescreen',
-          'media_size' => 'media--small',
+          'media_size' => 'media--large',
           'hide_descriptions' => 'hide-descriptions',
         ];
       }

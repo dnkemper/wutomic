@@ -1,0 +1,13 @@
+services:
+  artsci_hours.api:
+    class: Drupal\artsci_hours\HoursApi
+    arguments: ['@logger.channel.artsci_hours', '@cache.artsci_hours', '@http_client', '@config.factory']
+  logger.channel.artsci_hours:
+    parent: logger.channel_base
+    arguments: ['artsci_hours']
+  cache.artsci_hours:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: ['artsci_hours']

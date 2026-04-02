@@ -1,0 +1,23 @@
+uuid: 620efbb1-765b-4277-94a0-f29a316bc4f4
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: '-CY3ePTHwO5Jv6QTMM7UNbEqdjUcYHnGrSii5Mr6lFo'
+id: node
+label: Content
+tags:
+  canonical_url: '[current-page:url:absolute]'
+  description: '[node:summary]'
+  image_src: '[node:field_image:entity:field_media_image:large]'
+  og_description: '[node:summary]'
+  og_image_url: '[node:field_image:entity:field_media_image:large]'
+  og_site_name: '[site:name] - [artsci_core:combined_org]'
+  og_title: '[node:title]'
+  og_url: '[current-page:url:absolute]'
+  shortlink: '[current-page:url:unaliased]'
+  title: '[node:title] | [site:name] - [artsci_core:combined_org]'
+  twitter_cards_description: '[node:summary]'
+  twitter_cards_image: '[node:field_image:entity:field_media_image:large]'
+  twitter_cards_title: '[node:title]'
+  twitter_cards_type: summary_large_image

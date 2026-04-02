@@ -1,0 +1,41 @@
+_meta:
+  version: '1.0'
+  entity_type: block_content
+  uuid: 631979b9-cf39-46d2-a357-e8857487fccd
+  bundle: artsci_card
+  default_langcode: en
+  depends:
+    c064e28e-aae9-42f5-bb15-f40fa1d8a3d7: media
+default:
+  status:
+    -
+      value: true
+  reusable:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  field_artsci_card_button_display:
+    -
+      value: 'Use site default'
+  field_artsci_card_excerpt:
+    -
+      value: "<p>Attend or watch a recorded Artsci/Layout Builder training session offered by the web team.</p>\r\n"
+      format: minimal_plus
+  field_artsci_card_image:
+    -
+      entity: c064e28e-aae9-42f5-bb15-f40fa1d8a3d7
+  field_artsci_card_link:
+    -
+      uri: 'https://webcommunity.sites.artsci.edu/training'
+      title: ''
+      options:
+        href: 'https://webcommunity.sites.artsci.edu/training'
+        data-entity-type: ''
+        data-entity-uuid: ''
+        data-entity-substitution: ''
+  field_artsci_card_title:
+    -
+      size: h2
+      text: Training

@@ -14,6 +14,6 @@
  */
 function artsci_core_test_mail($key, &$message, $params) {
   // Simulate a module that only sets a from address with no name.
-  // @see: MailTest::testFromNameSetToSiteNameIfEmptyAndNotWashu.
+  // @see: MailTest::testFromNameSetToSiteNameIfEmptyAndNotArtsci.
   $message['from'] = 'foo@bar.com';
 }

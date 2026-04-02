@@ -1,0 +1,7 @@
+name: 'Artsci Accordion'
+description: 'Accordion functionality add-on to artsci_paragraphs'
+type: module
+package: University of Iowa
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - artsci_paragraphs:artsci_paragraphs

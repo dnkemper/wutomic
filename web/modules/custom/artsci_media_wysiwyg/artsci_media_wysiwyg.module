@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains hook implementations for artsci Media WYSIWYG.
+ * Contains hook implementations for Artsci Media WYSIWYG.
  */
 
 use Drupal\Component\Utility\Html;
@@ -105,42 +105,42 @@ function artsci_media_wysiwyg_form_media_library_add_form_alter(&$form, FormStat
  */
 function artsci_media_wysiwyg_media_update(EntityInterface $entity) {
   // If not local, try to clear the varnish cache for the file.
-  if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
-    $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
-    $purgeQueuers = \Drupal::service('purge.queuers');
-    $purgeQueue = \Drupal::service('purge.queue');
-    $queuer = $purgeQueuers->get('coretags');
-    $invalidations = [];
+  // if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
+  //   $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
+  //   $purgeQueuers = \Drupal::service('purge.queuers');
+  //   $purgeQueue = \Drupal::service('purge.queue');
+  //   $queuer = $purgeQueuers->get('coretags');
+  //   $invalidations = [];
 
-    switch ($entity->bundle()) {
-      case 'file':
-        $field = 'field_media_file';
-        break;
+  //   switch ($entity->bundle()) {
+  //     case 'file':
+  //       $field = 'field_media_file';
+  //       break;
 
-      case 'audio':
-        $field = 'field_media_audio_file';
-        break;
+  //     case 'audio':
+  //       $field = 'field_media_audio_file';
+  //       break;
 
-      case 'image':
-        $field = 'field_media_image';
-        $styles = ImageStyle::loadMultiple();
-        break;
-    }
+  //     case 'image':
+  //       $field = 'field_media_image';
+  //       $styles = ImageStyle::loadMultiple();
+  //       break;
+  //   }
 
-    if (isset($field) && $entity->hasField($field)) {
-      $file = File::load($entity->$field->target_id);
-      $invalidations[] = $purgeInvalidationFactory->get('url', $file->createFileUrl(FALSE));
+  //   if (isset($field) && $entity->hasField($field)) {
+  //     $file = File::load($entity->$field->target_id);
+  //     $invalidations[] = $purgeInvalidationFactory->get('url', $file->createFileUrl(FALSE));
 
-      // Note that media_entity_file_replace flushes derivative images.
-      if (isset($styles)) {
-        foreach ($styles as $style) {
-          $invalidations[] = $purgeInvalidationFactory->get('url', $style->buildUrl($file->getFileUri()));
-        }
-      }
+  //     // Note that media_entity_file_replace flushes derivative images.
+  //     if (isset($styles)) {
+  //       foreach ($styles as $style) {
+  //         $invalidations[] = $purgeInvalidationFactory->get('url', $style->buildUrl($file->getFileUri()));
+  //       }
+  //     }
 
-      $purgeQueue->add($queuer, $invalidations);
-    }
-  }
+  //     $purgeQueue->add($queuer, $invalidations);
+  //   }
+  // }
 }
 
 /**
@@ -206,5 +206,14 @@ function artsci_media_wysiwyg_config_schema_info_alter(&$definitions) {
   // https://www.drupal.org/project/drupal/issues/3410100#comment-15457015.
   if (isset($definitions['ckeditor5.plugin.ckeditor5_sourceEditing'])) {
     unset($definitions['ckeditor5.plugin.ckeditor5_sourceEditing']['mapping']['allowed_tags']['sequence']['constraints']['SourceEditingRedundantTags']);
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function artsci_media_wysiwyg_library_info_alter(&$libraries, $extension) {
+  if ($extension === 'ckeditor5' && isset($libraries['internal.drupal.ckeditor5'])) {
+    $libraries['internal.drupal.ckeditor5']['dependencies'][] = 'artsci_media_wysiwyg/ckeditor5-a11y';
   }
 }

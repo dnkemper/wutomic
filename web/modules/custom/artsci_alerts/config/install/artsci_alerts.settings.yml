@@ -1,0 +1,7 @@
+hawk_alert:
+  display: true
+  source: 'https://emergency.artsci.edu/api/active'
+custom_alert:
+  display: false
+  message: ''
+  level: info

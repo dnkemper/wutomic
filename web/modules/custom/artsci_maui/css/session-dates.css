@@ -1,0 +1,8 @@
+.hide-session-badges .card .session span.badge {
+  display: none;
+}
+.card .session span.badge {
+  margin: .3rem 0 .5rem;
+  display: block;
+  width: fit-content;
+}

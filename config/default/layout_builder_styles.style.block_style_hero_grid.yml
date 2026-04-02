@@ -1,0 +1,13 @@
+uuid: f4091166-0f4b-4b2a-902e-935d117986fd
+langcode: en
+status: true
+dependencies: {  }
+id: block_style_hero_grid
+label: 'Hero: Grid container'
+classes: hero__container-grid
+type: component
+group: default
+block_restrictions:
+  - 'inline_block:artsci_hero'
+layout_restrictions: {  }
+weight: -28

@@ -4,6 +4,7 @@ namespace Drupal\layout_builder_custom;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\layout_builder\Form\ConfigureBlockFormBase;
+use Drupal\artsci_core\LinkAnalyticsHelper;
 
 /**
  * Handles form alterations for the artsci_banner block.
@@ -61,7 +62,6 @@ class BannerBlockFormHandler {
 
     // Hide admin label in favor of custom heading.
     unset($form['settings']['admin_label']);
-    unset($form['field_artsci_banner_title_size']);
 
     /*
      * Headline section.
@@ -83,34 +83,12 @@ class BannerBlockFormHandler {
 
     // Set weights and clean up defaults for headline fields.
     if (isset($form['layout_builder_style_headline_type'])) {
-      $form['layout_builder_style_headline_type']['#weight'] = 65;
+      $form['layout_builder_style_headline_type']['#weight'] = 62;
     }
 
     if (isset($form['layout_builder_style_headline_size'])) {
-      $form['layout_builder_style_headline_size']['#weight'] = 66;
+      $form['layout_builder_style_headline_size']['#weight'] = 63;
     }
-    if (isset($element['field_artsci_headline'])) {
-  $element['field_artsci_headline']['#group'] = 'headline_group';
-  $element['field_artsci_headline']['#weight'] = 61;
-}
-
-if (isset($element['field_artsci_banner_title'])) {
-  $element['field_artsci_banner_title']['#group'] = 'headline_group';
-  $element['field_artsci_banner_title']['#weight'] = 62;
-  // Update the label for the Heading sizes to remove Size label.
-  if (isset($element['field_artsci_banner_title']['widget'][0]['container']['size']['#title'])) {
-    $element['field_artsci_banner_title']['widget'][0]['container']['size']['#title'] = t('Level');
-  }
-}
-if (isset($element['field_artsci_headline'])) {
-  $element['field_artsci_headline']['#group'] = 'headline_group';
-  $element['field_artsci_headline']['#weight'] = 61;
-  
-  // Example: modify sub-element titles if needed
-  if (isset($element['field_artsci_headline']['widget'][0]['container']['heading_size']['#title'])) {
-    $element['field_artsci_headline']['widget'][0]['container']['heading_size']['#title'] = t('Size');
-  }
-}
 
     // Duplicate headline fields into headline group.
     self::createDuplicateField($form, 'layout_builder_style_headline_type', 'headline_group');
@@ -244,58 +222,41 @@ if (isset($element['field_artsci_headline'])) {
     self::createDuplicateField($form, 'layout_builder_style_button_style', 'button_group');
     self::createDuplicateField($form, 'layout_builder_style_button_font', 'button_group');
 
-// Only show button style when a link URI is entered.
-if (isset($form['button_group']['layout_builder_style_button_style_duplicate'])) {
-  $form['button_group']['layout_builder_style_button_style_duplicate']['#states'] = [
-    'visible' => [
-      ':input[name="settings[block_form][field_artsci_banner_link][0][uri]"]' => ['filled' => TRUE],
-    ],
-  ];
-}
-
-if (isset($form['button_group']['layout_builder_style_button_font_duplicate'])) {
-  $form['button_group']['layout_builder_style_button_font_duplicate']['#states'] = [
-    'visible' => [
-      ':input[name="settings[block_form][field_artsci_banner_link][0][uri]"]' => ['filled' => TRUE],
-    ],
-  ];
-}
     /*
      * Layout section.
      */
     // Layout group heading.
-    // $form['layout_group_heading'] = [
-    //   '#type' => 'html_tag',
-    //   '#tag' => 'h3',
-    //   '#value' => t('Layout'),
-    //   '#weight' => 94,
-    //   '#attributes' => ['class' => ['heading-a']],
-    //   '#prefix' => '<div class="off-canvas-background padding--inline--md padding--block-start--md margin--block-start--md">',
-    // ];
+    $form['layout_group_heading'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => t('Layout'),
+      '#weight' => 94,
+      '#attributes' => ['class' => ['heading-a']],
+      '#prefix' => '<div class="off-canvas-background padding--inline--md padding--block-start--md margin--block-start--md">',
+    ];
 
     // Layout settings details element.
-    // $form['layout_settings'] = [
-    //   '#type' => 'details',
-    //   '#title' => t('<span class="element-invisible">Layout</span> Options'),
-    //   '#weight' => 97,
-    //   '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
-    //   '#open' => TRUE,
-    //   '#suffix' => '</div>',
-    // ];
+    $form['layout_settings'] = [
+      '#type' => 'details',
+      '#title' => t('<span class="element-invisible">Layout</span> Options'),
+      '#weight' => 97,
+      '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
+      '#open' => FALSE,
+      '#suffix' => '</div>',
+    ];
 
     // Set weights for layout fields.
-    // if (isset($form['layout_builder_style_horizontal_alignment'])) {
-    //   $form['layout_builder_style_horizontal_alignment']['#weight'] = 95;
-    // }
+    if (isset($form['layout_builder_style_horizontal_alignment'])) {
+      $form['layout_builder_style_horizontal_alignment']['#weight'] = 95;
+    }
 
-    // if (isset($form['layout_builder_style_vertical_alignment'])) {
-    //   $form['layout_builder_style_vertical_alignment']['#weight'] = 96;
-    // }
+    if (isset($form['layout_builder_style_vertical_alignment'])) {
+      $form['layout_builder_style_vertical_alignment']['#weight'] = 96;
+    }
 
     // Duplicate layout fields into layout settings container.
-    // self::createDuplicateField($form, 'layout_builder_style_container', 'layout_settings');
-    //     self::createDuplicateField($form, 'layout_builder_style_vertical_alignment', 'layout_settings');
-    // self::createDuplicateField($form, 'layout_builder_style_horizontal_alignment', 'layout_settings');
+    self::createDuplicateField($form, 'layout_builder_style_container', 'layout_settings');
+    self::createDuplicateField($form, 'layout_builder_style_banner_height', 'layout_settings');
 
     /*
      * Styles section.
@@ -316,46 +277,14 @@ if (isset($form['button_group']['layout_builder_style_button_font_duplicate'])) 
       '#title' => t('<span class="element-invisible">Style</span> Options'),
       '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
       '#weight' => 102,
-      '#open' => TRUE,
+      '#open' => FALSE,
       '#suffix' => '</div>',
     ];
-// Duplicate style fields into style options container.
-    if (isset($form['layout_builder_style_horizontal_alignment'])) {
-      $form['layout_builder_style_horizontal_alignment']['#weight'] = 95;
-    }
 
-    if (isset($form['layout_builder_style_vertical_alignment'])) {
-      $form['layout_builder_style_vertical_alignment']['#weight'] = 96;
-    }
+    // Duplicate style fields into style options container.
+    self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
+    self::createDuplicateField($form, 'layout_builder_style_default', 'style_options');
 
-    // Duplicate layout fields into layout settings container.
-    self::createDuplicateField($form, 'layout_builder_style_vertical_alignment', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_horizontal_alignment', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_container', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_banner_height_duplicate', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
-
-    self::createDuplicateField($form, 'layout_builder_style_banner_card_background', 'style_options');
-self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
-self::createDuplicateField($form, 'layout_builder_style_default', 'style_options');
-
-
-// Only show banner card background when background type is color-pattern.
-if (isset($form['style_options']['layout_builder_style_banner_card_background'])) {
-  $form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [
-    'visible' => [
-      ':input[name="settings[block_form][background_type]"]' => ['value' => 'color-pattern'],
-      ':input[name="layout_builder_style_default_duplicate"]' => ['value' => 'banner_offset_content'],
-    ],
-  ];
-}
-if (isset($form['layout_builder_style_banner_card_background'])) {
-  $form['layout_builder_style_banner_card_background']['#states'] = [
-    'visible' => [
-      ':input[name="settings[block_form][background_type]"]' => ['value' => 'color-pattern'],
-    ],
-  ];
-}
     /*
      * Bottom section.
      */
@@ -380,7 +309,6 @@ if (isset($form['layout_builder_style_banner_card_background'])) {
   public static function validateForm(array &$form, FormStateInterface $form_state) {
     // Sync duplicated fields back to original fields.
     $fields_to_sync = [
-      'layout_builder_style_banner_card_background',
       'layout_builder_style_banner_gradient',
       'layout_builder_style_banner_height',
       'layout_builder_style_button_style',
@@ -394,6 +322,9 @@ if (isset($form['layout_builder_style_banner_card_background'])) {
     ];
 
     self::syncDuplicateFields($form_state, $fields_to_sync);
+
+    // Sanitize analytics attributes on banner links.
+    LinkAnalyticsHelper::sanitizeLinkAnalyticsAttributes($form_state, 'field_artsci_banner_link', 'button');
 
     // Validation for links.
     $link_set = FALSE;
@@ -570,28 +501,8 @@ if (isset($form['layout_builder_style_banner_card_background'])) {
       $element['field_artsci_banner_link']['#weight'] = 70;
       $element['field_artsci_banner_link']['#attributes']['class'][] = 'padding--inline--md';
     }
-/*
- * Assign fields to groups.
- */
-// Assign block fields to groups.
-if (isset($element['field_artsci_banner_pre_title'])) {
-  $element['field_artsci_banner_pre_title']['#group'] = 'headline_group';
-  $element['field_artsci_banner_pre_title']['#weight'] = 60;
-}
 
-if (isset($element['field_artsci_headline'])) {
-  $element['field_artsci_headline']['#group'] = 'headline_group';
-  $element['field_artsci_headline']['#weight'] = 61;
-}
-
-if (isset($element['field_artsci_banner_title'])) {
-  $element['field_artsci_banner_title']['#group'] = 'headline_group';
-  $element['field_artsci_banner_title']['#weight'] = 62;
-  // Update the label for the Heading sizes to remove Size label.
-  if (isset($element['field_artsci_banner_title']['widget'][0]['container']['size']['#title'])) {
-    $element['field_artsci_banner_title']['widget'][0]['container']['size']['#title'] = t('Level');
-  }
-}    /*
+    /*
      * Configure background type.
      */
 
@@ -639,13 +550,6 @@ if (isset($element['field_artsci_banner_title'])) {
       // Hide the original field.
       $complete_form['layout_builder_style_background']['#access'] = FALSE;
     }
-    if (isset($form['style_options']['layout_builder_style_banner_card_background_duplicate'])) {
-  $form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [
-    'visible' => [
-      ':input[name="settings[block_form][background_type]"]' => ['value' => 'color-pattern'],
-    ],
-  ];
-}
 
     /*
      * Configure media fields.

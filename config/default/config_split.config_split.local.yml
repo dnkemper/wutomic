@@ -1,0 +1,23 @@
+uuid: 5799b1bf-d146-4c65-9250-cdcc9d51add3
+langcode: en
+status: true
+dependencies: {  }
+id: local
+label: Local
+description: ''
+weight: 90
+stackable: true
+no_patching: false
+storage: folder
+folder: ../config/envs/local
+module:
+  config_inspector: 0
+  devel: 0
+  stage_file_proxy: 0
+  update: 0
+  views_ui: 0
+theme: {  }
+complete_list:
+  - stage_file_proxy.settings
+partial_list:
+  - symfony_mailer.settings

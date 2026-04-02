@@ -1,8 +1,0 @@
-name: 'Academic Calendar iCal Feed'
-type: module
-description: 'Provides an iCal (.ics) feed for academic calendar events that can be subscribed to by calendar applications.'
-package: Custom
-core_version_requirement: ^10 || ^11
-dependencies:
-  - drupal:node
-  - drupal:datetime

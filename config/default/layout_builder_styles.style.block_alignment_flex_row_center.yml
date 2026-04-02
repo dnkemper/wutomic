@@ -1,0 +1,16 @@
+uuid: c327cbd5-eb4e-4ec5-85ae-aed50edf6ad1
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: uPum6khROkYN7rlhxBjQ6KLov40NtHocCtfB6APwA38
+id: block_alignment_flex_row_center
+label: 'Flex row center'
+classes: 'element--flex-center '
+type: component
+group: alignment
+block_restrictions:
+  - 'inline_block:artsci_cta'
+  - 'inline_block:artsci_statistic'
+layout_restrictions: {  }
+weight: -67

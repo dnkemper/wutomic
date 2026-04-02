@@ -1,0 +1,51 @@
+uuid: 205542df-69d8-409f-838e-c1461a3ec472
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_image
+    - field.field.block_content.artsci_image.field_artsci_image_caption
+    - field.field.block_content.artsci_image.field_artsci_image_image
+    - field.field.block_content.artsci_image.field_artsci_image_link
+  module:
+    - linkit
+    - text
+id: block_content.artsci_image.default
+targetEntityType: block_content
+bundle: artsci_image
+mode: default
+content:
+  field_artsci_image_caption:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_artsci_image_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_artsci_image_link:
+    type: linkit
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+      linkit_profile: default
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  search_api_excerpt: true

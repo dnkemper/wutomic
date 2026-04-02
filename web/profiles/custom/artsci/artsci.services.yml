@@ -1,0 +1,20 @@
+services:
+  artsci.route_subscriber:
+    class: Drupal\artsci\EventSubscriber\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+  artsci.simple_sitemap_override:
+    class: Drupal\artsci\ConfigOverride\SimpleSitemapOverride
+    arguments: [ '@request_stack' ]
+    tags:
+      - { name: config.factory.override }
+  artsci.google_analytics_override:
+    class: Drupal\artsci\ConfigOverride\GoogleAnalyticsOverride
+    arguments: [ '@config.factory' ]
+    tags:
+      - { name: config.factory.override }
+  artsci.robotstxt_override:
+    class: Drupal\artsci\ConfigOverride\RobotstxtOverride
+    arguments: [ '@request_stack' ]
+    tags:
+      - { name: config.factory.override }

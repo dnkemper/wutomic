@@ -1,11 +1,11 @@
-uuid: 7fda919d-a444-4847-998b-b3e5a9f96bed
+uuid: 51c2abee-4d95-4408-8bdb-157bb1d6252d
 langcode: en
 status: true
 dependencies:
   module:
     - user
 _core:
-  default_config_hash: hZxrM4LiKjRy1g-zZSX1RExTVK8SKQAtMrsRER1420I
+  default_config_hash: wTJRNzsLVTenCALONNlVfgm_pBOlqucSPuVFLOD56ck
 id: user_admin_people
 label: People
 module: user
@@ -16,7 +16,7 @@ base_field: uid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: Master
     display_plugin: default
     position: 0
     display_options:
@@ -552,6 +552,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -595,6 +597,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
           is_grouped: true
           group_info:
             label: Status
@@ -641,6 +645,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -681,6 +687,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -854,7 +862,6 @@ display:
           sticky: false
           summary: ''
           empty_table: true
-          class: ''
       row:
         type: fields
       query:

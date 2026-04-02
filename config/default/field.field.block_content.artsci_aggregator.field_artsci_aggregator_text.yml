@@ -1,0 +1,28 @@
+uuid: 5a5d066d-3f0a-45af-b896-b0d0c2a7fc61
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_aggregator
+    - field.storage.block_content.field_artsci_aggregator_text
+    - filter.format.minimal
+  module:
+    - allowed_formats
+    - text
+id: block_content.artsci_aggregator.field_artsci_aggregator_text
+field_name: field_artsci_aggregator_text
+entity_type: block_content
+bundle: artsci_aggregator
+label: 'No results text'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "<p>There are no results at this time.</p>\r\n"
+    format: minimal
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - minimal
+field_type: text_long

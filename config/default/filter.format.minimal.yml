@@ -5,6 +5,7 @@ dependencies:
   module:
     - editor
     - linkit
+    - artsci_core
 name: 'Minimal HTML'
 format: minimal
 weight: -9
@@ -60,6 +61,19 @@ filters:
     status: true
     weight: -41
     settings: {  }
+  filter_icon:
+    id: filter_icon
+    provider: artsci_core
+    status: true
+    weight: -30
+    settings: {  }
+  filter_iframe:
+    id: filter_iframe
+    provider: artsci_core
+    status: false
+    weight: -40
+    settings:
+      allowed_sources: ''
   filter_image_lazy_load:
     id: filter_image_lazy_load
     provider: filter
@@ -80,3 +94,4 @@ filters:
     weight: -50
     settings:
       title: true
+      media_substitution: media

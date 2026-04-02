@@ -1,0 +1,62 @@
+uuid: 65cdf3cd-9c51-460e-825d-5840e14c482f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_statistic
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_content
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_excerpt
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_title
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_title_pre
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_title_suf
+  module:
+    - heading
+_core:
+  default_config_hash: IpkpswEDWSyuXSZprw0B5SIs7iiF2f-ik6yCeDJQn_Q
+id: block_content.artsci_statistic.default
+targetEntityType: block_content
+bundle: artsci_statistic
+mode: default
+content:
+  field_artsci_statistic_content:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_artsci_statistic_excerpt:
+    type: string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_artsci_statistic_title:
+    type: heading
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_artsci_statistic_title_pre:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_artsci_statistic_title_suf:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  search_api_excerpt: true

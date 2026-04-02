@@ -1,0 +1,28 @@
+uuid: 730c6118-24aa-4cf4-a3d1-7fe8028135ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_spacer_separator
+    - field.field.block_content.artsci_spacer_separator.field_artsci_spacer_sep_txt
+  module:
+    - text
+_core:
+  default_config_hash: j_KaqLXvM_lpd8RJiODir28mJuYFCS5KSDX9jiVyEpU
+id: block_content.artsci_spacer_separator.default
+targetEntityType: block_content
+bundle: artsci_spacer_separator
+mode: default
+content:
+  field_artsci_spacer_sep_txt:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  search_api_excerpt: true

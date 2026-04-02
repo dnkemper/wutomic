@@ -1,0 +1,47 @@
+uuid: 506e96d7-9fba-4e54-984e-c6e1bc6178ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_collection
+    - core.entity_view_mode.block_content.descriptive_list
+    - field.field.block_content.artsci_collection.field_accordion_label_color
+    - field.field.block_content.artsci_collection.field_accordion_type
+    - field.field.block_content.artsci_collection.field_artsci_collection_items
+    - field.field.block_content.artsci_collection.field_artsci_headline
+  module:
+    - entity_reference_revisions
+    - layout_builder
+    - layout_builder_custom
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: block_content.artsci_collection.descriptive_list
+targetEntityType: block_content
+bundle: artsci_collection
+mode: descriptive_list
+content:
+  field_artsci_collection_items:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: descriptive_list
+      link: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_artsci_headline:
+    type: artsci_headline_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_accordion_label_color: true
+  field_accordion_type: true
+  search_api_excerpt: true

@@ -1,0 +1,52 @@
+uuid: e2d211da-68f0-4af4-97d3-53f9a65dd8dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_events
+    - field.field.block_content.artsci_events.field_collection_more
+    - field.field.block_content.artsci_events.field_collection_more_path
+    - field.field.block_content.artsci_events.field_collection_pager
+    - field.field.block_content.artsci_events.field_collection_results
+    - field.field.block_content.artsci_events.field_artsci_events_audiences
+    - field.field.block_content.artsci_events.field_artsci_events_date_range
+    - field.field.block_content.artsci_events.field_artsci_events_department
+    - field.field.block_content.artsci_events.field_artsci_events_interests
+    - field.field.block_content.artsci_events.field_artsci_events_keywords
+    - field.field.block_content.artsci_events.field_artsci_events_place
+    - field.field.block_content.artsci_events.field_artsci_events_sort
+    - field.field.block_content.artsci_events.field_artsci_events_timeframe
+    - field.field.block_content.artsci_events.field_artsci_events_types
+    - field.field.block_content.artsci_events.field_artsci_headline
+  module:
+    - layout_builder_custom
+id: block_content.artsci_events.default
+targetEntityType: block_content
+bundle: artsci_events
+mode: default
+content:
+  field_artsci_headline:
+    type: artsci_headline_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_collection_more: true
+  field_collection_more_path: true
+  field_collection_pager: true
+  field_collection_results: true
+  field_artsci_events_audiences: true
+  field_artsci_events_date_range: true
+  field_artsci_events_department: true
+  field_artsci_events_interests: true
+  field_artsci_events_keywords: true
+  field_artsci_events_place: true
+  field_artsci_events_sort: true
+  field_artsci_events_timeframe: true
+  field_artsci_events_types: true
+  search_api_excerpt: true

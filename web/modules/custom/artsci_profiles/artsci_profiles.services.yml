@@ -1,0 +1,7 @@
+services:
+  logger.channel.artsci_profiles:
+    parent: logger.channel_base
+    arguments: ['artsci_profiles']
+  artsci_profiles.client:
+    class: Drupal\artsci_profiles\Client
+    arguments: ['@config.factory', '@logger.channel.artsci_profiles', '@http_client']

@@ -1,0 +1,2 @@
+artsci_media_wysiwyg:
+  static_map_regex: '%[!?]m\/([^?]*)%'

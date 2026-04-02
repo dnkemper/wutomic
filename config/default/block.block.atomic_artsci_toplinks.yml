@@ -1,0 +1,33 @@
+uuid: e257c631-1f30-4c56-bff0-87a91f4e49f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.top-links
+  module:
+    - menu_block
+  theme:
+    - atomic_artsci
+id: atomic_artsci_toplinks
+theme: atomic_artsci
+region: action_menu
+weight: 0
+provider: null
+plugin: 'menu_block:top-links'
+settings:
+  id: 'menu_block:top-links'
+  label: 'Top links'
+  label_display: '0'
+  provider: menu_block
+  follow: false
+  follow_parent: '0'
+  label_link: false
+  label_type: block
+  level: 1
+  depth: 0
+  expand_all_items: false
+  parent: 'top-links:'
+  render_parent: false
+  suggestion: top_links
+  hide_on_nonactive: false
+visibility: {  }

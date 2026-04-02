@@ -1,0 +1,19 @@
+uuid: b2958986-4866-4631-8cfe-1bceda19655f
+langcode: en
+status: true
+dependencies: {  }
+id: media_format_circle
+label: Circle
+classes: "media--circle\r\nmedia--border"
+type: component
+group: media_format
+block_restrictions:
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_image'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: 42

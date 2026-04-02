@@ -1,0 +1,34 @@
+uuid: 267241e2-9f7d-4b46-88c0-f412a248a212
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_banner
+    - field.storage.block_content.field_artsci_banner_title
+  module:
+    - heading
+_core:
+  default_config_hash: Y-sFpOVC8dp2SNJb40vHSl7Z-spmdIZWrqXn8NAJvpQ
+id: block_content.artsci_banner.field_artsci_banner_title
+field_name: field_artsci_banner_title
+entity_type: block_content
+bundle: artsci_banner
+label: Headline
+description: 'Choose a primary line of text or headline.'
+required: false
+translatable: false
+default_value:
+  -
+    text: ''
+    size: h2
+default_value_callback: ''
+settings:
+  label: Heading
+  allowed_sizes:
+    h2: h2
+    h3: h3
+    h4: h4
+    h5: h5
+    h6: h6
+    h1: 0
+field_type: heading

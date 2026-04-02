@@ -1,0 +1,18 @@
+uuid: 35807c6f-0ccd-4f2d-bfa0-b5f7237b655f
+langcode: en
+status: true
+dependencies: {  }
+id: card_media_position_left
+label: Left
+classes: card--layout-left
+type: component
+group: card_media_position
+block_restrictions:
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: -47

@@ -1,0 +1,18 @@
+uuid: ffb155f3-12e8-482b-97ef-89535fda91be
+langcode: en
+status: true
+dependencies: {  }
+id: block_grid_twocol_50_50
+label: '2 columns'
+classes: grid--twocol--50-50
+type: component
+group: grid_columns
+block_restrictions:
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: -20

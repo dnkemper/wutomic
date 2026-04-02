@@ -1,0 +1,7 @@
+artsci_intranet.settings:
+  path: '/admin/config/artsci/intranet'
+  defaults:
+    _title: 'Intranet'
+    _form: 'Drupal\artsci_intranet\Form\SettingsForm'
+  requirements:
+    _permission: 'administer artsci intranet'

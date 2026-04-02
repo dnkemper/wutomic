@@ -1,0 +1,14 @@
+alerts:
+  version: 1.x
+  css:
+    theme:
+      assets/css/artsci_alerts.css: {}
+  js:
+    assets/js/alerts.js: {}
+  dependencies:
+    - core/loadjs
+    - fontawesome/webfonts
+    - core/drupalSettings
+    - core/once
+    - core/drupal.message
+    - core/jquery

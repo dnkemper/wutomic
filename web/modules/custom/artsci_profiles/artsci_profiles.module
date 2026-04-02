@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * Hooks for Artsci Profiles module.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function artsci_profiles_preprocess_page(&$variables) {
+  $route = \Drupal::routeMatch()->getRouteName();
+
+  if (strpos($route, 'artsci_profiles.directory') === 0) {
+    // We know it is a directory instance, and we want to remove the original
+    // breadcrumbs so the app can handle them.
+    unset($variables['page']['breadcrumb']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function artsci_profiles_preprocess_html(&$variables) {
+  $route = \Drupal::routeMatch()->getRouteName();
+
+  if (str_starts_with($route, 'artsci_profiles.directory')) {
+    // Let the controller set the head title and avoid duplicates.
+    unset($variables['head_title']);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function artsci_profiles_theme($existing, $type, $theme, $path) {
+  return [
+    'html__profiles' => [
+      'template' => 'html--profiles',
+      'base hook' => 'html',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function artsci_profiles_theme_suggestions_html(array $variables) {
+  $suggestions = [];
+  $route = \Drupal::routeMatch()->getRouteName();
+
+  if (str_starts_with($route, 'artsci_profiles.directory')) {
+    $suggestions[] = 'html__profiles';
+  }
+
+  return $suggestions;
+}

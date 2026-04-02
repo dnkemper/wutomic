@@ -33,7 +33,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['markup'] = [
       '#type' => 'markup',
-      '#markup' => $this->t('<p>These settings allows you to customize the top University of artsci search box.</p>'),
+      '#markup' => $this->t('<p>These settings allows you to customize the top University of Iowa search box.</p>'),
     ];
     $form['display_search'] = [
       '#type' => 'checkbox',
@@ -42,7 +42,7 @@ class SettingsForm extends ConfigFormBase {
     ];
     $form['display_search_all_artsci'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Display the "Search all University of artsci for ..." link'),
+      '#title' => $this->t('Display the "Search all University of Iowa for ..." link'),
       '#default_value' => $config->get('artsci_search.display_search_all_artsci') ?? TRUE,
     ];
     $form['cse_engine_id'] = [

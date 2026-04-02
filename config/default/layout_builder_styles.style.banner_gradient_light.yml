@@ -1,0 +1,13 @@
+uuid: be1a6310-5c4f-4a05-bc03-b9f1c9c34943
+langcode: en
+status: true
+dependencies: {  }
+id: banner_gradient_light
+label: 'Use light colored overlay'
+classes: banner--overlay-light
+type: component
+group: banner_gradient
+block_restrictions:
+  - 'inline_block:artsci_banner'
+layout_restrictions: {  }
+weight: 48

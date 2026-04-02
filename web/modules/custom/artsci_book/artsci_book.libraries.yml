@@ -1,0 +1,5 @@
+artsci_book_styling:
+  version: 1.x
+  css:
+    theme:
+      css/artsci_book.css: {}

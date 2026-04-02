@@ -1,0 +1,37 @@
+uuid: a5a44d16-e5c5-44b8-bd7e-7257251a6707
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_collection
+    - field.storage.block_content.field_artsci_collection_items
+    - paragraphs.paragraphs_type.artsci_collection_item
+  module:
+    - entity_reference_revisions
+id: block_content.artsci_collection.field_artsci_collection_items
+field_name: field_artsci_collection_items
+entity_type: block_content
+bundle: artsci_collection
+label: Items
+description: 'Add Collection Items.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      artsci_collection_item: artsci_collection_item
+    negate: 0
+    target_bundles_drag_drop:
+      artsci_collection_item:
+        weight: 30
+        enabled: true
+      artsci_contact:
+        weight: 5
+        enabled: false
+      artsci_slide:
+        weight: 31
+        enabled: false
+field_type: entity_reference_revisions

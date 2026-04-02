@@ -1,24 +1,26 @@
-uuid: ec1e69a9-23b4-45b1-babc-9646d3933690
+uuid: bc53f025-6404-4f83-a327-b4ac195bc5c8
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.article
+    - node.type.page
+    - node.type.person
   module:
     - content_moderation
-_core:
-  default_config_hash: T7gMMyFbTYLalxpIOnzJebvek2OW0b1RgLVE9I2y228
 id: editorial
 label: Editorial
 type: content_moderation
 type_settings:
   states:
     archived:
-      label: Archived
-      weight: 5
+      label: Unpublished
+      weight: 1
       published: false
       default_revision: true
     draft:
       label: Draft
-      weight: -5
+      weight: -2
       published: false
       default_revision: false
     published:
@@ -26,38 +28,51 @@ type_settings:
       weight: 0
       published: true
       default_revision: true
+    review:
+      label: Review
+      weight: -1
+      published: false
+      default_revision: false
   transitions:
     archive:
-      label: Archive
+      label: Unpublish
       from:
         - published
       to: archived
-      weight: 2
-    archived_draft:
-      label: 'Restore to Draft'
-      from:
-        - archived
-      to: draft
-      weight: 3
+      weight: 1
     archived_published:
-      label: Restore
+      label: 'Restore from unpublished'
       from:
         - archived
       to: published
-      weight: 4
+      weight: 2
     create_new_draft:
       label: 'Create New Draft'
       from:
+        - archived
         - draft
         - published
+        - review
       to: draft
-      weight: 0
+      weight: -2
+    needs_review:
+      label: 'Needs Review'
+      from:
+        - draft
+        - review
+      to: review
+      weight: -1
     publish:
       label: Publish
       from:
         - draft
         - published
+        - review
       to: published
-      weight: 1
-  entity_types: {  }
+      weight: 0
+  entity_types:
+    node:
+      - article
+      - page
+      - person
   default_moderation_state: draft

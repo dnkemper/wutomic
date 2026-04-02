@@ -1,0 +1,20 @@
+uuid: 7b921fdb-a868-4e05-bbb1-7ea6b758fd5d
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_gray_pattern_brain
+label: 'Gray - Brain pattern'
+classes: bg--gray--pattern--brain
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 27

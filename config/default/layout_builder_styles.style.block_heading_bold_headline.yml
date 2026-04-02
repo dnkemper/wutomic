@@ -1,0 +1,15 @@
+uuid: 2e8806df-6b91-4f52-ab71-cea03556d1ef
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: YwUlzQPKXQvBmzM-l82uUyb_iQTTjr5iQ3sySyeLo5M
+id: block_heading_bold_headline
+label: 'Heading: Bold headline'
+classes: bold-headline--positive
+type: component
+group: default
+block_restrictions:
+  - 'inline_block:artsci_heading'
+layout_restrictions: {  }
+weight: -41

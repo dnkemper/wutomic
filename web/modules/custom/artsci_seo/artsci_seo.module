@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file
+ * Module code for artsci seo.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function artsci_seo_form_google_analytics_admin_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Restrict access to some Google Analytics form items for all roles
+  // except administrator.
+  /** @var Drupal\artsci_core\Access\ArtsciCoreAccess $check */
+  $check = \Drupal::service('artsci_core.access_checker');
+
+  /** @var Drupal\Core\Access\AccessResultInterface $access */
+  $access = $check->access(\Drupal::currentUser()->getAccount());
+
+  $default_paths = [
+    '/admin',
+    '/admin/*',
+    '/batch',
+    '/node/add*',
+    '/node/*/*',
+    '/user/*/*',
+  ];
+
+  $description_addition = '<br /><br /><strong>The default Artsci pages to exclude are:</strong><br>' .
+    implode('<br>', $default_paths);
+
+  $form['tracking']['page_visibility_settings']['google_analytics_visibility_request_path_pages']['#description'] .= $description_addition;
+
+  if ($access->isForbidden()) {
+    $form['advanced']['#access'] = FALSE;
+    // Disable access to all tracking config except dimensions and metrics.
+    $allowed_children = ['parameters', 'page_visibility_settings'];
+    foreach (Element::children($form['tracking']) as $child) {
+      if (!in_array($child, $allowed_children)) {
+        $form['tracking'][$child]['#access'] = FALSE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_metatags_alter().
+ */
+function artsci_seo_metatags_alter(array &$metatags, array &$context) {
+  // Append the page number to the title, if it is set and greater than 0.
+  $page = \Drupal::service('pager.parameters')->findPage();
+
+  if ($page) {
+    $metatags['title'] .= " | Page {$page}";
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function artsci_seo_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  switch ($form_id) {
+    // Node form modifications.
+    case 'node_page_edit_form':
+    case 'node_page_form':
+    case 'node_article_edit_form':
+    case 'node_article_form':
+    case 'node_person_edit_form':
+    case 'node_person_form':
+      // Collapse inner SEO field groups.
+      if (isset($form['field_meta_tags'])) {
+        if ($form['field_meta_tags']['widget'][0]['advanced']) {
+          $form['field_meta_tags']['widget'][0]['advanced']['#open'] = FALSE;
+        }
+        if (isset($form['field_meta_tags']['widget'][0]['open_graph'])) {
+          $form['field_meta_tags']['widget'][0]['open_graph']['#open'] = FALSE;
+        }
+        if (isset($form['field_meta_tags']['widget'][0]['twitter_cards'])) {
+          $form['field_meta_tags']['widget'][0]['twitter_cards']['#open'] = FALSE;
+        }
+      }
+      break;
+
+  }
+}

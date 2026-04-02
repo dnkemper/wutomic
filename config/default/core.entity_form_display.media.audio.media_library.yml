@@ -1,22 +1,53 @@
-uuid: c91120d3-83b3-4665-8286-cb831a4aee9e
+uuid: d6092afe-7b53-4b32-bf19-2ec99588394a
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
     - field.field.media.audio.field_media_audio_file
+    - field.field.media.audio.field_tags
     - media.type.audio
+  module:
+    - file
 _core:
-  default_config_hash: 28vwMIYtvyjPcD4RyciZXIztxtZgmuWRCNgYemr_SZE
+  default_config_hash: 9XTn4CqOB0W8nLo5kOOaNqJAP63e2yQEzMtKttPrlVw
 id: media.audio.media_library
 targetEntityType: media
 bundle: audio
 mode: media_library
-content: {  }
+content:
+  field_media_audio_file:
+    type: file_generic
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_tags:
+    type: entity_reference_autocomplete_tags
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
 hidden:
   created: true
-  field_media_audio_file: true
-  name: true
   path: true
+  publish_on: true
+  publish_state: true
+  replace_file: true
   status: true
   uid: true
+  unpublish_on: true
+  unpublish_state: true

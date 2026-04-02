@@ -83,7 +83,6 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
 
     // Set an ID for this block if the third-party key is set.
     if ($unique_id = $event->getComponent()->getThirdPartySetting('layout_builder_custom', 'unique_id')) {
-            // $unique_id = $third_party_settings['layout_builder_custom']['unique_id'];
       $build['#attributes']['id'] = $unique_id;
     }
 
@@ -127,7 +126,7 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
       if (!is_null($content)) {
         // @todo Remove the duplicate section of code below once the
         //   following issue is resolved:
-        //   https://github.com/washu-artsci/artsci/issues/4993
+        //   https://github.com/artsci/artsci/issues/4993
         $build = [
           '#theme' => 'block',
           '#configuration' => $block->getConfiguration(),
@@ -175,19 +174,14 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
           $style_map = LayoutBuilderStylesHelper::getLayoutBuilderStylesMap($selected_styles);
           // Filter the style map to just classes related to the card.
           $style_map = Card::filterCardStyles($style_map);
-          $build['#attributes'] = $build['#attributes'] ?? [];
-
 
           LayoutBuilderStylesHelper::removeStylesFromAttributes($build['#attributes'], $style_map);
 
           $build['content']['#override_styles'] = $style_map;
 
           // Map the layout builder styles to the view mode to be used.
-          if (count(Element::children($build['content']['field_artsci_card_image'])) > 0) {
+          if (count(Element::children($build['content']['field_artsci_card_image'])) > 0 && isset($style_map['media_format'])) {
             LayoutBuilderStylesHelper::setMediaViewModeFromStyle($build['content']['field_artsci_card_image'][0], 'large', $style_map['media_format']);
-          }
-          else {
-            unset($style_map['media_format']);
           }
           break;
 
@@ -203,7 +197,7 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
           // style defaults later.
           $style_map = LayoutBuilderStylesHelper::getLayoutBuilderStylesMap($selected_styles);
           // Map the layout builder styles to the view mode to be used.
-          if (count(Element::children($build['content']['field_artsci_image_image'])) > 0) {
+          if (count(Element::children($build['content']['field_artsci_image_image'])) > 0 && isset($style_map['media_format'])) {
             LayoutBuilderStylesHelper::setMediaViewModeFromStyle($build['content']['field_artsci_image_image'][0], 'full', $style_map['media_format']);
           }
 

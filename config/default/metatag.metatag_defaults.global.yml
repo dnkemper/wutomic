@@ -1,0 +1,38 @@
+uuid: 0364157e-beb1-46cf-b7cb-d4123710b7b6
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: lL7-hhc78zCB8aZ7IduKQEFhuM10Vcs-aoX2i_lWFkY
+id: global
+label: Global
+tags:
+  apple_mobile_web_app_status_bar_style: black
+  apple_touch_icon: '[artsci_core:favicon_assets_path]apple-touch-icon-60x60.png'
+  apple_touch_icon_114x114: '[artsci_core:favicon_assets_path]apple-touch-icon-114x114.png'
+  apple_touch_icon_120x120: '[artsci_core:favicon_assets_path]apple-touch-icon-120x120.png'
+  apple_touch_icon_144x144: '[artsci_core:favicon_assets_path]apple-touch-icon-144x144.png'
+  apple_touch_icon_152x152: '[artsci_core:favicon_assets_path]apple-touch-icon-152x152.png'
+  apple_touch_icon_180x180: '[artsci_core:favicon_assets_path]apple-touch-icon-180x180.png'
+  apple_touch_icon_72x72: '[artsci_core:favicon_assets_path]apple-touch-icon-72x72.png'
+  apple_touch_icon_76x76: '[artsci_core:favicon_assets_path]apple-touch-icon-76x76.png'
+  apple_touch_icon_precomposed_180x180: '[artsci_core:favicon_assets_path]apple-touch-icon-precomposed.png'
+  canonical_url: '[current-page:url:absolute]'
+  icon_16x16: '[artsci_core:favicon_assets_path]favicon-16x16.png'
+  icon_192x192: '[artsci_core:favicon_assets_path]android-chrome-192x192.png'
+  icon_32x32: '[artsci_core:favicon_assets_path]favicon-32x32.png'
+  icon_96x96: '[artsci_core:favicon_assets_path]favicon-96x96.png'
+  mask_icon:
+    href: '[artsci_core:favicon_assets_path]safari-pinned-tab.svg'
+    color: ''
+  msapplication_square150x150logo: '[artsci_core:favicon_assets_path]mstile-150x150.png'
+  msapplication_tilecolor: '#000000'
+  msapplication_tileimage: '[artsci_core:favicon_assets_path]mstile-150x150.png'
+  referrer: no-referrer-when-downgrade
+  robots: 'index, follow'
+  shortcut_icon: '[artsci_core:favicon_assets_path]favicon.ico'
+  shortlink: '[current-page:url:unaliased]'
+  theme_color: '#000000'
+  title: '[current-page:title] | [site:name] | [artsci_core:combined_org]'
+  web_manifest: '[artsci_core:favicon_assets_path]site.webmanifest'
+  x_ua_compatible: IE=edge

@@ -1,0 +1,16 @@
+services:
+  logger.channel.artsci_dispatch:
+    parent: logger.channel_base
+    arguments: [ 'artsci_dispatch' ]
+  cache.artsci_dispatch:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: ['artsci_dispatch']
+  artsci_dispatch.dispatch_client:
+    class: Drupal\artsci_dispatch\DispatchApiClient
+    arguments: ['@http_client', '@logger.channel.artsci_dispatch', '@cache.artsci_dispatch', '@config.factory', ]
+  artsci_dispatch.message_log_repository:
+    class: Drupal\artsci_dispatch\MessageLogRepository
+    arguments: [ '@database', '@string_translation', '@messenger' ]

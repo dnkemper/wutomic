@@ -13,7 +13,7 @@ use Drupal\link\Plugin\Field\FieldType\LinkItem;
  *   id = "brand_icon_url",
  *   label = @Translation("Brand Icon URL"),
  *   description = @Translation("This field is used to capture the URL of the brand icon svg"),
- *   category = @Translation("general"),
+ *   category = @Translation("General"),
  *   default_widget = "brand_icon_url_widget",
  *   default_formatter = "brand_icon_url_formatter"
  * )

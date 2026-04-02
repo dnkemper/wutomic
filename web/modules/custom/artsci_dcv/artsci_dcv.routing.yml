@@ -1,0 +1,15 @@
+artsci_dcv.settings:
+  path: 'admin/config/artsci/dcv'
+  defaults:
+    _form: 'Drupal\artsci_dcv\Form\ArtsciDcvFileForm'
+    _title: 'Domain Control Validation'
+  requirements:
+    _permission: 'administer dcv'
+
+artsci_dcv.file:
+  path: '.well-known/pki-validation/{filename}'
+  defaults:
+    _controller: \Drupal\artsci_dcv\Controller\ArtsciDcvController::dcvFile
+    _title: 'DCV File'
+  requirements:
+    _permission: 'access content'

@@ -19,7 +19,7 @@ node.add_page:
   weight: 50
 
 system.admin_config_artsci:
-  title: 'Arts & Sciences'
+  title: 'Artsci'
   parent: system.admin_config
   route_name: system.admin_config_artsci
   weight: -100

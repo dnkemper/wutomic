@@ -1,0 +1,23 @@
+uuid: 48641c14-ccc9-4db6-815b-4b82a8b8205f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: sq-EwrWh59j9niCgPwhph3ahaXg8N8qvzak8aLb9pZs
+id: block_background_style_gold
+label: Gold
+classes: bg--gold
+type: component
+group: background
+block_restrictions:
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_cta'
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_events'
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: -60

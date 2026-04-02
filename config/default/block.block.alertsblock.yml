@@ -1,0 +1,25 @@
+uuid: 0d9439f9-5fd9-4973-a91a-7f24cfced098
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - artsci_alerts
+  theme:
+    - atomic_artsci
+id: alertsblock
+theme: atomic_artsci
+region: alert
+weight: -12
+provider: null
+plugin: artsci_alerts_block
+settings:
+  id: artsci_alerts_block
+  label: 'Alerts block'
+  label_display: '0'
+  provider: artsci_alerts
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/node/*/layout'

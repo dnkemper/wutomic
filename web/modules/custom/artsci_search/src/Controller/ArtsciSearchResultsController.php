@@ -29,8 +29,8 @@ class ArtsciSearchResultsController extends ControllerBase {
     if ($display_search_all_artsci) {
       $build['search'] = [
         '#type' => 'link',
-        '#title' => $this->t('Search all University of artsci for @terms', ['@terms' => $search_terms]),
-        '#url' => Url::fromUri('https://artsci.wustl.edu/search', ['query' => ['terms' => $search_terms]]),
+        '#title' => $this->t('Search all University of Iowa for @terms', ['@terms' => $search_terms]),
+        '#url' => Url::fromUri('https://artsci.edu/search', ['query' => ['terms' => $search_terms]]),
         '#attributes' => [
           'target' => '_blank',
         ],

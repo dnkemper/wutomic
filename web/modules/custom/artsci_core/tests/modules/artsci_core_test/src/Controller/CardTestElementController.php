@@ -44,8 +44,8 @@ class CardTestElementController extends ControllerBase {
 
   protected function getFakeData() {
     return [
-      '#title' => 'Continue Your Story at artsci',
-      '#url' => 'https://washu.edu',
+      '#title' => 'Continue Your Story at Iowa',
+      '#url' => 'https://artsci.edu',
       '#link_text' => 'Get started',
       '#link_indicator' => TRUE,
     ];

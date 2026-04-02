@@ -1,0 +1,41 @@
+_meta:
+  version: '1.0'
+  entity_type: block_content
+  uuid: 41c43a1b-0473-45b1-b799-2b235c3904fb
+  bundle: artsci_card
+  default_langcode: en
+  depends:
+    be324113-25ee-43e3-b6f2-26ce619ce852: media
+default:
+  status:
+    -
+      value: true
+  reusable:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  field_artsci_card_button_display:
+    -
+      value: '1'
+  field_artsci_card_excerpt:
+    -
+      value: "<p>Reach out directly to the team building the Artsci service.</p>\r\n"
+      format: minimal_plus
+  field_artsci_card_image:
+    -
+      entity: be324113-25ee-43e3-b6f2-26ce619ce852
+  field_artsci_card_link:
+    -
+      uri: 'https://webcommunity.sites.artsci.edu/contact-web-team'
+      title: 'Contact us'
+      options:
+        href: 'https://webcommunity.sites.artsci.edu/contact-web-team'
+        data-entity-type: ''
+        data-entity-uuid: ''
+        data-entity-substitution: ''
+  field_artsci_card_title:
+    -
+      size: h2
+      text: 'Contact web team'

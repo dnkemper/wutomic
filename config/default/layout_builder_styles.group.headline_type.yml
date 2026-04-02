@@ -1,0 +1,10 @@
+uuid: 9644ebbf-adfc-4889-9f05-a285b8367917
+langcode: en
+status: true
+dependencies: {  }
+id: headline_type
+label: 'Headline style'
+multiselect: single
+form_type: radio
+required: true
+weight: -13

@@ -1,0 +1,28 @@
+uuid: 950f5441-fdc8-4405-8fb2-ad50c0b507e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_collection
+    - field.storage.block_content.field_artsci_headline
+  module:
+    - layout_builder_custom
+id: block_content.artsci_collection.field_artsci_headline
+field_name: field_artsci_headline
+entity_type: block_content
+bundle: artsci_collection
+label: Headline
+description: 'Choose a headline or title text.'
+required: false
+translatable: true
+default_value:
+  -
+    headline: ''
+    child_heading_size: h2
+    heading_size: h2
+    hide_headline: 0
+    headline_style: default
+    headline_alignment: default
+default_value_callback: ''
+settings: {  }
+field_type: artsci_headline

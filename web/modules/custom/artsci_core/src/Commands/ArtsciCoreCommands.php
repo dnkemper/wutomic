@@ -6,11 +6,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Logger\LoggerChannelTrait;
-use Drupal\purge\Plugin\Purge\Invalidation\InvalidationsService;
-use Drupal\purge\Plugin\Purge\Queue\QueueService;
-use Drupal\purge\Plugin\Purge\Queuer\QueuersService;
 use Drush\Commands\DrushCommands;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -22,13 +18,6 @@ use Symfony\Component\Yaml\Yaml;
  */
 class ArtsciCoreCommands extends DrushCommands {
   use LoggerChannelTrait;
-
-  /**
-   * The artsci_core logger channel.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected ?LoggerInterface $logger;
 
   /**
    * The config factory service.
@@ -45,36 +34,12 @@ class ArtsciCoreCommands extends DrushCommands {
   protected $moduleHandler;
 
   /**
-   * The purge invalidations service.
-   *
-   * @var \Drupal\purge\Plugin\Purge\Invalidation\InvalidationsService
-   */
-  protected $purgeInvalidations;
-
-  /**
-   * The purge queuer service.
-   *
-   * @var \Drupal\purge\Plugin\Purge\Queuer\QueuersService
-   */
-  protected $purgeQueuer;
-
-  /**
-   * The purge queue service.
-   *
-   * @var \Drupal\purge\Plugin\Purge\Queue\QueueService
-   */
-  protected $purgeQueue;
-
-  /**
    * Command constructor.
    */
-  public function __construct(LoggerInterface $logger, ConfigFactoryInterface $configFactory, ModuleHandler $moduleHandler, InvalidationsService $purgeInvalidations, QueuersService $purgeQueuer, QueueService $purgeQueue) {
-    $this->logger = $logger;
+  public function __construct(ConfigFactoryInterface $configFactory, ModuleHandler $moduleHandler) {
+    parent::__construct();
     $this->configFactory = $configFactory;
     $this->moduleHandler = $moduleHandler;
-    $this->purgeInvalidations = $purgeInvalidations;
-    $this->purgeQueuer = $purgeQueuer;
-    $this->purgeQueue = $purgeQueue;
   }
 
   /**
@@ -102,16 +67,7 @@ class ArtsciCoreCommands extends DrushCommands {
     // Flush site cache.
     drupal_flush_all_caches();
 
-    // If available (not Local), try to clear the varnish cache for the files.
-    if ($this->moduleHandler->moduleExists('purge')) {
-      $queuer = $this->purgeQueuer->get('coretags');
-
-      $invalidations = [
-        $this->purgeInvalidations->get('everything'),
-      ];
-
-      $this->purgeQueue->add($queuer, $invalidations);
-    }
+    // If available (not Local), try to clear the varnish cache for the files
   }
 
   /**

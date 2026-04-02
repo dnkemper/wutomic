@@ -1,0 +1,22 @@
+uuid: 7170283c-9507-4471-9ee3-fcd16ecc8d42
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 3116P8GwgfVgzvtzj0uUJuJO8mXk8DAEpfSd_q8wxfw
+id: section_margin_extended_width_container
+label: Wide
+classes: page__container--extended
+type: section
+group: container
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 57

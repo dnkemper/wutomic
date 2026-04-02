@@ -1,0 +1,6 @@
+name: artsci_maui
+type: module
+description: Provides blocks to place various types of MAUI data.
+package: Artsci
+core: 8.x
+core_version_requirement: ^9 || ^10 || ^11

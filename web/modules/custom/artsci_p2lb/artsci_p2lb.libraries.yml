@@ -1,0 +1,4 @@
+overrides:
+  css:
+    theme:
+      css/artsci_p2lb.overrides.css: {}

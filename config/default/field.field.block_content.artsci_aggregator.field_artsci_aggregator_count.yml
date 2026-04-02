@@ -1,0 +1,25 @@
+uuid: 9c808a12-9fef-497b-a7c7-5f92211eb456
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_aggregator
+    - field.storage.block_content.field_artsci_aggregator_count
+id: block_content.artsci_aggregator.field_artsci_aggregator_count
+field_name: field_artsci_aggregator_count
+entity_type: block_content
+bundle: artsci_aggregator
+label: 'Number of items'
+description: 'How many items to show (min: 1, max: 25).'
+required: true
+translatable: false
+default_value:
+  -
+    value: 5
+default_value_callback: ''
+settings:
+  min: 1
+  max: 25
+  prefix: ''
+  suffix: ''
+field_type: integer

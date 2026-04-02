@@ -1,0 +1,18 @@
+uuid: 081ef5b1-34be-4b7d-b506-58cf4a70c6bf
+langcode: en
+status: true
+dependencies: {  }
+id: media_size_large
+label: Large
+classes: media--large
+type: component
+group: media_size
+block_restrictions:
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: -45

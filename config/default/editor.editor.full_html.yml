@@ -1,4 +1,4 @@
-uuid: fd0ad066-8550-4782-8bcf-e50837f2f7d9
+uuid: 4bf8938c-dbd6-4165-b819-ca6f10a5abdb
 langcode: en
 status: true
 dependencies:
@@ -6,35 +6,48 @@ dependencies:
     - filter.format.full_html
   module:
     - ckeditor5
-_core:
-  default_config_hash: 4mmJmN8kEiUf9aytnx0QPOORBNL5JaF_ijXRwOm2stg
+    - ckeditor_small_tag
 format: full_html
 editor: ckeditor5
 settings:
   toolbar:
     items:
       - bold
-      - italic
       - strikethrough
+      - italic
+      - alignment
       - superscript
       - subscript
+      - small
       - removeFormat
-      - '|'
-      - link
+      - specialCharacters
       - '|'
       - bulletedList
       - numberedList
+      - outdent
+      - indent
+      - '|'
+      - link
       - '|'
       - blockQuote
-      - drupalInsertImage
       - insertTable
-      - horizontalLine
+      - drupalMedia
       - '|'
+      - style
       - heading
       - codeBlock
       - '|'
       - sourceEditing
+      - undo
+      - redo
+      - horizontalLine
   plugins:
+    ckeditor5_alignment:
+      enabled_alignments:
+        - center
+        - justify
+        - left
+        - right
     ckeditor5_codeBlock:
       languages:
         -
@@ -86,8 +99,6 @@ settings:
         - heading4
         - heading5
         - heading6
-    ckeditor5_imageResize:
-      allow_resize: true
     ckeditor5_list:
       properties:
         reversed: true
@@ -96,11 +107,74 @@ settings:
       multiBlock: true
     ckeditor5_sourceEditing:
       allowed_tags: {  }
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Intro Bold'
+          element: '<p class="artsci-component--bold-intro">'
+        -
+          label: 'Intro Light'
+          element: '<p class="artsci-component--light-intro">'
+        -
+          label: 'H2 Serif'
+          element: '<h2 class="headline headline--serif">'
+        -
+          label: 'H2 Serif Underline'
+          element: '<h2 class="headline headline--serif headline--underline">'
+        -
+          label: 'H3 Serif'
+          element: '<h3 class="headline headline--serif">'
+        -
+          label: 'H3 Serif Underline'
+          element: '<h3 class="headline headline--serif headline--underline">'
+        -
+          label: 'H4 Serif'
+          element: '<h4 class="headline headline--serif">'
+        -
+          label: 'H4 Serif Underline'
+          element: '<h4 class="headline headline--serif headline--underline">'
+        -
+          label: 'H5 Serif'
+          element: '<h5 class="headline headline--serif">'
+        -
+          label: 'H5 Serif Underline'
+          element: '<h5 class="headline headline--serif headline--underline">'
+        -
+          label: 'H6 Serif'
+          element: '<h6 class="headline headline--serif">'
+        -
+          label: 'H6 Serif Underline'
+          element: '<h6 class="headline headline--serif headline--underline">'
+        -
+          label: 'Alert Success'
+          element: '<div class="alert alert--success">'
+        -
+          label: 'Alert Info'
+          element: '<div class="alert alert--info">'
+        -
+          label: 'Alert Warning'
+          element: '<div class="alert alert--warning">'
+        -
+          label: 'Alert Danger'
+          element: '<div class="alert alert--danger">'
+        -
+          label: 'Button Primary'
+          element: '<a class="bttn bttn--primary">'
+        -
+          label: 'Button Secondary'
+          element: '<a class="bttn bttn--secondary">'
+    editor_advanced_link_link:
+      enabled_attributes:
+        - aria-label
+        - class
+        - id
+        - rel
+        - target
+        - title
+    linkit_extension:
+      linkit_enabled: true
+      linkit_profile: default
+    media_media:
+      allow_view_mode_override: false
 image_upload:
-  status: true
-  scheme: public
-  directory: inline-images
-  max_size: null
-  max_dimensions:
-    width: null
-    height: null
+  status: false

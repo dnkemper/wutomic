@@ -1,3 +1,7 @@
 _core:
-  default_config_hash: UiTY9bhUKWJOIWDlOKM3akeeyHuJJRspXETsv3SY6jw
-roles: {  }
+  default_config_hash: qJ-7MDpKO6kYnQNZJWk4mtQ2LEErKL7sTlNJYr0lcIU
+roles:
+  viewer: safe
+  editor: safe
+  publisher: safe
+  webmaster: safe

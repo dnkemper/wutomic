@@ -1,0 +1,12 @@
+uuid: f2ae151d-f0c1-47cd-aed7-fae9d5f80a8b
+langcode: en
+status: true
+dependencies: {  }
+id: block_margin_default_removed
+label: 'Remove default top margin'
+classes: block-margin__default--removed
+type: component
+group: margin
+block_restrictions: {  }
+layout_restrictions: {  }
+weight: 19

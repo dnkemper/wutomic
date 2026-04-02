@@ -1,0 +1,6 @@
+name: University of Iowa Alerts
+type: module
+description: Displays Hawk Alerts from the emergency alert system.
+package: University of Iowa
+core_version_requirement: ^9 || ^10 || ^11
+configure: artsci_alerts.settings_form

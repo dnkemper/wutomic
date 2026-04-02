@@ -1,0 +1,20 @@
+uuid: a15951a8-ab69-463f-a974-83684292d14b
+langcode: en
+status: true
+dependencies: {  }
+id: restore_default_spacing
+label: 'Restore default spacing'
+classes: section-padding__top-restored
+type: section
+group: spacing
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 66

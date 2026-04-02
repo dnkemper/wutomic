@@ -1,0 +1,10 @@
+artsci_profiles.settings_form:
+  path: '/admin/config/artsci/artsci-profiles'
+  defaults:
+    _title: 'Profiles settings'
+    _form: 'Drupal\artsci_profiles\Form\SettingsForm'
+  requirements:
+    _permission: 'administer artsci_profiles configuration'
+
+route_callbacks:
+  - '\Drupal\artsci_profiles\Routing\ProfilesDynamic::routes'

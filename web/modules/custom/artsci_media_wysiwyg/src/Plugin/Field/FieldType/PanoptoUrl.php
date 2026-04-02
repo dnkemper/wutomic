@@ -11,7 +11,7 @@ use Drupal\link\Plugin\Field\FieldType\LinkItem;
  *   id = "panopto_url",
  *   label = @Translation("Panopto URL"),
  *   description = @Translation("This field is used to capture the URL of a panopto instance."),
- *   category = @Translation("general"),
+ *   category = @Translation("General"),
  *   default_widget = "panopto_url_widget",
  *   default_formatter = "panopto_url_formatter"
  * )

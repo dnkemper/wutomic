@@ -1,0 +1,13 @@
+uuid: 34dd5928-5baf-47eb-96ca-2edb924466a6
+langcode: en
+status: true
+dependencies: {  }
+id: headline_bold_serif
+label: 'Bold serif'
+classes: "headline\r\nheadline--serif"
+type: component
+group: headline_type
+block_restrictions:
+  - 'inline_block:artsci_banner'
+layout_restrictions: {  }
+weight: -23

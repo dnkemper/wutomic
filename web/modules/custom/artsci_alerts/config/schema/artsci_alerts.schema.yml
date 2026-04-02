@@ -1,0 +1,27 @@
+artsci_alerts.settings:
+  type: config_object
+  label: 'Artsci Alerts settings'
+  mapping:
+    hawk_alert:
+      label: 'Hawk Alert settings'
+      type: mapping
+      mapping:
+        display:
+          label: 'Toggles display of Hawk Alerts.'
+          type: boolean
+        source:
+          label: 'The URL of JSON for Hawk Alerts.'
+          type: text
+    custom_alert:
+      label: 'Custom Alert settings'
+      type: mapping
+      mapping:
+        display:
+          label: 'Toggles display of a custom alert.'
+          type: boolean
+        message:
+          label: 'The custom alert message.'
+          type: text
+        level:
+          label: 'The custom alert level.'
+          type: text

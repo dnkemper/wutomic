@@ -12,7 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 class ArtsciCoreAccess implements AccessInterface {
 
   /**
-   * A custom access check.
+   * A custom access artsci.
    *
    * @param \Drupal\Core\Session\AccountInterface|null $account
    *   Run access checks for this account.

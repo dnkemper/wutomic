@@ -1,0 +1,41 @@
+uuid: 3d90c659-f925-426d-9c52-ddcc794bdd8a
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_text_area
+    - field.field.block_content.artsci_text_area.field_artsci_headline
+    - field.field.block_content.artsci_text_area.field_artsci_text_area
+  module:
+    - layout_builder_custom
+    - text
+_core:
+  default_config_hash: _RDgtUCWDBPkvqAaDWgbSPslsdNF56I9hqQCGDkeNaU
+id: block_content.artsci_text_area.default
+targetEntityType: block_content
+bundle: artsci_text_area
+mode: default
+content:
+  field_artsci_headline:
+    type: artsci_headline_widget
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_artsci_text_area:
+    type: text_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

@@ -1,0 +1,18 @@
+uuid: 484f9303-b56e-4eaf-8916-63126acf7156
+langcode: en
+status: true
+dependencies: {  }
+id: block_grid_threecol_33_34_33
+label: '3 columns'
+classes: grid--threecol--33-34-33
+type: component
+group: grid_columns
+block_restrictions:
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: -22

@@ -54,7 +54,7 @@ class CardElementTest extends BrowserTestBase {
     $this->assertFalse($this->cardHasIndicatorButton());
 
     // Assert card has no title.
-    $assert_session->pageTextNotContains('Continue Your Story at artsci');
+    $assert_session->pageTextNotContains('Continue Your Story at Iowa');
 
     // Check pseudo-button: card has title, URL, and link text.
     $this->drupalGet('/card_test_element', [
@@ -74,7 +74,7 @@ class CardElementTest extends BrowserTestBase {
     $this->assertTrue($this->cardHasPseudoButton());
     $this->assertFalse($this->cardHasIndicatorButton());
 
-    $assert_session->pageTextContains('Continue Your Story at artsci');
+    $assert_session->pageTextContains('Continue Your Story at Iowa');
 
     // Check indicator button: card has URL and link indicator.
     $this->drupalGet('/card_test_element', [
@@ -94,7 +94,7 @@ class CardElementTest extends BrowserTestBase {
     $this->assertTrue($this->cardHasIndicatorButton());
 
     // Assert card has no title.
-    $assert_session->pageTextNotContains('Continue Your Story at artsci');
+    $assert_session->pageTextNotContains('Continue Your Story at Iowa');
   }
 
   /**
@@ -113,7 +113,7 @@ class CardElementTest extends BrowserTestBase {
     return !is_null($button) &&
       $button->getText() === 'Get started' &&
       $button->getTagName() === 'a' &&
-      $button->getAttribute('href') === 'https://washu.edu';
+      $button->getAttribute('href') === 'https://artsci.edu';
   }
 
   /**
@@ -136,7 +136,7 @@ class CardElementTest extends BrowserTestBase {
       $button->getText() === '' &&
       $button->getTagName() === 'a' &&
       $button->find('css', '.fa-arrow-right') &&
-      $button->getAttribute('href') === 'https://washu.edu';
+      $button->getAttribute('href') === 'https://artsci.edu';
   }
 
   /**

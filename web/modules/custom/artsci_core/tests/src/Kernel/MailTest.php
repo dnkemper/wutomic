@@ -48,7 +48,7 @@ class MailTest extends KernelTestBase {
       'body' => 'This is a test.',
     ];
 
-    $this->serviceAccount = 'webteam-noreply@washu.edu';
+    $this->serviceAccount = 'artsci-noreply@artsci.edu';
   }
 
   /**
@@ -64,9 +64,9 @@ class MailTest extends KernelTestBase {
   }
 
   /**
-   * Test the from email is overridden if not originating from washu.edu.
+   * Test the from email is overridden if not originating from artsci.edu.
    */
-  public function testFromAddressOverriddenIfNotWashu() {
+  public function testFromAddressOverriddenIfNotArtsci() {
     $this->config('system.site')->set('mail', 'foo@bar.com')->save();
     $this->config('system.site')->set('name', 'Foo')->save();
     $result = $this->container->get('plugin.manager.mail')->mail('artsci_core', 'key', 'admin@example.com', 'en', $this->params);
@@ -74,20 +74,20 @@ class MailTest extends KernelTestBase {
   }
 
   /**
-   * Test the from email is not overridden if originating from washu.edu.
+   * Test the from email is not overridden if originating from artsci.edu.
    */
-  public function testFromAddressNotOverriddenIfWashu() {
-    $this->config('system.site')->set('mail', 'foo@washu.edu')->save();
+  public function testFromAddressNotOverriddenIfArtsci() {
+    $this->config('system.site')->set('mail', 'foo@artsci.edu')->save();
     $this->config('system.site')->set('name', 'Foo')->save();
     $result = $this->container->get('plugin.manager.mail')->mail('artsci_core', 'key', 'admin@example.com', 'en', $this->params);
     $this->assertNotEquals("Foo <$this->serviceAccount>", $result['headers']['from']);
   }
 
   /**
-   * Test the from name is set to site name if empty for non-washu.edu emails.
+   * Test the from name is set to site name if empty for non-artsci.edu emails.
    */
-  public function testFromNameSetToSiteNameIfEmptyAndNotWashu() {
-    $this->config('system.site')->set('mail', 'foo@washu.edu')->save();
+  public function testFromNameSetToSiteNameIfEmptyAndNotArtsci() {
+    $this->config('system.site')->set('mail', 'foo@artsci.edu')->save();
     $this->config('system.site')->set('name', 'Test Site')->save();
     $result = $this->container->get('plugin.manager.mail')->mail('artsci_core_test', 'key', 'admin@example.com', 'en', $this->params);
     $this->assertEquals("Test Site <$this->serviceAccount>", $result['headers']['from']);
@@ -106,7 +106,7 @@ class MailTest extends KernelTestBase {
         'Someone External',
       ],
       [
-        'someone@washu.edu',
+        'someone@artsci.edu',
         'Someone Internal',
       ],
     ];

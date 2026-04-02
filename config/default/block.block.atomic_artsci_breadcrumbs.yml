@@ -1,0 +1,28 @@
+uuid: 20a9586c-4cd1-4b08-ab11-23615956182c
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_builder_custom
+    - system
+  theme:
+    - atomic_artsci
+_core:
+  default_config_hash: lx_V7UKaGq0pmmhBWW_bkmPQTb2HvCdCrz3R-BUj_z0
+id: atomic_artsci_breadcrumbs
+theme: atomic_artsci
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility:
+  layout_builder_active:
+    id: layout_builder_active
+    negate: false
+    context_mapping: {  }
+    enabled: 1

@@ -1,0 +1,20 @@
+uuid: aff4050d-4d65-442c-b024-e182a8e0a700
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_gray_pattern_community
+label: 'Gray - Community pattern'
+classes: bg--gray--pattern--community
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 28

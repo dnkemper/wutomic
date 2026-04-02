@@ -1,0 +1,21 @@
+uuid: 9f5a68b3-8ebf-4cb0-8978-58dcf64cca32
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_artsci_contact_phone
+    - paragraphs.paragraphs_type.artsci_contact
+  module:
+    - telephone
+id: paragraph.artsci_contact.field_artsci_contact_phone
+field_name: field_artsci_contact_phone
+entity_type: paragraph
+bundle: artsci_contact
+label: 'Phone Number'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: telephone

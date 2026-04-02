@@ -1,0 +1,25 @@
+uuid: 26411c14-d58e-465b-9b74-e02999ade89d
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - atomic_artsci
+_core:
+  default_config_hash: RRaW6NkMgBPWqFp0JR5iA4noD4Zqg3cxKxKrsP35qhk
+id: atomic_artsci_branding
+theme: atomic_artsci
+region: header
+weight: 0
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: false
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

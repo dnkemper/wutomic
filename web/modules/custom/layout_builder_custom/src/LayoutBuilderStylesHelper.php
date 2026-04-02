@@ -60,9 +60,6 @@ class LayoutBuilderStylesHelper {
    *   A style map of Layout Builder styles.
    */
   public static function removeStylesFromAttributes(array &$attributes, array $style_map) {
-    if (empty($attributes['class'])) {
-      return;
-    }
     // Filter class list to only elements didn't match a style from the style
     // map.
     $attributes['class'] = array_filter($attributes['class'], function ($class) use ($style_map) {
@@ -143,15 +140,9 @@ class LayoutBuilderStylesHelper {
    *   The attributes array to be processed.
    */
   public static function processGridClasses(array &$attributes) {
-    if (empty($attributes['class'])) {
-      return;
-    }
     if (in_array('list-container--list', $attributes['class'])) {
       foreach ($attributes['class'] as $key => $style) {
         if (str_starts_with($style, static::GRID_PREFIX)) {
-          unset($attributes['class'][$key]);
-        }
-        if (str_starts_with($style, static::LIST_PREFIX)) {
           unset($attributes['class'][$key]);
         }
       }
@@ -201,13 +192,13 @@ class LayoutBuilderStylesHelper {
         'empty_label' => t('Left'),
       ],
       'grid_columns' => [
-        'default' => 'block_grid_onecol_100',
+        'default' => 'block_grid_threecol_33_34_33',
       ],
       'headline_type' => [
         'default' => 'headline_bold_serif',
       ],
       'headline_size' => [
-        'default' => 'headline_medium',
+        'default' => 'headline_large',
       ],
       'list_format' => [
         'default' => 'list_format_list',
@@ -216,7 +207,7 @@ class LayoutBuilderStylesHelper {
         'default' => 'media_format_widescreen',
       ],
       'media_size' => [
-        'default' => 'media_size_large',
+        'default' => 'media_size_small',
       ],
       'menu_orientation' => [
         'default' => 'block_menu_vertical',

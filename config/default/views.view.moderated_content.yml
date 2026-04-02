@@ -1,15 +1,17 @@
-uuid: 76277280-0013-4e9b-a136-a2b7526c2082
+uuid: 3708512c-d04f-4542-8147-7ed22588ceea
 langcode: en
 status: true
 dependencies:
+  config:
+    - taxonomy.vocabulary.tags
+    - workflows.workflow.editorial
   module:
+    - content_moderation
     - node
+    - taxonomy
     - user
-  enforced:
-    module:
-      - content_moderation
 _core:
-  default_config_hash: SeyUoUjWFNY3MNSth2i3GkQJlgDYe0GECc-zchRdQGQ
+  default_config_hash: 1UIjNd6iIhogbx50cJPDN7Me8cUQx2xCP2IBgrKG6Ms
 id: moderated_content
 label: 'Moderated content'
 module: views
@@ -20,7 +22,7 @@ base_field: vid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: Master
     display_plugin: default
     position: 0
     display_options:
@@ -229,7 +231,7 @@ display:
           group_type: group
           admin_label: ''
           entity_type: node
-          plugin_id: field
+          plugin_id: moderation_state_field
           label: 'Moderation state'
           exclude: false
           alter:
@@ -342,7 +344,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: long
+              date_format: ''
               custom_date_format: ''
             time_diff:
               enabled: false
@@ -532,6 +534,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -572,6 +576,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -597,6 +603,7 @@ display:
           operator: in
           value:
             editorial-draft: editorial-draft
+            editorial-review: editorial-review
             editorial-archived: editorial-archived
           group: 1
           exposed: true
@@ -614,6 +621,12 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              publisher: '0'
+              webmaster: '0'
+              administrator: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -627,34 +640,38 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        langcode:
-          id: langcode
-          table: node_field_revision
-          field: langcode
-          relationship: none
+        field_tags_target_id:
+          id: field_tags_target_id
+          table: node__field_tags
+          field: field_tags_target_id
+          relationship: nid
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: langcode
-          plugin_id: language
-          operator: in
+          plugin_id: taxonomy_index_tid
+          operator: or
           value: {  }
           group: 1
           exposed: true
           expose:
-            operator_id: langcode_op
-            label: Language
+            operator_id: field_tags_target_id_op
+            label: Tags
             description: ''
             use_operator: false
-            operator: langcode_op
+            operator: field_tags_target_id_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: langcode
+            identifier: field_tags_target_id
             required: false
             remember: false
-            multiple: false
+            multiple: true
             remember_roles:
               authenticated: authenticated
+              anonymous: '0'
+              viewer: '0'
+              editor: '0'
+              publisher: '0'
+              webmaster: '0'
+              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -668,6 +685,19 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
+          vid: tags
+          type: textfield
+          hierarchy: false
+          limit: true
+          error_message: true
+          save_lineage: false
+          force_deepest: false
+          parent: 0
+          level_labels: ''
+          hierarchy_depth: 0
+          required_depth: 0
+          none_label: '- Please select -'
         moderation_state_1:
           id: moderation_state_1
           table: node_field_revision
@@ -768,7 +798,6 @@ display:
           empty_table: true
           caption: ''
           description: ''
-          class: ''
       row:
         type: fields
       query:
@@ -814,7 +843,8 @@ display:
         - url.query_args
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:workflow_list'
   moderated_content:
     id: moderated_content
     display_title: 'Moderated content'
@@ -833,4 +863,5 @@ display:
         - url.query_args
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:workflow_list'

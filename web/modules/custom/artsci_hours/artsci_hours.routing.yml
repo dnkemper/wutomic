@@ -1,0 +1,7 @@
+artsci_hours.settings:
+  path: '/admin/config/artsci/hours'
+  defaults:
+    _title: 'Hours settings'
+    _form: 'Drupal\artsci_hours\Form\SettingsForm'
+  requirements:
+    _permission: 'administer artsci_hours configuration'

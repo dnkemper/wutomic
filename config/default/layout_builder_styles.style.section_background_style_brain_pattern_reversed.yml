@@ -1,0 +1,22 @@
+uuid: 37aa5d2f-06d5-45b2-8722-ce6ff5a1a87a
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: '-flF6zrJ2mlCLeOzN-w7jSj3VpwYMWNCL2JyZQTMqzU'
+id: section_background_style_brain_pattern_reversed
+label: 'Gold - Brain pattern'
+classes: bg--gold--pattern--brain
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 8

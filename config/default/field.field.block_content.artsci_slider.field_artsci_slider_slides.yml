@@ -1,0 +1,40 @@
+uuid: 1f9797c6-1b00-46e0-9eba-d268e092fed8
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_slider
+    - field.storage.block_content.field_artsci_slider_slides
+    - paragraphs.paragraphs_type.artsci_slide
+  module:
+    - entity_reference_revisions
+id: block_content.artsci_slider.field_artsci_slider_slides
+field_name: field_artsci_slider_slides
+entity_type: block_content
+bundle: artsci_slider
+label: Slides
+description: 'Add up to 4 slides.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      artsci_slide: artsci_slide
+    negate: 0
+    target_bundles_drag_drop:
+      artsci_collection_item:
+        weight: 4
+        enabled: false
+      artsci_contact:
+        weight: 5
+        enabled: false
+      artsci_slide:
+        weight: 31
+        enabled: true
+      artsci_timeline_item:
+        weight: 8
+        enabled: false
+field_type: entity_reference_revisions

@@ -1,0 +1,25 @@
+uuid: cb028a47-e7c8-4c88-8093-0f1a5c92f8b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_cta
+    - field.storage.block_content.field_artsci_cta_link
+  module:
+    - link
+_core:
+  default_config_hash: PMQrZVJgRhbn3YqvHv8whbKzhV0e4jYfG4ioTu3AV5A
+id: block_content.artsci_cta.field_artsci_cta_link
+field_name: field_artsci_cta_link
+entity_type: block_content
+bundle: artsci_cta
+label: Link
+description: 'Add text for the button link.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 17
+field_type: link

@@ -1,0 +1,85 @@
+uuid: d3bbb0b6-6d89-462f-a63f-2a8b7e56c425
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_statistic
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_content
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_excerpt
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_title
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_title_pre
+    - field.field.block_content.artsci_statistic.field_artsci_statistic_title_suf
+  module:
+    - field_group
+    - heading
+third_party_settings:
+  field_group:
+    group_artsci_statistic_title:
+      children:
+        - field_artsci_statistic_title_pre
+        - field_artsci_statistic_title
+        - field_artsci_statistic_title_suf
+      label: 'Artsci Statistic Title'
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        id: ''
+        description: ''
+        required_fields: true
+_core:
+  default_config_hash: vlvCFBTHPtwBRLi0UQUnYGKJOy9RQSnNPOjFoTZBMic
+id: block_content.artsci_statistic.default
+targetEntityType: block_content
+bundle: artsci_statistic
+mode: default
+content:
+  field_artsci_statistic_content:
+    type: string_textarea
+    weight: 6
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_artsci_statistic_excerpt:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_artsci_statistic_title:
+    type: heading
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_artsci_statistic_title_pre:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: '#'
+    third_party_settings: {  }
+  field_artsci_statistic_title_suf:
+    type: string_textfield
+    weight: 4
+    region: content
+    settings:
+      size: 60
+      placeholder: '%'
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

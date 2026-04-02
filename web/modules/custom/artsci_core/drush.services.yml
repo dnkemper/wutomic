@@ -1,0 +1,6 @@
+services:
+  artsci_core.commands:
+    class: \Drupal\artsci_core\Commands\ArtsciCoreCommands
+    arguments: ['@config.factory', '@module_handler']
+    tags:
+      - { name: drush.command }

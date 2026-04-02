@@ -1,9 +1,14 @@
 _core:
-  default_config_hash: 2TnP0TViNExHGuA7Cdr4L3uxhYGNzKyL0XnoAhtSHMQ
+  default_config_hash: 7QwhifH5gAzkdFMMDFV6XQRrcx4PAvtROZO8rs19nTo
 form_ids:
   - 'comment_*'
   - user_login_form
   - user_pass
   - user_register_form
-  - 'contact_message_*'
+  - 'contact_*'
+  - 'webform_submission_*'
+  - artsci_bar_search_form
+  - 'artsci_dispatch_*'
+excluded_form_ids:
+  - ''
 show_form_ids: false

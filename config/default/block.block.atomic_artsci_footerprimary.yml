@@ -1,0 +1,33 @@
+uuid: efcf40b1-3576-49b9-92d9-04eaa6053ea2
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-primary
+  module:
+    - menu_block
+  theme:
+    - atomic_artsci
+id: atomic_artsci_footerprimary
+theme: atomic_artsci
+region: footer_second
+weight: 0
+provider: null
+plugin: 'menu_block:footer-primary'
+settings:
+  id: 'menu_block:footer-primary'
+  label: 'Footer primary'
+  label_display: '0'
+  provider: menu_block
+  follow: false
+  follow_parent: '0'
+  label_link: false
+  label_type: block
+  level: 1
+  depth: 1
+  expand_all_items: false
+  parent: 'footer-primary:'
+  render_parent: false
+  suggestion: footer_primary
+  hide_on_nonactive: false
+visibility: {  }

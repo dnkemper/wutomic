@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Artsci Intranet module.
+ */
+
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_install().
+ */
+function artsci_intranet_install() {
+  // Enable the 'artsci_intranet' split.
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('config_split.config_split.artsci_intranet');
+  $config->set('status', TRUE);
+  $config->save(TRUE);
+
+  // Set some sane default configuration.
+  $config_factory->getEditable('artsci_intranet.settings')
+    ->set('unauthorized.title', 'Unauthorized')
+    ->set('unauthorized.message', '<p>You must log in to access this page.</p>')
+    ->set('access_denied.title', 'Access denied')
+    ->set('access_denied.message', '<p>You do not have sufficient privileges to access this page. Please contact an administrator.</p>')
+    ->save();
+
+  $config_factory->getEditable('atomic_artsci.settings')
+    ->set('footer.login_link', FALSE)
+    ->save();
+
+  \Drupal::messenger()->addStatus(__FUNCTION__);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function artsci_intranet_uninstall() {
+  \Drupal::messenger()->addStatus(__FUNCTION__);
+}
+
+/**
+ * Rebuild search index for artsci_intranet sites.
+ */
+function artsci_intranet_update_10001() {
+  // Load the intranet search index.
+  $index = Index::load('artsci_intranet_search_index');
+
+  if (!$index) {
+    return t('Intranet search index not found.');
+  }
+
+  // Rebuild the tracker to remove orphaned items.
+  $index->rebuildTracker();
+
+  // Queue all items for reindexing.
+  $index->reindex();
+
+  return t('Rebuilt tracker and queued all items for reindexing on the Intranet Search Index.');
+}

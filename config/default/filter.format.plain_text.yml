@@ -1,12 +1,14 @@
-uuid: cd36dc12-9fb8-4dde-afe6-95a9d63b2ea3
+uuid: 2eebe675-8e6a-4537-989a-9186538310c3
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - artsci_core
 _core:
-  default_config_hash: JLMwODO0epnA_H-jFlH9ezVfa5YBJniRv3MmLqYNl_Q
+  default_config_hash: NIKBt6kw_uPhNI0qtR2DnRf7mSOgAQdx7Q94SKMjXbQ
 name: 'Plain text'
 format: plain_text
-weight: 10
+weight: -6
 filters:
   filter_autop:
     id: filter_autop

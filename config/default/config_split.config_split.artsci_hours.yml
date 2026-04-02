@@ -1,0 +1,17 @@
+uuid: 008a4282-30b2-4bad-91ec-e69de64a4873
+langcode: en
+status: false
+dependencies: {  }
+id: artsci_hours
+label: 'Resource Hours'
+description: 'Resource Hours module and configuration.'
+weight: 80
+stackable: true
+no_patching: false
+storage: folder
+folder: ../config/features/artsci_hours
+module:
+  artsci_hours: 0
+theme: {  }
+complete_list: {  }
+partial_list: {  }

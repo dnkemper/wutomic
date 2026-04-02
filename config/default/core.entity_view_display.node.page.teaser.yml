@@ -1,30 +1,82 @@
-uuid: 16e501d1-48eb-4e60-a1ac-08f79757fc26
+uuid: adca35d0-ece2-4f0b-a872-4c65467baf4d
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.field_after_content_override
+    - field.field.node.page.field_featured_image_display
+    - field.field.node.page.field_image
+    - field.field.node.page.field_meta_tags
+    - field.field.node.page.field_pre_footer_override
+    - field.field.node.page.field_publish_options
+    - field.field.node.page.field_tags
+    - field.field.node.page.field_teaser
+    - field.field.node.page.layout_builder__layout
+    - field.field.node.page.rabbit_hole__settings
     - node.type.page
   module:
-    - text
+    - smart_trim
     - user
 _core:
-  default_config_hash: 8BgdRtLbtQ0F__o0FHSH0Mx5fvXOra9tfT1GmNKbRYw
+  default_config_hash: oWYzz5zPkfwfLVY9mzbyCf3TaCHY1_tOVH9b1--bVTo
 id: node.page.teaser
 targetEntityType: node
 bundle: page
 mode: teaser
 content:
   body:
-    type: text_summary_or_trimmed
+    type: smart_trim
     label: hidden
     settings:
-      trim_length: 600
+      trim_length: 0
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+        token_browser: ''
+      summary_handler: full
+      trim_options:
+        text: false
+        trim_zero: true
+        replace_tokens: false
     third_party_settings: {  }
-    weight: 100
+    weight: 0
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: large__widescreen
+      link: false
+    third_party_settings: {  }
+    weight: 2
     region: content
   links:
-    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
-hidden: {  }
+hidden:
+  content_moderation_control: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_after_content_override: true
+  field_featured_image_display: true
+  field_meta_tags: true
+  field_pre_footer_override: true
+  field_publish_options: true
+  field_tags: true
+  field_teaser: true
+  layout_builder__layout: true
+  rabbit_hole__settings: true
+  search_api_excerpt: true

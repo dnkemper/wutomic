@@ -1,0 +1,25 @@
+uuid: 72e7ae0d-cf15-4320-b03e-1696d4b08517
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_text_area
+    - field.storage.block_content.field_artsci_text_area
+  module:
+    - allowed_formats
+    - text
+_core:
+  default_config_hash: laCW_7qA-r5joL8F7_vHl7iqy1pPoSW6f1etoQ6chl8
+id: block_content.artsci_text_area.field_artsci_text_area
+field_name: field_artsci_text_area
+entity_type: block_content
+bundle: artsci_text_area
+label: 'Text Area'
+description: 'Write text to be displayed in Text Area'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

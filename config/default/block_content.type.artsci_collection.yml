@@ -1,0 +1,8 @@
+uuid: 564eb355-accc-402d-8e03-a099efeb0cb8
+langcode: en
+status: true
+dependencies: {  }
+id: artsci_collection
+label: Collection
+revision: true
+description: 'A container for multiple items styled as an accordion or a descriptive list.'

@@ -17,7 +17,7 @@ use Drupal\Core\TypedData\DataReferenceTargetDefinition;
  *   id = "artsci_academic_units",
  *   label = @Translation("Academic Units"),
  *   description = @Translation("Reference academic unit configuration entities."),
- *   category = @Translation("reference"),
+ *   category = @Translation("Reference"),
  *   default_formatter = "artsci_academic_units_formatter",
  *   default_widget = "artsci_academic_units_widget",
  *   list_class = "\Drupal\Core\Field\EntityReferenceFieldItemList",

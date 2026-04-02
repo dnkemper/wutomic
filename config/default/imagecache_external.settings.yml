@@ -1,7 +1,7 @@
 _core:
-  default_config_hash: h0niJowg3SHB0YbWTvOZ68odB941VAIOJ6XRbcwQKAc
+  default_config_hash: pf41tN-PPhgH1h2NxglpZuVbsh8xKOnO2r5cqM3aeYs
 imagecache_directory: externals
-imagecache_subdirectories: false
+imagecache_subdirectories: true
 imagecache_default_extension: .jpg
 imagecache_external_batch_flush_limit: 1000
 imagecache_external_hosts: ''
@@ -17,12 +17,11 @@ imagecache_external_allowed_mimetypes:
   - image/png;charset=utf-8
   - image/gif
   - image/gif;charset=utf-8
-  - image/webp
-  - image/webp;charset=utf-8
   - application/octet-stream
   - application/octet-stream;charset=utf-8
-  - binary/octet-stream
-imagecache_external_cron_flush_frequency: 0
+  - image/webp
+  - image/webp;charset=utf-8
+imagecache_external_cron_flush_frequency: 7
 imagecache_external_cron_flush_originals: true
 svg_settings:
   allowed_tags: {  }

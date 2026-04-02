@@ -1,24 +1,19 @@
-uuid: 9122620a-9a0b-49dc-8b92-8d6f48ae330c
+uuid: 1cda3e90-cb2c-4c64-8fc2-0e69c970bc2b
 langcode: en
 status: true
 dependencies:
-  config:
-    - filter.format.restricted_html
   module:
-    - comment
-    - filter
+    - fragments
     - media
-    - search
     - system
 _core:
-  default_config_hash: xLG41YbRo2NP-0SgRNTkMzLEuaeibanGXgUTbdIcIIg
+  default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
 id: anonymous
 label: 'Anonymous user'
-weight: 0
+weight: -10
 is_admin: false
 permissions:
-  - 'access comments'
   - 'access content'
-  - 'search content'
-  - 'use text format restricted_html'
   - 'view media'
+  - 'view region_item fragments'
+  - 'view region_item_after_content fragments'

@@ -1,0 +1,11 @@
+{
+    "name": "artsci/artsci",
+    "description": "Artsci ITS Artsci profile.",
+    "type": "drupal-profile",
+    "authors": [
+        {
+            "name": "ITS",
+            "homepage": "https://its.artsci.edu"
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 _core:
-  default_config_hash: AuQRq7_2iJQR0uk3wdl290UEDlcPVf8tQBRamInGQyE
+  default_config_hash: V8V4qoFWUmhf9Atc_VX3qfO2bgt4z7cF4YCm7hlVdeY
 photoswipe_always_load_non_admin: false
 enable_cdn: false
 options:
@@ -9,11 +9,11 @@ options:
   zoomAnimationDuration: 333
   maxWidthToAnimate: 4000
   easing: 'cubic-bezier(.4,0,.22,1)'
-  bgOpacity: 0.8
+  bgOpacity: 1.0
   spacing: 0.1
   initialZoomLevel: fit
-  secondaryZoomLevel: '2.5'
-  maxZoomLevel: '4'
+  secondaryZoomLevel: '1'
+  maxZoomLevel: '2.5'
   allowPanToNext: true
   loop: true
   wheelToZoom: false
@@ -33,9 +33,16 @@ options:
   arrowPrevTitle: Previous
   arrowNextTitle: Next
   indexIndicatorSep: ' / '
-  errorMsg: 'The image could not be loaded.'
+  errorMsg: '<div class="pswp__error-msg"><a href="%url%" target="_blank">The image</a> could not be loaded.</div>'
   preload:
     - 1
-    - 2
+    - 1
   preloaderDelay: 2000
   mainClass: ''
+  showHideOpacity: false
+  maxSpreadZoom: 2
+  closeOnScroll: true
+  mouseUsed: false
+  history: true
+  focus: true
+  modal: true

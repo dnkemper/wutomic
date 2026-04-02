@@ -1,0 +1,25 @@
+uuid: aa81b3ab-a951-4585-8064-184456d353f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_spacer_separator
+    - field.storage.block_content.field_artsci_spacer_sep_txt
+  module:
+    - allowed_formats
+    - text
+_core:
+  default_config_hash: 4h3VVwzeJsScB0XakLdjv6QgrAGpsZm584GEIWFAJGM
+id: block_content.artsci_spacer_separator.field_artsci_spacer_sep_txt
+field_name: field_artsci_spacer_sep_txt
+entity_type: block_content
+bundle: artsci_spacer_separator
+label: 'Spacer/Separator Text'
+description: 'Add text to be displayed in the Spacer block.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

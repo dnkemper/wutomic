@@ -1,0 +1,43 @@
+uuid: 305d132f-9b34-4f29-a3bc-69f5fad2e667
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_slider
+    - field.field.block_content.artsci_slider.field_artsci_headline
+    - field.field.block_content.artsci_slider.field_artsci_slider_slides
+  module:
+    - layout_builder_custom
+    - paragraphs
+id: block_content.artsci_slider.default
+targetEntityType: block_content
+bundle: artsci_slider
+mode: default
+content:
+  field_artsci_headline:
+    type: artsci_headline_widget
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_artsci_slider_slides:
+    type: paragraphs
+    weight: 1
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      closed_mode: preview
+      autocollapse: all
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: artsci_slide
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: '0'
+    third_party_settings: {  }
+hidden:
+  info: true

@@ -1,0 +1,22 @@
+uuid: 2af967c9-c6da-4b27-90f8-3bf416ad7c4d
+langcode: en
+status: true
+dependencies:
+  theme:
+    - atomic_artsci
+_core:
+  default_config_hash: j6zgH4B5IpGXESNKvSOARgAvSWIJrhfcXSFA5PxBsAE
+id: atomic_artsci_local_tasks
+theme: atomic_artsci
+region: content
+weight: -40
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

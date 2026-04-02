@@ -1,0 +1,14 @@
+uuid: 8032049e-7ce4-4db2-b2e0-fe08fcdba47c
+langcode: en
+status: true
+dependencies: {  }
+id: block_hide_details
+label: 'Hide details'
+classes: hide-details
+type: component
+group: default
+block_restrictions:
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_aggregator'
+layout_restrictions: {  }
+weight: -26

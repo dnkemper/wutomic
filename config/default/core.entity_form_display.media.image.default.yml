@@ -1,16 +1,20 @@
-uuid: a107aa76-fa4a-4de1-964d-51ee44700b65
+uuid: f5643057-77fb-4b08-af23-dba6847c4588
 langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.image.field_media_caption
     - field.field.media.image.field_media_image
+    - field.field.media.image.field_tags
     - image.style.thumbnail
     - media.type.image
   module:
-    - image
+    - decorative_image_widget
+    - focal_point
     - path
+    - text
 _core:
-  default_config_hash: JSY4-JPyNZBiYYo6imdRYF6_SdtWQexPndrLvn3-vw4
+  default_config_hash: '-WXYDEr2PU_doMsA_Hy684VTmiCzDNR9k3-cQO4j7dM'
 id: media.image.default
 targetEntityType: media
 bundle: image
@@ -18,27 +22,62 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_media_caption:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_media_image:
-    type: image_image
-    weight: 0
+    type: image_focal_point
+    weight: 2
     region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+      preview_link: true
+      offsets: '50,50'
+    third_party_settings:
+      decorative_image_widget:
+        use_decorative_checkbox: true
+  field_tags:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 40
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  replace_file:
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 100
+    weight: 8
     region: content
     settings:
       display_label: true
@@ -54,4 +93,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  name: true
+  publish_on: true
+  publish_state: true
+  unpublish_on: true
+  unpublish_state: true

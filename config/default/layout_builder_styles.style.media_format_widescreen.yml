@@ -1,0 +1,20 @@
+uuid: 97093a14-43e4-4a42-b10b-3ea155dc388d
+langcode: en
+status: true
+dependencies: {  }
+id: media_format_widescreen
+label: 'Widescreen (16:9)'
+classes: media--widescreen
+type: component
+group: media_format
+block_restrictions:
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_image'
+  - 'inline_block:artsci_image_gallery'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: 39

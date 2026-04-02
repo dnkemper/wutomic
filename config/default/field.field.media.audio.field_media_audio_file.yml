@@ -1,4 +1,4 @@
-uuid: da5e4d78-b8e6-476d-8cbd-260132b90a88
+uuid: 2c46df4c-41cc-44d9-a136-3cdfff989e1a
 langcode: en
 status: true
 dependencies:
@@ -8,7 +8,7 @@ dependencies:
   module:
     - file
 _core:
-  default_config_hash: UlZPIbHcLyNqGY5bvydCTijGcKDmwn4Fo8oYZT85wlk
+  default_config_hash: sI-7KvS4Qbg6EucALXjwYEotxgxUfH-bMC19yTpZ1kw
 id: media.audio.field_media_audio_file
 field_name: field_media_audio_file
 entity_type: media
@@ -24,6 +24,6 @@ settings:
   handler_settings: {  }
   file_directory: '[date:custom:Y]-[date:custom:m]'
   file_extensions: 'mp3 wav aac'
-  max_filesize: ''
+  max_filesize: '50 MB'
   description_field: false
 field_type: file

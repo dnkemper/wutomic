@@ -1,0 +1,124 @@
+<?php
+
+namespace Drupal\artsci_alerts\Form;
+
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Configure Artsci Bar settings for this site.
+ */
+class SettingsForm extends ConfigFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'artsci_alerts_settings';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return ['artsci_alerts.settings'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildForm($form, $form_state);
+    $config = $this->config('artsci_alerts.settings');
+
+    $form['hawk_alert'] = [
+      '#type' => 'markup',
+      '#title' => $this->t('Hawk Alerts'),
+      '#markup' => $this->t('Active Hawk Alerts from <a href="@link">emergency.artsci.edu</a>  will be automatically displayed at the top of every page.', [
+        '@link' => 'https://emergency.artsci.edu',
+      ]),
+    ];
+
+    $form['custom_alert_display'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display Custom Alert'),
+      '#default_value' => $config->get('custom_alert.display'),
+      '#description' => $this->t('Check to display a custom alert at the top of every page.'),
+      '#attributes' => [
+        'name' => 'custom_alert_display',
+      ],
+      '#return_value' => TRUE,
+    ];
+
+    $form['custom_alert_level'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Custom Alert Level'),
+      '#options' => [
+        'info' => $this->t('Info'),
+        'warning' => $this->t('Warning'),
+        'danger' => $this->t('Danger'),
+      ],
+      '#default_value' => $config->get('custom_alert.level'),
+      '#description' => $this->t('The custom alert level. Determines the color of the alert based on the <a href=":link">ARTSCI</a> alert component.', [
+        ':link' => 'https://artsci.brand.artsci.edu/components/detail/alert.html',
+      ]),
+      '#states' => [
+        'visible' => [
+          ':input[name="custom_alert_display"]' => ['checked' => TRUE],
+        ],
+        'required' => [
+          ':input[name="custom_alert_display"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    // Using states for requiring this element resulted in a console error, so
+    // we check to see if it is empty in the validation method.
+    $form['custom_alert_message'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('Custom Alert Message'),
+      '#format' => 'minimal',
+      '#allowed_formats' => [
+        'minimal',
+      ],
+      '#default_value' => $config->get('custom_alert.message'),
+      '#description' => $this->t('The message to be displayed. The first heading in the message will have an associated icon based on the alert level.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="custom_alert_display"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    // Require the custom alert message if display is checked.
+    if ($form_state->getValue('custom_alert_display') && empty($form_state->getValue('custom_alert_message')['value'])) {
+      $form_state->setErrorByName('custom_alert_message', 'This field is required.');
+    }
+
+    parent::validateForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $this->config('artsci_alerts.settings')
+      ->set('custom_alert.display', $form_state->getValue('custom_alert_display'))
+      ->set('custom_alert.level', $form_state->getValue('custom_alert_level'))
+      ->set('custom_alert.message', $form_state->getValue([
+        'custom_alert_message',
+        'value',
+      ]))
+      ->save();
+
+    parent::submitForm($form, $form_state);
+  }
+
+}

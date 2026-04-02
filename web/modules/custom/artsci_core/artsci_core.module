@@ -28,14 +28,15 @@ use Drupal\artsci_core\Entity\Card;
 use Drupal\artsci_core\Entity\Contact;
 use Drupal\artsci_core\Entity\Event;
 use Drupal\artsci_core\Entity\RendersAsCardInterface;
+use Drupal\artsci_core\Entity\TimelineItem;
 use Drupal\artsci_core\HeadlineHelper;
+use Drupal\artsci_core\LinkAnalyticsHelper;
 use Drupal\artsci_core\RegionHelper;
 use Drupal\views\Views;
 use Drupal\webform\Element\WebformRoles;
 use Drupal\workflows\Entity\Workflow;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
-use Drupal\layout_builder\Form\ConfigureBlockFormBase;
 
 /**
  * Implements hook_cron().
@@ -48,6 +49,19 @@ function artsci_core_cron() {
   if (!$daily_last_cleared || $daily_last_cleared != $today) {
     \Drupal::state()->set($state_key, $today);
     Cache::invalidateTags(['time:daily']);
+
+    // if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
+    //   $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
+    //   $purgeQueuers = \Drupal::service('purge.queuers');
+    //   $purgeQueue = \Drupal::service('purge.queue');
+    //   $queuer = $purgeQueuers->get('coretags');
+
+    //   $invalidations = [
+    //     $purgeInvalidationFactory->get('tag', 'time:daily'),
+    //   ];
+
+    //   $purgeQueue->add($queuer, $invalidations);
+    // }
   }
 
   // Hourly.
@@ -59,6 +73,18 @@ function artsci_core_cron() {
     \Drupal::state()->set($state_key, $request_time);
     Cache::invalidateTags(['time:hourly']);
 
+    // if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
+    //   $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
+    //   $purgeQueuers = \Drupal::service('purge.queuers');
+    //   $purgeQueue = \Drupal::service('purge.queue');
+    //   $queuer = $purgeQueuers->get('coretags');
+
+    //   $invalidations = [
+    //     $purgeInvalidationFactory->get('tag', 'time:hourly'),
+    //   ];
+
+    //   $purgeQueue->add($queuer, $invalidations);
+    // }
   }
 }
 
@@ -81,6 +107,9 @@ function artsci_core_entity_bundle_info_alter(array &$bundles) {
   }
   if (isset($bundles['block_content']['artsci_event'])) {
     $bundles['block_content']['artsci_event']['class'] = Event::class;
+  }
+  if (isset($bundles['paragraph']['artsci_timeline_item'])) {
+    $bundles['paragraph']['artsci_timeline_item']['class'] = TimelineItem::class;
   }
   if (isset($bundles['node']['contact'])) {
     $bundles['node']['contact']['class'] = Contact::class;
@@ -159,7 +188,7 @@ function artsci_core_mail_alter(&$message) {
     }
 
     // Override the from address if it doesn't match our Platform Email domain
-    // of washu.edu. Otherwise, the email will not be sent. We aren't handling
+    // of artsci.edu. Otherwise, the email will not be sent. We aren't handling
     // multiple from addresses here because that doesn't seem to work currently
     // hook_mail_alter isn't even invoked for some reason.
     try {
@@ -167,9 +196,9 @@ function artsci_core_mail_alter(&$message) {
       $domain = explode('@', $from->getAddress());
       $domain = array_pop($domain);
 
-      if ($domain != 'washu.edu') {
+      if ($domain != 'artsci.edu') {
         $name = $from->getName() ?: \Drupal::config('system.site')->get('name');
-        $from = new Address('webteam-noreply@washu.edu', $name);
+        $from = new Address('artsci-noreply@artsci.edu', $name);
         $message['headers']['From'] = $from->toString();
       }
     }
@@ -209,7 +238,7 @@ function artsci_core_mailer_build(EmailInterface $email) {
   }
 
   // Override the from address if it doesn't match our Platform Email domain
-  // of washu.edu. Otherwise, the email will not be sent. We aren't handling
+  // of artsci.edu. Otherwise, the email will not be sent. We aren't handling
   // multiple from addresses here because that doesn't seem to work currently -
   // hook_mail_alter isn't even invoked for some reason.
   $from_addresses = $email->getFrom();
@@ -219,9 +248,9 @@ function artsci_core_mailer_build(EmailInterface $email) {
     $domain = explode('@', $from->getEmail());
     $domain = array_pop($domain);
 
-    if ($domain != 'washu.edu') {
+    if ($domain != 'artsci.edu') {
       $name = $from->getDisplayName() ?: \Drupal::config('system.site')->get('name');
-      $from = new Address('webteam-noreply@washu.edu', $name);
+      $from = new Address('artsci-noreply@artsci.edu', $name);
     }
   }
   $email->setFrom($from_addresses);
@@ -289,7 +318,7 @@ function artsci_core_node_presave(Node $node) {
 
   // Only proceed if this is a supported content type.
   if (isset($type_map[$node_type])) {
-    $config_name = "artsci_" . $type_map[$node_type] . '.settings';
+    $config_name = 'artsci_' . $type_map[$node_type] . '.settings';
     $config = \Drupal::configFactory()->getEditable($config_name);
     // We'll do this for tag list and related content.
     foreach ([
@@ -300,12 +329,11 @@ function artsci_core_node_presave(Node $node) {
       if ($config->get($setting) !== 'do_not_display') {
         // Get the view and invalidate the cache.
         $view = Views::getView($view_name);
-        // $view->storage->invalidateCaches();
+        $view->storage->invalidateCaches();
       }
     }
   }
 }
-
 
 /**
  * Implements hook_entity_view().
@@ -527,6 +555,18 @@ function template_preprocess_card(&$variables) {
     ...$button_classes,
   ];
 
+  // Apply link tracking attributes to the appropriate link element.
+  if (!empty($element['#link_attributes'])) {
+    if ($element['#linked_element'] === 'title') {
+      $element['#headline']['headline_url_attributes'] = $element['#link_attributes'];
+    }
+    elseif ($element['#linked_element'] === 'button') {
+      foreach ($element['#link_attributes'] as $attr => $value) {
+        $element['#button_attributes'][$attr] = $value;
+      }
+    }
+  }
+
   // Transfer properties and slots from the render element to variables for
   // processing in the template.
   foreach ([
@@ -734,9 +774,18 @@ function artsci_core_preprocess_page(&$variables) {
  */
 function artsci_core_page_attachments(&$page) {
   $admin_context = \Drupal::service('router.admin_context');
-    $route = \Drupal::routeMatch()->getRouteObject();
-  if ($route && $route->getOption('_layout_builder') === TRUE) {
-    $attachments['#attached']['library'][] = 'artsci_core/layout-builder-shortcuts';
+  if (!$admin_context->isAdminRoute()) {
+    // Load campus-wide Google Tag in PROD.
+    $env = getenv('AH_PRODUCTION');
+    if ((int) $env === 1) {
+      // Check that the campus-wide container should be included.
+      // If the config isn't set, err on the side of inclusion.
+      $include_gtag = \Drupal::config('artsci_core.settings')
+        ?->get('artsci_core.campus_gtm');
+      if ($include_gtag !== 0) {
+        $page['#attached']['library'][] = 'artsci_core/gtag';
+      }
+    }
   }
 }
 
@@ -816,21 +865,6 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
   if ($route_name === 'entity.node.edit_form' || $route_name === 'node.add') {
     artsci_core_scheduler_help_text($form);
   }
-  if (!in_array($form_id, ['layout_builder_add_block', 'layout_builder_update_block'], TRUE)) {
-    return;
-  }
-
-  $form_object = $form_state->getFormObject();
-  if (!$form_object instanceof ConfigureBlockFormBase) {
-    return;
-  }
-
-  $component = $form_object->getCurrentComponent();
-  if (!$component) {
-    return;
-  }
-
-  $block = $component->getPlugin();
 
   switch ($form_id) {
     case 'fragment_region_item_add_form':
@@ -874,12 +908,12 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
         $protected = \Drupal::config('artsci_core.protected');
         // If protected...
         if ($protected->get('protect')) {
-          // Get uuids of protected blocks.
+          // Get uartsci of protected blocks.
           $protected_blocks = $protected->get('protected_blocks');
-          $uuids = array_keys($protected_blocks);
+          $uartsci = array_keys($protected_blocks);
 
           // See if current block matches any protected and prevent deletion.
-          if (in_array($uuid, $uuids)) {
+          if (in_array($uuid, $uartsci)) {
             \Drupal::messenger()
               ->addWarning(t('This block is protected from deletion. Remove content from the block instead.'));
             $form['actions']['submit']['#disabled'] = TRUE;
@@ -1163,7 +1197,7 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
   // Adjust the body summary help text for all nodes that use it.
   if (str_starts_with($form_id, 'node_') && str_ends_with($form_id, '_form')) {
     if (isset($form['body']['widget'][0]['summary'])) {
-      $form['body']['widget'][0]['summary']['#description'] = t('The summary is used for list displays on this site and in the content\'s <a href="https://it.artsci.wustl.edu/documentation/search-engine-optimization#summary" target="_blank">meta description</a>. If left blank, a trimmed value of the full text will be used for the meta description, but not for list displays.');
+      $form['body']['widget'][0]['summary']['#description'] = t('The summary is used for list displays on this site and in the content\'s <a href="https://artsci.artsci.edu/documentation/search-engine-optimization#summary" target="_blank">meta description</a>. If left blank, a trimmed value of the full text will be used for the meta description, but not for list displays.');
     }
   }
 }
@@ -1172,30 +1206,7 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
  * Validation handler to clean up analytics attributes.
  */
 function artsci_core_menu_link_analytics_validate($form, FormStateInterface $form_state) {
-  $attributes = $form_state->getValue(['link', 0, 'options', 'attributes']) ?? [];
-  $event_name = trim($attributes['data-sn-event'] ?? '');
-
-  // If event name is empty, clear all analytics attributes.
-  if (empty($event_name)) {
-    unset($attributes['data-sn-event']);
-    unset($attributes['data-sn-event-type']);
-    unset($attributes['data-sn-event-component']);
-    unset($attributes['data-sn-event-label']);
-  }
-  else {
-    // Sanitize event name: lowercase and underscores.
-    $event_name = strtolower(Html::cleanCssIdentifier($event_name));
-    $attributes['data-sn-event'] = str_replace('-', '_', $event_name);
-    // Use menu link title as label if label is empty.
-    if (empty(trim($attributes['data-sn-event-label'] ?? ''))) {
-      $menu_link_title = trim($form_state->getValue(['title', 0, 'value']) ?? '');
-      if (!empty($menu_link_title)) {
-        $attributes['data-sn-event-label'] = $menu_link_title;
-      }
-    }
-  }
-
-  $form_state->setValue(['link', 0, 'options', 'attributes'], $attributes);
+  LinkAnalyticsHelper::sanitizeMenuLinkAnalyticsAttributes($form_state, 'link');
 }
 
 /**
@@ -1215,7 +1226,7 @@ function artsci_core_menu_links_discovered_alter(array &$links) {
 function artsci_core_preprocess_details(&$variables) {
   // This function adds a new 'details-multi-select' class
   // to style the details with checkbox dropdowns as seen on pages
-  // like classrooms.washu.edu/spaces/find-university-classroom.
+  // like classrooms.artsci.edu/spaces/find-university-classroom.
   // Check if the element contains form checkboxes and add multi-select class.
   $has_checkboxes = FALSE;
 
@@ -1364,7 +1375,7 @@ function artsci_core_menu_local_tasks_alter(&$data, $route_name) {
   $logged_in = \Drupal::currentUser()->isAuthenticated();
   if ($logged_in) {
     $data['tabs'][0]['entity.node.delete_form']['#weight'] = 110;
-    // $data['tabs'][0]['entity.fragment.delete_form']['#weight'] = 110;
+    $data['tabs'][0]['entity.fragment.delete_form']['#weight'] = 110;
     $data['tabs'][0]['entity.taxonomy_term.delete_form']['#weight'] = 110;
   }
 
@@ -1484,6 +1495,25 @@ function artsci_core_preprocess_block(&$variables) {
           $variables['#cache']['tags'][] = 'node:' . $node->id();
         }
 
+        // Add the login link if we didn't break out.
+        $variables['content']['login_link'] = [
+          '#type' => 'link',
+          '#title' => t('HawkID Login'),
+          '#url' => Url::fromRoute('samlauth.saml_controller_login', [
+            'destination' => $request->getRequestUri(),
+          ]),
+          '#prefix' => '<p class="text-align-center">',
+          '#suffix' => '</p>',
+          '#attributes' => [
+            'class' => [
+              'bttn',
+              'bttn--primary',
+              'bttn--caps',
+            ],
+            'rel' => 'nofollow',
+          ],
+        ];
+
         // Try cache contexts instead of max-age=0.
         $variables['#cache']['contexts'][] = 'user.roles';
         $variables['#cache']['contexts'][] = 'url.path';
@@ -1541,18 +1571,18 @@ function artsci_core_tokens($type, $tokens, array $data, array $options, Bubblea
       // Find the desired token by name.
       switch ($name) {
         case 'favicon_assets_path':
-          $favicon_path = $uihc_site ? '/profiles/custom/artsci/assets/favicons/' : '/profiles/custom/artsci/assets/';
+          $favicon_path = $uihc_site ? '/profiles/custom/artsci/assets/uihc_favicons/' : '/profiles/custom/artsci/assets/';
           $replacements[$original] = $config->get('artsci_core.favicon_assets_path') ?? $favicon_path;
 
           break;
 
         case 'combined_org':
           $site_settings = $config_factory->getEditable('system.site');
-          $combined_org = $config->get('artsci_core.org_name') ?? 'Washington University in St. Louis';
+          $combined_org = $config->get('artsci_core.org_name') ?? 'The University of Iowa';
           $has_parent = $site_settings->get('has_parent');
 
           if ($uihc_site) {
-            $combined_org = 'Washington University Medical';
+            $combined_org = 'University of Iowa Health Care';
           }
           if ($has_parent) {
             $parent_org = $site_settings->get('parent.name');
@@ -1676,7 +1706,7 @@ function artsci_core_county_options(FieldStorageConfig $definition, ?ContentEnti
     'Howard',
     'Humboldt',
     'Ida',
-    'artsci',
+    'Iowa',
     'Jackson',
     'Jasper',
     'Jefferson',
@@ -1783,7 +1813,7 @@ function artsci_core_state_options(FieldStorageConfig $definition, ?ContentEntit
     'ID' => 'Idaho',
     'IL' => 'Illinois',
     'IN' => 'Indiana',
-    'IA' => 'artsci',
+    'IA' => 'Iowa',
     'KS' => 'Kansas',
     'KY' => 'Kentucky',
     'LA' => 'Louisiana',
@@ -1867,10 +1897,8 @@ function artsci_core_set_field_label_icon(array &$variables, string $icon_classe
  *   The Font Awesome class for the field icon.
  * @param string $icon_bg_classes
  *   The Font Awesome class for the background of the field icon.
- * @param string $icon_title
- *   The title attribute value for the field icon.
  */
-function artsci_core_set_field_icon(array &$variables, string $icon_classes, string $icon_bg_classes = '', string $icon_title = '') : void {
+function artsci_core_set_field_icon(array &$variables, string $icon_classes, string $icon_bg_classes = '') : void {
   if (!isset($variables['field_icon'])) {
     $variables['field_icon'] = '';
   }
@@ -1881,9 +1909,6 @@ function artsci_core_set_field_icon(array &$variables, string $icon_classes, str
     ]);
   if (!empty($icon_bg_classes)) {
     $variables['field_icon_bg'] = $icon_bg_classes;
-  }
-  if (!empty($icon_title)) {
-    $variables['field_icon_title'] = $icon_title;
   }
 }
 

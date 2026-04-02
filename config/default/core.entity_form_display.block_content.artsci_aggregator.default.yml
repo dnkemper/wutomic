@@ -1,0 +1,62 @@
+uuid: b654e3c2-33e7-481b-9601-d08dba83c1bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_aggregator
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_count
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_feeds
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_pager
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_text
+    - field.field.block_content.artsci_aggregator.field_artsci_headline
+  module:
+    - layout_builder_custom
+    - text
+id: block_content.artsci_aggregator.default
+targetEntityType: block_content
+bundle: artsci_aggregator
+mode: default
+content:
+  field_artsci_aggregator_count:
+    type: number
+    weight: 3
+    region: content
+    settings:
+      placeholder: '5'
+    third_party_settings: {  }
+  field_artsci_aggregator_feeds:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_artsci_aggregator_pager:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_artsci_aggregator_text:
+    type: text_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_artsci_headline:
+    type: artsci_headline_widget
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }
