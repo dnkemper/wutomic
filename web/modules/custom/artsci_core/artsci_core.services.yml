@@ -1,0 +1,13 @@
+services:
+  logger.channel.artsci_core:
+    parent: logger.channel_base
+    arguments: [ 'artsci_core' ]
+  artsci_core.route_subscriber:
+    class: 'Drupal\artsci_core\Routing\ArtsciCoreRouteSubscriber'
+    tags:
+      - { name: event_subscriber }
+  artsci_core.access_checker:
+    class: Drupal\artsci_core\Access\ArtsciCoreAccess
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _artsci_core_access_check }

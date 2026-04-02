@@ -1,0 +1,267 @@
+.si-toggle-container.si-pos-side.si-pos-east {
+  display: none;
+}
+
+/**
+ * Target off-canvas styling using both the
+ * D8/9 and D10 methods.
+ * See https://www.drupal.org/node/3305664
+ */
+
+.js-off-canvas-dialog-open .dialog-off-canvas-main-canvas {
+  padding-right: calc(var(--off-canvas-width) + 13px) !important;
+}
+
+#drupal-off-canvas-wrapper {
+  overflow: visible;
+  padding: 0px;
+  margin-right: -1px;
+  width: var(--off-canvas-width, 300) !important;
+  top: var(--drupal-displace-offset-top, 0px) !important;
+}
+
+.dialog-off-canvas-main-canvas {
+  transition-duration: 0s;
+}
+
+/**
+ * The height is 1px too small.
+ */
+#drupal-off-canvas-wrapper:before {
+  position: absolute;
+  content: '';
+  left: -1px;
+  top: -1px;
+  background-color: var(--off-canvas-wrapper-border-color);
+  height: 1px;
+  width: calc(100% + 1px);
+}
+
+#drupal-off-canvas-wrapper:after {
+  position: absolute;
+  content: '';
+  left: -1px;
+  top: calc(100% - 1px);
+  background-color: var(--off-canvas-background-color);
+  height: 50px;
+  width: calc(100% + 1px);
+}
+
+#drupal-off-canvas {
+  width: calc(100% - 1px) !important;
+  height: calc(100% - (var(--off-canvas-title-padding) * 2 + 1.4rem)) !important;
+  overflow: auto;
+  padding: 13px;
+}
+
+#drupal-off-canvas-wrapper .ui-dialog-titlebar {
+  margin: 0px;
+}
+
+#drupal-off-canvas-wrapper .ui-dialog-titlebar button {
+  position: fixed;
+  top: calc(var(--drupal-displace-offset-top) + var(--off-canvas-title-padding) + 0.7rem);
+}
+
+#drupal-off-canvas-wrapper .ui-dialog-titlebar:after,
+#drupal-off-canvas:after {
+  background-color: var(--off-canvas-title-background-color);
+  content: '';
+  left: 100%;
+  top: -1px;
+  width: 500px;
+  display: block;
+  height: calc(100% + 1px);
+  position: absolute;
+  z-index: -1;
+}
+
+#drupal-off-canvas:after {
+  background-color: var(--off-canvas-background-color);
+  top: 0px;
+  z-index: -2;
+}
+
+
+#drupal-off-canvas:not(.drupal-off-canvas-reset) p,
+#drupal-off-canvas-wrapper p {
+  line-height: 1.75;
+}
+
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .form-select,
+#drupal-off-canvas-wrapper .form-select,
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .form-text,
+#drupal-off-canvas-wrapper .form-text {
+  width: 100%;
+}
+
+#drupal-off-canvas:not(.drupal-off-canvas-reset) ul,
+#drupal-off-canvas-wrapper ul {
+  display: inline-block;
+  width: 100% !important;
+}
+
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .filter-help > a,
+#drupal-off-canvas-wrapper .filter-help > a {
+  margin-right: 20px;
+}
+
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .field--name-field-Artsci-card-title .form-select,
+#drupal-off-canvas-wrapper .field--name-field-Artsci-card-title .form-select {
+  padding: 5px 4px 4px 4px;
+  margin-top: 4px;
+}
+
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .ui-autocomplete,
+#drupal-off-canvas-wrapper .ui-autocomplete {
+  color: #000;
+}
+
+/**
+ * Reset first th and td to not be 150px.
+ */
+#drupal-off-canvas:not(.drupal-off-canvas-reset) th:first-child,
+#drupal-off-canvas-wrapper th:first-child,
+#drupal-off-canvas:not(.drupal-off-canvas-reset) td:first-child,
+#drupal-off-canvas-wrapper td:first-child {
+  width: auto;
+}
+
+#drupal-off-canvas-wrapper .form [type=checkbox],
+#drupal-off-canvas-wrapper .form [type=radio] {
+  height: 1.2rem;
+  min-width: 1.2rem;
+  margin: .25rem .35rem 0 .25rem;
+  -webkit-transform: scale(1.3, 1.3);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/**
+ * Banner off-canvas block form styles.
+ *
+ * BEM Hierarchy:
+ *
+ * off-canvas-form-group (Block)
+ * └── off-canvas-form-group__collapsible (Element - details/accordion)
+ *     └── off-canvas-form-group__collapsible--overlay (Modifier - gradient/overlay variant)
+ */
+
+/* Remove border and padding for main radio buttons within the form group containers. */
+#drupal-off-canvas-wrapper fieldset {
+  border: none !important;
+  padding-inline-start: 0;
+  margin-block-start: 0;
+}
+
+#drupal-off-canvas-wrapper fieldset:not([data-drupal-ck-style-fence]) {
+  margin-block-end: 0;
+}
+
+/* Custom utility classes for use in the off-canvas form */
+#drupal-off-canvas-wrapper .off-canvas-background {
+  background-color: var(--off-canvas-title-background-color);
+}
+
+#drupal-off-canvas-wrapper .padding--inline--md {
+  padding-inline: var(--space-sm-width-gutter);
+}
+
+#drupal-off-canvas-wrapper .padding--block-start--md {
+  padding-block-start: var(--space-sm-width-gutter);
+}
+
+#drupal-off-canvas-wrapper .padding--block-end--md {
+  padding-block-end: var(--space-sm-width-gutter);
+}
+
+#drupal-off-canvas-wrapper .margin--block-start--md {
+  margin-block-start: var(--space-md-width-gutter);
+}
+
+#drupal-off-canvas-wrapper .margin--block-end--md {
+  margin-block-end: var(--space-md-width-gutter);
+}
+
+/* Collapsible details element - standard styling */
+#drupal-off-canvas-wrapper details.off-canvas-form-group__collapsible {
+  padding: 0;
+  margin: 0;
+  margin-block-start: 1rem;
+  background: none;
+}
+
+/* Overlay collapsible - special styling for gradient/overlay options */
+#drupal-off-canvas-wrapper details.off-canvas-form-group__collapsible--overlay {
+  margin: 0;
+  padding-block-start: 0;
+  border-block-start: 1px solid hsla(0, 0%, 100%, .325);
+  background-color: var(--off-canvas-title-background-color);
+}
+
+/* Summary for overlay collapsible */
+#drupal-off-canvas-wrapper details.off-canvas-form-group__collapsible--overlay summary {
+  margin: 0;
+  background: none;
+}
+
+/* Summary for standard collapsible */
+#drupal-off-canvas-wrapper details.off-canvas-form-group__collapsible summary {
+  background: none;
+  border-top: 1px solid hsla(0, 0%, 100%, .325);
+}
+
+#drupal-off-canvas-wrapper details.off-canvas-form-group__collapsible--overlay .details-wrapper {
+  padding: 1.5rem;
+}
+
+/* Bottom padding for all details wrappers */
+#drupal-off-canvas-wrapper details .details-wrapper {
+  padding-block-end: 1.5rem;
+}
+
+/**
+ * Drag handle styling.
+ */
+.ui-dialog.ui-dialog-off-canvas .ui-resizable-handle {
+  width: 15px;
+  height: calc(100% + 52px);
+  top: -1px;
+  background: #838383;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #2b2b2b;
+  border-left: 1px solid #515151;
+  cursor: ew-resize;
+}
+
+.ui-dialog.ui-dialog-off-canvas .ui-resizable-handle:before,
+.ui-dialog.ui-dialog-off-canvas .ui-resizable-handle:after {
+  content: '';
+  background: #5c6264;
+  border-right: 1px solid #484646;
+  width: 2px;
+  display: block;
+  height: 60px;
+}
+
+.ui-dialog.ui-dialog-off-canvas .ui-resizable-w {
+  left: -15px;
+}
+
+.ui-dialog.ui-dialog-off-canvas .ui-resizable-w:before {
+  left: -2px;
+  position: relative;
+}
+
+.ui-dialog.ui-dialog-off-canvas .ui-resizable-w:after {
+  left: 1px;
+  position: relative;
+}
+
+.ui-dialog.ui-dialog-off-canvas:not(.ui-dialog-resizing) {
+  left: auto !important;
+  right: 0;
+}

@@ -1,0 +1,300 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for artsci_aggregator module.
+ */
+
+use Drupal\aggregator\Entity\Feed;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\media\Entity\Media;
+use Drupal\artsci_core\HeadlineHelper;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function artsci_aggregator_form_aggregator_admin_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Remove never from aggregator cleanup options. Keeping items forever has
+  // potential to create very large database tables. Add additional options.
+  unset($form['processors']['aggregator']['aggregator_clear']['#options'][0]);
+  $form['processors']['aggregator']['aggregator_clear']['#options'][15552000] = t('6 months');
+  $form['processors']['aggregator']['aggregator_clear']['#options'][31557600] = t('1 year');
+
+  // Remove access to aggregator teaser length as it does nothing!
+  // @see: https://www.drupal.org/project/drupal/issues/2283877
+  $form['processors']['aggregator']['aggregator_teaser_length']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function artsci_aggregator_form_aggregator_feed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var Drupal\artsci_core\Access\ArtsciCoreAccess $check */
+  $check = \Drupal::service('artsci_core.access_checker');
+
+  /** @var Drupal\Core\Access\AccessResultInterface $access */
+  $access = $check->access(\Drupal::currentUser()->getAccount());
+
+  // Set the minimum feed refresh to match our hourly cron job so that
+  // webmasters aren't confused as to why it's not refreshing sooner. Admins can
+  // set this to whatever assuming they set up a custom job to run more often.
+  if ($access->isForbidden()) {
+    foreach ($form['refresh']['widget']['#options'] as $key => $value) {
+      if ($key !== 0 && $key < 3600) {
+        unset($form['refresh']['widget']['#options'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_build_defaults_alter().
+ */
+function artsci_aggregator_aggregator_item_build_defaults_alter(array &$build, EntityInterface $entity, $view_mode) {
+  $build['#type'] = 'card';
+  $build['#prefix'] = '<div class="column-container">';
+  $build['#suffix'] = '</div>';
+  unset($build['#theme']);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function artsci_aggregator_aggregator_item_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  $build['#attached']['library'][] = 'atomic_artsci/aggregator-feed';
+  // Add the card library.
+  $build['#attached']['library'][] = 'atomic_artsci/card';
+
+  // Set the title.
+  $build['#title'] = html_entity_decode($entity->label());
+
+  // Move author field to #meta and add an icon.
+  if (!$entity->get('author')->isEmpty() && isset($build['author'])) {
+    if (is_array($build['author'])) {
+      $build['#meta']['author'] = array_merge($build['author'], [
+        '#prefix' => '<span role="presentation" class="fas fa-user"></span>',
+      ]);
+    }
+    else {
+      $build['#meta']['author'] = [
+        '#prefix' => '<span role="presentation" class="fas fa-user"></span>',
+        'value' => $build['author'],
+      ];
+    }
+  }
+
+  unset($build['author']);
+
+  // Move description field to #content.
+  if (isset($build['description'])) {
+    $build['#content'] = $build['description'];
+  }
+  unset($build['description']);
+
+  // Move timestamp to #subtitle. Since this is just a string, set it as
+  // #markup so that it is considered a valid render array.
+  $build['#subtitle']['timestamp'] = [
+    '#markup' => \Drupal::service('date.formatter')->format((int) $entity->getPostedTime(), 'medium'),
+  ];
+  unset($build['timestamp']);
+
+  // Set the URL.
+  $build['#url'] = $entity->link?->value;
+
+  $override_styles = $build['#override_styles'] ?? [];
+
+  $style_map = [
+    'card_headline_style' => 'headline--serif',
+    'card_media_position' => 'card--layout-right',
+    'media_format' => 'media--widescreen',
+    'media_size' => 'media--small',
+    'border' => 'borderless',
+    ...$override_styles,
+    'aggregator_item' => 'aggregator-item',
+  ];
+
+  $build['#attributes']['class'] = array_values($style_map);
+
+  // Only add the feed image  and heading size to the aggregator item if we're
+  // not on the canonical feed page.
+  if (\Drupal::routeMatch()->getRouteName() !== 'entity.aggregator_feed.canonical') {
+    // Set the heading level size for use in the template.
+    $build['#title_heading_size'] = $variables['elements']['#heading_size'] ?? 'h3';
+
+    /** @var Drupal\aggregator\Entity\Feed $feed */
+    $feed = \Drupal::entityTypeManager()
+      ->getStorage('aggregator_feed')
+      ->load($entity->getFeedId());
+    $mid = $feed->field_aggregator_feed_image
+      ?->target_id;
+
+    // Establish default view mode if layout_builder_styles don't exist.
+    $image_view_mode = 'large__square';
+
+    // A local feed image should take precedence.
+    if (!is_null($mid) && !is_null($media = Media::load($mid))) {
+
+      // Map the layout builder styles to the view mode that should be used.
+      $media_formats = [
+        'media--widescreen' => 'large__widescreen',
+        'media--square' => 'large__square',
+        'media--circle' => 'large__square',
+      ];
+
+      // Set the view mode based on the media format.
+      if (isset($media_formats[$style_map['media_format']])) {
+        $image_view_mode = $media_formats[$style_map['media_format']];
+      }
+
+      $feed_image = \Drupal::entityTypeManager()->getViewBuilder('media')->view($media, $image_view_mode);
+      if (!in_array($image_view_mode, $feed_image['#cache']['keys'])) {
+        unset($feed_image['#cache']['keys']);
+      }
+      $build['#media']['field_aggregator_feed_image'] = $feed_image;
+    }
+    elseif ($image = $feed->getImage()) {
+      $build['#meta']['feed_image_external'] = artsci_aggregator_build_external_image($image, $image_view_mode, $feed->get('title')->getString());
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function artsci_aggregator_preprocess_block__inline_block__artsci_aggregator(&$variables) {
+  /** @var \Drupal\block_content\BlockContentInterface $block */
+  $block = $variables['elements']['content']['#block_content'];
+
+  if (!isset($variables['attributes']['class'])) {
+    $variables['attributes']['class'] = [];
+  }
+
+  $variables['attributes']['class'][] = 'list-container';
+
+  // Get configuration from block fields.
+  $view_display = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
+  $per_page = (int) $block->get('field_artsci_aggregator_count')->getString() ?: 10;
+  $show_pager = (bool) $block->get('field_artsci_aggregator_pager')->getString();
+
+  // Load and configure the view.
+  $view = \Drupal\views\Views::getView('rss_block');
+
+  if ($view && $view->access($view_display)) {
+    $view->setDisplay($view_display);
+    $view->setItemsPerPage($per_page);
+
+    // Configure pager based on block settings.
+    $pager_options = $view->display_handler->getOption('pager');
+    if (!$show_pager) {
+      $pager_options['type'] = 'some';
+      $pager_options['options']['items_per_page'] = $per_page;
+    }
+    else {
+      $pager_options['type'] = 'full';
+      $pager_options['options']['items_per_page'] = $per_page;
+    }
+    $view->display_handler->setOption('pager', $pager_options);
+
+    // Execute and render the view.
+    $view->preExecute();
+    $view->execute();
+
+    if (!empty($view->result)) {
+      $variables['content']['view'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => [
+            'aggregator-wrapper',
+            'artsci-aggregator',
+          ],
+        ],
+      ];
+      $variables['content']['view']['content'] = $view->render();
+
+      // Add cache metadata from the view.
+      $renderer = \Drupal::service('renderer');
+      $renderer->addCacheableDependency($variables['content']['view'], $view);
+    }
+    else {
+      $variables['content']['no_results'] = [
+        '#markup' => $block->field_artsci_aggregator_text?->value ?: t('No content available.'),
+        '#prefix' => '<div class="artsci-aggregator-no-results">',
+        '#suffix' => '</div>',
+      ];
+    }
+  }
+  else {
+    $variables['content']['no_results'] = [
+      '#markup' => t('View display not available.'),
+      '#prefix' => '<div class="artsci-aggregator-no-results">',
+      '#suffix' => '</div>',
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function artsci_aggregator_preprocess_aggregator_feed(&$variables) {
+  if (\Drupal::routeMatch()->getRouteName() === 'entity.aggregator_feed.canonical') {
+    $variables['#attached']['library'][] = 'atomic_artsci/aggregator-feed';
+
+    /** @var Drupal\aggregator\Entity\Feed $feed */
+    $feed = $variables['elements']['#aggregator_feed'];
+    $image = $feed->get('field_aggregator_feed_image');
+
+    // The image field prints via the view mode if set. If not, we'll replace
+    // it with the feed image if that is set.
+    if ($image->isEmpty()) {
+      if ($image = $feed->getImage()) {
+        $variables['content']['field_aggregator_feed_image'] = artsci_aggregator_build_external_image($image, 'small__square', $feed->get('title')->getString());
+      }
+    }
+  }
+}
+
+/**
+ * Allowed values callback for artsci_aggregator_feeds field.
+ */
+function _artsci_aggregator_get_feeds() {
+  $feeds = \Drupal::entityTypeManager()->getStorage('aggregator_feed')->loadMultiple();
+  $options = [];
+
+  foreach ($feeds as $feed) {
+    $options[$feed->id()] = $feed->label();
+  }
+
+  return $options;
+}
+
+/**
+ * Builds a render array for a feed's external image.
+ *
+ * @param string $image
+ *   The image URL.
+ * @param string $view_mode
+ *   The view mode.
+ * @param string $title
+ *   The title.
+ *
+ * @return array
+ *   The render array for a feed's external image.
+ */
+function artsci_aggregator_build_external_image($image, $view_mode, $title) {
+  return [
+    '#theme' => 'imagecache_external_responsive',
+    '#uri' => $image,
+    '#responsive_image_style_id' => $view_mode,
+    '#attributes' => [
+      'data-lazy' => TRUE,
+      'alt' => t('@title feed image', ['@title' => $title]),
+      'class' => [
+        'feed-image',
+      ],
+    ],
+  ];
+}

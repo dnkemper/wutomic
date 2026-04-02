@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Page functionality for the Artsci platform.
+ */
+
+use Drupal\artsci_pages\Entity\Page;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function artsci_pages_entity_bundle_info_alter(array &$bundles) {
+  if (isset($bundles['node']['page'])) {
+    $bundles['node']['page']['class'] = Page::class;
+  }
+}

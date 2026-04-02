@@ -1,0 +1,10 @@
+name: Artsci Aggregator
+type: module
+description: Override core aggregator functionality.
+package: Artsci
+core: 8.x
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:aggregator
+  - artsci_core:artsci_core
+  - drupal:allowed_formats

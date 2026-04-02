@@ -1,0 +1,4 @@
+administer artsci events:
+  title: 'Administer Artsci Events'
+  description: 'Perform administration tasks for the Artsci Events module.'
+  restrict access: true

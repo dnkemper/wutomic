@@ -1,0 +1,59 @@
+<?php
+
+namespace Drupal\layout_builder_custom\Plugin\Field\FieldWidget;
+
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\WidgetBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\artsci_core\HeadlineHelper;
+
+/**
+ * Plugin implementation of the 'ArtsciHeadlineDefaultWidget' widget.
+ *
+ * @FieldWidget(
+ *   id = "artsci_headline_widget",
+ *   label = @Translation("Artsci Headline Field Type Default Widget"),
+ *   description = @Translation("Artsci Headline Field Type Default Widget"),
+ *   field_types = {
+ *     "artsci_headline",
+ *   }
+ * )
+ */
+class ArtsciHeadlineWidget extends WidgetBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+    $element = HeadlineHelper::getElement([
+      'headline' => $items[$delta]->headline ?? NULL,
+      'hide_headline' => $items[$delta]->hide_headline ?? 0,
+      'heading_size' => $items[$delta]->heading_size ?? 'h2',
+      'headline_style' => $items[$delta]->headline_style ?? 'default',
+      'headline_alignment' => $items[$delta]->headline_alignment ?? 'default',
+      'child_heading_size' => $items[$delta]->child_heading_size ?? 'h2',
+      'description' => $items[$delta]->getFieldDefinition()->getDescription() ?? '',
+    ]);
+
+    return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+    foreach ($values as $delta => $data) {
+      $values[$delta]['headline'] = $data['container']['headline'];
+      $values[$delta]['hide_headline'] = $data['container']['hide_headline'];
+      $values[$delta]['headline_style'] = $data['container']['headline_style'];
+      $values[$delta]['headline_alignment'] = $data['container']['headline_alignment'];
+      $values[$delta]['heading_size'] = $data['container']['heading_size'];
+      if (isset($data['container']['child_heading_size'])) {
+        $values[$delta]['child_heading_size'] = $data['container']['child_heading_size'];
+      }
+      unset($values[$delta]['container']);
+    }
+    return $values;
+  }
+
+}

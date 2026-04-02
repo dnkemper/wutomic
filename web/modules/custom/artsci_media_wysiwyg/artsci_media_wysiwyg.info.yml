@@ -1,0 +1,16 @@
+name: Artsci Media WYSIWYG
+type: module
+description: 'Media and WYSIWYG functionality for the Artsci platform.'
+core_version_requirement: ^10 || ^11
+package: Custom
+
+dependencies:
+  - drupal:ckeditor5
+  - drupal:media
+  - editor_advanced_link:editor_advanced_link
+  - entity_browser:entity_browser
+  - entity_browser:entity_browser_entity_form
+  - focal_point:focal_point
+  - inline_entity_form:inline_entity_form
+  - linkit:linkit
+  - media_library:media_library

@@ -1,0 +1,35 @@
+layout_builder_custom.overrides:
+  js:
+    js/layout_builder_custom.overrides.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery
+    - core/js-cookie
+    - core/once
+  css:
+    theme:
+      css/layout_builder_custom.overrides.css: {}
+banner-block-form:
+  js:
+    js/banner-block-form.js: {}
+  dependencies:
+    - core/once
+card-block-form:
+  js:
+    js/card-block-form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+quote-block-form:
+  js:
+    js/quote-block-form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/jquery.once
+image-block-form:
+  js:
+    js/image-block-form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once

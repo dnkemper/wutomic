@@ -1,0 +1,20 @@
+
+services:
+  artsci_aggregator.route_subscriber:
+    class: Drupal\artsci_aggregator\EventSubscriber\RouteSubscriber
+    arguments: ['@current_user']
+    tags:
+      - { name: event_subscriber }
+
+  artsci_aggregator.controller_alter:
+    class: Drupal\artsci_aggregator\EventSubscriber\ControllerAlterSubscriber
+    arguments: ['@config.factory', '@date.formatter']
+    tags:
+      - { name: event_subscriber }
+
+  artsci_aggregator.custom_items_import:
+    class: Drupal\artsci_aggregator\ItemsImporterOverride
+    decorates: aggregator.items.importer
+    decoration_priority: 9
+    public: false
+    arguments: ['@artsci_aggregator.custom_items_import.inner', '@config.factory', '@plugin.manager.aggregator.fetcher', '@plugin.manager.aggregator.parser', '@plugin.manager.aggregator.processor', '@logger.channel.aggregator', '@keyvalue.aggregator']

@@ -1,0 +1,7 @@
+artsci_pages.settings_form:
+  path: '/admin/config/artsci/artsci-pages'
+  defaults:
+    _title: 'Artsci Pages'
+    _form: 'Drupal\artsci_pages\Form\SettingsForm'
+  requirements:
+    _permission: 'administer artsci pages'

@@ -1,0 +1,4 @@
+administer artsci articles:
+  title: 'Administer Artsci Articles'
+  description: 'Perform administration tasks for the Artsci Articles module.'
+  restrict access: true

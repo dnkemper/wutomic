@@ -1,0 +1,15 @@
+artsci_search.search_results:
+  path: '/search'
+  defaults:
+    _title: 'Search'
+    _controller: '\Drupal\artsci_search\Controller\ArtsciSearchResultsController::build'
+  requirements:
+    _permission: 'access content'
+
+artsci_search.settings_form:
+  path: '/admin/config/artsci/artsci-search'
+  defaults:
+    _title: 'University of artsci Search'
+    _form: 'Drupal\artsci_search\Form\SettingsForm'
+  requirements:
+    _permission: 'administer artsci_search configuration'

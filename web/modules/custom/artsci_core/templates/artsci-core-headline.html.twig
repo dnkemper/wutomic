@@ -1,0 +1,7 @@
+{% set heading = {
+  'headline_level': heading_size ?: 'h2',
+  'headline_class': headline_style,
+  'headline_text': headline,
+  'headline_location': headline_alignment,
+} %}
+{% include '@atomic_artsci/artsci/headline.html.twig' with heading only %}

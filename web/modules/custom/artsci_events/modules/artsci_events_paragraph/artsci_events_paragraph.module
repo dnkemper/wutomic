@@ -1,0 +1,182 @@
+<?php
+
+/**
+ * @file
+ * Paragraphs events bundle functionality.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_uip_classes_alter().
+ */
+function artsci_events_paragraph_uip_classes_alter(&$options, $entity, $bundle) {
+  switch ($bundle) {
+    case 'events':
+      $options['hide-descriptions'] = 'Hide Descriptions';
+      $options['hide-images'] = 'Hide Images';
+      $options['grid'] = 'Grid';
+      $options['masonry'] = 'Masonry';
+      break;
+
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function artsci_events_paragraph_theme($existing, $type, $theme, $path) {
+  return [
+    'paragraph__events__default' => [
+      'template' => 'paragraph--events--default',
+      'base hook' => 'paragraph',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function artsci_events_paragraph_preprocess_paragraph(&$variables) {
+  $paragraph = $variables['paragraph'];
+  switch ($paragraph->bundle()) {
+    case 'events':
+      $admin_context = \Drupal::service('router.admin_context');
+      if (!$admin_context->isAdminRoute()) {
+        $variables['#attached']['library'][] = 'atomic_artsci/paragraphs-lists';
+        $variables['#attached']['library'][] = 'atomic_artsci/event';
+        $variables['#attached']['library'][] = 'atomic_artsci/media';
+        $variables['attributes']['class'][] = 'list-container';
+
+        // Display title if it exists.
+        if ($paragraph->hasField('field_uip_display_title')) {
+          if ((int) $paragraph->field_uip_display_title->value === 1) {
+            $variables['display_title'] = TRUE;
+          }
+        }
+
+        if ($paragraph->hasField('field_uip_classes') && !$paragraph->get('field_uip_classes')->isEmpty()) {
+          $classes = $paragraph->get('field_uip_classes')->getValue();
+          // Clean array of classes selected.
+          $classes = array_column($classes, 'value');
+          // Check for grid classes otherwise add list class.
+          $display_options = [
+            'grid',
+            'masonry',
+          ];
+          $result = array_intersect($display_options, $classes);
+          if (!$result) {
+            $variables['attributes']['class'][] = 'list';
+          }
+        }
+        else {
+          $variables['attributes']['class'][] = 'list';
+        }
+        // Get field_uip_colwidth value.
+        if ($paragraph->hasField('field_uip_colwidth')) {
+          $variables['attributes']['class'][] = $paragraph->field_uip_colwidth->value;
+        }
+        // Get field_uip_id value.
+        if ($paragraph->hasField('field_uip_id')) {
+          $variables['attributes']['id'][] = Html::getClass($paragraph->field_uip_id->value);
+        }
+
+        $date_format = date('d-m-Y');
+
+        // Defaults to upcoming.
+        $display_id = 'events';
+        $start = 'now';
+        $end = '+365 days';
+
+        if ($paragraph->get('field_events_past')->value === TRUE) {
+          $display_id = 'past';
+          $start = '-365 days';
+          $end = 'yesterday';
+        }
+
+        $data = artsci_events_load([
+          'display_id' => $display_id,
+          'filters[department]' => $paragraph->get('field_events_department')->getString(),
+          'filters[audiences]' => $paragraph->get('field_events_audiences')->getString(),
+          'filters[interests]' => $paragraph->get('field_events_gen_interests')->getString(),
+          'filters[types]' => $paragraph->get('field_events_event_types')->getString(),
+          'filters[keywords]' => $paragraph->get('field_events_keywords')->getString(),
+          'filters[startdate][value][date]' => date('m-d-Y', strtotime(date($date_format) . $start)),
+          'filters[enddate][value][date]' => date('m-d-Y', strtotime(date($date_format) . $end)),
+          'page' => 0,
+          'items_per_page' => $paragraph->get('field_events_results')->getString(),
+        ]);
+
+        // Get site-wide configuration for use with constructing event link.
+        $config = \Drupal::config('artsci_events.settings');
+
+        if (!empty($data['events'])) {
+          foreach ($data['events'] as $key => $value) {
+            // The API nests each event as an array.
+            $event = $value['event'];
+
+            // Base styles.
+            $styles = [
+              'card--list',
+              'card__row',
+              'card--layout-left',
+              'borderless',
+              'media--circle',
+              'media--border',
+              'media--small',
+            ];
+
+            $event['artsci_events_config'] = $config;
+
+            $event['attributes']['class'] = $styles;
+            $event['heading_size'] = 'h3';
+
+            // Pass off to helper function to build card render.
+            $variables['list'][$key] = artsci_events_build_card($event);
+
+          }
+        }
+        else {
+          if (isset($data['error'])) {
+            $message = '<div class="events-empty"><p>Unable to fetch events at this time.</p></div>';
+          }
+          else {
+            $message = '<div class="events-empty"><p>There are currently no events to display.</p></div>';
+          }
+          $variables['list'] = [
+            '#type' => 'markup',
+            '#markup' => $message,
+          ];
+        }
+
+        // If we have more link checked and link provided, pass it.
+        if ((bool) $paragraph->get('field_events_more')->value === TRUE) {
+          $variables['more'] = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => 'more-link',
+            ],
+          ];
+
+          if (!empty($paragraph->get('field_events_more_path')->getString())) {
+            $url = Url::fromUri($paragraph->get('field_events_more_path')->uri);
+          }
+          else {
+            $url = Url::fromUri('//events.artsci.edu');
+          }
+
+          $variables['more']['btn'] = [
+            '#type' => 'link',
+            '#title' => 'View more events',
+            '#url' => $url,
+            '#attributes' => [
+              'class' => ['btn', 'btn-primary'],
+            ],
+          ];
+        }
+      }
+
+      break;
+  }
+}

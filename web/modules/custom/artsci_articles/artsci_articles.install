@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * Install tasks.
+ */
+
+/**
+ * Update articles page meta description.
+ */
+function artsci_articles_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('views.view.articles');
+
+  $config
+    ->set('display.page_articles.display_options.display_extenders.metatag_display_extender.metatags.description', 'The latest articles from [site:name].')
+    ->save();
+}
+
+/**
+ * Add numeric validation to articles view arguments.
+ */
+function artsci_articles_update_9101() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('views.view.articles');
+
+  $config
+    ->clear('core')
+    ->set('display.default.display_options.arguments.created_year.validate.type', 'numeric')
+    ->set('display.default.display_options.arguments.created_month.validate.type', 'numeric')
+    ->set('display.default.display_options.filters.status.expose.operator_limit_selection', FALSE)
+    ->set('display.default.display_options.filters.status.expose.operator_list', [])
+    ->set('display.default.display_options.filters.type.expose.operator_limit_selection', FALSE)
+    ->set('display.default.display_options.filters.type.expose.operator_list', [])
+    ->save();
+}
+
+/**
+ * Add tag and related display config setting to articles.
+ */
+function artsci_articles_update_9301() {
+  $config = \Drupal::configFactory()->getEditable('artsci_articles.settings');
+  $config->set('tag_display', 'do_not_display');
+  $config->set('related_display', 'related_display');
+
+  $config->save();
+}
+
+/**
+ * Add link indicator on teasers config setting to pages.
+ */
+function artsci_articles_update_9302() {
+  $config = \Drupal::configFactory()->getEditable('artsci_pages.settings');
+  $config->set('show_teaser_link_indicator', FALSE);
+
+  $config->save();
+}
+
+/**
+ * Update articles feed guid permalink to false.
+ */
+function artsci_articles_update_9303() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('views.view.articles');
+
+  $config
+    ->set('display.feed_articles.display_options.row.options.guid_field_options.guid_field_is_permalink', FALSE)
+    ->save();
+}
+
+/**
+ * Set related articles to card_grid instead of do_not_display.
+ */
+function artsci_articles_update_9304() {
+  $config = \Drupal::configFactory()->getEditable('artsci_articles.settings');
+  if ($config->get('related_display') !== 'headings_lists') {
+    $config->set('related_display', 'card_grid')
+      ->save();
+  }
+}
+
+/**
+ * Add preserved link message display config setting to articles.
+ */
+function artsci_articles_update_9305() {
+  $config = \Drupal::configFactory()->getEditable('artsci_articles.settings');
+
+  if (!$config->get('preserved_links_message_display_default')) {
+    $config->set('preserved_links_message_display_default', 'Links in this article are preserved for historical purposes, but the destination sources may have changed.')
+      ->save();
+  }
+}
+
+/**
+ * Add articles config setting for displaying articles authored by view.
+ */
+function artsci_articles_update_9306() {
+  $config = \Drupal::configFactory()->getEditable('artsci_articles.settings');
+  $config->set('display_articles_by_author', FALSE);
+  $config->save();
+}
+
+/**
+ * Update the articles view to add new sort configuration for title field.
+ */
+function artsci_articles_update_9307() {
+  $config_factory = \Drupal::configFactory();
+
+  // Get the articles view configuration.
+  $view_config = $config_factory->getEditable('views.view.articles');
+
+  if ($view_config) {
+    $displays = $view_config->get('display');
+
+    if (is_array($displays)) {
+      $target_displays = ['default', 'page_articles'];
+
+      foreach ($target_displays as $display_id) {
+        if (isset($displays[$display_id]['display_options']['sorts'])) {
+          // Check if title sort already exists.
+          $title_sort_exists = FALSE;
+          foreach ($displays[$display_id]['display_options']['sorts'] as $sort) {
+            if ($sort['field'] == 'title') {
+              $title_sort_exists = TRUE;
+              break;
+            }
+          }
+
+          // If title sort doesn't exist, add it.
+          if (!$title_sort_exists) {
+            $displays[$display_id]['display_options']['sorts']['title'] = [
+              'id' => 'title',
+              'table' => 'node_field_data',
+              'field' => 'title',
+              'relationship' => 'none',
+              'group_type' => 'group',
+              'admin_label' => '',
+              'entity_type' => 'node',
+              'entity_field' => 'title',
+              'plugin_id' => 'standard',
+              'order' => 'ASC',
+              'expose' => [
+                'label' => '',
+                'field_identifier' => '',
+              ],
+              'exposed' => FALSE,
+            ];
+          }
+        }
+      }
+    }
+
+    $view_config->set('display', $displays);
+    $view_config->save(TRUE);
+  }
+}

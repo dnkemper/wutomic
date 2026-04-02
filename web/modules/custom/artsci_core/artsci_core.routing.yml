@@ -1,0 +1,21 @@
+artsci_core.settings_form:
+  path: '/admin/config/artsci/artsci-core'
+  defaults:
+    _title: 'Artsci Core Settings'
+    _form: 'Drupal\artsci_core\Form\SettingsForm'
+  requirements:
+    _permission: 'administer artsci core'
+artsci_core.region_settings:
+  path: '/admin/config/artsci/region-settings'
+  defaults:
+    _title: 'Region Settings'
+    _form: 'Drupal\artsci_core\Form\RegionSettings'
+  requirements:
+    _permission: 'configure editable region_item fragment layout overrides'
+system.admin_config_artsci:
+  path: '/admin/config/artsci'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Arts & Sciences'
+  requirements:
+    _permission: 'administer basic site settings'

@@ -1,0 +1,9 @@
+name: "Layout Builder Custom"
+description: Customizations to make Layout Builder more usable.
+type: module
+core_version_requirement: ^10 || ^11
+package: Custom - Artsci
+dependencies:
+  - drupal:layout_builder
+  - drupal:block
+  - drupal:replicate

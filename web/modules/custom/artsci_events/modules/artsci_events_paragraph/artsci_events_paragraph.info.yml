@@ -1,0 +1,8 @@
+name: 'Artsci Events Paragraph'
+description: 'Paragraph functionality add-on to Artsci Events.'
+type: module
+package: Artsci
+core_version_requirement: ^8.8 || ^9 || ^10
+dependencies:
+  - artsci_events:artsci_events
+  - artsci_paragraphs:artsci_paragraphs

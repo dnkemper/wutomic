@@ -1,0 +1,6 @@
+name: Artsci Search
+type: module
+description: Provides search functionality for Artsci web sites.
+package: Custom
+core_version_requirement: ^10 || ^11
+configure: artsci_search.settings_form

@@ -1,0 +1,34 @@
+artsci_people.person_type.*:
+  type: config_entity
+  label: Person Type
+  mapping:
+    id:
+      type: string
+      label: ID
+    label:
+      type: label
+      label: Label
+    uuid:
+      type: string
+    description:
+      type: string
+    allow_former:
+      type: boolean
+    allowed_fields:
+      type: sequence
+      label: 'Allowed fields'
+      sequence:
+        type: string
+artsci_people.settings:
+  type: config_object
+  label: 'Artsci People settings'
+  mapping:
+    tag_display:
+      type: string
+      label: Tag display
+    related_display:
+      type: string
+      label: Related display
+    show_teaser_link_indicator:
+      type: boolean
+      label: Show arrows linking to pages from lists/teasers.

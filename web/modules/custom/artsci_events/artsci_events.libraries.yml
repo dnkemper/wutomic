@@ -1,0 +1,13 @@
+single-event:
+  js:
+    /libraries/jquery-collapse/src/jquery.collapse.js: {}
+    js/single-event.js: {}
+  css:
+    theme:
+      css/single-event.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupalSettings
+    - core/once
+    - core/drupal

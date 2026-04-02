@@ -1,0 +1,6 @@
+name: Arts & Sciences Core
+type: module
+description: 'Provides common functionality for Arts & Sciences sites.'
+package: Arts & Sciences
+core_version_requirement: ^10 || ^11
+#configure: artsci_core.settings_form

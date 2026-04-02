@@ -1,0 +1,70 @@
+@media only screen and (min-width: 900px) {
+  .artsci-event {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+
+.artsci-event .event-field {
+  margin-bottom: 10px;
+  font-family: Zilla Slab, serif;
+  font-size: 1.2rem;
+}
+
+.artsci-event .event-field.event-description {
+  margin-top: 2rem;
+}
+
+.artsci-event .main-column {
+  -webkit-flex: 1 0 64%;
+  -ms-flex: 1 0 64%;
+  flex: 1 0 64%;
+}
+
+.artsci-event .secondary-column {
+  -webkit-flex: 0 0 33%;
+  -ms-flex: 0 0 33%;
+  flex: 0 0 33%;
+}
+
+@media only screen and (min-width: 900px) {
+  .artsci-event .secondary-column .event-field,
+  .artsci-event .secondary-column .btn {
+    display: block;
+    margin: 0 auto 1em;
+    width: 70%;
+  }
+}
+
+.event-location-details {
+  margin-left: 25px;
+}
+
+.date-instance {
+  margin: 5px 0;
+}
+.date-instance__label {
+  text-transform: uppercase;
+  font-size: 75%;
+  font-weight: bold;
+}
+.date-instance__past {
+  color: #737373;
+}
+.event-field.event-time .date-instance:nth-child(2) {
+  margin-top: 1rem;
+}
+.date-instance__next-upcoming .date-instance__date {
+  font-weight: 600;
+}
+
+.artsci-event .svg-inline--fa {
+  margin-right: 5px;
+}
+
+.artsci-event-accessibility-statement {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #eee;
+}

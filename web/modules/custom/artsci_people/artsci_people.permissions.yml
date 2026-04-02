@@ -1,0 +1,7 @@
+administer person_type:
+  title: 'Administer person type'
+
+administer artsci people:
+  title: 'Administer Artsci People'
+  description: 'Perform administration tasks for the Artsci People module.'
+  restrict access: true

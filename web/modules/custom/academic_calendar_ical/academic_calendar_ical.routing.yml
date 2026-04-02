@@ -1,0 +1,7 @@
+academic_calendar_ical.feed:
+  path: '/ampersand/news.ics'
+  defaults:
+    _controller: '\Drupal\academic_calendar_ical\Controller\AcademicCalendarIcalController::feed'
+    _title: 'Academic Calendar iCal Feed'
+  requirements:
+    _access: 'TRUE'

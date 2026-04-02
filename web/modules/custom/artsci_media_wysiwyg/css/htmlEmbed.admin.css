@@ -1,0 +1,12 @@
+.ckeditor5-toolbar-button-htmlEmbed {
+  background-image: url(../icons/html.svg);
+}
+a.ck-anchor::before {
+  background-image: url(../icons/simpleBox.svg);
+}
+#edit-body-wrapper > div > div.js-form-type-textarea.js-form-item.form-item.form-type--textarea.js-form-item-body-0-value.form-item--body-0-value > div > div > div.ck.ck-editor__top.ck-reset_all > div > div.ck.ck-sticky-panel__content > div > div > button:nth-child(18) > svg {
+  font-size: 30px;
+  line-height: 1;
+  margin-top: -10px;
+  margin-bottom: -30px;
+}

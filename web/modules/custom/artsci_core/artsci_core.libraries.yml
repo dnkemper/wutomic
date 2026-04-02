@@ -1,0 +1,45 @@
+gtag:
+  version: 1.x
+  js:
+    js/tag-manager.js: {}
+claro-exposed-form:
+  css:
+    theme:
+      css/claro-exposed-form.css: { }
+exposedFormEnhancements:
+  css:
+    theme:
+      css/exposedFormEnhancements.css: {}
+skeletonLoad:
+  css:
+    theme:
+      css/skeletonLoad.css: {}
+  js:
+    js/exposedFormEnhancements.js: { }
+  dependencies:
+    - core/drupal
+    - core/once
+find_text-icon:
+  version: 1.0
+  css:
+    theme:
+      css/find_text_icon.css: {}
+      /libraries/fontawesome/css/all.min.css: {}
+banner-block-form:
+  js:
+    js/banner-block-form.js: {}
+  dependencies:
+    - core/once
+layout-builder-shortcuts:
+  js:
+    js/layout-builder-shortcuts.js: {}
+  dependencies:
+    - core/jquery
+
+subscribe-block:
+  js:
+    js/subscribe-block.js: {}
+    css/subscribe-block.css: {}
+  dependencies:
+    - core/drupal
+    - core/once

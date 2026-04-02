@@ -1,0 +1,4 @@
+administer artsci pages:
+  title: 'Administer Artsci Pages'
+  description: 'Perform administration tasks for the Artsci Pages module.'
+  restrict access: true

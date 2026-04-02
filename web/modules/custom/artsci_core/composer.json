@@ -1,0 +1,12 @@
+{
+    "name": "washu/artsci_core",
+    "description": "Core artsci functionality.",
+    "type": "drupal-custom-module",
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^10"
+            }
+        }
+    }
+}

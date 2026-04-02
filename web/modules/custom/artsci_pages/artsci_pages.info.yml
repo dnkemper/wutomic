@@ -1,0 +1,5 @@
+name: Artsci Pages
+type: module
+description: 'Settings and functionality related to Page content.'
+core_version_requirement: ^10 || ^11
+package: Artsci

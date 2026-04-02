@@ -1,0 +1,10 @@
+artsci_events.settings_form:
+  path: '/admin/config/artsci/artsci-events'
+  defaults:
+    _title: 'Artsci Events'
+    _form: '\Drupal\artsci_events\Form\EventsSettingsForm'
+  requirements:
+    _permission: 'administer artsci events'
+
+route_callbacks:
+  - '\Drupal\artsci_events\Routing\EventsRoutes::routes'

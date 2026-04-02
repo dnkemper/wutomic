@@ -1,0 +1,12 @@
+search-form:
+  css:
+    base:
+      css/search-form.css: {}
+search-results:
+  js:
+    js/cse.results.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/once
+    - core/drupal
