@@ -1,0 +1,17 @@
+uuid: 4f0b8ba3-71a2-432a-97e0-a9ef39ddea7b
+langcode: en
+status: true
+dependencies: {  }
+id: block_background_style_red
+label: Red
+classes: bg--red
+type: component
+group: background
+block_restrictions:
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_cta'
+  - 'inline_block:artsci_card'
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_aggregator'
+layout_restrictions: {  }
+weight: 0

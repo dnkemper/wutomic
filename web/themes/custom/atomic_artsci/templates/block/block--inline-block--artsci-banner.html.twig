@@ -48,7 +48,6 @@
   'title_prefix': title_prefix,
   'title_suffix': title_suffix,
   'in_preview': in_preview,
-  'options_list_title': content.field_options_list_title,
 } %}
 
 {% embed '@atomic_artsci/artsci/banner.html.twig' with block_banner only %}
@@ -59,23 +58,6 @@
     {{ title_suffix }}
     {% if banner_image %}
       {{ banner_image }}
-    {% endif %}
-  {% endblock %}
-
-  {% block banner_bttn %}
-    {{ parent() }}
-
-    {# "Explore programs for" dropdown — options list unique to the banner hero. #}
-    {% if options_list_title|render|trim is not empty %}
-      <div class="banner__options">
-        <button class="banner__options-toggle bttn bttn--outline" aria-expanded="false" aria-haspopup="true">
-          {{ options_list_title }}
-          <i role="presentation" class="fas fa-chevron-down"></i>
-        </button>
-        <div class="banner__options-list" hidden>
-          {{ options_list_links }}
-        </div>
-      </div>
     {% endif %}
   {% endblock %}
 

@@ -4,14 +4,9 @@ status: true
 dependencies:
   config:
     - image.style.thumbnail
-    - media.type.audio
-    - media.type.facebook
     - media.type.file
     - media.type.image
-    - media.type.panopto
     - media.type.remote_video
-    - media.type.static_map
-    - media.type.twitter
     - taxonomy.vocabulary.tags
   module:
     - image
@@ -655,13 +650,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              publisher: '0'
-              webmaster: '0'
-              administrator: '0'
-              sign_manager: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -690,14 +678,9 @@ display:
           plugin_id: bundle
           operator: in
           value:
-            audio: audio
-            facebook: facebook
             file: file
             image: image
             remote_video: remote_video
-            static_map: static_map
-            twitter: twitter
-            panopto: panopto
           group: 1
           exposed: true
           expose:
@@ -714,12 +697,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              publisher: '0'
-              webmaster: '0'
-              administrator: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -846,12 +823,6 @@ display:
             multiple: true
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              publisher: '0'
-              webmaster: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:

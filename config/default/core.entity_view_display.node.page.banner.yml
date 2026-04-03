@@ -159,6 +159,13 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
+  private:
+    type: private
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   entity_print_view_epub: true
   entity_print_view_pdf: true

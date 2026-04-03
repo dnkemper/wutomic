@@ -1,0 +1,19 @@
+# Schema for the artsci_media_wysiwyg CKEditor 5 plugins.
+
+ckeditor5.plugin.artsci_media_wysiwyg_linkStyles:
+  type: mapping
+  label: 'Link Styles CKEditor 5 plugin'
+  mapping:
+    styles:
+      type: sequence
+      label: 'Styles'
+      sequence:
+        type: mapping
+        label: 'Style'
+        mapping:
+          label:
+            type: label
+            label: 'Label'
+          element:
+            type: string
+            label: 'Element'

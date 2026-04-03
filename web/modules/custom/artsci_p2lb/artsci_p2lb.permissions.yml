@@ -1,4 +1,0 @@
-administer artsci p2lb:
-  title: 'Administer Artsci P2Lb'
-  description: 'Perform administration tasks for the Artsci P2Lb module.'
-  restrict access: true

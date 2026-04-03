@@ -13,6 +13,13 @@ targetEntityType: block_content
 bundle: featured_content
 mode: default
 content:
+  field_artsci_headline:
+    type: artsci_headline_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_featured_content_item:
     type: entity_reference_entity_view
     label: hidden
@@ -21,13 +28,6 @@ content:
       link: false
     third_party_settings: {  }
     weight: 1
-    region: content
-  field_artsci_headline:
-    type: artsci_headline_formatter
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
     region: content
 hidden:
   entity_print_view_epub: true

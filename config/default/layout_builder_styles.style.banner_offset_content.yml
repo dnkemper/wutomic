@@ -1,0 +1,13 @@
+uuid: 4148adc5-e55b-4711-8852-0fed9e8874b7
+langcode: en
+status: true
+dependencies: {  }
+id: banner_offset_content
+label: 'Banner offset Content'
+classes: banner--offset-content
+type: component
+group: default
+block_restrictions:
+  - 'inline_block:artsci_banner'
+layout_restrictions: {  }
+weight: 22

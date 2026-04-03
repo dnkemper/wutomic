@@ -1,0 +1,19 @@
+uuid: e704aa9c-1cf9-485a-ac07-27b1cf758354
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_style_red
+label: Red
+classes: bg--red
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 0

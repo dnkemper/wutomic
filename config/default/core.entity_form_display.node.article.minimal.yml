@@ -49,6 +49,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  private:
+    type: private
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   promote:
     type: boolean_checkbox
     weight: 15

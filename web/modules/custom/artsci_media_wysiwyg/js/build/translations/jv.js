@@ -1,0 +1,1 @@
+!function(e){const n=e.jv=e.jv||{};n.dictionary=Object.assign(n.dictionary||{},{"Edit source":"","Empty snippet content":"","iframe snippet":"","Insert Iframe":"Tambahaken Iframe","No preview available":"","paste iframe code here...":"","Save changes":""})}(window.CKEDITOR_TRANSLATIONS||(window.CKEDITOR_TRANSLATIONS={}));

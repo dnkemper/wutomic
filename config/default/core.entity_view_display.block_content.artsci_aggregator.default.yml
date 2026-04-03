@@ -5,7 +5,7 @@ dependencies:
   config:
     - block_content.type.artsci_aggregator
     - field.field.block_content.artsci_aggregator.field_artsci_aggregator_count
-    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_feeds
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_display
     - field.field.block_content.artsci_aggregator.field_artsci_aggregator_pager
     - field.field.block_content.artsci_aggregator.field_artsci_aggregator_text
     - field.field.block_content.artsci_aggregator.field_artsci_headline
@@ -28,7 +28,7 @@ hidden:
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
   field_artsci_aggregator_count: true
-  field_artsci_aggregator_feeds: true
+  field_artsci_aggregator_display: true
   field_artsci_aggregator_pager: true
   field_artsci_aggregator_text: true
   search_api_excerpt: true

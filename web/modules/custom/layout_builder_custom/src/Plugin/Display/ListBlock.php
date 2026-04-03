@@ -621,10 +621,32 @@ class ListBlock extends CoreBlock {
       }
       if (!empty($config['sort'])) {
         uasort($config['sort'], '\Drupal\ctools_views\Plugin\Display\Block::sortFieldsByWeight');
-        foreach ($config['sort'] as $sort_name => $sort) {
+        foreach ($config['sort'] as $sort_name => $sort_config) {
           if (!empty($config['sort'][$sort_name]) && !empty($sorts[$sort_name])) {
             $sort = $sorts[$sort_name];
-            $sort['order'] = $config['sort'][$sort_name]['order'];
+            // Ensure order is a string (ASC/DESC), not an array.
+            $order = $config['sort'][$sort_name]['order'] ?? 'ASC';
+            if (is_array($order)) {
+              // Log corrupted config for debugging.
+              \Drupal::logger('layout_builder_custom')->error('Corrupted sort order in view @view, display @display, sort @sort: @order', [
+                '@view' => $this->view->id(),
+                '@display' => $display_id,
+                '@sort' => $sort_name,
+                '@order' => print_r($order, TRUE),
+              ]);
+              // Handle corrupted config: use first value or default to ASC.
+              $order = reset($order) ?: 'ASC';
+            }
+            // Ensure we have a valid string.
+            if (!is_string($order) || !in_array(strtoupper($order), ['ASC', 'DESC'])) {
+              \Drupal::logger('layout_builder_custom')->error('Invalid sort order value in view @view: @order (type: @type)', [
+                '@view' => $this->view->id(),
+                '@order' => print_r($order, TRUE),
+                '@type' => gettype($order),
+              ]);
+              $order = 'ASC';
+            }
+            $sort['order'] = $order;
             // Re-add sorts in the order that was selected for the block.
             $this->view->setHandler($display_id, 'sort', $sort_name, $sort);
           }

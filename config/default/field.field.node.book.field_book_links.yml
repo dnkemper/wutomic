@@ -1,0 +1,23 @@
+uuid: e5f67890-abcd-ef12-3456-789012345678
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_book_links
+    - node.type.book
+  module:
+    - link
+id: node.book.field_book_links
+field_name: field_book_links
+entity_type: node
+bundle: book
+label: Links
+description: 'Add links to publisher, purchase page, or other related resources.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

@@ -1,38 +1,4 @@
 @use 'variables';
-$breakpoints: (
-  'sm':   576px,
-  'md':   768px,
-  'lg':   992px,
-  'xl':   1200px,
-  'xxl':  1400px,
-);
-
-// Mobile-first: min-width
-@mixin bp($name) {
-  @if map-has-key($breakpoints, $name) {
-    @media (min-width: map-get($breakpoints, $name)) {
-      @content;
-    }
-  } @else {
-    @warn "Breakpoint `#{$name}` not found.";
-  }
-}
-
-// Desktop-first: max-width (subtract 1px)
-@mixin bp-down($name) {
-  @if map-has-key($breakpoints, $name) {
-    @media (max-width: map-get($breakpoints, $name) - 1px) {
-      @content;
-    }
-  }
-}
-
-// Between two breakpoints
-@mixin bp-between($lower, $upper) {
-  @media (min-width: map-get($breakpoints, $lower)) and (max-width: map-get($breakpoints, $upper) - 1px) {
-    @content;
-  }
-}
 
 // Media Queries ///////////////
 @mixin breakpoint($class) {

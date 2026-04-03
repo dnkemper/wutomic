@@ -1,0 +1,11 @@
+uuid: 12345678-90ab-cdef-1234-567890abcdef
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.book_author
+label: 'Book author'
+description: null
+targetEntityType: node
+cache: true

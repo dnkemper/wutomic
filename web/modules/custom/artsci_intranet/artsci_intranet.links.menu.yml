@@ -1,5 +1,0 @@
-artsci_intranet.settings:
-  title: Intranet
-  description: Customize intranet functionality.
-  parent: system.admin_config_artsci
-  route_name: artsci_intranet.settings

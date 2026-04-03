@@ -21,14 +21,6 @@ targetEntityType: paragraph
 bundle: artsci_slide
 mode: preview
 content:
-  field_collection_headline:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_artsci_slide_content:
     type: smart_trim
     label: hidden
@@ -62,6 +54,14 @@ content:
       link: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_collection_headline:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   entity_print_view_epub: true

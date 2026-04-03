@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.book_amended_date
+    - field.storage.node.field_book_publication_date
     - field.storage.node.book_owner
     - node.type.book
     - system.menu.main
@@ -1141,7 +1141,7 @@ display:
           default_field_elements: true
           inline:
             title: title
-            book_amended_date: book_amended_date
+            field_book_publication_date: field_book_publication_date
           separator: ' - '
           hide_empty: false
       relationships: {  }
@@ -1274,10 +1274,10 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        book_amended_date:
-          id: book_amended_date
-          table: node__book_amended_date
-          field: book_amended_date
+        field_book_publication_date:
+          id: field_book_publication_date
+          table: node__field_book_publication_date
+          field: field_book_publication_date
           relationship: none
           group_type: group
           admin_label: ''
@@ -1339,10 +1339,10 @@ display:
           field_api_classes: false
           plugin_id: field
       sorts:
-        book_amended_date_value:
-          id: book_amended_date_value
-          table: node__book_amended_date
-          field: book_amended_date_value
+        field_book_publication_date_value:
+          id: field_book_publication_date_value
+          table: node__field_book_publication_date
+          field: field_book_publication_date_value
           relationship: none
           group_type: group
           admin_label: ''
@@ -1492,10 +1492,10 @@ display:
           entity_type: node
           entity_field: title
           plugin_id: string
-        book_amended_date_value:
-          id: book_amended_date_value
-          table: node__book_amended_date
-          field: book_amended_date_value
+        field_book_publication_date_value:
+          id: field_book_publication_date_value
+          table: node__field_book_publication_date
+          field: field_book_publication_date_value
           relationship: none
           group_type: group
           admin_label: ''
@@ -1562,5 +1562,5 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.book_amended_date'
+        - 'config:field.storage.node.field_book_publication_date'
         - 'config:field.storage.node.book_owner'

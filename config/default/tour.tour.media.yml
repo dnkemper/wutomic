@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: media
 label: 'Add Media'
-module: artsci
 routes:
   -
     route_name: entity.media.add_form

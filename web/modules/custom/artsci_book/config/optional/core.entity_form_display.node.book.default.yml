@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.node.book.body
-    - field.field.node.book.book_amended_date
+    - field.field.node.book.field_book_publication_date
     - field.field.node.book.book_owner
     - field.field.node.book.book_tags
     - node.type.book
@@ -25,7 +25,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
-  book_amended_date:
+  field_book_publication_date:
     type: datetime_default
     weight: 6
     settings: {  }

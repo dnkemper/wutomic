@@ -4,7 +4,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.book.body
-    - field.field.node.book.book_amended_date
+    - field.field.node.book.field_book_publication_date
     - field.field.node.book.book_owner
     - field.field.node.book.book_tags
     - node.type.book
@@ -28,6 +28,6 @@ content:
     weight: 101
     region: content
 hidden:
-  book_amended_date: true
+  field_book_publication_date: true
   book_owner: true
   book_tags: true

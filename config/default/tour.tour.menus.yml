@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: menus
 label: 'Managing Menus'
-module: artsci
 routes:
   -
     route_name: entity.menu.edit_form

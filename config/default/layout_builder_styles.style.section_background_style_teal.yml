@@ -1,0 +1,20 @@
+uuid: 47939c1e-dfc0-4664-990f-227c179f47b4
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_style_teal
+label: Teal
+classes: bg--teal
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 0

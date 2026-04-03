@@ -17,8 +17,8 @@ chosen:
     theme:
       /libraries/chosen/chosen.css: {}
   js:
-    /libraries/chosen/chosen.jquery.js: {}
-    js/chosen.behaviors.js: {}
+    js/chosen.behaviors.js: { weight: -20 }
+    /libraries/chosen/chosen.jquery.js: { weight: -10 }
   dependencies:
     - core/jquery
     - core/once

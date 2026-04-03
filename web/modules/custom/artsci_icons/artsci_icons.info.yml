@@ -1,7 +1,0 @@
-name: "Artsci Icons"
-type: module
-description: "Artsci Icons."
-package: User interface Icon packs
-core_version_requirement: ^10.3 || ^11
-dependencies:
-  - ui_icons:ui_icons

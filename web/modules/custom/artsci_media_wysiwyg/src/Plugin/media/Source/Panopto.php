@@ -2,7 +2,6 @@
 
 namespace Drupal\artsci_media_wysiwyg\Plugin\media\Source;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -140,22 +139,8 @@ class Panopto extends MediaSourceBase implements MediaSourceFieldConstraintsInte
     $id = $parsed['query']['id'];
 
     switch ($attribute_name) {
+      // @todo https://github.com/artsci/artsci/issues/5029
       case 'default_name':
-        try {
-          $response = $this->client->get(
-            self::BASE_URL . '/Panopto/Pages/Embed.aspx',
-            ['query' => ['id' => $id]]
-          );
-          $html = (string) $response->getBody();
-          $document = Html::load($html);
-          $title = trim($document->getElementsByTagName('title')->item(0)?->textContent ?? '');
-          if (!empty($title)) {
-            return mb_substr($title, 0, 255);
-          }
-        }
-        catch (\Exception $e) {
-          // Fall through to the default name on failure.
-        }
         return 'media:' . $media->bundle() . ':' . $uuid;
 
       case 'thumbnail_uri':

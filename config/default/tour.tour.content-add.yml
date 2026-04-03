@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: content-add
 label: 'Adding Content'
-module: artsci
 routes:
   -
     route_name: node.add

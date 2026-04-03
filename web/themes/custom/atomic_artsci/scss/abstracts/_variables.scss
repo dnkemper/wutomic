@@ -1,16 +1,6 @@
-// ==========================================================================
-// VARIABLES — Figma Token Values (ArtsCI Rebrand)
-// ==========================================================================
-// Single source of truth for SCSS compile-time values.
-// CSS custom properties live in _tokens.scss.
-// ==========================================================================
-
 @use 'sass:color';
 
-// --------------------------------------------------------------------------
-// COLORS — WashU Arts & Sciences brand palette
-// --------------------------------------------------------------------------
-
+// Utility color variables
 // Primary brand
 $artsci-gold: #BA0C2F;        // Primary red (legacy name kept for compat)
 $artsci-black: #000000;
@@ -20,8 +10,6 @@ $primary: #BA0C2F;
 $secondary: #000000;
 $white: #FFFFFF;
 $blk: #000000;
-
-// Neutrals
 $light: #F3F3F3;
 $gray: #737373;
 $gray-light: #CACACA;
@@ -36,7 +24,7 @@ $dark: #343a40;
 
 $color-red:         #BA0C2F;
 $color-red-dark:    #971B2F;
-$color-teal:        #007360;
+$color-teal:        #367B88;
 $color-teal-dark:   #00573F;
 $color-gold:        #F1BE48;
 $color-black:       #1A1A1A;
@@ -50,24 +38,39 @@ $color-tan:         #F5F1EB;
 $color-light:       #F9F7F4;
 $color-white:       #FFFFFF;
 
-// Status
 $success: #00664F;
+$orange: #BD472A;
 $success-light: color.scale($success, $lightness: 95%);
 $info: #00558C;
 $info-light: color.scale($info, $lightness: 95%);
-$warning: #BA0C2F;
+$warning: #FFCD00;
 $warning-light: color.scale($warning, $lightness: 85%);
 $danger: #BD472A;
 $danger-light: color.scale($danger, $lightness: 85%);
-$orange: #BD472A;
 
 // Links
 $link-color: var(--link-color);
 
-// --------------------------------------------------------------------------
-// TYPOGRAPHY
-// --------------------------------------------------------------------------
+// img path
+$imgpath: '../../assets/images' !default;
 
+// Additional Colors
+$white: #fff;
+$blk: #000;
+$dark-gray: color.scale($blk, $lightness: 20%);
+$med-gray: color.scale($blk, $lightness: 40%);
+$light-gray: color.scale($blk, $lightness: 70%);
+$lighter-gray: color.scale($blk, $lightness: 90%);
+//$off-white: color.scale($blk, $lightness: 97%);
+$dark: #343a40;
+
+// Borders
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
+$border-width: 1px;
+
+// Typography
 $font-family-sans-serif: "ivystyle-sans", "Calibri", sans-serif;
 $font-family-serif: "ivypresto-headline", "Georgia", serif;
 $font-family-serif-alt: "ivypresto-headline", "Georgia", serif;
@@ -75,67 +78,45 @@ $font-family-caps: "ivystyle-sans", "Calibri", sans-serif;
 $font-family-caps-light: "ivystyle-sans", "Calibri", sans-serif;
 $font-family-caps-bold: "ivystyle-sans", "Calibri", sans-serif;
 $font-family-script: "amnestyscript";
-
-// Weights
 $font-weight-light: 300;
 $font-weight-normal: 400;
 $font-weight-medium: 500;
-$font-weight-medium-bold: 400;
-$font-weight-bold: 500;
+$font-weight-medium-bold: 600;
+$font-weight-bold: 700;
 $font-weight-heavy: 900;
 $headings-font-weight: $font-weight-medium;
-
-// Sizes (Figma px values)
-$h1-font-size: 52px;
-$h2-font-size: 40px;
-$h3-font-size: 32px;
-$h4-font-size: 24px;
-$h5-font-size: 20px;
-$h6-font-size: 18px;
-$content-font-size: 16px;
-$label-font-size: 14px;
-$base-font-size: 16px;
-$small-font-size: 13px;
+$h1-font-size: 3.35rem;
+$h2-font-size: 2.3rem;
+$h3-font-size: 1.9125rem;
+$h4-font-size: 1.6rem;
+$h5-font-size: 1.4rem;
+$h6-font-size: 1.2rem;
+$content-font-size: 1.2rem;
+$label-font-size: 0.9rem;
+$base-font-size: 1rem;
+$small-font-size: .8rem;
 $text-muted: $gray;
 
-// --------------------------------------------------------------------------
-// BORDERS
-// --------------------------------------------------------------------------
-
-$border-radius: 0;
-$border-radius-lg: 0;
-$border-radius-sm: 0;
-$border-width: 1px;
-
-// --------------------------------------------------------------------------
-// CONTAINER
-// --------------------------------------------------------------------------
-
+// Container
 $container-width: 81.875em;
 
-// --------------------------------------------------------------------------
-// SPACING
-// --------------------------------------------------------------------------
-
-$mobile-width-gutter: 1.25rem;
-$desktop-width-gutter: 3rem;
-$mobile-height-gutter: 2rem;
-$desktop-height-gutter: 8rem;
-$gutter: 1.25rem;
-$xsm: 0.325rem;
-$xsm-sm: 0.425rem;
-$sm: 0.625rem;
-$sm-md: 0.9rem;
+// Margin/Padding
+$mobile-width-gutter: 1.25rem; // 20px
+$desktop-width-gutter: 3rem; // 20px
+$mobile-height-gutter: 2rem; // 20px
+$desktop-height-gutter: 8rem; // 20px
+$gutter: 1.25rem; // 20px
+$xsm: 0.325rem; // 5px
+$xsm-sm: .425rem;
+$sm: 0.625rem; // 10px
+$sm-md: 0.9rem; // 15px
 $md: 1.05rem;
-$lg: 1.875rem;
-$xlg: 2.5rem;
-$xxlg: 3.15rem;
-$xxxlg: 3.75rem;
+$lg: 1.875rem; // 30px
+$xlg: 2.5rem; // 40px
+$xxlg: 3.15rem; // 50px
+$xxxlg: 3.75rem; // 60px
 
-// --------------------------------------------------------------------------
-// BREAKPOINTS
-// --------------------------------------------------------------------------
-
+// Breakpoints.
 $break-xxsm: 400px;
 $break-xsm: 600px;
 $break-sm: 768px;
@@ -144,9 +125,30 @@ $break-lg: 1200px;
 $break-page-container: 84.375em;
 $break-xlg: 106em;
 
-// --------------------------------------------------------------------------
-// MISC
-// --------------------------------------------------------------------------
-
+// Drop shadow.
 $soft-drop-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
-$imgpath: '../../images' !default;
+:root {
+    font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  // Colors - Brand official
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+
+  // Colors - Unofficial
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+
+  // Margin/Padding
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}

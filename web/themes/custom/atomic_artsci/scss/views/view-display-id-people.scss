@@ -1,0 +1,104 @@
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
+
+// This file contains the styles for the /admin/config/artsci/artsci-people page.
+
+.view-id-people {
+  @include utilities.margin(variables.$top: variables.$lg);
+  .view-header {
+    width: 100%;
+  }
+  .view-content {
+    @include utilities.list-group;
+    @include utilities.list-group-flush;
+  }
+
+  .view-content:first-child .views-row:first-child {
+    border-top: none;
+  }
+
+  .view-content:last-child .views-row:last-child {
+    border-bottom: none;
+  }
+  .field--name-body.field__item {
+    font-size: initial;
+  }
+
+  .draggableviews-weight {
+    min-width: 45px;
+  }
+}
+
+
+.view-display-id-page_people_table {
+  table {
+    tbody tr:not(.is-selected):nth-child(2n),
+    tbody tr:not(.is-selected):nth-child(2n) th {
+      background-color: #fff;
+    }
+  }
+
+  thead {
+    @include utilities.element-invisible;
+  }
+
+  .views-field-title,
+  .views-field-draggableviews {
+    width: 0px;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  .tabledrag-title {
+    @include utilities.element-invisible;
+  }
+
+  .views-field.views-field-rendered-entity {
+    width: 100%;
+    container-type: inline-size;
+    container-name: column;
+    @include utilities.breakpoint(sm) {
+      display: block;
+    }
+  }
+
+  tr.draggable {
+    position: relative;
+    width: 100%;
+
+    .card {
+      margin-bottom: 1.6rem;
+      width: 100%;
+    }
+
+    .tabledrag-handle {
+      margin: 0 0.5rem 0 0;
+      height: 16px;
+
+      .handle {
+        background-position: 0rem;
+        width: 16px;
+        height: 16px;
+        padding: 0rem;
+        margin: 0rem;
+      }
+    }
+
+    &+td {
+      padding-left: 0rem;
+
+      fieldset {
+        margin-bottom: 0rem;
+      }
+
+      input {
+        margin: 0;
+      }
+    }
+
+    &.drag {
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+  }
+}

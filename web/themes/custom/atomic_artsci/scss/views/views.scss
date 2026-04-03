@@ -1,0 +1,260 @@
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
+
+// Use "views-form--stacked" class for exposed forms in a sidebar column.
+.views-exposed-form {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 4rem;
+  position: relative;
+
+  fieldset {
+    border: 0;
+    padding: 0;
+  }
+
+  fieldset {
+    &.fieldgroup {
+      padding: 0;
+    }
+  }
+
+  [type='checkbox'] + label,
+  [type='radio'] + label {
+    font-weight: variables.$font-weight-normal;
+    flex-basis: 75%;
+  }
+
+  .form-type-checkbox {
+    display: flex;
+  }
+
+  .form-actions {
+    .views-form--stacked & {
+      width: 100%;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  }
+
+  &.form:not(.artsci-search) {
+    label,
+    .fieldset-legend {
+      font-size: 1rem;
+    }
+    .button {
+      @include utilities.bttn--secondary;
+      max-height: 3.45rem;
+      padding: 1rem 1.25rem;
+      font-size: clamp(0.9rem, calc(0.7887vw + 0.6042rem), 1.25rem);
+      @include utilities.breakpoint(md) {
+        padding: 0.9rem 1.25rem 1.1rem;
+      }
+    }
+
+    input[id^='edit-reset'] {
+      color: var(--brand-secondary);
+      background: var(--brand-primary);
+    }
+  }
+
+  .button {
+    border: 0;
+
+    .views-form--stacked & {
+      flex: 1;
+      @include utilities.breakpoint(sm) {
+        flex-basis: 100%;
+      }
+    }
+  }
+
+  .form--inline {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+.views-exposed-form:not([class*="bef"]) {
+  .form--inline {
+    @include utilities.breakpoint(sm) {
+      display: flex;
+      justify-content: flex-start;
+
+      .views-form--stacked & {
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .form-actions {
+    gap: 0.9rem;
+    display: flex;
+
+    @include utilities.breakpoint(sm) {
+      margin-top: 3.1em;
+    }
+
+    input[id^='edit-reset'] {
+      .views-form--stacked & {
+        width: 100%;
+        display: flex;
+        gap: 1.5rem;
+      }
+    }
+  }
+
+  &.form:not(.artsci-search) {
+    padding: 5px 19px;
+
+    .views-form--stacked & {
+      padding: 1rem 1.5rem;
+    }
+
+    [type=text],
+    select {
+      .views-form--stacked & {
+        margin-bottom: 0;
+      }
+    }
+
+    .form-item {
+      .views-form--stacked & {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        @include utilities.breakpoint(sm) {
+          margin-top: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      &.form-type-checkbox {
+        .views-form--stacked & {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
+    .form-actions:not(:last-child),
+    .form-item:not(:last-child) {
+      @include utilities.breakpoint(sm) {
+        margin-right: 1em;
+
+        .views-form--stacked & {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .form-actions {
+      @include utilities.breakpoint(sm) {
+        margin-top: 3.1em;
+      }
+
+      .button {
+        flex: 1;
+        .views-form--stacked & {
+          @include utilities.breakpoint(sm) {
+            flex-basis: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .button {
+    @include utilities.bttn--secondary;
+    border: 0;
+  }
+
+  .js-form-item {
+    flex: auto 1 1;
+    @include utilities.breakpoint(sm) {
+      flex: 1;
+
+      .views-form--stacked & {
+        flex: 0 1 100%;
+      }
+    }
+  }
+
+  .form-group {
+    margin: 0 1rem 1rem;
+  }
+}
+
+// Background color overrides.
+.bg-black,
+.bg-dark {
+  .pager__item.pager__item--ellipsis {
+    color: #5d5656;
+  }
+
+  .pager__item a {
+    color: variables.$primary;
+  }
+}
+
+.bg-yellow {
+  .pager__item a {
+    color: variables.$secondary;
+  }
+
+  .pager__item.is-active a {
+    color: white;
+  }
+}
+
+// feed icons
+.feed-icons {
+  .bttn {
+    svg,
+    span {
+      margin-left: 0;
+      margin-right: variables.$xsm;
+    }
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// default styles for views fields.
+.views-field {
+  line-height: 1.7;
+  margin-top: 0;
+  font-size: variables.$content-font-size;
+}
+
+// Layout
+.views--twocol--25-75 {
+  @include utilities.grid-base;
+  @include utilities.breakpoint(sm) {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 1.5rem;
+
+    .view-header {
+      grid-column: 1 / -1;
+    }
+
+    .view-filters {
+      grid-area: 2/1/6/2;
+      min-width: 200px;
+    }
+
+    .view-content,
+    .view-empty {
+      grid-area: 2/2/6/5;
+      min-width: 0;
+    }
+
+    .pager.list-container__item--full {
+      grid-area: 6/2/6/5;
+    }
+  }
+  @include utilities.breakpoint(page-container) {
+    gap: 3rem;
+  }
+}

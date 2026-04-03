@@ -1,0 +1,20 @@
+uuid: db247e63-81e0-4f56-b7a8-5afd00abbae7
+langcode: en
+status: true
+dependencies: {  }
+id: section_ampersand
+label: 'Ampersand section'
+classes: section-ampersand
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 54

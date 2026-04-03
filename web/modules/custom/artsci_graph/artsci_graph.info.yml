@@ -1,5 +1,0 @@
-name: artsci_graph
-type: module
-description: A simple graphing module for artsci websites.
-package: Custom
-core_version_requirement: ^9.2 || ^10

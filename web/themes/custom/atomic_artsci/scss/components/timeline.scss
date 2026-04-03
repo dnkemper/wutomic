@@ -1,0 +1,281 @@
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
+
+// Timeline block
+.block-inline-blockartsci-timeline {
+  position: relative;
+  // prevent line from going into another section.
+  overflow: hidden;
+  padding-top: 10px;
+}
+
+.timeline {
+  transition: all 0.4s ease;
+  position: relative;
+  display: grid;
+  list-style: none;
+  margin: 0;
+}
+
+// Timeline icon
+.timeline--wrapper {
+  position: relative;
+  list-style: none;
+
+  .card {
+    .card__details + footer .bttn {
+      margin-top: 0;
+    }
+    header + .card__details + footer .bttn {
+      margin-top: 1.25rem;
+    }
+  }
+
+  .card__details {
+    @include utilities.breakpoint(md) {
+      margin: 0;
+    }
+  }
+
+  .timeline__icon {
+    position: absolute;
+    font-size: 25px;
+    background: variables.$light;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    top: -79px;
+    right: calc(50% - 30px);
+    line-height: 0;
+
+    [class*=bg--gray] & {
+      background: variables.$gray-light;
+    }
+
+    @include utilities.breakpoint(md) {
+      top: -30px;
+      right: inherit;
+    }
+
+    .field--name-field-timeline-icon {
+      width: 100%;
+      text-align: center;
+    }
+
+    .svg-inline--fa {
+      font-size: inherit;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .timeline__icon-wrapper {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    @include utilities.breakpoint(md) {
+      top: 50%;
+    }
+  }
+}
+
+.timeline--wrapper {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  @include utilities.breakpoint(md) {
+    width: 50%;
+  }
+  &:first-child {
+    @include utilities.breakpoint(md) {
+      margin-top: variables.$desktop-width-gutter;
+    }
+  }
+  &:last-child {
+    margin-bottom: variables.$desktop-width-gutter;
+  }
+  .timeline--card {
+    height: 100%;
+    margin-top: variables.$desktop-width-gutter;
+    @include utilities.breakpoint(md) {
+      margin-top: inherit;
+      height: auto;
+    }
+    &:after {
+      bottom: 100%;
+      left: 50%;
+      margin-left: -12px;
+      border: solid transparent;
+      content: "";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: transparent;
+      border-width: 15px;
+
+      @include utilities.breakpoint(md) {
+        top: 50%;
+        border-bottom-color: transparent;
+        margin-top: -15px;
+        margin-left: unset;
+        left: unset;
+      }
+    }
+  }
+  .card__subtitle {
+    opacity: 1;
+  }
+  .field--name-field-timeline-date {
+    @include utilities.breakpoint(md) {
+      position: absolute;
+      bottom: 48%;
+      width: 90%;
+    }
+    @include utilities.breakpoint(page-container) {
+      width: 100%;
+    }
+    [class*=bg--black] & {
+      color: variables.$primary;
+    }
+    [class*=bg--gold] & {
+      color: variables.$secondary;
+    }
+  }
+  &:nth-child(odd) {
+    @include utilities.breakpoint(md) {
+      margin-left: auto;
+    }
+    .timeline__icon {
+      @include utilities.breakpoint(md) {
+        right: 27px;
+      }
+    }
+    .field--name-field-timeline-date {
+      @include utilities.breakpoint(md) {
+        margin-left: -130%;
+        text-align: right;
+      }
+      @include utilities.breakpoint(page-container) {
+        margin-left: -125%;
+      }
+      .page__container--narrow & {
+        @include utilities.breakpoint(page-container) {
+          margin-left: -130%;
+        }
+      }
+      .page__container--extended & {
+        @include utilities.breakpoint(page-container) {
+          margin-left: -122%;
+        }
+      }
+      .page__container--full &,
+      .page__container--edge &{
+        @include utilities.breakpoint(page-container) {
+          margin-left: -120%;
+        }
+      }
+
+    }
+    .timeline__icon-wrapper {
+      @include utilities.breakpoint(md) {
+        left: 0;
+      }
+    }
+    .timeline--card {
+      @include utilities.breakpoint(md) {
+        margin-left: 3.5rem;
+      }
+      &:after {
+        @include utilities.breakpoint(md) {
+          right: 100%;
+          border-right-color: variables.$brand-cool-gray;
+        }
+      }
+    }
+  }
+  &:nth-child(even) {
+    @include utilities.breakpoint(md) {
+      margin-right: auto;
+      padding-right: 5px;
+    }
+    .timeline__icon {
+      @include utilities.breakpoint(md) {
+        right: -91px;
+      }
+    }
+    .field--name-field-timeline-date {
+      @include utilities.breakpoint(md) {
+        margin-left: 125%;
+      }
+      @include utilities.breakpoint(page-container) {
+        margin-left: 113%;
+      }
+      .page__container--narrow & {
+        @include utilities.breakpoint(page-container) {
+          margin-left: 118%;
+        }
+      }
+    }
+    .timeline__icon-wrapper {
+      @include utilities.breakpoint(md) {
+        right: 0;
+      }
+    }
+    .timeline--card {
+      @include utilities.breakpoint(md) {
+        margin-right: 3.5rem;
+      }
+      &:after {
+        @include utilities.breakpoint(md) {
+          left: 100%;
+          border-left-color: variables.$brand-cool-gray;
+        }
+      }
+    }
+  }
+}
+
+.timeline--card.js-scroll {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.timeline--card.js-scroll.scrolled,
+li:first-child .timeline--card.js-scroll {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion) {
+  .timeline--card.js-scroll {
+    opacity: 1;
+  }
+}
+
+.timeline-line {
+  position: absolute;
+  left: calc(50% - 3px);
+  height: 100%;
+}
+
+.timeline-line__mask {
+  position: absolute;
+  width: 6px;
+  height: 100%;
+  background-color: #fafafa;
+  clip: rect(0, auto, auto, 0);
+  -webkit-mask-image: -webkit-linear-gradient(top, #ffffff 0%,#ffffff 100%);
+}
+
+.timeline-line__fill {
+  background-color: variables.$primary;
+  height: 53%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  [class*=bg--gold] & {
+    background-color: variables.$secondary;
+  }
+}

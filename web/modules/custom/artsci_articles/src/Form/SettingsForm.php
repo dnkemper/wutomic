@@ -3,6 +3,7 @@
 namespace Drupal\artsci_articles\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -72,6 +73,8 @@ class SettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
+   *   The typed config manager.
    * @param \Drupal\pathauto\AliasCleanerInterface $pathauto_alias_cleaner
    *   The alias cleaner.
    * @param \Drupal\path_alias\AliasRepositoryInterface $aliasRepository
@@ -85,8 +88,8 @@ class SettingsForm extends ConfigFormBase {
    * @param \Drupal\Core\Session\AccountProxy $currentUser
    *   The current user.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, AliasCleanerInterface $pathauto_alias_cleaner, AliasRepositoryInterface $aliasRepository, EntityTypeManager $entityTypeManager, PathautoGenerator $pathAutoGenerator, ArtsciCoreAccess $artsciCoreAccess, AccountProxy $currentUser) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, AliasCleanerInterface $pathauto_alias_cleaner, AliasRepositoryInterface $aliasRepository, EntityTypeManager $entityTypeManager, PathautoGenerator $pathAutoGenerator, ArtsciCoreAccess $artsciCoreAccess, AccountProxy $currentUser) {
+    parent::__construct($config_factory, $typedConfigManager);
     $this->aliasCleaner = $pathauto_alias_cleaner;
     $this->aliasRepository = $aliasRepository;
     $this->entityTypeManager = $entityTypeManager;
@@ -101,6 +104,7 @@ class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('pathauto.alias_cleaner'),
       $container->get('path_alias.repository'),
       $container->get('entity_type.manager'),
@@ -382,12 +386,14 @@ class SettingsForm extends ConfigFormBase {
     // Check if path already exists.
     $path = $form_state->getValue('artsci_articles_path');
 
-    // Clean up path first.
-    $path = $this->aliasCleaner->cleanString($path);
-    $path_exists = $this->aliasRepository->lookupByAlias('/' . $path, 'en');
+    if (!empty($path)) {
+      // Clean up path first.
+      $path = $this->aliasCleaner->cleanString($path);
+      $path_exists = $this->aliasRepository->lookupByAlias('/' . $path, 'en');
 
-    if ($path_exists) {
-      $form_state->setErrorByName('path', $this->t('This path is already in-use.'));
+      if ($path_exists) {
+        $form_state->setErrorByName('artsci_articles_path', $this->t('This path is already in-use.'));
+      }
     }
 
     // Unset custom related content title if checkbox is unchecked.
@@ -441,7 +447,9 @@ class SettingsForm extends ConfigFormBase {
     $remove_yearmonth_slug = $form_state->getValue('remove_yearmonth_slug');
 
     // Clean path.
-    $path = $this->aliasCleaner->cleanString($path);
+    if (!empty($path)) {
+      $path = $this->aliasCleaner->cleanString($path);
+    }
 
     // Load article listing view.
     $view = $this->entityTypeManager->getStorage('view')->load('articles');

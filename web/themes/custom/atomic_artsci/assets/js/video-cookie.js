@@ -2,7 +2,7 @@
 
   'use strict';
 
-  const artsci_VIDEO_COOKIE = 'artsci-video';
+  const ARTSCI_VIDEO_COOKIE = 'artsci-video';
 
   Drupal.behaviors.artsciVideoCookie = {
     attach: function (context) {
@@ -15,8 +15,8 @@
             // Set videoCookieCollection to be an empty dictionary.
             let videoCookieCollection = {};
             // If the video cookie already exists, load it in to the videoCookieCollection variable.
-            if (cookies.get(artsci_VIDEO_COOKIE)) {
-              videoCookieCollection = JSON.parse(cookies.get(artsci_VIDEO_COOKIE));
+            if (cookies.get(ARTSCI_VIDEO_COOKIE)) {
+              videoCookieCollection = JSON.parse(cookies.get(ARTSCI_VIDEO_COOKIE));
             }
             // Also get the cookie id for later usage.
             const videoCookieId = video.getAttribute('data-video-cookie-id');
@@ -34,8 +34,8 @@
             // On the video controls button click...
             btn.onclick = function() {
               // Update the video cookie to make sure we have the latest one.
-              if (cookies.get(artsci_VIDEO_COOKIE)) {
-                videoCookieCollection = JSON.parse(cookies.get(artsci_VIDEO_COOKIE));
+              if (cookies.get(ARTSCI_VIDEO_COOKIE)) {
+                videoCookieCollection = JSON.parse(cookies.get(ARTSCI_VIDEO_COOKIE));
               }
               // And then if the video is paused...
               if (video.paused) {
@@ -45,12 +45,12 @@
               }
               else {
                 // Remove a cookie based upon the cookie id index.
-                if (cookies.get(artsci_VIDEO_COOKIE)) {
+                if (cookies.get(ARTSCI_VIDEO_COOKIE)) {
                   delete videoCookieCollection[videoCookieId];
 
                   // If cookie array is empty, remove cookie dictionary.
                   if (Object.keys(videoCookieCollection).length === 0) {
-                    cookies.remove(artsci_VIDEO_COOKIE, { path: '/' });
+                    cookies.remove(ARTSCI_VIDEO_COOKIE, { path: '/' });
                   }
                   // Else, re-save the dictionary.
                   else {
@@ -69,7 +69,7 @@
     // String-ify the cookie JSON so it can be saved.
     const cookieString = JSON.stringify(cookie);
     // Cookie is set to expire in 99 years.
-    cookies.set(artsci_VIDEO_COOKIE, cookieString, { expires: 36135, path: '/' });
+    cookies.set(ARTSCI_VIDEO_COOKIE, cookieString, { expires: 36135, path: '/' });
   }
 
 })(jQuery, Drupal, once, window.Cookies);

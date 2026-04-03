@@ -1,6 +1,0 @@
-name: Artsci P2Lb
-type: module
-description: 'Convert content from paragraphs to layout builder blocks.'
-package: Artsci
-core_version_requirement: ^9 || ^10 || ^11
-dependencies:

@@ -45,7 +45,7 @@ function layout_builder_custom_form_layout_builder_configure_section_alter(&$for
     '#type' => 'textfield',
     '#title' => t('Unique ID'),
     '#description' => t('Provide a unique identifier for this section. Primarily used for anchor links. Input will be cleaned to convert spaces and remove special characters.'),
-    '#default_value' => $config['layout_builder_custom_unique_id'] ?: '',
+    '#default_value' => $config['layout_builder_custom_unique_id'] ?? '',
     '#ajax' => [
       'callback' => '_layout_builder_custom_unique_id',
       'wrapper' => $wrapper_id,
@@ -306,7 +306,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           case 'inline_block:artsci_card':
             $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
             // Set help text for media position.
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
 
             // Set '#states' for card image size.
             $form['layout_builder_style_media_size']['#states'] = [
@@ -335,7 +335,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           case 'views_block:page_list_block-list_page':
           case 'views_block:people_list_block-list_card':
             // Set help text for media position.
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
             // Set '#states' for card image size.
             $form['layout_builder_style_media_size']['#states'] = [
               'visible' => [
@@ -535,18 +535,18 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
             break;
 
-          case 'artsci_dispatch_sign_up_form':
+          case 'sitenow_dispatch_sign_up_form':
             // Checks to see if there is an API key set, and if not we
             // shouldn't be able to add the block, so remove the button.
-            if (empty(\Drupal::config('artsci_dispatch.settings')
+            if (empty(\Drupal::config('sitenow_dispatch.settings')
               ->get('api_key'))) {
               $form['actions']['submit']['#access'] = FALSE;
             }
             break;
 
-          case 'artsci_dispatch_thankyou_form':
+          case 'sitenow_dispatch_thankyou_form':
             // This block has to be explicitly enabled by an administrator.
-            if (!\Drupal::config('artsci_dispatch.settings')
+            if (!\Drupal::config('sitenow_dispatch.settings')
               ->get('thanks.enabled')) {
               $form['actions']['submit']['#access'] = FALSE;
             }
@@ -780,6 +780,7 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
             $form_icon_selection = [
               'settings',
               'block_form',
+              'field_icon',
               0,
               'value',
               'icon',
@@ -908,45 +909,49 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
         break;
 
       case 'inline_block:artsci_card':
-        $media_types = [
-          'image' => 'Image',
-          'icon' => 'Icon',
-        ];
-        $default_bg = 'image';
+        // $media_types = [
+        //   'image' => 'Image',
+        //   'icon' => 'Icon',
+        // ];
+        // $default_bg = 'image';
 
-        $element['media_types'] = [
-          '#type' => 'radios',
-          '#title' => t('Media type'),
-          '#options' => $media_types,
-          '#default_value' => $component->getThirdPartySetting('layout_builder_custom', 'media_types') ?: $default_bg,
-          '#weight' => 4,
-        ];
+        // $element['media_types'] = [
+        //   '#type' => 'radios',
+        //   '#title' => t('Media type'),
+        //   '#options' => $media_types,
+        //   '#default_value' => $component->getThirdPartySetting('layout_builder_custom', 'media_types') ?: $default_bg,
+        //   '#weight' => 4,
+        // ];
 
-        $element['field_artsci_card_image'] = [
-          '#states' => [
-            'visible' => [
-              ':input[name="settings[block_form][media_types]"]' => [
-                'value' => 'image',
+        if (isset($element['field_artsci_card_image'])) {
+          $element['field_artsci_card_image'] = [
+            '#states' => [
+              'visible' => [
+                ':input[name="settings[block_form][media_types]"]' => [
+                  'value' => 'image',
+                ],
               ],
             ],
-          ],
-          '#weight' => 5,
-        ] + $element['field_artsci_card_image'];
+            '#weight' => 5,
+          ] + $element['field_artsci_card_image'];
+        }
 
-        // $element['field_icon'] = [
-        //   '#states' => [
-        //     'visible' => [
-        //       ':input[name="settings[block_form][media_types]"]' => [
-        //         'value' => 'icon',
+        // if (isset($element['field_icon'])) {
+        //   $element['field_icon'] = [
+        //     '#states' => [
+        //       'visible' => [
+        //         ':input[name="settings[block_form][media_types]"]' => [
+        //           'value' => 'icon',
+        //         ],
         //       ],
         //     ],
-        //   ],
-        //   '#weight' => 5,
-        // ] + $element['field_icon'];
+        //     '#weight' => 5,
+        //   ] + $element['field_icon'];
+        // }
 
         if (isset($element['field_artsci_card_button_display'])) {
           $element['field_artsci_card_button_display']['widget']['#options']['_none'] = 'Use site default';
-          $element['field_artsci_card_button_display']['widget']['#description'] .= t('&nbsp;If "Use site default" is selected, this setting can be changed on the <a href="@settings_url">Artsci Pages settings</a>.', [
+          $element['field_artsci_card_button_display']['widget']['#description'] .= t('&nbsp;If "Use site default" is selected, this setting can be changed on the <a href="@settings_url">SiteNow Pages settings</a>.', [
             '@settings_url' => Url::fromRoute("artsci_pages.settings_form")
               ->toString(),
           ]);
@@ -1366,12 +1371,12 @@ function layout_builder_custom_preprocess_views_view_unformatted(&$variables) {
 function layout_builder_custom_views_plugins_display_alter(&$displays) {
   $moduleHandler = \Drupal::service('module_handler');
 
-  $is_v2 = \Drupal::config('config_split.config_split.artsci_v2')->get('status');
+  $is_v2 = \Drupal::config('config_split.config_split.sitenow_v2')->get('status');
 
-  // Only proceed if this is a V3 site or artsci_p2lb is enabled.
+  // Only proceed if this is a V3 site or sitenow_p2lb is enabled.
   // @todo Remove check and always set after v2 is removed.
   //   See https://github.com/artsci/artsci/issues/4948
-  if ($is_v2 === FALSE || $moduleHandler->moduleExists('artsci_p2lb')) {
+  if ($is_v2 === FALSE || $moduleHandler->moduleExists('sitenow_p2lb')) {
     // Swap the block class if it can be swapped.
     if (!empty($displays['block']['class']) && $displays['block']['class'] === Block::class) {
       $displays['block']['class'] = ListBlock::class;

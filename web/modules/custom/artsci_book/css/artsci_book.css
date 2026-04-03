@@ -1,11 +1,11 @@
 /**
  * @file
- * Default styling for the University of Iowa Book module.
- *
- * This styling is intended to provide a default layout for both the default
- * Views listings and content nodes, leaving much of the styling up to the
- * site itself.
+ * Default styling for the WashU Arts & Sciences Book module.
  */
+
+/* ==========================================================================
+   Book Node Base Styles
+   ========================================================================== */
 
 .node--type-book .field--name-book-amended-date,
 .node--type-book .field--name-book-owner,
@@ -20,4 +20,159 @@
 
 .node--type-book .field--name-book-tags a {
   text-decoration: none;
+}
+
+/* ==========================================================================
+   Book Subtitle
+   ========================================================================== */
+
+.book-subtitle {
+  font-size: 1.25rem;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Book Publication Date
+   ========================================================================== */
+
+.book-publication-date {
+  margin-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Book Links (Publisher, etc.)
+   ========================================================================== */
+
+.book-links {
+  margin-bottom: 1rem;
+}
+
+.book-links__item a {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Book Topics (Tags)
+   ========================================================================== */
+
+.book-topics {
+  margin-bottom: 2rem;
+}
+
+.book-topics__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--washu-red, #a51417);
+  margin-bottom: 0.5rem;
+}
+
+.book-topics__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.book-topics__item {
+  margin-bottom: 0.25rem;
+}
+
+.book-topics__item a {
+  text-decoration: none;
+}
+
+.book-topics__item a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   About the Author Section
+   ========================================================================== */
+
+.book-authors {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+.book-authors__title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.book-authors__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ==========================================================================
+   Book Author Card (Person in book_author view mode)
+   ========================================================================== */
+
+.book-author-card {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.book-author-card__image {
+  flex-shrink: 0;
+  width: 120px;
+}
+
+.book-author-card__image img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.book-author-card__content {
+  flex: 1;
+}
+
+.book-author-card__name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.book-author-card__bio {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.book-author-card__bio p:last-child {
+  margin-bottom: 0;
+}
+
+.book-author-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--washu-red, #a51417);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.book-author-card__link:hover {
+  text-decoration: underline;
+}
+
+.book-author-card__link .fa-solid {
+  font-size: 0.875em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .book-author-card {
+    flex-direction: column;
+  }
+
+  .book-author-card__image {
+    width: 100px;
+  }
 }

@@ -1,0 +1,326 @@
+uuid: d5c6d773-a3fd-4d93-9483-9eb38fe1cdff
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.book.body
+    - field.field.node.book.book_amended_date
+    - field.field.node.book.book_owner
+    - field.field.node.book.book_tags
+    - field.field.node.book.field_book_author
+    - field.field.node.book.field_book_links
+    - field.field.node.book.field_book_publication_date
+    - field.field.node.book.field_book_subtitle
+    - field.field.node.book.field_byline_names
+    - field.field.node.book.field_byline_options
+    - field.field.node.book.field_description
+    - field.field.node.book.field_image
+    - field.field.node.book.field_is_shared_content
+    - field.field.node.book.rabbit_hole__settings
+    - node.type.book
+  module:
+    - layout_builder
+    - user
+  theme:
+    - atomic_artsci
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_twocol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          column_widths: 67-33
+          layout_builder_styles_style:
+            - section_background_style_red
+            - section_margin_fixed_width_container
+        components:
+          -
+            uuid: 3c29d288-e004-431c-bcc8-ae189e1bc5ac
+            region: first
+            configuration:
+              id: 'field_block:node:book:field_book_publication_date'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: datetime_custom
+                label: inline
+                settings:
+                  timezone_override: ''
+                  date_format: 'F d, Y'
+                third_party_settings: {  }
+            weight: 2
+            additional:
+              layout_builder_styles_style:
+                0: ''
+                block_margin_default_removed: block_margin_default_removed
+            third_party_settings: {  }
+          -
+            uuid: 0fac9e51-a6f7-4621-ac39-7138cbce02df
+            region: first
+            configuration:
+              id: 'field_block:node:book:field_byline_names'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 1
+            additional:
+              layout_builder_styles_style:
+                0: ''
+                block_margin_default_removed: block_margin_default_removed
+            third_party_settings: {  }
+          -
+            uuid: c2da30c0-10f4-40b2-ae2a-f6a0a0b2e28d
+            region: first
+            configuration:
+              id: 'field_block:node:book:field_book_author'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: hidden
+                settings:
+                  link: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+            weight: 0
+            additional:
+              layout_builder_styles_style:
+                0: ''
+                block_margin_default_removed: block_margin_default_removed
+            third_party_settings: {  }
+          -
+            uuid: 35f47cbf-f18b-4829-accb-29e15d929447
+            region: first
+            configuration:
+              id: 'field_block:node:book:field_byline_options'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: list_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: -1
+            additional:
+              layout_builder_styles_style:
+                0: ''
+                block_margin_default_removed: block_margin_default_removed
+            third_party_settings: {  }
+          -
+            uuid: ef1632a0-7209-4929-8305-ca233c00655b
+            region: first
+            configuration:
+              id: 'field_block:node:book:field_book_subtitle'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: heading_text
+                label: hidden
+                settings:
+                  size: h2
+                third_party_settings: {  }
+            weight: -2
+            additional:
+              layout_builder_styles_style:
+                0: ''
+                block_margin_default_removed: block_margin_default_removed
+            third_party_settings: {  }
+          -
+            uuid: 5fc81578-3301-4a7e-aa3c-556af6260dfc
+            region: first
+            configuration:
+              id: 'field_block:node:book:title'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: heading_text
+                label: hidden
+                settings:
+                  size: h1
+                third_party_settings: {  }
+            weight: -3
+            additional:
+              layout_builder_styles_style:
+                - ''
+            third_party_settings: {  }
+          -
+            uuid: 96d08f5a-a002-41b5-8385-3cecb79f06b4
+            region: second
+            configuration:
+              id: 'field_block:node:book:field_image'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: large__no_crop
+                third_party_settings: {  }
+            weight: 0
+            additional:
+              layout_builder_styles_style:
+                - ''
+            third_party_settings: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_twocol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          column_widths: 67-33
+          layout_builder_styles_style:
+            - ''
+            - section_margin_fixed_width_container
+        components:
+          -
+            uuid: b85221d6-18d0-43f2-9cdb-d5c38ced4c85
+            region: first
+            configuration:
+              id: 'field_block:node:book:body'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional:
+              layout_builder_styles_style:
+                - ''
+            third_party_settings: {  }
+          -
+            uuid: 5d8ce0c1-0cad-4f2f-b321-1617d2c25753
+            region: second
+            configuration:
+              id: 'field_block:node:book:book_tags'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+            third_party_settings: {  }
+          -
+            uuid: 9df09d74-e654-4a74-a15d-94290ee6c629
+            region: first
+            configuration:
+              id: 'field_block:node:book:field_description'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional:
+              layout_builder_styles_style:
+                - ''
+            third_party_settings: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          layout_builder_styles_style:
+            - ''
+            - section_margin_fixed_width_container
+        components:
+          -
+            uuid: 33804c59-3508-487a-b08b-43c08ce4931e
+            region: content
+            configuration:
+              id: 'field_block:node:book:field_book_author'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: book_author
+                  link: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+            third_party_settings: {  }
+        third_party_settings: {  }
+id: node.book.default
+targetEntityType: node
+bundle: book
+mode: default
+content: {  }
+hidden:
+  body: true
+  book_amended_date: true
+  book_owner: true
+  book_tags: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_book_author: true
+  field_book_links: true
+  field_book_publication_date: true
+  field_book_subtitle: true
+  field_byline_names: true
+  field_byline_options: true
+  field_description: true
+  field_image: true
+  field_is_shared_content: true
+  links: true
+  private: true
+  rabbit_hole__settings: true
+  search_api_excerpt: true

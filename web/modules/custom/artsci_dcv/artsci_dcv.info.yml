@@ -1,6 +1,0 @@
-name: Artsci DCV
-type: module
-description: 'CertManager domain control validation via file upload.'
-core_version_requirement: ^9 || ^10 || ^11
-package: Artsci
-configure: artsci_dcv.settings

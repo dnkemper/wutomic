@@ -1,7 +1,0 @@
-artsci_alerts.settings_form:
-  path: '/admin/config/artsci/artsci-alerts'
-  defaults:
-    _title: 'University of Iowa Alerts'
-    _form: 'Drupal\artsci_alerts\Form\SettingsForm'
-  requirements:
-    _permission: 'administer artsci_alerts configuration'

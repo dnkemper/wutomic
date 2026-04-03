@@ -1,0 +1,67 @@
+{#
+/**
+ * @file
+ * Theme override to display a block.
+ *
+ * Available variables:
+ * - plugin_id: The ID of the block implementation.
+ * - label: The configured label of the block if visible.
+ * - configuration: A list of the block's configuration values.
+ *   - label: The configured label for the block.
+ *   - label_display: The display settings for the label.
+ *   - provider: The module or other provider that provided this block plugin.
+ *   - Block plugin specific settings will also be stored here.
+ * - content: The content of this block.
+ * - attributes: array of HTML attributes populated by modules, intended to
+ *   be added to the main container tag of this template.
+ *   - id: A valid HTML ID and guaranteed unique.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ *
+ * @see template_preprocess_block()
+ */
+#}
+
+{{ attach_library('atomic_artsci/vertical-video') }}
+{{ attach_library('atomic_artsci/highlight') }}
+
+{% set video_id = content.field_artsci_vertical_video[0]['#media'].id %}
+{% set video_title = content.field_artsci_vertical_video_title[0] %}
+{% set video_field = content.field_artsci_vertical_video[0]['#media'].field_media_video_file.entity.uri.value %}
+{% set video_url = file_url(content.field_artsci_vertical_video[0]['#media'].field_media_video_file.entity.uri.value) %}
+{% set video_thumbnail = file_url(content.field_artsci_vertical_video_image[0]['#media'].field_media_image.entity.uri.value) %}
+{% set video_caption_url = file_url(content.field_artsci_vertical_video_cap[0]['#media'].field_media_file.entity.uri.value) %}
+
+<div class="portrait {{ attributes ? attributes.class }}" {{ attributes ? attributes|without('class') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <div class="portrait__item">
+    <div class="embed-responsive media--video embed-responsive-9by16">
+      {% if video_field is not empty %}
+      {% if video_title is not empty %}
+        <div id="video-btn--{{ video_id }}" class="vidbttn">
+        {% else %}
+        <div id="video-btn--{{ video_id }}" class="vidbttn">
+          {% endif %}
+          <span>Play</span>
+        </div>
+        <video id="video-container--{{ video_id }}" class="player" preload="metadata"  poster="{{ video_thumbnail }}" controls>
+          <source src="{{ video_url }}" type="video/mp4">
+          <track label="English" kind="subtitles" srclang="en" src="{{ video_caption_url }}" default="default"/>
+          <p>Video is not Supporting</p>
+        </video>
+        {% endif %}
+    </div>
+    {% if video_title is not empty %}
+      <div class="highlight__wrapper">
+        <span class="highlight__title">
+          <span class="headline__heading">{{ video_title }}</span>
+        </span>
+      </div>
+    {% endif %}
+  </div>
+</div>

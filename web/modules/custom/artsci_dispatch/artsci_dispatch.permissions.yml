@@ -1,8 +1,0 @@
-administer artsci_dispatch configuration:
-  title: 'Administer artsci_dispatch configuration'
-  description: 'Access configuration settings for the Artsci Dispatch module.'
-  restrict access: true
-
-send artsci_dispatch requests:
-  title: 'Send artsci_dispatch requests'
-  description: 'Send requests for dispatch communications.'

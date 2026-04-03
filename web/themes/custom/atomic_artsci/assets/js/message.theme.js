@@ -1,6 +1,6 @@
 /**
  * @file
- * Overriding core's message functions to match UIDS alert component structure.
+ * Overriding core's message functions to match ARTSCI alert component structure.
  */
 
 ((Drupal) => {
@@ -38,7 +38,7 @@
       alertClasses.push('alert--dismissible');
     }
 
-    // Map Drupal message types to UIDS alert types and icons.
+    // Map Drupal message types to ARTSCI alert types and icons.
     let icon = '';
     if (type === 'status') {
       alertClasses.push('alert--success');

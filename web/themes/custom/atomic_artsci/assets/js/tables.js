@@ -11,9 +11,9 @@ let responsiveTablePrefixes = [
 document.addEventListener("DOMContentLoaded", function () {
 
     // Detect if we are on a layout builder preview page.
-    if (document.querySelector('#block-artsci-base-local-tasks a[data-drupal-link-system-path$="layout"].is-active')) {
+    if (document.querySelector('#block-atomic-artsci-local-tasks a[data-drupal-link-system-path$="layout"].is-active')) {
         // if it is, grab the element that holds the layout builder content and its preview.
-        let layoutContent = document.querySelector('#block-artsci-base-content');
+        let layoutContent = document.querySelector('#block-atomic-artsci-content');
         // Then set up a mutation observer to observe if if the content within it changes.
         let layoutContentMO = new window.MutationObserver(function (e) {
             // For each change 'e', check to see if there are removed nodes and if there are, if one of them was the 'layout-builder' node.

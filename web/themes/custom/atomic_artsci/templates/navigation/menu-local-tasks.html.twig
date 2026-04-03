@@ -11,11 +11,14 @@
  * themed in menu-local-task.html.twig.
  */
 #}
-{% if primary %}
+{% set primary_rendered = primary ? primary|render : '' %}
+{% set secondary_rendered = secondary ? secondary|render : '' %}
+
+{% if primary_rendered|trim %}
   <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
-  <ul class="tabs primary">{{ primary }}</ul>
+  <ul class="tabs primary">{{ primary_rendered }}</ul>
 {% endif %}
-{% if secondary %}
+{% if secondary_rendered|trim %}
   <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
-  <ul class="tabs secondary">{{ secondary }}</ul>
+  <ul class="tabs secondary">{{ secondary_rendered }}</ul>
 {% endif %}

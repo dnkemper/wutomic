@@ -1,4 +1,4 @@
-import { applyClickA11y } from '../../artsci/assets/js/click-a11y.js';
+import { applyClickA11y } from './click-a11y.js';
 
 (function ($, Drupal) {
   "use strict";

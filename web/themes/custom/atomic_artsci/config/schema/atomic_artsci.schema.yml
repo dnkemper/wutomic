@@ -1,6 +1,6 @@
 atomic_artsci.settings:
   type: theme_settings
-  label: 'Atomic Artsci settings'
+  label: 'ARTSCI Base settings'
   mapping:
     header:
       label: 'Header settings'

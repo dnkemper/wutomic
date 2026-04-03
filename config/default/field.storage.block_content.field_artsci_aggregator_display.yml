@@ -1,0 +1,30 @@
+uuid: 8a7b6c5d-4e3f-2a1b-0c9d-8e7f6a5b4c3d
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+id: block_content.field_artsci_aggregator_display
+field_name: field_artsci_aggregator_display
+entity_type: block_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: article_block
+      label: Articles
+    -
+      value: people_block
+      label: People
+    -
+      value: block_1
+      label: Books
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

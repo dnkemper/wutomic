@@ -1,6 +1,0 @@
-name: artsci_facilities
-type: module
-description: Provides Facilities Management integration.
-package: Artsci
-core: 8.x
-core_version_requirement: ^9 || ^10 || ^11

@@ -1,0 +1,10 @@
+uuid: ab4c9ce6-9b44-45e3-96a0-6c2fda22c05a
+langcode: en
+status: true
+dependencies: {  }
+id: banner_card_background
+label: 'Card Background'
+multiselect: single
+form_type: select
+required: false
+weight: -2

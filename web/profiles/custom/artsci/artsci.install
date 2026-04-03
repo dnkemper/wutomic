@@ -1254,7 +1254,7 @@ function artsci_update_9017() {
     'sites/icsa.artsci.edu' => 'icsa.artsci.edu',
     'sites/ighn.international.artsci.edu' => 'ighn.international.artsci.edu',
     'sites/immuno.grad.artsci.edu' => 'immuno.grad.artsci.edu',
-    'sites/iowasuperfund.artsci.edu' => 'iowasuperfund.artsci.edu',
+    'sites/artscisuperfund.artsci.edu' => 'artscisuperfund.artsci.edu',
     'sites/pharmacy.artsci.edu' => 'pharmacy.artsci.edu',
     'sites/policy.clas.artsci.edu' => 'policy.clas.artsci.edu',
     'sites/presidentialsearch.artsci.edu' => 'presidentialsearch.artsci.edu',
@@ -2842,7 +2842,7 @@ function artsci_update_9071() {
     $config->set('header.branding_options', 'regents');
   }
   else {
-    $config->set('header.branding_options', 'iowa');
+    $config->set('header.branding_options', 'artsci');
   }
   $config->save();
 }
@@ -4712,4 +4712,52 @@ function artsci_update_10034() {
   }
 
   return t('No webform handlers required attachment changes.');
+}
+
+/**
+ * Add 'page' to replicate allowed if not present and not artsci_v2.
+ */
+function artsci_update_10035() {
+  $config_split_manager = \Drupal::service('config_split.manager');
+  $artsci_v2 = $config_split_manager->getSplitConfig('artsci_v2');
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('artsci_core.settings');
+  // If v2 return no action needed.
+  if ($artsci_v2 && $artsci_v2->get('status')) {
+    return;
+  }
+  // Get current allowed array.
+  $allowed = $config->get('artsci_core.replicate_allowed');
+  // If array continue otherwise make array.
+  if (!is_array($allowed)) {
+    $allowed = [];
+  }
+  // If page not in array add it and save.
+  if (!in_array('person', $allowed)) {
+    $allowed[] = 'person';
+    $config->set('artsci_core.replicate_allowed', $allowed)
+      ->save();
+  }
+}
+
+/**
+ * Add 'page' to replicate allowed if not present and not artsci_v2.
+ */
+function artsci_update_10036() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('artsci_core.settings');
+  // If v2 return no action needed.
+
+  // Get current allowed array.
+  $allowed = $config->get('artsci_core.replicate_allowed');
+  // If array continue otherwise make array.
+  if (!is_array($allowed)) {
+    $allowed = [];
+  }
+  // If page not in array add it and save.
+  if (!in_array('book', $allowed)) {
+    $allowed[] = 'book';
+    $config->set('artsci_core.replicate_allowed', $allowed)
+      ->save();
+  }
 }

@@ -1,4 +1,0 @@
-administer dcv:
-  title: 'Administer DCV'
-  description: 'Upload a file for domain control validation.'
-  restrict access: TRUE

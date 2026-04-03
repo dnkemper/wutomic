@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Theme override for the book links field.
+ *
+ * Displays publisher and other related links.
+ */
+#}
+{%
+  set classes = [
+    'field',
+    'field--name-' ~ field_name|clean_class,
+    'book-links',
+  ]
+%}
+
+{% if items|length > 0 %}
+<div{{ attributes.addClass(classes) }}>
+  {% for item in items %}
+    <span class="book-links__item">
+      {%- if not loop.first %} | {% endif -%}
+      {{ item.content }}
+    </span>
+  {% endfor %}
+</div>
+{% endif %}

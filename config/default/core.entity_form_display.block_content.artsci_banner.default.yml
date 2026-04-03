@@ -23,12 +23,6 @@ targetEntityType: block_content
 bundle: artsci_banner
 mode: default
 content:
-  field_styles_gradient_midpoint:
-    type: options_buttons
-    weight: 26
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_artsci_banner_autoplay:
     type: boolean_checkbox
     weight: 6
@@ -86,6 +80,12 @@ content:
   field_artsci_banner_title:
     type: heading
     weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_styles_gradient_midpoint:
+    type: options_buttons
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }

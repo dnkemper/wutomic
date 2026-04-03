@@ -1,5 +1,0 @@
-name: Artsci Articles
-type: module
-description: 'Periodical feature for the Artsci platform.'
-core_version_requirement: ^9 || ^10 || ^11
-package: Artsci

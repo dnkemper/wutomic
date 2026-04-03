@@ -62,21 +62,22 @@
 {% endif %}
 
 {% if page.header %}
-{# {% include '@atomic_artsci/layout/header--' ~ header_type ~ '.html.twig' %} #}
 {% include '@atomic_artsci/layout/header--inline.html.twig' %}
-
 {% endif %}
-  {% if page.breadcrumb %}
-    {{ page.breadcrumb }}hi
-  {% endif %}
+
 {% if page.alert %}
   {{ page.alert }}
 {% endif %}
+
 
 <main role="main" {{ node_attributes.addClass(content_classes) }}>
 
   <a id="main-content" tabindex="-1"></a>
   {# link is in html.html.twig #}
+
+  {% if page.breadcrumb %}
+    {{ page.breadcrumb }}
+  {% endif %}
 
   {{ page.content }}
 

@@ -1,6 +1,0 @@
-services:
-  artsci_p2lb.commands:
-    class: Drupal\artsci_p2lb\Commands\P2LbCommands
-    arguments: ['@account_switcher', '@entity_type.manager', '@entity_reference_revisions.orphan_purger', '@config.factory']
-    tags:
-      - { name: drush.command }

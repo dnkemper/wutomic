@@ -17,14 +17,6 @@ targetEntityType: paragraph
 bundle: artsci_slide
 mode: default
 content:
-  field_collection_headline:
-    type: string_textfield
-    weight: 0
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_artsci_slide_content:
     type: text_textarea
     weight: 1
@@ -49,6 +41,14 @@ content:
       placeholder_title: ''
       linkit_profile: default
       linkit_auto_link_text: false
+    third_party_settings: {  }
+  field_collection_headline:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   created: true

@@ -2,8 +2,6 @@
 @use 'variables';
 @use 'placeholders';
 
-$imgpath: '../../assets/images' !default;
-
 $backgrounds: (
   // Black.
   'bg--black--pattern--brain': (
@@ -21,9 +19,13 @@ $backgrounds: (
     'background-color': variables.$secondary,
     'background-image': '#{variables.$imgpath}/particle-pattern--black.png',
   ),
-  'bg--black': (
+  'bg--teal': (
     'type': 'dark',
-    'background-color': variables.$secondary,
+    'background-color': variables.$color-teal,
+  ),
+  'bg--red': (
+    'type': 'dark',
+    'background-color': variables.$primary,
   ),
   // Gold.
   'bg--gold--pattern--brain': (
@@ -40,10 +42,6 @@ $backgrounds: (
     'type': 'light',
     'background-color': variables.$primary,
     'background-image': '#{variables.$imgpath}/particle-pattern.png',
-  ),
-  'bg--gold': (
-    'type': 'light',
-    'background-color': variables.$primary,
   ),
   // Gray.
   'bg--gray--pattern--brain': (
@@ -147,72 +145,4 @@ $bg-to-fg-color-map: (
       @content
     }
   }
-}
-
-.bg-primary {
-  background: variables.$primary;
-}
-
-.bg-secondary {
-  background: variables.$secondary;
-}
-
-.bg-cool-gray {
-  background: variables.$brand-cool-gray;
-}
-
-.bg-blue {
-  background: variables.$info;
-}
-
-.bg-green {
-  background: variables.$success;
-}
-
-.bg-orange {
-  background: variables.$danger;
-}
-
-.text-white {
-  color: variables.$white;
-}
-
-.text--gray {
-  color: variables.$brand-cool-gray;
-}
-
-.text--gold {
-  color: variables.$primary;
-}
-
-.text--black {
-  color: variables.$secondary;
-}
-
-a.text--black {
-  color: variables.$secondary;
-  [class*="bg-"] &,
-  [class*="bg-"] [class*="bg-"] & {
-    color: variables.$secondary;
-  }
-}
-
-.text--white {
-  color: variables.$white;
-}
-
-.bg--gold {
-  background: variables.$primary;
-}
-
-.bg--black {
-  background: variables.$secondary;
-}
-
-.bg--gray {
-  background: variables.$light;
-}
-
-.bg--light {
-  background: variables.$white;
 }

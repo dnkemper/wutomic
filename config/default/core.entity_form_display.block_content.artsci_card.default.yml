@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - block_content.type.artsci_card
+    - field.field.block_content.artsci_card.field_pre_title
     - field.field.block_content.artsci_card.field_artsci_card_author
     - field.field.block_content.artsci_card.field_artsci_card_button_display
     - field.field.block_content.artsci_card.field_artsci_card_excerpt
@@ -12,7 +13,7 @@ dependencies:
     - field.field.block_content.artsci_card.field_artsci_card_title
   module:
     - heading
-    - linkit_attributes
+    - linkit
     - media_library
     - text
 _core:
@@ -52,7 +53,7 @@ content:
       media_types: {  }
     third_party_settings: {  }
   field_artsci_card_link:
-    type: linkit_attributes
+    type: linkit
     weight: 4
     region: content
     settings:
@@ -60,26 +61,20 @@ content:
       placeholder_title: ''
       linkit_profile: default
       linkit_auto_link_text: true
-      enabled_attributes:
-        data-sn-event: true
-        data-sn-event-type: true
-        data-sn-event-component: true
-        data-sn-event-label: true
-        id: false
-        name: false
-        target: false
-        rel: false
-        class: false
-        accesskey: false
-        aria-label: false
-        title: false
-      widget_default_open: collapsed
     third_party_settings: {  }
   field_artsci_card_title:
     type: heading
     weight: 0
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_pre_title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   info:
     type: string_textfield

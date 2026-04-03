@@ -1,0 +1,8 @@
+# Fonts will be copied dynamically during the build process.
+assets/fonts
+
+# Icons will be copied dynamically during the build process.
+assets/icons
+
+# JS is not compiled dynamically but lives in assets directory.
+!assets/js

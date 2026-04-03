@@ -1,0 +1,11 @@
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
+
+// Events List Block
+.view-events-list-block,
+.view-display-id-card_list {
+  .field--name-field-event-location,
+  .field--name-field-event-virtual {
+    margin-top: variables.$xsm;
+  }
+}

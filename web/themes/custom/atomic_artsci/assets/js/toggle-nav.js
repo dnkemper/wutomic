@@ -110,7 +110,7 @@ class ToggleNavBehavior {
 
   Drupal.behaviors.toggleNav = {
     attach: function (context, settings) {
-      const [header] = once('artsci_base_toggle_nav', context.querySelector('[data-artsci-header]'));
+      const [header] = once('atomic_artsci_toggle_nav', context.querySelector('[data-artsci-header]'));
       if (header) {
         // Instantiate the ToggleNavBehavior class to attach the behavior
         new ToggleNavBehavior(context);

@@ -1,5 +1,0 @@
-chart_overrides:
-  version: 1.x
-  css:
-    theme:
-      css/artsci_charts.css: {}

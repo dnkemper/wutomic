@@ -1,0 +1,47 @@
+adding: {  }
+removing:
+  dependencies:
+    config:
+      - block_content.type.artsci_hero
+      - block_content.type.artsci_page_title_hero
+      - entity_browser.browser.media_wysiwyg_browser
+      - media.type.audio
+      - media.type.facebook
+      - media.type.panopto
+      - media.type.static_map
+      - media.type.twitter
+    module:
+      - google_tag
+  permissions:
+    - 'access media_wysiwyg_browser entity browser pages'
+    - 'access ui icons library'
+    - 'administer google tag manager'
+    - 'create audio media'
+    - 'create facebook media'
+    - 'create panopto media'
+    - 'create static_map media'
+    - 'create twitter media'
+    - 'delete any audio media'
+    - 'delete any facebook media'
+    - 'delete any panopto media'
+    - 'delete any static_map media'
+    - 'delete any twitter media'
+    - 'delete any artsci_hero block content'
+    - 'delete any artsci_page_title_hero block content'
+    - 'delete own audio media'
+    - 'delete own facebook media'
+    - 'delete own panopto media'
+    - 'delete own static_map media'
+    - 'delete own twitter media'
+    - 'edit any audio media'
+    - 'edit any facebook media'
+    - 'edit any panopto media'
+    - 'edit any static_map media'
+    - 'edit any twitter media'
+    - 'edit any artsci_hero block content'
+    - 'edit any artsci_page_title_hero block content'
+    - 'edit own audio media'
+    - 'edit own facebook media'
+    - 'edit own panopto media'
+    - 'edit own static_map media'
+    - 'edit own twitter media'

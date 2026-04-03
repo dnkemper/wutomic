@@ -4,11 +4,8 @@ status: true
 dependencies:
   config:
     - image.style.thumbnail
-    - media.type.audio
-    - media.type.facebook
     - media.type.image
     - media.type.remote_video
-    - media.type.twitter
   module:
     - entity_browser
     - image
@@ -590,10 +587,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              editor: '0'
-              webmaster: '0'
-              administrator: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -619,11 +612,8 @@ display:
           plugin_id: bundle
           operator: in
           value:
-            facebook: facebook
-            audio: audio
             image: image
             remote_video: remote_video
-            twitter: twitter
           group: 1
           exposed: true
           expose:
@@ -640,12 +630,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              viewer: '0'
-              editor: '0'
-              publisher: '0'
-              webmaster: '0'
-              administrator: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -671,11 +655,8 @@ display:
           plugin_id: bundle
           operator: in
           value:
-            audio: audio
-            facebook: facebook
             image: image
             remote_video: remote_video
-            twitter: twitter
           group: 1
           exposed: false
           expose:

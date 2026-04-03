@@ -21,6 +21,7 @@ class Card extends BlockContent implements RendersAsCardInterface {
 
     // Add fields to card.
     $this->mapFieldsToCardBuild($build, [
+      '#pre_title' => 'field_pre_title',
       '#media' => [
         'field_artsci_card_image',
       ],
@@ -34,16 +35,12 @@ class Card extends BlockContent implements RendersAsCardInterface {
       $title = $build['field_artsci_card_link'][0]['#title'] ?? NULL;
 
       if ($url) {
-        $link_attributes = $url->getOptions()['attributes'] ?? [];
         $url = $url->toString();
         if (LinkHelper::shouldClearTitle($title)) {
           $title = NULL;
         }
         $build['#url'] = $url;
         $build['#link_text'] = $title;
-        if (!empty($link_attributes)) {
-          $build['#link_attributes'] = $link_attributes;
-        }
       }
 
       // Remove the original field to prevent further processing.

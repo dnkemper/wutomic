@@ -1,5 +1,0 @@
-name: Artsci Dispatch
-type: module
-description: Dispatch integration for the Artsci platform.
-package: Custom
-core_version_requirement: ^9 || ^10 || ^11

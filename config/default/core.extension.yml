@@ -8,18 +8,27 @@ module:
   aggregator: 0
   allowed_formats: 0
   antibot: 0
+  artsci_aggregator: 0
+  artsci_book: 0
+  artsci_core: 0
+  artsci_media_wysiwyg: 0
+  artsci_pages: 0
+  artsci_people: 0
+  artsci_search: 0
+  artsci_seo: 0
   automated_cron: 0
   better_exposed_filters: 0
   bigmenu: 0
   block: 0
   block_content: 0
+  book: 0
   breakpoint: 0
   captcha: 0
   ckeditor5: 0
   ckeditor_small_tag: 0
   config: 0
+  config_filter: 0
   config_ignore: 0
-  config_inspector: 0
   config_split: 0
   content_moderation: 0
   contextual: 0
@@ -28,6 +37,7 @@ module:
   csv_serialization: 0
   ctools: 0
   ctools_views: 0
+  date_all_day: 0
   datetime: 0
   datetime_range: 0
   dblog: 0
@@ -60,6 +70,7 @@ module:
   fragments: 0
   fullcalendar_view: 0
   geofield: 0
+  gin_toolbar: 0
   google_tag: 0
   heading: 0
   help: 0
@@ -70,21 +81,21 @@ module:
   imagecache_external: 0
   imagemagick: 0
   inline_entity_form: 0
+  inline_form_errors: 0
+  js_cookie: 0
   jsonapi: 0
   jsonapi_extras: 0
   jsonapi_include: 0
-  inline_form_errors: 0
-  js_cookie: 0
   key: 0
   layout_builder: 0
+  layout_builder_browser: 0
   layout_builder_expose_all_field_blocks: 0
-  layout_builder_limit: 0
-  layout_builder_lock: 0
   layout_builder_operation_link: 0
   layout_builder_restrictions: 0
   layout_builder_restrictions_by_region: 0
   layout_builder_styles: 0
   layout_discovery: 0
+  lb_copy_section: 0
   lb_direct_add: 0
   link: 0
   link_attributes: 0
@@ -121,17 +132,18 @@ module:
   node: 0
   node_revision_delete: 0
   node_view_permissions: 0
-  og: 0
+  optional_end_date: 0
   options: 0
   override_node_options: 0
   page_cache: 0
   path: 0
   path_alias: 0
   photoswipe: 0
-  private_content: 0
   photoswipe_dynamic_caption: 0
   phpass: 0
+  private_content: 0
   rabbit_hole: 0
+  rebuild_cache_access: 0
   redirect: 0
   replicate: 0
   replicate_ui: 0
@@ -147,15 +159,10 @@ module:
   schema_person: 0
   schema_web_site: 0
   search_api: 0
+  search_api_db: 0
   serialization: 0
   simple_sitemap: 0
   simplei: 0
-  artsci_dcv: 0
-  artsci_dispatch: 0
-  artsci_media_wysiwyg: 0
-  artsci_pages: 0
-  artsci_people: 0
-  artsci_seo: 0
   smart_date: 0
   smart_date_recur: 0
   smart_trim: 0
@@ -175,32 +182,27 @@ module:
   turnstile: 0
   tvi: 0
   twig_tweak: 0
-  update: 0
-  artsci_aggregator: 0
-  artsci_alerts: 0
-  artsci_core: 0
-  artsci_entities: 0
-  artsci_search: 0
+  twig_vardumper: 0
   user: 0
   views_bulk_operations: 0
   views_core_entity_reference: 0
   views_data_export: 0
-  views_ui: 0
+  views_tree: 0
   webform: 0
   webform_ui: 0
   weight: 0
   workbench_email: 0
   workflows: 0
+  artsci_articles: 1
   layout_builder_custom: 1
   menu_admin_per_menu: 1
   menu_link_content: 1
   pathauto: 1
-  artsci_articles: 1
-  artsci_events: 1
   externalauth: 10
   menu_link_weight: 10
   views: 10
   paragraphs: 11
+  twigsuggest: 100
   artsci: 1000
 theme:
   stable: 0

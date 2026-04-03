@@ -39,19 +39,6 @@
   <div{{ attributes.addClass(classes) }}>
     {# Middle container is necessary for having a fixed width container inside a section with a visible background. #}
     <div class="layout__spacing_container">
-
-      {# {# Section headline renders once, inside the background container but above all columns. #}
-       {% if section_headline.text %}
-        {% set headline = {
-          'headline_level': section_headline.size ?: 'h2',
-          'headline_class': 'headline--serif',
-          'headline_text': section_headline.text,
-          'headline_location': 'left',
-        } %}
-        <div class="layout__headline">
-          {% include '@atomic_artsci/artsci/headline.html.twig' with headline only %}
-        </div>
-      {% endif %} 
       {% for region in layout.getRegionNames %}
 
         {% if render_sections[region] %}

@@ -465,7 +465,7 @@ $search-img-path: '../../images/search-01.svg';
   }
 }
 
-// artsci_base overrides.
+// atomic_artsci overrides.
 
 .search-overlay .artsci-search [type="submit"]::before {
   background-image: url($search-mobile-img-path);

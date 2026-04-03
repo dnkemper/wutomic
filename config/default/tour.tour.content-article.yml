@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: content-article
 label: 'Adding Articles'
-module: artsci
 routes:
   -
     route_name: node.add

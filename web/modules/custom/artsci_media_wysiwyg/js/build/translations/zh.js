@@ -1,0 +1,1 @@
+!function(e){const n=e.zh=e.zh||{};n.dictionary=Object.assign(n.dictionary||{},{"Edit source":"編輯Iframe","Empty snippet content":"Iframe標籤中無內容","iframe snippet":"Iframe標籤","Insert Iframe":"輸入Iframe","No preview available":"無法顯示預覽","paste iframe code here...":"在此貼上純Iframe","Save changes":"儲存變更"})}(window.CKEDITOR_TRANSLATIONS||(window.CKEDITOR_TRANSLATIONS={}));

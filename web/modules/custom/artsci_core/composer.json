@@ -1,6 +1,6 @@
 {
-    "name": "uiowa/uiowa_core",
-    "description": "Core uiowa functionality.",
+    "name": "uartsci/uartsci_core",
+    "description": "Core uartsci functionality.",
     "type": "drupal-custom-module",
     "extra": {
         "drush": {

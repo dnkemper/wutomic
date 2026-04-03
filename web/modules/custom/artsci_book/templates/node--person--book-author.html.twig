@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * Theme override for person nodes displayed in the book_author view mode.
+ *
+ * Shows author card with headshot, name, bio excerpt, and "Learn More" link.
+ *
+ * Available variables:
+ * - node: The person node entity.
+ * - first_name: The person's first name.
+ * - last_name: The person's last name.
+ * - full_name: Combined first and last name.
+ * - person_url: URL to the person's profile page.
+ * - external_url: URL to external website (if set).
+ * - is_external: Boolean indicating if link should go to external site.
+ * - content: All node content with configured fields.
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    'node--view-mode-book-author',
+    'book-author-card',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  {% if content.field_image|render %}
+    <div class="book-author-card__image">
+      {{ content.field_image }}
+    </div>
+  {% endif %}
+
+  <div class="book-author-card__content">
+    <h3 class="book-author-card__name">{{ full_name }}</h3>
+
+    {% if content.body|render %}
+      <div class="book-author-card__bio">
+        {{ content.body }}
+      </div>
+    {% endif %}
+
+    {% if first_name %}
+      {% set link_url = is_external ? external_url : person_url %}
+      <a href="{{ link_url }}" class="book-author-card__link">
+        {{ 'Learn More About @name'|t({'@name': first_name}) }}
+        {% if is_external %}
+          <span class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></span>
+          <span class="visually-hidden">{{ '(external link)'|t }}</span>
+        {% else %}
+          <span class="fa-solid fa-arrow-right" aria-hidden="true"></span>
+        {% endif %}
+      </a>
+    {% endif %}
+  </div>
+</article>

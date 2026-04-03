@@ -1,6 +1,14 @@
-@use '../abstracts/variables';
+@use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
-// @forward 'border';
+
+.border {
+  @include utilities.border;
+}
+
+.borderless {
+  border: none!important;
+}
+
 
 @mixin container-query() {
   @supports (contain: inline-size) {
@@ -23,7 +31,7 @@
   display: flex;
   flex: 1 1 0%;
   flex-direction: column;
-  // @include utilities.border;
+  @include utilities.border;
 
   h2,
   h3,
@@ -241,14 +249,8 @@
 
 // === Pre-Title === //
 .card__pre-title {
-  font-family: variables.$font-family-sans-serif;
-  font-weight: variables.$font-weight-medium-bold;
-  color: variables.$color-red-dark;
-  line-height: 150%;
-  letter-spacing: 5%;
-  font-size: 1rem;
-  margin: 10px 0;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  opacity: .7;
   i,
   span[class*="fa-"],
   svg {
@@ -522,7 +524,7 @@ $bg-colors: "white", "gray", "black", "gold";
 /* === End: Card modifiers === */
 
 
-// @todo move back to UIDS
+// @todo move back to ARTSCI
 // https://github.com/artsci/artsci/issues/6295
 
 .card {

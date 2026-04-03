@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: artsci-alerts
 label: 'Artsci Alerts'
-module: artsci
 routes:
   -
     route_name: artsci_alerts.settings_form

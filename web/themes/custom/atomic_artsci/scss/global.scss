@@ -1,25 +1,5 @@
-// ==========================================================================
-// GLOBAL — Stripped-down foundation
-// ==========================================================================
-// This file contains ONLY the essential global styles:
-//   - CSS custom properties
-//   - Reset / normalize
-//   - Base typography
-//   - Layout containers & grid
-//   - Section spacing
-//   - Headlines
-//   - Basic utilities
-// ==========================================================================
-
-@use 'abstracts/_variables.scss';
-@use 'abstracts/utilities' as utilities;
-@use 'abstracts/mixins' as mixins;
-@use 'abstracts/headline-mixins' as headline-mixins;
-.block.block-layout-builder.block-field-blocknodepersonprivate,
-.block.block-layout-builder.block-field-blocknodepageprivate {
-    display: none;
-    height: 0;
-}
+@use 'abstracts/variables.scss';
+@use 'abstracts/_utilities.scss';
 a.arrow {
   color: black;
     &::after {
@@ -249,21 +229,24 @@ h3 {
   --space-sm-width-gutter: 1.25rem;
 }
 
-// ==========================================================================
-// RESET
-// ==========================================================================
+:root {
+  font-size: 16px;
+}
 
 html {
   box-sizing: border-box;
   font-family: variables.$font-family-sans-serif;
+  /* 1 */
   line-height: 1.15;
+  /* 2 */
   -ms-text-size-adjust: 100%;
+  /* 3 */
   -webkit-text-size-adjust: 100%;
+  /* 3 */
   touch-action: manipulation;
-  scroll-behavior: smooth;
-  scroll-padding-bottom: 120px;
 }
 
+// https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
 * {
   box-sizing: inherit;
 
@@ -273,6 +256,12 @@ html {
   }
 }
 
+/* Sections
+   ========================================================================== */
+
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
 body {
   margin: 0;
   font-size: 100%;
@@ -282,80 +271,412 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-article, aside, footer, header, nav, section,
-figcaption, figure, main {
+/**
+ * Add the correct display in IE 9-.
+ */
+article,
+aside,
+footer,
+header,
+nav,
+section {
   display: block;
 }
 
-hr {
-  box-sizing: content-box;
-  height: 0;
-  overflow: visible;
-  border: 0;
-  clear: both;
-  float: none;
-  width: 100%;
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+figcaption,
+figure,
+main {
+  /* 1 */
+  display: block;
 }
 
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1rem;
+  /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
 a {
   background-color: transparent;
+  /* 1 */
   -webkit-text-decoration-skip: objects;
-  color: variables.$link-color;
-  text-decoration: underline;
+  /* 2 */
 
+  /**
+   * Remove the outline on focused links when they are also active or hovered
+   * in all browsers (opinionated).
+   */
   &:active,
   &:hover {
     outline-width: 0;
   }
 }
 
-img {
-  border: 0;
-  height: auto;
-  max-width: 100%;
-  vertical-align: top;
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: 0;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  text-decoration: underline dotted;
+  /* 2 */
 }
 
-svg:not(:root) {
-  overflow: hidden;
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
 }
 
-audio, video {
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ */
+audio,
+video {
   display: inline-block;
 }
 
+/**
+ * Add the correct display in iOS 4-7.
+ */
 audio:not([controls]) {
   display: none;
   height: 0;
 }
 
-button, input, optgroup, select, textarea {
-  font-family: sans-serif;
-  margin: 0;
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+img {
+  border: 0;
+  height: auto;
+  max-width: 100%;
+  /* Remove small gap at the bottom of an image when inside a container. */
+  vertical-align: top;
 }
 
-button, input {
+/**
+ * Hide the overflow in IE.
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: sans-serif;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+  /* 1 */
   overflow: visible;
 }
 
-button, select {
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+  /* 1 */
   text-transform: none;
 }
 
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
 button,
 html [type='button'],
+  /* 1 */
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button;
+  /* 2 */
 }
 
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type='button']:-moz-focusring,
+[type='reset']:-moz-focusring,
+[type='submit']:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  display: inline-block;
+  /* 1 */
+  vertical-align: baseline;
+  /* 2 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+[type='checkbox'],
+[type='radio'] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+[type='search']::-webkit-search-cancel-button,
+[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+details,
+  /* 1 */
+menu {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+}
+
+/* Scripting
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ */
+canvas {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in IE.
+ */
+template {
+  display: none;
+}
+
+/* Hidden
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 10-.
+ */
 [hidden] {
   display: none;
 }
 
-ul, ol, dl {
+/* Lists
+   ========================================================================== */
+
+/**
+ * Unset default list margin and padding because if not
+ * we'll have to unset it every. single. time.
+ */
+ul,
+ol,
+dl {
   margin: 0;
   padding: 0;
 }
@@ -371,45 +692,246 @@ figure {
   margin-inline: 0;
 }
 
-details summary {
-  white-space: nowrap;
-  cursor: pointer;
+aside .region,
+.layout-content .region {
+  padding: 0;
+  border: none;
 }
 
-summary {
-  display: list-item;
+.layout-container {
+  @include utilities.container-width;;
 }
 
-// Reduced motion
-@media (prefers-reduced-motion: reduce) {
-  :after, :before {
-    transition-duration: 0.01ms !important;
-  }
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+.page__container {
+  @include utilities.container-width;;
+
+  &--mixed {
+    @include utilities.container-width;;
   }
 }
 
-:focus:not(:focus-visible) {
-  outline: none;
+.flex__wrapper {
+  @include utilities.breakpoint(sm) {
+    flex-wrap: wrap;
+    display: flex;
+  }
 }
 
-// ==========================================================================
-// TYPOGRAPHY
-// ==========================================================================
 
-p {
-  line-height: 1.7;
-  font-size: variables.$content-font-size;
-  @include utilities.margin($bottom: variables.$md, $top: 0);
+.element-invisible,
+.visually-hidden {
+  @include utilities.element-invisible();
 }
 
-p, dl, ol, ul, blockquote, pre, table {
-  font-weight: variables.$font-weight-normal;
+@media (min-width: 0em) and (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
 }
+
+.mobile-display {
+  @include utilities.breakpoint(sm) {
+    display: none;
+  }
+}
+
+.element--center {
+  @extend %artsci-component--center;
+}
+
+.element--left {
+  @extend %artsci-component--left;
+}
+
+
+// Block Margins / Padding
+
+.block-padding,
+.element--padding {
+  &__top {
+    padding-top: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-top: 2rem;
+    }
+  }
+  &__right {
+    padding-right: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-right: 2rem;
+    }
+  }
+  &__bottom {
+    padding-bottom: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-bottom: 2rem;
+    }
+  }
+  &__left {
+    padding-left: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-left: 2rem;
+    }
+  }
+  &__all {
+    padding: variables.$desktop-width-gutter;
+  }
+  &__all--extra {
+    padding: 6rem;
+  }
+  &__all--minimal {
+    padding: 2rem;
+  }
+}
+
+.element--padding__all--sm {
+  padding: var(--space-sm-width-gutter);
+}
+
+// CSS logical property padding utility classes.
+.padding--block--sm {
+  padding-block: 0.5rem;
+}
+
+.padding--block--md {
+  padding-block: 1rem;
+}
+
+.padding--inline-start--sm {
+  padding-inline-start: 0.5rem;
+}
+
+.padding--inline-start--md {
+  padding-inline-start: 1rem;
+}
+
+.padding--inline-end--sm  {
+  padding-inline-end: 0.5rem;
+}
+
+.padding--inline-end--md  {
+  padding-inline-end: 1rem;
+}
+
+.padding--inline--md {
+  padding-inline: 1rem;
+}
+
+.block-margin,
+.element--margin {
+  &__top {
+    margin-top: variables.$md;
+
+    &--extra {
+      margin-top: variables.$md;
+      @include utilities.breakpoint(sm) {
+        margin-top: variables.$mobile-height-gutter;
+      }
+    }
+  }
+
+  &__right {
+    @include utilities.breakpoint(sm) {
+      margin-right: variables.$md;
+    }
+  }
+
+  &__bottom {
+    margin-bottom: variables.$md;
+
+    &--extra {
+      margin-bottom: variables.$md;
+      @include utilities.breakpoint(sm) {
+        margin-bottom: variables.$mobile-height-gutter;
+      }
+    }
+  }
+
+  &__left {
+    @include utilities.breakpoint(sm) {
+      margin-left: variables.$md;
+    }
+  }
+}
+
+@font-face {
+  font-family: 'Antonio-fallback';
+  text-transform: uppercase;
+  size-adjust: 99%;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Zilla-fallback';
+  size-adjust: 93%;
+  ascent-override: 99%;
+  src: local('Georgia');
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: variables.$font-weight-medium;
+  line-height: 1.125;
+  letter-spacing: 0;
+}
+
+h1, .h1 {
+  @include utilities.h1;
+}
+
+.h1 {
+  &.bold-headline--serif,
+  &.headline--serif {
+    @include utilities.h1;
+    font-weight: variables.$font-weight-bold;
+  }
+}
+
+h2, .h2 {
+  @include utilities.h2;
+  // Overriding the size for Zilla so that the size is equal to Roboto.
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
+  }
+}
+
+h3, .h3 {
+  @include utilities.h3;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.65rem, calc(1.0986vw + 1.238rem), 2.1375rem);
+  }
+}
+
+h4, .h4 {
+  @include utilities.h4;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.45rem, calc(0.8451vw + 1.1331rem), 1.825rem);
+  }
+}
+
+h5, .h5 {
+  @include utilities.h5;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.3rem, calc(0.7324vw + 1.0254rem), 1.625rem);
+  }
+}
+
+h6, .h6 {
+  @include utilities.h6;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.2rem, calc(0.507vw + 1.0099rem), 1.425rem);
+  }
+}
+
 
 ol {
   list-style-position: outside;
@@ -421,6 +943,22 @@ ol:not([type]) {
   list-style-type: decimal;
 }
 
+ol:not([type]).is-lower-alpha {
+  list-style-type: lower-alpha;
+}
+
+ol:not([type]).is-lower-roman {
+  list-style-type: lower-roman;
+}
+
+ol:not([type]).is-upper-alpha {
+  list-style-type: upper-alpha;
+}
+
+ol:not([type]).is-upper-roman {
+  list-style-type: upper-roman;
+}
+
 ul {
   list-style: disc outside;
   font-size: variables.$content-font-size;
@@ -429,41 +967,149 @@ ul {
   margin-left: 1.875rem;
 }
 
-ul li, ol li {
+ul li,
+ol li {
   line-height: 1.6;
   margin-bottom: 0.5rem;
 }
 
-ul ul { list-style-type: circle; }
-ul ul ul { list-style-type: square; }
+ul ul {
+  list-style-type: circle;
+}
+
+ul ul ul {
+  list-style-type: square;
+}
 
 ol ol, ol ul, ul ol, ul ul {
   margin-top: 0;
-  margin-block-start: 0.75rem;
+  margin-block-start: .75rem;
   margin-bottom: 0;
-  margin-block-end: 0.75rem;
+  margin-block-end: .75rem;
+}
+
+.element--list-none {
+  list-style: none;
+  li {
+    list-style: none;
+  }
 }
 
 dd {
   @include utilities.margin($left: variables.$lg);
 }
 
-small {
-  vertical-align: middle;
-  display: inline-block;
-  line-height: 1.3;
 
-  &.small--inline {
-    display: inline;
+.artsci-component--circle-list,
+.element--circle-list {
+  margin: 0 0 0 -13px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: circle-counter;
+
+  li li {
+    list-style-type: disc;
+    display: list-item;
+  }
+
+  >li {
+    position: relative;
+    min-height: 90px;
+    margin-bottom: 0.25rem;
+    list-style: none;
+    counter-increment: circle-counter;
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+
+    @include utilities.breakpoint(sm) {
+      margin-left: 115px;
+    }
+
+    &:before {
+      display: block;
+      margin: 0 auto;
+      top: 0px;
+      left: -100px;
+      width: 5rem;
+      height: 5rem;
+      padding-top: 35px;
+      content: counter(circle-counter);
+      text-align: center;
+      text-transform: uppercase;
+      color: black;
+      border: 1px solid variables.$primary;
+      border-radius: 50%;
+      background-color: variables.$primary;
+      box-shadow: inset 0px 0px 0px 10px white;
+      text-transform: uppercase;
+      font-family: variables.$font-family-caps;
+      -webkit-font-smoothing: auto;
+      -moz-osx-font-smoothing: auto;
+      font-weight: bold;
+      font-size: 2.4rem;
+      line-height: 0;
+      box-sizing: border-box;
+
+      @include utilities.breakpoint(sm) {
+        position: absolute;
+        display: inline-block;
+        margin: 0 0.5rem 0;
+      }
+
+      .artsci-component--gray &,
+      .bg--gray & {
+        box-shadow: inset 0px 0px 0px 10px variables.$light;
+      }
+    }
   }
 }
 
-* + small {
-  margin-top: variables.$md;
+.element--circle-list>li,
+.artsci-component--circle-list>li {
+  display: block;
+  align-items: start;
+  padding-top: 1.275rem;
 }
 
-sup, sub {
-  font-size: 75%;
+.element--circle-list h2,
+.artsci-component--circle-list h2,
+.element--circle-list h3,
+.artsci-component--circle-list h3,
+.element--circle-list h4,
+.artsci-component--circle-list h4,
+.element--circle-list h5,
+.artsci-component--circle-list h5,
+.element--circle-list h6,
+.artsci-component--circle-list h6 {
+  margin-bottom: 1.2rem;
+}
+
+.element--circle-list li a.bttn,
+.artsci-component--circle-list li a.bttn {
+  display: inline-block;
+}
+
+
+p,
+dl,
+ol,
+ul,
+blockquote,
+pre,
+table {
+  font-weight: variables.$font-weight-normal;
+}
+
+p {
+  line-height: 1.7;
+  font-size: variables.$content-font-size;
+  @include utilities.margin($bottom: variables.$md, $top: 0);
+}
+
+a {
+  color: variables.$link-color;
+  text-decoration: underline;
 }
 
 figcaption {
@@ -482,20 +1128,170 @@ pre {
   padding: variables.$md;
   white-space: pre;
   word-wrap: normal;
-  font-family: monospace, monospace;
-  font-size: 1rem;
-  line-height: 1.5;
 }
 
-code, kbd, samp {
-  font-family: monospace, monospace;
-  font-size: 1em;
+small {
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 1.3;
+
+  &.small--inline {
+    display: inline;
+  }
+}
+
+sup,
+sub {
+  font-size: 75%;
 }
 
 mark {
   background-color: variables.$primary;
+}
+
+pre {
+  font-family: variables.$font-family-serif;
+  line-height: 1.5;
+}
+
+.is-small {
+  font-size: variables.$small-font-size;
+}
+
+.is-medium {
+  font-size: variables.$h6-font-size;
+}
+
+.is-large {
+  font-size: variables.$h4-font-size;
+}
+
+.margin-top {
+  margin-top: variables.$sm-md;
+}
+
+.image {
+  position: relative;
+  display: block;
+}
+
+.image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.element--two-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 2;
+    column-gap: variables.$desktop-width-gutter;
+  }
+}
+
+.element--three-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 3;
+    column-gap: variables.$desktop-width-gutter;
+  }
+}
+
+hr {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-separator {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: variables.$gutter 0;
+}
+
+.element--spacer-thin {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-gold {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: 1.25rem 0;
+  &:after {
+    content: "";
+    display: block;
+    width: 33%;
+    height: 6px;
+    margin: 0;
+    background: variables.$primary;
+  }
+  &--centered {
+    &:after {
+      margin: 0 auto;
+    }
+  }
+  [class*="bg-"] & {
+    border: none;
+  }
+  .bg-pattern--brain-reversed &,
+  .bg--gold--pattern--brain &,
+  .bg--gold & {
+    &:after {
+      background: #fff;
+    }
+  }
+}
+
+// Bold intro component class
+
+.artsci-component--bold-intro,
+.element--bold-intro {
+  font-family: variables.$font-family-serif;
+  font-weight: variables.$font-weight-medium-bold;
+  line-height: 1.3;
+  font-size: 2.2rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.2
+  font-size: clamp(1.6rem, calc(1.3521vw + 1.093rem), 2.2rem);
+  margin-top: 0;
+}
+
+.artsci-component--light-intro,
+.element--light-intro {
+  font-weight: variables.$font-weight-light;
+  line-height: 1.4;
+  font-size: 2.1rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.1
+  font-size: clamp(1.6rem, calc(1.1268vw + 1.1775rem), 2.1rem);
+  margin-top: 0;
+}
+
+// mark
+mark {
+  background-color: variables.$primary;
   padding: 0.1em;
 
+  // Nested class for deletion styling
+  &.deletion {
+    background-color: variables.$danger-light;
+  }
+
+  // Accessibility pseudo-elements for screen readers
   &::before,
   &::after {
     clip-path: inset(100%);
@@ -506,359 +1302,25 @@ mark {
     width: 1px;
   }
 
-  &::before { content: " [highlight start] "; }
-  &::after { content: " [highlight end] "; }
+  &::before {
+    content: " [highlight start] ";
+  }
+
+  &::after {
+    content: " [highlight end] ";
+  }
 
   .bg--gold & {
     background-color: #fff;
     color: variables.$artsci-black;
-  }
-}
 
-// Font fallbacks
-@font-face {
-  font-family: 'Antonio-fallback';
-  text-transform: uppercase;
-  size-adjust: 99%;
-  src: local('Arial Narrow');
-}
-
-@font-face {
-  font-family: 'Zilla-fallback';
-  size-adjust: 93%;
-  ascent-override: 99%;
-  src: local('Georgia');
-}
-
-// ==========================================================================
-// HEADLINES
-// ==========================================================================
-
-.bold-headline,
-.headline {
-  @include headline-mixins.headline;
-
-  [class*="bg-"] & {
-    a { color: inherit; }
-  }
-
-  &.bold-headline--negative,
-  &.headline--negative {
-    @include headline-mixins.headline-negative;
-  }
-}
-
-.headline--center {
-  text-align: center;
-}
-
-.bold-headline--caps,
-.headline--uppercase {
-  @include headline-mixins.headline-uppercase;
-}
-
-.bold-headline--serif,
-.headline--serif {
-  @include headline-mixins.headline-serif;
-}
-
-.bold-headline--highlight,
-.headline--highlight {
-  @include headline-mixins.headline-highlight;
-}
-
-.headline--highlight.headline--serif {
-  span { padding: 0.2rem 1rem 0.5rem 1rem; }
-}
-
-.bold-headline--caps .headline__headline span,
-.bold-headline--highlight span,
-.headline--highlight span {
-  @include headline-mixins.headline-highlight-word;
-}
-
-.bold-headline--caps .headline__heading,
-.headline--uppercase .headline__heading,
-.headline--uppercase .headline__text {
-  [class*="bg--gold"] & { font-weight: 400; }
-}
-
-.bold-headline--caps .headline__heading span,
-.headline--uppercase .headline__heading span,
-.headline--uppercase .headline__text span {
-  @include headline-mixins.headline-highlight-word-uppercase;
-}
-
-.bold-headline--underline,
-.headline--underline {
-  @include headline-mixins.headline-underline;
-}
-
-h5, .h5 {
-  &.bold-headline--underline,
-  &.headline--underline {
-    @include headline-mixins.headline-underline;
-    &:after { height: 5px; }
-  }
-}
-
-h6, .h6 {
-  &.bold-headline--underline,
-  &.headline--underline {
-    @include headline-mixins.headline-underline;
-    &:after { height: 4px; }
-  }
-}
-
-.bold-headline--highlight.bold-headline--serif,
-.headline--highlight.headline--serif {
-  font-weight: 600;
-}
-
-.bold-headline--highlight.bold-headline--caps,
-.headline--highlight.headline--uppercase {
-  span { padding: 0.4rem 1.2rem 0.8rem; }
-}
-
-// ==========================================================================
-// LAYOUT — Containers & regions
-// ==========================================================================
-
-aside .region,
-.layout-content .region {
-  padding: 0;
-  border: none;
-}
-
-.layout-container {
-  @include utilities.container-width;
-}
-
-.page__container {
-  @include utilities.container-width;
-
-  &--mixed {
-    @include utilities.container-width;
-  }
-}
-
-.page__container.layout__container {
-  max-width: 100%;
-}
-
-// Container query declarations
-@supports (contain: inline-size) {
-  .grid__column,
-  .column-container,
-  .layout-container {
-    container-type: inline-size;
-    container-name: column;
-  }
-}
-
-// Flex basis for blocks within regions
-.layout__region {
-  .block,
-  .view,
-  .card,
-  .banner,
-  .cta__wrapper,
-  .slider,
-  .stat {
-    flex-basis: 100%;
-    min-width: 0;
-  }
-
-  .card {
-    height: 100%;
-  }
-}
-
-// Equal height columns
-.layout {
-  .layout__region--first,
-  .layout__region--second,
-  .layout__region--third,
-  .layout__region--fourth {
-    @include utilities.breakpoint(sm) {
-      display: grid;
-    }
-  }
-
-  &.section-alignment__start {
-    .layout__region {
-      display: inherit;
-      flex-wrap: inherit;
+    &.deletion {
+      background-color: variables.$artsci-black;
+      color: variables.$artsci-gold;
     }
   }
 }
 
-.section-alignment__start {
-  .layout__spacing_container {
-    align-items: flex-start;
-  }
-}
-
-// Layout spacing container
-.layout__spacing_container {
-  min-width: 0;
-}
-
-// ==========================================================================
-// SECTION SPACING
-// ==========================================================================
-
-.layout__container {
-  margin-top: 0;
-  padding-bottom: variables.$mobile-width-gutter;
-  padding-top: variables.$mobile-width-gutter;
-
-  @include utilities.breakpoint(sm) {
-    padding-top: variables.$desktop-width-gutter;
-    padding-bottom: variables.$desktop-width-gutter;
-  }
-
-  &:first-child {
-    padding-top: 0;
-
-    .region-pre-footer & {
-      padding-top: variables.$mobile-width-gutter;
-      @include utilities.breakpoint(sm) {
-        padding-top: variables.$desktop-width-gutter;
-      }
-    }
-  }
-
-  &.layout--title {
-    padding-bottom: 1.25rem;
-
-    &.layout--title--hidden {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-  }
-
-  &.layout--title + &:not([class*="bg-"]) {
-    padding-top: 0;
-  }
-
-  // Collapse padding between same-background sections
-  $backgrounds:
-    ':not([class*="bg-"])',
-    '.bg--gold',
-    '.bg--black',
-    '.bg--gray',
-    '.bg-pattern--brain',
-    '.bg-pattern--brain-reversed',
-    '.bg-pattern--brain-black';
-
-  @each $background in $backgrounds {
-    &#{$background} + &#{$background} {
-      padding-top: 0;
-
-      &.section-padding {
-        &__top-restored {
-          padding-top: variables.$desktop-width-gutter;
-        }
-        &__top-extra {
-          padding-top: 6rem;
-        }
-      }
-    }
-  }
-
-  // Restore padding if page title is hidden
-  &.layout--title--hidden + &:not([class*="bg-"]) {
-    padding-top: variables.$desktop-width-gutter;
-
-    &.section-padding__removed-top {
-      padding-top: 0;
-    }
-  }
-
-  // LBS padding classes
-  &.section-padding {
-    &__removed-top {
-      padding-top: 0;
-      .region-pre-footer & { padding-top: 0; }
-    }
-    &__removed-bottom { padding-bottom: 0; }
-    &__top-restored { padding-top: variables.$desktop-width-gutter; }
-    &__top-extra {
-      padding-top: 6rem;
-      .region-pre-footer & { padding-top: 6rem; }
-    }
-    &__bottom-extra { padding-bottom: 6rem; }
-  }
-
-  // Block wrapper with borders/backgrounds
-  .block--wrapper,
-  .block-inline-blockartsci-text-area {
-    min-width: 0;
-
-    &.border,
-    &[class*="bg--"],
-    &[class*="bg-pattern--"] {
-      padding: variables.$desktop-width-gutter;
-    }
-    &.border.block-padding__all--minimal,
-    &[class*="bg--"].block-padding__all--minimal,
-    &[class*="bg-pattern--"].block-padding__all--minimal {
-      padding: 2rem;
-    }
-    &.border.block-padding__all--extra,
-    &[class*="bg--"].block-padding__all--extra,
-    &[class*="bg-pattern--"].block-padding__all--extra {
-      padding: 6rem;
-    }
-  }
-}
-
-// Block spacing within sections
-.layout__container {
-  &:not([class*="grid-"]):not([class*="layout--title"]) {
-    .layout__region {
-      .block + .block {
-        margin-top: 1.6rem;
-
-        .field--label-above { margin-bottom: 0; }
-
-        .field.text-formatted div {
-          margin-bottom: 0;
-          p:first-child:last-child { margin-bottom: 0; }
-        }
-
-        &:first-child { margin-top: 0; }
-      }
-
-      .block + .block.block-margin__top {
-        margin-top: variables.$md;
-      }
-      .block + .block.block-margin__top--extra {
-        margin-top: variables.$md;
-        @include utilities.breakpoint(sm) {
-          margin-top: variables.$mobile-height-gutter;
-        }
-      }
-      .block + .block.block-margin__default--removed {
-        margin-top: 0;
-      }
-    }
-  }
-
-  // Override for blocks adjacent to page title/breadcrumbs
-  .layout__region {
-    .block.block-system-breadcrumb-block + .block[class*="block-field-"],
-    .block.block-field-blocknodepagetitle + .block[class*="block-field-"],
-    .block.block-field-blocknodepersontitle + .block[class*="block-field-"] {
-      margin-top: 0;
-    }
-  }
-}
-
-// ==========================================================================
-// GRID
-// ==========================================================================
 
 .grid--onecol {
   .list-container__inner {
@@ -934,62 +1396,514 @@ aside .region,
   }
 }
 
-// ==========================================================================
-// MULTI-COLUMN LAYOUTS — Mobile margins & column order
-// ==========================================================================
-
-.layout--fourcol,
-.layout--threecol,
-.layout--twocol,
-.layout--has-sidebar {
-  .layout__region:not(:last-child) {
-    margin-bottom: variables.$mobile-height-gutter;
-    @include utilities.breakpoint(md) {
-      margin-bottom: 0;
-    }
-  }
-
-  &.section-order__reversed {
-    .layout__region:last-child {
-      margin-bottom: variables.$mobile-height-gutter;
-      @include utilities.breakpoint(md) { margin-bottom: 0; }
-    }
-    .layout__region:first-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &.column-spacing__removed {
-    .layout__region:not(:last-child) { margin-bottom: 0; }
-    &.section-order__reversed .layout__region:last-child { margin-bottom: 0; }
+// Declare which containers to query.
+@supports (contain: inline-size) {
+  .grid__column,
+  .column-container,
+  .layout-container{
+    container-type: inline-size;
+    container-name: column;
   }
 }
 
-.layout--twocol {
-  .layout__region.layout__region--card-media {
-    margin-bottom: 0;
+
+.element--flex-left,
+.flex--left {
+  flex-flow: column nowrap;
+  text-align: left;
+  width: 100%;
+  padding: 1.5rem 0;
+}
+
+.element--flex-center,
+.flex--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  text-align: center;
+
+  @include utilities.breakpoint(sm) {
+    padding: 1.5rem 0;
   }
 }
 
-.layout--twocol.layout,
-.layout--twocol.layout .layout__spacing_container {
+.flex--gap__sm {
+    @include utilities.breakpoint(sm) {
+      column-gap: var(--space-sm-width-gutter);
+    }
+}
+
+.flex--gap__md {
+  @include utilities.breakpoint(sm) {
+    column-gap: var(--space-md-width-gutter);
+  }
+}
+
+.flex {
+  @include utilities.breakpoint(sm) {
+    display: flex;
+  }
+}
+
+.flex--wrap {
+  flex-wrap: wrap;
+}
+
+.flex--break {
   flex-basis: 100%;
 }
 
-.layout--onecol {
-  .feature,
-  .banner {
-    flex-basis: 100%;
+.flex--1 {
+  flex: 1;
+}
 
-    .section-column__row & {
-      flex-basis: unset;
+.flex--2 {
+  flex: 2;
+}
+
+.flex--3 {
+  flex: 3;
+}
+
+.flex--4 {
+  flex: 4;
+}
+
+.flex--5 {
+  flex: 5;
+}
+
+.flex--6 {
+  flex: 6;
+}
+
+.flex--7 {
+  flex: 7;
+}
+
+.flex--8 {
+  flex: 8;
+}
+
+.flex--9 {
+  flex: 9;
+}
+
+.flex--10 {
+  flex: 10;
+}
+
+.flex--11 {
+  flex: 11;
+}
+
+.flex--12 {
+  flex: 12;
+}
+
+
+:root {
+  // Colors - Brand official
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+
+  // Colors - Unofficial
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+
+  // Margin/Padding
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:focus:not(:focus-visible) {
+  outline: none
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  :after, :before {
+    transition-duration: 0.01ms !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Add scroll padding so that hidden items remain in focus when tabbing through content.
+html {
+  scroll-padding-bottom: 120px;
+}
+
+// Overrides for older browsers until https://github.com/w3c/csswg-drafts/issues/10544 is the standard.
+// @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
+// Unset container-type for regions that use absolute positioning.
+// Horizontal navigation, timeline block.
+.layout__region--unset-type .column-container {
+  container-type: unset;
+}
+
+// @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
+.node__content:has(.layout--onecol--background.banner),
+.list-container__inner .views-row {
+  container-type: inline-size;
+  container-name: column;
+}
+
+// Word break classes.
+.block--word-break,
+.block-inline-blockartsci-text-area,
+.block-field-blocknodepagebody {
+  a {
+    word-break: break-word;
+  }
+  .headline {
+    a {
+      word-break: unset;
     }
   }
 }
 
-// ==========================================================================
-// PAGE CONTAINER VARIANTS
-// ==========================================================================
+// Bust out of container.
+.block--edge-to-edge {
+  margin: 0 calc(50% - 50vw);
+  > .form--inline {
+    @extend %container;
+  }
+}
+
+details {
+  summary {
+    // So we don't wrap the arrow away from the label.
+    white-space: nowrap;
+
+    // Ensure users get pointer cursor for details.
+    cursor: pointer;
+  }
+}
+
+// Set an element to display inline.
+.element--inline-breakpoint {
+  @include utilities.breakpoint(sm) {
+    display: inline-flex;
+  }
+}
+
+.element--inline {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.element--vh {
+  height: 100svh;
+}
+
+// Align items in a grid to the top.
+.element--align-top {
+  align-self: start;
+}
+
+// Position absolute.
+.element--absolute {
+  position: absolute;
+  z-index: 1;
+}
+
+.element--absolute--left {
+  left: variables.$desktop-width-gutter;
+}
+
+.element--absolute--bottom {
+  bottom: variables.$desktop-width-gutter;
+}
+
+// Set object to cover.
+.element--cover {
+  * {
+    object-fit: cover;
+    height: 100%;
+  }
+  .contextual-links {
+    height: auto;
+  }
+}
+
+
+// Containers within a background color useful for views blocks.
+.block--bg-container {
+  .block__headline  {
+    @extend %container;
+    //hack to prevent a change in container width (which is in em) when font size isn't 1em
+    max-width: 1310px;
+  }
+  & > div {
+    margin: 0 variables.$gutter;
+
+    @include utilities.breakpoint(page-container) {
+      max-width: 81.875em;
+      margin: 0 auto;
+    }
+  }
+}
+
+// Flex basis for all blocks and views
+
+.layout__region {
+
+  .block,
+  .view,
+  .card,
+  .banner,
+  .cta__wrapper,
+  .slider,
+  .stat {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+  .card {
+    height: 100%;
+  }
+}
+
+// set equal height columns
+.layout {
+  .layout__region--first,
+  .layout__region--second,
+  .layout__region--third,
+  .layout__region--fourth {
+    @include utilities.breakpoint(sm) {
+      display: grid;
+    }
+  }
+  &.section-alignment__start {
+    .layout__region {
+      display: inherit;
+      flex-wrap: inherit;
+    }
+  }
+}
+
+// Unset equal height columns
+.section-alignment__start {
+  .layout__spacing_container {
+    align-items: flex-start;
+  }
+}
+
+// Layout container padding
+.layout__container {
+  margin-top: 0;
+  padding-bottom: variables.$mobile-width-gutter;
+  // This will be overridden by a subsequent style for 1+n containers.
+  padding-top: variables.$mobile-width-gutter;
+
+  @include utilities.breakpoint(sm) {
+    padding-top: variables.$desktop-width-gutter;
+    padding-bottom: variables.$desktop-width-gutter;
+  }
+
+  &:first-child {
+    padding-top: 0;
+    .region-pre-footer & {
+      padding-top: variables.$mobile-width-gutter;
+      @include utilities.breakpoint(sm) {
+        padding-top: variables.$desktop-width-gutter;
+      }
+    }
+  }
+
+  // @todo Should this be moved to the header layout scss file?
+  &.layout--title {
+    padding-bottom: 1.25rem;
+
+    &.layout--title--hidden {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &.layout--title + &:not([class*="bg-"]) {
+    padding-top: 0;
+  }
+
+  // Define a list of background treatments.
+  $backgrounds:
+    ':not([class*="bg-"])',
+    '.bg--gold',
+    '.bg--black',
+    '.bg--gray',
+    '.bg-pattern--brain',
+    '.bg-pattern--brain-reversed',
+    '.bg-pattern--brain-black';
+
+  // Loop through each background.
+  @each $background in $backgrounds {
+
+    // When an element follows a previous element
+    // with the same background treatment, remove the
+    // top padding of the target element.
+    &#{$background} + &#{$background} {
+      padding-top: 0;
+
+      // Necessary to restore padding
+      &.section-padding {
+        &__top-restored {
+          padding-top: variables.$desktop-width-gutter;
+        }
+
+        &__top-extra {
+          padding-top: 6rem;
+        }
+      }
+    }
+  }
+
+  // Add default padding if page title is hidden
+  &.layout--title--hidden + &:not([class*="bg-"]) {
+    padding-top: variables.$desktop-width-gutter;
+
+    &.section-padding {
+      &__removed-top {
+        padding-top: 0;
+      }
+    }
+  }
+
+  // LBS padding classes
+  &.section-padding {
+    &__removed-top {
+      padding-top: 0;
+      .region-pre-footer & {
+        padding-top: 0;
+      }
+    }
+
+    &__removed-bottom {
+      padding-bottom: 0;
+    }
+
+    &__top-restored {
+      padding-top: variables.$desktop-width-gutter;
+    }
+
+    &__top-extra {
+      padding-top: 6rem;
+      .region-pre-footer & {
+        padding-top: 6rem;
+      }
+    }
+
+    &__bottom-extra {
+      padding-bottom: 6rem;
+    }
+  }
+
+  // @todo Where should this live?
+  .block--wrapper,
+  .block-inline-blockartsci-text-area {
+    min-width: 0;
+
+    &.border,
+    &[class*="bg--"],
+    &[class*="bg-pattern--"] {
+      padding: variables.$desktop-width-gutter;
+    }
+    &.border.block-padding__all--minimal,
+    &[class*="bg--"].block-padding__all--minimal,
+    &[class*="bg-pattern--"].block-padding__all--minimal {
+      padding: 2rem;
+    }
+    &.border.block-padding__all--extra,
+    &[class*="bg--"].block-padding__all--extra,
+    &[class*="bg-pattern--"].block-padding__all--extra {
+      padding: 6rem;
+    }
+  }
+}
+
+// @todo remove when https://github.com/artsci/artsci/issues/714 is complete.
+.border {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  &--top {
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  &--right {
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  &--bottom {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  &--left {
+    border-left: 1px solid rgba(0, 0, 0, 0.25);
+    &.borderless.card {
+      border-left: 1px solid rgba(0, 0, 0, 0.25)!important;
+    }
+  }
+}
+
+// For sidebars: remove padding from adjacent blocks if they are the same and don't have a margin top set
+.block[class*="bg--gray"].block-padding__all + .block[class*="bg--gray"].block-padding__all:not(.block-margin__top) {
+  margin-top: -1.5rem;
+  padding-top: 0;
+}
+
+// default spacing for pages without layout builder
+
+// Neither Paragraphs or Layout Builder.
+body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled main.page__container {
+  margin-bottom: 1.25rem;
+}
+
+// Artsci Paragraphs Page
+.page-node-type-page.layout-builder-disabled main.page__container {
+  max-width: 100%;
+  margin: 0;
+}
+
+.path-node.layout-builder-disabled:not(.page-node-type-page) {
+  .node--view-mode-full {
+    margin-bottom: variables.$lg;
+  }
+}
+
+.layout-builder-disabled main.page__container {
+  margin: 0 variables.$mobile-width-gutter variables.$mobile-width-gutter;
+
+  @include utilities.breakpoint(page-container) {
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+.layout-builder-disabled .artsci-bar .page__container {
+  margin-top: 0;
+
+  @include utilities.breakpoint(page-container) {
+    margin: 0 auto;
+  }
+}
+
+.page__container.layout__container {
+  max-width: 100%;
+}
+
+// default spacing for layout builder pages with container set in theme settings
 
 .content__container {
   .layout__spacing_container {
@@ -1026,6 +1940,9 @@ aside .region,
   }
 }
 
+// default left/right gutter spacing for full width settings without layout builder
+// settings if page container full or edge is selected on section
+
 .page__container--full.layout__container,
 .page__container--full.layout--has-sidebar,
 .page__container--full.sidebar-invisible {
@@ -1051,63 +1968,21 @@ aside .region,
   }
 }
 
-// ==========================================================================
-// SECTION WIDTH (Layout Builder Styles)
-// ==========================================================================
-
-.section--contained {
-  .layout__spacing_container {
-    max-width: 81.875em;
-    margin-inline: auto;
-    padding-inline: variables.$gutter;
-
-    @include utilities.breakpoint(page-container) {
-      padding-inline: 0;
-    }
-  }
-}
-
-.section--narrow {
-  .layout__spacing_container {
-    max-width: 63.75em;
-    margin-inline: auto;
-    padding-inline: variables.$gutter;
-
-    @include utilities.breakpoint(page-container) {
-      padding-inline: 0;
-    }
-  }
-}
-
-.section--full-width {
-  .layout__spacing_container {
-    max-width: 100%;
-    margin-right: variables.$mobile-width-gutter;
-    margin-left: variables.$mobile-width-gutter;
-
-    @include utilities.breakpoint(md) {
-      margin-right: variables.$desktop-width-gutter;
-      margin-left: variables.$desktop-width-gutter;
-    }
-  }
-}
-
-// ==========================================================================
-// COLUMN ORDER REVERSAL (Layout Builder Styles)
-// ==========================================================================
+// Reverse column order lb style
 
 .section-order__reversed {
-  // Sidebar layout
+  // sidebar layout
   &.layout--has-sidebar {
     .layout__spacing_container {
       .layout__region--sidebar {
         order: 2;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
     }
   }
-
-  // Two column
+  // two column
   &.layout--twocol {
     .layout__spacing_container {
       display: grid;
@@ -1116,233 +1991,390 @@ aside .region,
       .layout__region--sidebar,
       .layout__region--main {
         order: 2;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
 
+      // Layout with card sidebar.
       .layout__region-container.card {
         order: 1;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
 
       .layout__region--second,
       .layout__region--content,
       .layout__region-container {
         order: 1;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
-
       .layout__region-container {
         margin-bottom: variables.$mobile-height-gutter;
       }
     }
   }
-
-  // Three column
+  // three col reverse column order lb style
   &.layout--threecol {
     .layout__spacing_container {
       display: grid;
 
       .layout__region--first {
         order: 3;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
+
       .layout__region--second {
         order: 2;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
+
       .layout__region--third {
         order: 1;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
     }
   }
-
-  // Four column
+  // four col reverse column order lb style
   &.layout--fourcol {
     .layout__spacing_container {
       display: grid;
 
       .layout__region--first {
         order: 4;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
+
       .layout__region--second {
         order: 3;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
+
       .layout__region--third {
         order: 2;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
+
       .layout__region--fourth {
         order: 1;
-        @include utilities.breakpoint(md) { order: inherit; }
+        @include utilities.breakpoint(md) {
+          order: inherit;
+        }
       }
     }
   }
 }
 
-// ==========================================================================
-// BASIC UTILITIES
-// ==========================================================================
+// Add margins for all stacked layout regions for mobile.
+.layout--fourcol,
+.layout--threecol,
+.layout--twocol,
+.layout--has-sidebar {
+  .layout__region:not(:last-child) {
+    margin-bottom: variables.$mobile-height-gutter;
+    @include utilities.breakpoint(md) {
+      margin-bottom: 0;
+    }
+  }
 
-.element-invisible,
-.visually-hidden {
-  @include utilities.element-invisible();
+
+  // If section order is reversed, add margin back into last-child.
+  &.section-order__reversed {
+    .layout__region:last-child {
+      margin-bottom: variables.$mobile-height-gutter;
+      @include utilities.breakpoint(md) {
+        margin-bottom: 0;
+      }
+    }
+
+    .layout__region:first-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Remove mobile margins if column spacing is removed.
+  &.column-spacing__removed {
+    .layout__region:not(:last-child) {
+      margin-bottom: 0;
+    }
+    &.section-order__reversed {
+      .layout__region:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Unset margin for regions within card layout.
+.layout--twocol {
+  .layout__region.layout__region--card-media {
+    margin-bottom: 0;
+  }
+}
+
+// Container fix for responsive tables
+
+.layout__spacing_container {
+  min-width: 0;
+}
+
+// Set spacing as the default for mobile.
+.layout__container {
+  &:not([class*="grid-"]):not([class*="layout--title"]) {
+    .layout__region {
+      .block + .block {
+        margin-top: 1.6rem;
+        .field--label-above {
+          margin-bottom: 0;
+        }
+
+        .field.text-formatted div {
+          margin-bottom: 0;
+          p:first-child:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+      // Allow margin top and top extra to override.
+      .block + .block.block-margin__top {
+        margin-top: variables.$md;
+      }
+      .block + .block.block-margin__top--extra {
+        margin-top: variables.$md;
+        @include utilities.breakpoint(sm) {
+          margin-top: variables.$mobile-height-gutter;
+        }
+      }
+      // Remove default margins style.
+      .block + .block.block-margin__default--removed {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+// Override default for blocks adjacent to page title/breadcrumbs.
+.layout__container {
+  .layout__region {
+    .block.block-system-breadcrumb-block + .block[class*="block-field-"],
+    .block.block-field-blocknodepagetitle + .block[class*="block-field-"],
+    .block.block-field-blocknodepersontitle + .block[class*="block-field-"] {
+      margin-top: 0;
+    }
+  }
+}
+
+// No results text
+.view-empty,
+.events-empty,
+.artsci-aggregator-no-results {
+  p {
+    font-size: 1rem;
+  }
+}
+
+// mobile search
+.search-button[aria-expanded="true"] {
+  margin-left: auto;
+}
+
+// skip link
+.skip-link-region {
+  text-align: center;
+  background: #f1f1f1;
+  display: block;
+
+  a {
+    color: blue;
+    padding: 10px;
+    display: block;
+  }
+}
+
+// todo move back to artsci as toc style also create tag style for term edit
+.view-a-z-list,
+.view-book-a-z-list,
+.view-book-search,
+.view-book-whats-new {
+  .view-header {
+    margin-bottom: variables.$md;
+  }
+
+  .views-row {
+    margin-bottom: variables.$md;
+    font-size: 1.3rem;
+    border-bottom: 1px solid variables.$light;
+    padding: variables.$sm 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: variables.$font-weight-light;
+      color: variables.$secondary;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.view-book-toc {
+  span {
+    margin-bottom: variables.$md;
+    font-size: 1.3rem;
+    padding: variables.$sm 0;
+
+    a {
+      text-decoration: none;
+      font-weight: variables.$font-weight-light;
+      color: variables.$secondary;
+    }
+  }
+
+  ul li {
+    list-style: inherit;
+  }
+}
+
+.view-book-toc .views-field-book-owner,
+.view-book-whats-new .views-field-book-amended-date {
+  font-size: small;
+  font-weight: variables.$font-weight-light;
+  color: variables.$text-muted;
+  margin-left: variables.$sm-md;
+}
+
+.view-display-id-attachment_a_z_list,
+.view-display-id-attachment_book_a_z_list,
+.view-display-id-attachment_services {
+  >div {
+    display: flex;
+    @include utilities.margin(variables.$top: 0, variables.$left: 0, variables.$bottom: variables.$xlg);
+    flex-wrap: wrap;
+
+    span {
+      border: 1px solid variables.$gray-light;
+      display: flex;
+      text-align: center;
+      margin: 0 variables.$sm variables.$sm 0;
+      color: variables.$gray;
+      height: 3rem;
+      width: 3rem;
+      align-items: center;
+      justify-content: center;
+
+      @include utilities.breakpoint(page-container) {
+        border-right: none;
+        margin: 0;
+        flex: 1;
+      }
+
+      a {
+        display: flex;
+        text-decoration: none;
+        color: variables.$secondary;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+
+        &:hover,
+        &:focus,
+        &.is-active {
+          background: variables.$light;
+        }
+      }
+
+      &:last-child {
+          @include utilities.breakpoint(page-container) {
+            border-right: 1px solid variables.$gray-light;
+        }
+      }
+    }
+  }
+}
+
+// @todo remove
+
+.artsci-component--alert {
+  margin-top: 0;
+}
+
+// Extra padding to help browsers with a full menu drawer
+.o-canvas__menu .region-primary-menu {
+  &::after {
+    float: left;
+    padding-bottom: 100%;
+    content: '';
+    clear: both;
+    display: list-item;
+    color: #fff;
+  }
+  @include utilities.breakpoint(sm) {
+    &::after {
+      padding-bottom: 50px;
+    }
+  }
+}
+
+@media all and (min-width: 0px) and (max-width: 855px) and (-ms-high-contrast: none),
+(-ms-high-contrast: active) {
+  .o-canvas__group {
+    -ms-flex-preferred-size: 100% !important;
+    flex-basis: 100% !important;
+  }
+}
+
+.layout--twocol.layout,
+.layout--twocol.layout .layout__spacing_container {
+  flex-basis: 100%;
+}
+
+.layout--onecol {
+
+  .feature,
+  .banner {
+    flex-basis: 100%;
+
+    .section-column__row & {
+      flex-basis: unset;
+    }
+  }
+}
+
+.block-inline-blockartsci-collection {
+  flex-basis: 100%;
+  min-width: 0;
 }
 
 .screen-reader-text {
   @include utilities.element-invisible;
 }
 
-@media (min-width: 0em) and (max-width: 768px) {
-  .mobile-hidden { display: none; }
-}
-
-.mobile-display {
-  @include utilities.breakpoint(sm) { display: none; }
-}
-
-.element--center {
-  @extend %artsci-component--center;
-}
-
-.element--left {
-  @extend %artsci-component--left;
-}
-
-.image {
-  position: relative;
-  display: block;
-
-  img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-}
-
-.element--two-column {
-  @include utilities.breakpoint(sm) {
-    column-count: 2;
-    column-gap: variables.$desktop-width-gutter;
-  }
-}
-
-.element--three-column {
-  @include utilities.breakpoint(sm) {
-    column-count: 3;
-    column-gap: variables.$desktop-width-gutter;
-  }
-}
-
-// Border utility
-.border {
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  &--top { border-top: 1px solid rgba(0, 0, 0, 0.25); }
-  &--right { border-right: 1px solid rgba(0, 0, 0, 0.25); }
-  &--bottom { border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
-  &--left {
-    border-left: 1px solid rgba(0, 0, 0, 0.25);
-    &.borderless.card {
-      border-left: 1px solid rgba(0, 0, 0, 0.25) !important;
-    }
-  }
-}
-
-// Flex utilities
-.flex {
-  @include utilities.breakpoint(sm) { display: flex; }
-}
-
-.flex--wrap { flex-wrap: wrap; }
-.flex--break { flex-basis: 100%; }
-.flex--1 { flex: 1; }
-.flex--2 { flex: 2; }
-.flex--3 { flex: 3; }
-.flex--4 { flex: 4; }
-
-.flex__wrapper {
-  @include utilities.breakpoint(sm) {
-    flex-wrap: wrap;
-    display: flex;
-  }
-}
-
-.flex--gap__sm {
-  @include utilities.breakpoint(sm) {
-    column-gap: var(--space-sm-width-gutter);
-  }
-}
-
-.flex--gap__md {
-  @include utilities.breakpoint(sm) {
-    column-gap: var(--space-md-width-gutter);
-  }
-}
-
-// Block padding/margin
-.block-padding,
-.element--padding {
-  &__top { padding-top: variables.$desktop-width-gutter; }
-  &__right { padding-right: variables.$desktop-width-gutter; }
-  &__bottom { padding-bottom: variables.$desktop-width-gutter; }
-  &__left { padding-left: variables.$desktop-width-gutter; }
-  &__all { padding: variables.$desktop-width-gutter; }
-  &__all--extra { padding: 6rem; }
-  &__all--minimal { padding: 2rem; }
-}
-
-.block-margin,
-.element--margin {
-  &__top {
-    margin-top: variables.$md;
-
-    &--extra {
-      margin-top: variables.$md;
-      @include utilities.breakpoint(sm) { margin-top: variables.$mobile-height-gutter; }
-    }
-  }
-  &__bottom {
-    margin-bottom: variables.$md;
-
-    &--extra {
-      margin-bottom: variables.$md;
-      @include utilities.breakpoint(sm) { margin-bottom: variables.$mobile-height-gutter; }
-    }
-  }
-  &__right {
-    @include utilities.breakpoint(sm) { margin-right: variables.$md; }
-  }
-  &__left {
-    @include utilities.breakpoint(sm) { margin-left: variables.$md; }
-  }
-}
-
-// Intro text components
-.artsci-component--bold-intro,
-.element--bold-intro {
-  font-family: variables.$font-family-serif;
-  font-weight: variables.$font-weight-medium-bold;
-  line-height: 1.3;
-  font-size: clamp(1.6rem, calc(1.3521vw + 1.093rem), 2.2rem);
-  margin-top: 0;
-}
-
-.artsci-component--light-intro,
-.element--light-intro {
-  font-weight: variables.$font-weight-light;
-  line-height: 1.4;
-  font-size: clamp(1.6rem, calc(1.1268vw + 1.1775rem), 2.1rem);
-  margin-top: 0;
-}
-
-// Size utilities
-.is-small { font-size: variables.$small-font-size; }
-.is-medium { font-size: variables.$h6-font-size; }
-.is-large { font-size: variables.$h4-font-size; }
-
-// Lazy load animation
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -1357,15 +2389,6 @@ img.lazyload.loaded {
   opacity: 1;
 }
 
-// Collection block
-.block-inline-blockartsci-collection {
-  flex-basis: 100%;
-  min-width: 0;
-}
-
-// No results
-.view-empty,
-.events-empty,
-.artsci-aggregator-no-results {
-  p { font-size: 1rem; }
+* + small {
+  margin-top: variables.$md;
 }

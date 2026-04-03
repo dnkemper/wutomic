@@ -4,6 +4,7 @@ base theme: classy
 description: A flexible theme with a responsive, mobile-first layout.
 package: Custom
 core_version_requirement: ^11 || ^12
+screenshot: screenshot.png
 dependencies:
   - classy:classy
 libraries-override:
@@ -13,9 +14,7 @@ libraries-extend:
   core/drupal.message:
     - atomic_artsci/message
 libraries:
-  - atomic_artsci/typekit
   - atomic_artsci/global-styling
-  - atomic_artsci/layouts
 favicon:
   use_default: false
   path: favicon.ico
@@ -38,3 +37,10 @@ regions:
   footer_first: 'Footer under logo'
   footer_second: 'Footer menus'
   page_bottom: 'Page bottom'
+# Ckeditor styling for lead paragraphs and alerts
+ckeditor5-stylesheets:
+  - assets/css/components/video/video-utilities.css
+  - assets/css/artsci_wysiwyg.css
+  - https://fonts.googleapis.com/css2?family=Antonio:wght@100;300;700
+  - https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400
+  - https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300;400;500;600;700

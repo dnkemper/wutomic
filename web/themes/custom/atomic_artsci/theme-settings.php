@@ -21,7 +21,7 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
 
   $form['header'] = [
     '#type' => 'details',
-    '#title' => t('artsci bar settings'),
+    '#title' => t('IOWA bar settings'),
     '#description' => t('Configure the overall type of header, the style of navigation to be used, and whether or not the header is sticky.'),
     '#weight' => -1000,
     '#open' => TRUE,
@@ -33,8 +33,8 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
     '#title' => t('Site name display'),
     '#description' => t('Select an option'),
     '#options' => [
-      'inline' => t('Display inline with the artsci bar'),
-      'below' => t('Display below the artsci bar'),
+      'inline' => t('Display inline with the IOWA bar'),
+      'below' => t('Display below the IOWA bar'),
     ],
     '#default_value' => theme_get_setting('header.type'),
   ];
@@ -105,8 +105,8 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
     '#title' => t('Branding options'),
     '#description' => t('Select an option'),
     '#options' => [
-      'artsci' => t('artsci'),
-      'uihc' => t('artsci Health Care'),
+      'artsci' => t('Iowa'),
+      'uihc' => t('Iowa Health Care'),
       'regents' => t('Regents'),
     ],
     '#default_value' => theme_get_setting('header.branding_options'),
@@ -159,7 +159,7 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
     '#title' => t('Style'),
     '#description' => t('This option changes the primary gold theme color.'),
     '#options' => [
-      'brand' => t('artsci brand'),
+      'brand' => t('Iowa brand'),
       'gray' => t('Gray'),
     ],
     '#default_value' => theme_get_setting('style.style_selector'),

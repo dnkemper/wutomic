@@ -3,6 +3,7 @@
 namespace Drupal\artsci_people\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,7 +13,7 @@ use Drupal\pathauto\PathautoGenerator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Configure Artsci People settings for this site.
+ * Configure artsci People settings for this site.
  */
 class SettingsForm extends ConfigFormBase {
 
@@ -22,6 +23,7 @@ class SettingsForm extends ConfigFormBase {
    * @var string
    */
   const SETTINGS = 'artsci_people.settings';
+
   /**
    * The alias cleaner.
    *
@@ -55,6 +57,8 @@ class SettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
+   *   The typed config manager.
    * @param \Drupal\pathauto\AliasCleanerInterface $pathauto_alias_cleaner
    *   The alias cleaner.
    * @param \Drupal\path_alias\AliasRepositoryInterface $aliasRepository
@@ -64,8 +68,8 @@ class SettingsForm extends ConfigFormBase {
    * @param \Drupal\pathauto\PathautoGenerator $pathAutoGenerator
    *   The PathautoGenerator service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, AliasCleanerInterface $pathauto_alias_cleaner, AliasRepositoryInterface $aliasRepository, EntityTypeManager $entityTypeManager, PathautoGenerator $pathAutoGenerator) {
-    parent::__construct($config_factory);
+  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, AliasCleanerInterface $pathauto_alias_cleaner, AliasRepositoryInterface $aliasRepository, EntityTypeManager $entityTypeManager, PathautoGenerator $pathAutoGenerator) {
+    parent::__construct($config_factory, $typedConfigManager);
     $this->aliasCleaner = $pathauto_alias_cleaner;
     $this->aliasRepository = $aliasRepository;
     $this->entityTypeManager = $entityTypeManager;
@@ -78,6 +82,7 @@ class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get('pathauto.alias_cleaner'),
       $container->get('path_alias.repository'),
       $container->get('entity_type.manager'),
@@ -275,7 +280,7 @@ class SettingsForm extends ConfigFormBase {
 
     // show_teaser_link_indicator.
     $is_v2 = $this->config('config_split.config_split.artsci_v2')->get('status');
-    // Visual indicators aren't available on Artsci v2.
+    // Visual indicators aren't available on artsci v2.
     if (!$is_v2) {
       $form['global']['teaser'] = [
         '#type' => 'fieldset',
@@ -299,12 +304,14 @@ class SettingsForm extends ConfigFormBase {
     // Check if path already exists.
     $path = $form_state->getValue('artsci_people_path');
 
-    // Clean up path first.
-    $path = $this->aliasCleaner->cleanString($path);
-    $path_exists = $this->aliasRepository->lookupByAlias('/' . $path, 'en');
+    if (!empty($path)) {
+      // Clean up path first.
+      $path = $this->aliasCleaner->cleanString($path);
+      $path_exists = $this->aliasRepository->lookupByAlias('/' . $path, 'en');
 
-    if ($path_exists) {
-      $form_state->setErrorByName('path', $this->t('This path is already in use.'));
+      if ($path_exists) {
+        $form_state->setErrorByName('artsci_people_path', $this->t('This path is already in use.'));
+      }
     }
 
     parent::validateForm($form, $form_state);
@@ -324,8 +331,11 @@ class SettingsForm extends ConfigFormBase {
     $tag_display = $form_state->getValue('tag_display');
     $related_display = $form_state->getValue('related_display');
     $show_teaser_link_indicator = $form_state->getValue('show_teaser_link_indicator');
+
     // Clean path.
-    $path = $this->aliasCleaner->cleanString($path);
+    if (!empty($path)) {
+      $path = $this->aliasCleaner->cleanString($path);
+    }
 
     // Load people listing view.
     $view = $this->entityTypeManager->getStorage('view')->load('people');

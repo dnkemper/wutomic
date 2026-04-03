@@ -5,11 +5,14 @@ global-styling:
     base:
       assets/css/global.css: {}
       /libraries/fontawesome/css/all.min.css: {}
-      https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,700&family=Zilla+Slab:wght@400;600;700&family=Antonio:wght@100;300;700&display=swap: { type: external, minified: false }
+      https://use.typekit.net/ual3ogb.css: { type: external }
     layout:
       assets/css/components/page-layouts.css: {}
     component:
-      assets/css/subscribe-block.css: {}
+      assets/css/components/badge.css: {}
+      assets/css/components/breadcrumbs.css: {}
+      assets/css/components/colors.css: {}
+      assets/css/components/blockquote.css: {}
       assets/css/components/button.css: {}
       assets/css/components/form/forms.css: {}
       assets/css/components/typography/headings.css: {}
@@ -17,8 +20,8 @@ global-styling:
       assets/css/components/alert.css: {}
       assets/css/components/pagination.css: {}
       assets/css/components/typography/paragraph.css: {}
+      assets/css/components/tables.css: {}
       assets/css/components/form/search.css: {}
-      assets/css/components/breadcrumbs.css: {}
       assets/css/components/brand-bar.css: {}
       assets/css/components/footer.css: {}
       assets/css/components/menus/superfish/superfish.css: {}
@@ -30,15 +33,24 @@ global-styling:
       assets/css/fields/fields.css: {}
       assets/css/components/background.css: { weight: 200 }
       assets/css/components/grid.css: {}
+      https://use.typekit.net/ual3ogb.css: { type: external }
     theme:
       assets/css/theme/print.css: { media: print }
   dependencies:
     - core/jquery
     - core/once
+# Adobe Typekit fonts (already external fonts pattern exists)
 typekit:
   css:
     base:
-      https://use.typekit.net/ual3ogb.css: { type: external, minified: true }
+      https://use.typekit.net/ual3ogb.css: { type: external }
+
+# ScrollReveal
+scrollreveal:
+  js:
+    assets/js/scrollreveal.min.js: {}
+    assets/js/scrollreveal-init.js: {}
+
 # Third-party libraries
 # Accessible Menu
 accessible-menu:
@@ -54,7 +66,15 @@ slick:
     /libraries/slick-carousel/slick/slick.min.js: {}
   dependencies:
     - core/jquery
-# UIDS.
+# Pannellum
+virtual_tour:
+  css:
+    theme:
+      /libraries/pannellum/build/pannellum.css: {}
+  js:
+    /libraries/pannellum/build/pannellum.js: {}
+
+# ARTSCI.
 status-messages:
   js:
     assets/js/artsci.status-messages.js: {}
@@ -63,20 +83,42 @@ message:
     assets/js/message.theme.js: {}
   dependencies:
     - atomic_artsci/status-messages
-
+logo:
+  css:
+    component:
+      assets/css/components/logo.css: {}
+search-toggle:
+  css:
+    component:
+      assets/css/components/search-toggle.css: { weight: 200}
+  js:
+    assets/js/search-toggle.js: {}
+search-results:
+  css:
+    component:
+      assets/css/components/search-results.css: {}
+toggle-nav:
+  css:
+    component:
+      assets/css/components/menus/toggle-nav.css: {}
+  js:
+    assets/js/toggle-nav.js: { attributes: { type: module } }
 accordion:
   css:
     component:
       assets/css/components/accordion.css: {}
       assets/css/paragraphs/artsci_paragraphs_accordion.css: {}
   js:
-    js/accordion-init.js: { attributes: { type: module } }
+    assets/js/accordion-init.js: { attributes: { type: module } }
 tabs:
   css:
     component:
       assets/css/components/tabs.css: {}
   js:
-    js/tabs.js: {}
+    artsci/assets/js/tabs.js: {}
+header-sticky:
+  js:
+    assets/js/brand-bar.js: { attributes: { type: module } }
 video-cookie:
   js:
     assets/js/video-cookie.js: {}
@@ -91,7 +133,7 @@ slider:
       assets/css/components/slider.css: {}
       assets/css/components/banner.css: {}
   js:
-    assets/js/slider.js: {}
+    artsci/assets/js/slider.js: {}
 remote-video:
   css:
     component:
@@ -101,7 +143,7 @@ lazy-load-animation:
     assets/js/lazy_load_animation.js: {}
 video:
   js:
-    assets/js/video.js: {}
+    artsci/assets/js/video.js: {}
 hero:
   css:
     component:
@@ -164,6 +206,10 @@ related:
   css:
     component:
       assets/css/components/related.css: {}
+badge:
+  css:
+    component:
+      assets/css/components/badge.css: {}
 cta:
   css:
     component:
@@ -335,6 +381,7 @@ admin:
   css:
     component:
       assets/css/admin.css: { weight: 200 }
+      assets/css/components/badge.css: {}
 region_item:
   css:
     component:
@@ -399,253 +446,3 @@ theme-overrides:
   css:
     component:
       assets/css/theme-overrides.css: {}
-# ==========================================================================
-# ATOMIC ARTSCI — Library Definitions for New Blocks
-# ==========================================================================
-#
-# ADD these to your existing atomic_artsci.libraries.yml.
-#
-# Architecture:
-#   - Global CSS (main.css) contains: abstracts, base, layout, utilities
-#   - Component CSS is loaded per-template via {{ attach_library() }}
-#   - Each component library maps to one SCSS partial → one CSS file
-#
-# CSS file paths assume compilation outputs to: assets/css/
-# JS file paths: assets/js/
-# ==========================================================================
-
-
-# ==========================================================================
-# GLOBAL — loaded on every page (already have this, update if needed)
-# ==========================================================================
-# global-styles:
-#   css:
-#     base:
-#       assets/css/main.css: {}
-#   dependencies:
-#     - core/drupal
-
-
-# ==========================================================================
-# BLOCK COMPONENTS — loaded per-template
-# ==========================================================================
-
-artsci-collection:
-  css:
-    component:
-      assets/css/components/blocks/collection.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-image-callout:
-  css:
-    component:
-      assets/css/components/blocks/image-callout.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-content-block:
-  css:
-    component:
-      assets/css/components/blocks/content-block.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-call-to-action:
-  css:
-    component:
-      assets/css/components/blocks/call-to-action.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-video-block:
-  css:
-    component:
-      assets/css/components/blocks/video-block.css: {}
-  dependencies:
-    - core/drupal
-
-blockquote:
-  css:
-    component:
-      assets/css/components/blockquote.css: {}
-
-artsci-card-collection:
-  css:
-    component:
-      assets/css/components/blocks/card-collection.css: {}
-  dependencies:
-    - core/drupal
-    - atomic_artsci/stat
-
-artsci-banner-block:
-  css:
-    component:
-      assets/css/components/blocks/banner-block.css: {}
-  dependencies:
-    - core/drupal
-    - atomic_artsci/banner
-
-artsci-ampersand-banner:
-  css:
-    component:
-      assets/css/components/blocks/ampersand-banner.css: {}
-  dependencies:
-    - core/drupal
-
-# artsci-media-carousel:
-#   css:
-#     component:
-#       assets/css/components/blocks/media-carousel.css: {}
-#   dependencies:
-#     - core/drupal
-#     - atomic_artsci/slider
-
-artsci-component-tabs:
-  css:
-    component:
-      assets/css/components/blocks/component-tabs.css: {}
-  js:
-    assets/js/component-tabs.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
-artsci-gallery:
-  css:
-    component:
-      assets/css/components/blocks/gallery.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-social-embed:
-  css:
-    component:
-      assets/css/components/blocks/social-embed.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-anchor-links:
-  css:
-    component:
-      assets/css/components/blocks/anchor-links.css: {}
-  dependencies:
-    - core/drupal
-
-
-# ==========================================================================
-# PARAGRAPH COMPONENTS — loaded via block library dependencies
-# ==========================================================================
-
-artsci-featured-item:
-  css:
-    component:
-      assets/css/components/paragraphs/featured-item.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-stat-card:
-  css:
-    component:
-      assets/css/components/paragraphs/stat-card.css: {}
-  dependencies:
-    - core/drupal
-
-artsci-gallery-item:
-  css:
-    component:
-      assets/css/components/paragraphs/gallery-item.css: {}
-  dependencies:
-    - core/drupal
-
-# =====================================================================
-# CAROUSEL LIBRARIES — add/replace these in atomic_artsci.libraries.yml
-# =====================================================================
-
-# Unified carousel JS + shared base CSS (arrows, dots, deco lines)
-# Loaded by ALL carousel block templates
-artsci-carousel:
-  css:
-    component:
-      assets/css/components/carousel-base.css: {}
-  js:
-    js/artsci-carousel.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
-# Large fan carousel (teal bg, 3-card fan)
-artsci-carousel-large:
-  css:
-    component:
-      assets/css/components/carousel-large.css: {}
-  dependencies:
-    - atomic_artsci/artsci-carousel
-
-# Mini carousel (compact sidebar widget)
-artsci-carousel-mini:
-  css:
-    component:
-      assets/css/components/carousel-mini.css: {}
-  dependencies:
-    - atomic_artsci/artsci-carousel
-
-# Paged carousel (N cards per page with dots)
-artsci-carousel-paged:
-  css:
-    component:
-      assets/css/components/paged-carousel.css: {}
-  dependencies:
-    - atomic_artsci/artsci-carousel
-
-# Stories carousel (portrait scroll cards)
-artsci-stories-carousel:
-  css:
-    component:
-      assets/css/components/stories-carousel.css: {}
-  dependencies:
-    - atomic_artsci/artsci-carousel
-
-# Stats carousel (big numbers, paged — extends paged carousel)
-artsci-stats-carousel:
-  css:
-    component:
-      assets/css/components/stats-carousel.css: {}
-  dependencies:
-    - atomic_artsci/artsci-carousel-paged
-
-# Featured content block (all grid display modes)
-artsci-featured-content:
-  css:
-    component:
-      assets/css/components/featured-content.css: {}
-  dependencies:
-    - core/drupal
-
-# =====================================================================
-# DELETE these old entries (replaced above):
-# =====================================================================
-#
-# artsci-carousel:          ← REPLACED (was pointing to old JS/CSS)
-# stories-carousel:         ← REPLACED by artsci-stories-carousel
-# artsci-media-carousel:    ← Keep if media carousel block still exists
-# artsci-paged-carousel:    ← REPLACED by artsci-carousel-paged
-
-section-carousel:
-  version: 1.x
-  css:
-    component:
-      css/components/section-carousel.css: {}
-  js:
-    js/section-carousel.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
-# Card overlay styles (loaded when card--overlay LB style is used)
-card-overlay:
-  version: 1.x
-  css:
-    component:
-      css/components/card-overlay.css: {}
-

@@ -1,0 +1,20 @@
+uuid: 14eeff33-9214-4650-a9a4-c87d5af0c0fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - artsci_core
+  theme:
+    - atomic_artsci
+id: atomic_artsci_subscribe_block
+theme: atomic_artsci
+region: footer_second
+weight: 0
+provider: null
+plugin: artsci_core_subscribe_block
+settings:
+  id: artsci_core_subscribe_block
+  label: 'Subscribe Block'
+  label_display: '0'
+  provider: artsci_core
+visibility: {  }

@@ -13,6 +13,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "artsci_headline",
  *   label = @Translation("Headline"),
  *   description = @Translation("Parent headline for collections of content."),
+ *   category = "general",
  *   default_formatter = "artsci_headline_formatter",
  *   default_widget = "artsci_headline_widget",
  * )

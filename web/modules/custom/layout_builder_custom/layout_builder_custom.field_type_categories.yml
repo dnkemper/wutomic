@@ -1,0 +1,5 @@
+# Field type categories for layout_builder_custom module.
+general:
+  label: 'General'
+  description: 'General purpose fields.'
+  weight: 0

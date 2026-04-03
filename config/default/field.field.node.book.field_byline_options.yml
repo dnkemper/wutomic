@@ -1,0 +1,23 @@
+uuid: a1b2c3d4-5e6f-7890-abcd-ef1234567890
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_byline_options
+    - node.type.book
+  module:
+    - options
+id: node.book.field_byline_options
+field_name: field_byline_options
+entity_type: node
+bundle: book
+label: 'Byline prefix'
+description: 'Select what displays before the author name(s) (e.g., "By", "Edited By").'
+required: false
+translatable: false
+default_value:
+  -
+    value: By
+default_value_callback: ''
+settings: {  }
+field_type: list_string

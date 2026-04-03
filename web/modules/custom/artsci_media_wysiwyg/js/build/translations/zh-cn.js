@@ -1,0 +1,1 @@
+!function(n){const e=n["zh-cn"]=n["zh-cn"]||{};e.dictionary=Object.assign(e.dictionary||{},{"Edit source":"编辑源代码","Empty snippet content":"空片段内容","iframe snippet":"Iframe 代码片段","Insert Iframe":"插入 Iframe","No preview available":"预览不可用","paste iframe code here...":"在这里粘贴 Iframe 源代码","Save changes":"保存更改"})}(window.CKEDITOR_TRANSLATIONS||(window.CKEDITOR_TRANSLATIONS={}));

@@ -1,7 +1,0 @@
-name: "Artsci PiwikPRO"
-description: 'Customized implementation of PiwikPRO on Artsci.'
-type: module
-core_version_requirement: ^10 || ^11
-package: Artsci
-dependencies:
-  - piwik_pro

@@ -1,11 +1,11 @@
 {% extends '@atomic_artsci/layout/header.html.twig' %}
 
 {% block artsci_bar %}
-  {# {% if logo_path and is_off_brand %} #}
-    {# <div class="site-name">
+  {# {% if logo_path and is_off_brand %}
+    <div class="site-name">
       <a href="{{ path('<front>') }}"><img alt="{{ site_name }}" src ="{{ logo_path }}" /></a>
-    </div> #}
-  {# {% else %}
+    </div>
+  {% else %}
     {% include '@atomic_artsci/artsci/site-name.html.twig' with {
       'site_name': site_name,
       'site_url': path('<front>'),

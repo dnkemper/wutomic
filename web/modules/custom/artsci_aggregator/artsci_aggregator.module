@@ -175,125 +175,65 @@ function artsci_aggregator_preprocess_block__inline_block__artsci_aggregator(&$v
 
   $variables['attributes']['class'][] = 'list-container';
 
-  $feeds = [];
-
-  foreach ($block->get('field_artsci_aggregator_feeds')->getIterator() as $list_string_item) {
-    $feeds[] = $list_string_item->getString();
-  }
-
-  // Add cache tags for selected feeds.
-  if ($feeds) {
-    $feed_entities = Feed::loadMultiple($feeds);
-    $feed_tags = [];
-
-    foreach ($feed_entities as $feed) {
-      // Attempt to get these from aggregator since all of
-      // this functionality exists.
-      $tags = $feed->getCacheTags();
-      if (empty($tags)) {
-        // But... fallback to a manually constructed tag if not.
-        $tags = ['aggregator_feed:' . $feed->id()];
-      }
-      $feed_tags = Cache::mergeTags($feed_tags, $tags);
-    }
-
-    $variables['#cache']['tags'] = Cache::mergeTags(
-      $variables['#cache']['tags'] ?? [],
-      $feed_tags
-    );
-  }
-
-  $per_page = (int) $block->get('field_artsci_aggregator_count')->getString();
+  // Get configuration from block fields.
+  $view_display = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
+  $per_page = (int) $block->get('field_artsci_aggregator_count')->getString() ?: 10;
   $show_pager = (bool) $block->get('field_artsci_aggregator_pager')->getString();
 
-  $query = \Drupal::entityTypeManager()->getStorage('aggregator_item')->getQuery()
-    ->accessCheck(TRUE)
-    ->condition('fid', $feeds, 'IN')
-    ->sort('timestamp', 'DESC')
-    ->sort('iid', 'DESC');
+  // Load and configure the view.
+  $view = \Drupal\views\Views::getView('rss_block');
 
-  if (!$show_pager) {
-    $query->range(0, $per_page);
-  }
+  if ($view && $view->access($view_display)) {
+    $view->setDisplay($view_display);
+    $view->setItemsPerPage($per_page);
 
-  $result = $query->execute();
+    // Configure pager based on block settings.
+    $pager_options = $view->display_handler->getOption('pager');
+    if (!$show_pager) {
+      $pager_options['type'] = 'some';
+      $pager_options['options']['items_per_page'] = $per_page;
+    }
+    else {
+      $pager_options['type'] = 'full';
+      $pager_options['options']['items_per_page'] = $per_page;
+    }
+    $view->display_handler->setOption('pager', $pager_options);
 
-  if ($result) {
-    $variables['content']['aggregator'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => [
-          'aggregator-wrapper',
-          'artsci-aggregator',
-          'list-container__inner',
+    // Execute and render the view.
+    $view->preExecute();
+    $view->execute();
+
+    if (!empty($view->result)) {
+      $variables['content']['view'] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => [
+            'aggregator-wrapper',
+            'artsci-aggregator',
+          ],
         ],
-      ],
-    ];
-    $variables['content']['aggregator']['feed_source'] = ['#markup' => ''];
-    $items = \Drupal::entityTypeManager()->getStorage('aggregator_item')->loadMultiple($result);
+      ];
+      $variables['content']['view']['content'] = $view->render();
 
-    if ($items) {
-      // Determine heading size for child items.
-      $heading_size = 'h3';
-
-      $headline = $block->get('field_artsci_headline')
-        ?->first()
-        ?->getValue();
-
-      // Get the appropriate heading size.
-      if (!is_null($headline)) {
-        if (empty($headline['headline'])) {
-          $heading_size = $headline['child_heading_size'];
-        }
-        else {
-          $heading_size = HeadlineHelper::getHeadingSizeUp($headline['heading_size']);
-        }
-      }
-
-      // If output is paged, overwrite $items with the current chunk.
-      if ($show_pager) {
-        $count = count($items);
-        static $element = 0;
-        $element++;
-        /** @var \Drupal\Core\Pager\PagerManager $pager */
-        $pager = \Drupal::service('pager.manager');
-        $chunks = array_chunk($items, $per_page);
-        $current = $pager->createPager($count, $per_page, $element)->getCurrentPage();
-        $items = $chunks[$current];
-      }
-
-      $variables['content']['aggregator']['items'] = \Drupal::entityTypeManager()->getViewBuilder('aggregator_item')->viewMultiple($items, 'default');
-
-      foreach (Element::children($variables['content']['aggregator']['items']) as $id) {
-        $variables['content']['aggregator']['items'][$id]['#heading_size'] = $heading_size;
-        // If they exist, pass the override styles from the block down to the
-        // individual feed items.
-        if (isset($variables['elements']['#override_styles'])) {
-          $variables['content']['aggregator']['items'][$id]['#override_styles'] = $variables['elements']['#override_styles'];
-        }
-      }
-
-      if ($show_pager) {
-        $variables['content']['pager'] = [
-          '#type' => 'pager',
-          '#element' => $element,
-          '#quantity' => 3,
-        ];
-      }
+      // Add cache metadata from the view.
+      $renderer = \Drupal::service('renderer');
+      $renderer->addCacheableDependency($variables['content']['view'], $view);
+    }
+    else {
+      $variables['content']['no_results'] = [
+        '#markup' => $block->field_artsci_aggregator_text?->value ?: t('No content available.'),
+        '#prefix' => '<div class="artsci-aggregator-no-results">',
+        '#suffix' => '</div>',
+      ];
     }
   }
   else {
     $variables['content']['no_results'] = [
-      '#markup' => $block->field_artsci_aggregator_text?->value,
+      '#markup' => t('View display not available.'),
       '#prefix' => '<div class="artsci-aggregator-no-results">',
       '#suffix' => '</div>',
     ];
   }
-
-  $variables['#attached']['feed'][] = [
-    'aggregator/rss',
-    \Drupal::configFactory()->get('system.site')->get('name') . ' ' . t('aggregator'),
-  ];
 }
 
 /**

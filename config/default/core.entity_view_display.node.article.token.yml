@@ -62,6 +62,13 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  private:
+    type: private
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   article_created_date: true
   content_moderation_control: true

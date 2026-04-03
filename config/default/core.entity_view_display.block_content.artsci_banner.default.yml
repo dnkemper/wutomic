@@ -24,13 +24,6 @@ targetEntityType: block_content
 bundle: artsci_banner
 mode: default
 content:
-  field_styles_gradient_midpoint:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 6
-    region: content
   field_artsci_banner_autoplay:
     type: boolean
     label: above
@@ -86,6 +79,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_styles_gradient_midpoint:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
     region: content
 hidden:
   entity_print_view_epub: true

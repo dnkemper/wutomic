@@ -5,7 +5,7 @@ namespace Drupal\atomic_artsci;
 use Drupal\Core\Security\TrustedCallbackInterface;
 
 /**
- * Implements trusted prerender callbacks for the UIDS Base theme.
+ * Implements trusted prerender callbacks for the ARTSCI Base theme.
  *
  * @internal
  */
@@ -21,7 +21,7 @@ class ArtsciPreRender implements TrustedCallbackInterface {
    *   The updated renderable array containing the placeholder.
    */
   public static function messagePlaceholder(array $element) {
-    // Set up the fallback placeholder with UIDS-specific attributes.
+    // Set up the fallback placeholder with ARTSCI-specific attributes.
     if (isset($element['fallback']['#markup'])) {
       $element['fallback']['#markup'] = '<div data-drupal-messages-fallback class="hidden messages-list artsci-messages-container"></div>';
     }

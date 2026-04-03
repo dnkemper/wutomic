@@ -1,7 +1,0 @@
-name: Artsci Carousel
-type: module
-description: Carousel element for Artsci Paragraphs.
-package: Artsci
-core_version_requirement: ^9 || ^10 || ^11
-dependencies:
-  - artsci_paragraphs:artsci_paragraphs

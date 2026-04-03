@@ -23,6 +23,7 @@
       @include breakpoints.breakpoint(sm) {
         .list-container__inner {
           display: grid;
+          align-items: baseline;
           @include twocol-grid;
         }
       }
@@ -39,6 +40,7 @@
       @media screen and (min-width: 58.125em) {
         .list-container__inner {
           display: grid;
+          align-items: baseline;
           @include threecol-grid;
         }
       }
@@ -49,6 +51,7 @@
       @media screen and (min-width: 58.125em) {
         .list-container__inner {
           display: grid;
+          align-items: baseline;
           @include fourcol-grid;
         }
       }

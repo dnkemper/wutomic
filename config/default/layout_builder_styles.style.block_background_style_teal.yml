@@ -1,0 +1,12 @@
+uuid: 5e66250a-a602-4df8-9fba-1403a98425e5
+langcode: en
+status: true
+dependencies: {  }
+id: block_background_style_teal
+label: Teal
+classes: bg--teal
+type: component
+group: background
+block_restrictions: {  }
+layout_restrictions: {  }
+weight: 0

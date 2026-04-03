@@ -1,7 +1,0 @@
-name: "CCOM Core"
-description: 'Customizations for CCOM sites on the Artsci platform.'
-type: module
-core_version_requirement: ^9.2 || ^10
-package: CCOM
-dependencies:
-  - artsci_piwikpro

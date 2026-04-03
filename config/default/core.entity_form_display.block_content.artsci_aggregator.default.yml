@@ -5,7 +5,7 @@ dependencies:
   config:
     - block_content.type.artsci_aggregator
     - field.field.block_content.artsci_aggregator.field_artsci_aggregator_count
-    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_feeds
+    - field.field.block_content.artsci_aggregator.field_artsci_aggregator_display
     - field.field.block_content.artsci_aggregator.field_artsci_aggregator_pager
     - field.field.block_content.artsci_aggregator.field_artsci_aggregator_text
     - field.field.block_content.artsci_aggregator.field_artsci_headline
@@ -19,12 +19,12 @@ mode: default
 content:
   field_artsci_aggregator_count:
     type: number
-    weight: 3
+    weight: 4
     region: content
     settings:
       placeholder: '5'
     third_party_settings: {  }
-  field_artsci_aggregator_feeds:
+  field_artsci_aggregator_display:
     type: options_select
     weight: 2
     region: content

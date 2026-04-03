@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: layout-builder
 label: 'Layout Builder'
-module: artsci
 routes:
   -
     route_name: layout_builder.overrides.node.view

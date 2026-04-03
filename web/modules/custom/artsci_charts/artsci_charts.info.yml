@@ -1,5 +1,0 @@
-name: Artsci Charts
-type: module
-description: 'Charts functionality for the Artsci platform.'
-core_version_requirement: ^9 || ^10 || ^11
-package: Artsci

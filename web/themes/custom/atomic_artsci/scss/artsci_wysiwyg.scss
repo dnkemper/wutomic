@@ -1,0 +1,3205 @@
+@use 'abstracts/variables.scss';
+@use 'abstracts/_utilities.scss';
+
+// Define the editor styles scope
+.ck.ck-content,
+.ck-content {
+  font-family: Roboto, sans-serif;
+
+  // Colors
+  --brand-primary: #FFCD00;
+  --brand-secondary: #000000;
+
+  // Margin/Padding
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+
+
+:root {
+  font-size: 16px;
+}
+
+html {
+  box-sizing: border-box;
+  font-family: variables.$font-family-sans-serif;
+  /* 1 */
+  line-height: 1.15;
+  /* 2 */
+  -ms-text-size-adjust: 100%;
+  /* 3 */
+  -webkit-text-size-adjust: 100%;
+  /* 3 */
+  touch-action: manipulation;
+}
+
+// https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+* {
+  box-sizing: inherit;
+
+  &::before,
+  &::after {
+    box-sizing: inherit;
+  }
+}
+
+/* Sections
+   ========================================================================== */
+
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+body {
+  margin: 0;
+  font-size: 100%;
+  line-height: 1.15;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+figcaption,
+figure,
+main {
+  /* 1 */
+  display: block;
+}
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1rem;
+  /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+a {
+  background-color: transparent;
+  /* 1 */
+  -webkit-text-decoration-skip: objects;
+  /* 2 */
+
+  /**
+   * Remove the outline on focused links when they are also active or hovered
+   * in all browsers (opinionated).
+   */
+  &:active,
+  &:hover {
+    outline-width: 0;
+  }
+}
+
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: 0;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  text-decoration: underline dotted;
+  /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ */
+audio,
+video {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+img {
+  border: 0;
+  height: auto;
+  max-width: 100%;
+  /* Remove small gap at the bottom of an image when inside a container. */
+  vertical-align: top;
+}
+
+/**
+ * Hide the overflow in IE.
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: sans-serif;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+html [type='button'],
+  /* 1 */
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: button;
+  /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type='button']:-moz-focusring,
+[type='reset']:-moz-focusring,
+[type='submit']:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  display: inline-block;
+  /* 1 */
+  vertical-align: baseline;
+  /* 2 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+[type='checkbox'],
+[type='radio'] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+[type='search']::-webkit-search-cancel-button,
+[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+details,
+  /* 1 */
+menu {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+}
+
+/* Scripting
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ */
+canvas {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in IE.
+ */
+template {
+  display: none;
+}
+
+/* Hidden
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 10-.
+ */
+[hidden] {
+  display: none;
+}
+
+/* Lists
+   ========================================================================== */
+
+/**
+ * Unset default list margin and padding because if not
+ * we'll have to unset it every. single. time.
+ */
+ul,
+ol,
+dl {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}
+
+figure {
+  margin: inherit;
+  margin-block: 0;
+  margin-inline: 0;
+}
+
+aside .region,
+.layout-content .region {
+  padding: 0;
+  border: none;
+}
+
+.layout-container {
+  @include utilities.container-width;;
+}
+
+.page__container {
+  @include utilities.container-width;;
+
+  &--mixed {
+    @include utilities.container-width;;
+  }
+}
+
+.flex__wrapper {
+  @include utilities.breakpoint(sm) {
+    flex-wrap: wrap;
+    display: flex;
+  }
+}
+
+
+.element-invisible,
+.visually-hidden {
+  @include utilities.element-invisible();
+}
+
+@media (min-width: 0em) and (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+.mobile-display {
+  @include utilities.breakpoint(sm) {
+    display: none;
+  }
+}
+
+.element--center {
+  @extend %artsci-component--center;
+}
+
+.element--left {
+  @extend %artsci-component--left;
+}
+
+
+// Block Margins / Padding
+
+.block-padding,
+.element--padding {
+  &__top {
+    padding-top: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-top: 2rem;
+    }
+  }
+  &__right {
+    padding-right: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-right: 2rem;
+    }
+  }
+  &__bottom {
+    padding-bottom: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-bottom: 2rem;
+    }
+  }
+  &__left {
+    padding-left: variables.$desktop-width-gutter;
+    &--minimal {
+      padding-left: 2rem;
+    }
+  }
+  &__all {
+    padding: variables.$desktop-width-gutter;
+  }
+  &__all--extra {
+    padding: 6rem;
+  }
+  &__all--minimal {
+    padding: 2rem;
+  }
+}
+
+.element--padding__all--sm {
+  padding: var(--space-sm-width-gutter);
+}
+
+// CSS logical property padding utility classes.
+.padding--block--sm {
+  padding-block: 0.5rem;
+}
+
+.padding--block--md {
+  padding-block: 1rem;
+}
+
+.padding--inline-start--sm {
+  padding-inline-start: 0.5rem;
+}
+
+.padding--inline-start--md {
+  padding-inline-start: 1rem;
+}
+
+.padding--inline-end--sm  {
+  padding-inline-end: 0.5rem;
+}
+
+.padding--inline-end--md  {
+  padding-inline-end: 1rem;
+}
+
+.padding--inline--md {
+  padding-inline: 1rem;
+}
+
+.block-margin,
+.element--margin {
+  &__top {
+    margin-top: variables.$md;
+
+    &--extra {
+      margin-top: variables.$md;
+      @include utilities.breakpoint(sm) {
+        margin-top: variables.$mobile-height-gutter;
+      }
+    }
+  }
+
+  &__right {
+    @include utilities.breakpoint(sm) {
+      margin-right: variables.$md;
+    }
+  }
+
+  &__bottom {
+    margin-bottom: variables.$md;
+
+    &--extra {
+      margin-bottom: variables.$md;
+      @include utilities.breakpoint(sm) {
+        margin-bottom: variables.$mobile-height-gutter;
+      }
+    }
+  }
+
+  &__left {
+    @include utilities.breakpoint(sm) {
+      margin-left: variables.$md;
+    }
+  }
+}
+
+@font-face {
+  font-family: 'Antonio-fallback';
+  text-transform: uppercase;
+  size-adjust: 99%;
+  src: local('Arial Narrow');
+}
+
+@font-face {
+  font-family: 'Zilla-fallback';
+  size-adjust: 93%;
+  ascent-override: 99%;
+  src: local('Georgia');
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: variables.$font-weight-medium;
+  line-height: 1.125;
+  letter-spacing: 0;
+}
+
+h1, .h1 {
+  @include utilities.h1;
+}
+
+.h1 {
+  &.bold-headline--serif,
+  &.headline--serif {
+    @include utilities.h1;
+    font-weight: variables.$font-weight-bold;
+  }
+}
+
+h2, .h2 {
+  @include utilities.h2;
+  // Overriding the size for Zilla so that the size is equal to Roboto.
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
+  }
+}
+
+h3, .h3 {
+  @include utilities.h3;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.65rem, calc(1.0986vw + 1.238rem), 2.1375rem);
+  }
+}
+
+h4, .h4 {
+  @include utilities.h4;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.45rem, calc(0.8451vw + 1.1331rem), 1.825rem);
+  }
+}
+
+h5, .h5 {
+  @include utilities.h5;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.3rem, calc(0.7324vw + 1.0254rem), 1.625rem);
+  }
+}
+
+h6, .h6 {
+  @include utilities.h6;
+  &.bold-headline--serif,
+  &.headline--serif  {
+    font-size: clamp(1.2rem, calc(0.507vw + 1.0099rem), 1.425rem);
+  }
+}
+
+
+ol {
+  list-style-position: outside;
+  font-size: variables.$content-font-size;
+  @include utilities.margin($top: variables.$md, $left: variables.$lg, $bottom: variables.$md);
+}
+
+ol:not([type]) {
+  list-style-type: decimal;
+}
+
+ol:not([type]).is-lower-alpha {
+  list-style-type: lower-alpha;
+}
+
+ol:not([type]).is-lower-roman {
+  list-style-type: lower-roman;
+}
+
+ol:not([type]).is-upper-alpha {
+  list-style-type: upper-alpha;
+}
+
+ol:not([type]).is-upper-roman {
+  list-style-type: upper-roman;
+}
+
+ul {
+  list-style: disc outside;
+  font-size: variables.$content-font-size;
+  margin-top: 1.05rem;
+  margin-bottom: 1.05rem;
+  margin-left: 1.875rem;
+}
+
+ul li,
+ol li {
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+ul ul {
+  list-style-type: circle;
+}
+
+ul ul ul {
+  list-style-type: square;
+}
+
+ol ol, ol ul, ul ol, ul ul {
+  margin-top: 0;
+  margin-block-start: .75rem;
+  margin-bottom: 0;
+  margin-block-end: .75rem;
+}
+
+.element--list-none {
+  list-style: none;
+  li {
+    list-style: none;
+  }
+}
+
+dd {
+  @include utilities.margin($left: variables.$lg);
+}
+
+
+.artsci-component--circle-list,
+.element--circle-list {
+  margin: 0 0 0 -13px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: circle-counter;
+
+  li li {
+    list-style-type: disc;
+    display: list-item;
+  }
+
+  >li {
+    position: relative;
+    min-height: 90px;
+    margin-bottom: 0.25rem;
+    list-style: none;
+    counter-increment: circle-counter;
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+
+    @include utilities.breakpoint(sm) {
+      margin-left: 115px;
+    }
+
+    &:before {
+      display: block;
+      margin: 0 auto;
+      top: 0px;
+      left: -100px;
+      width: 5rem;
+      height: 5rem;
+      padding-top: 35px;
+      content: counter(circle-counter);
+      text-align: center;
+      text-transform: uppercase;
+      color: black;
+      border: 1px solid variables.$primary;
+      border-radius: 50%;
+      background-color: variables.$primary;
+      box-shadow: inset 0px 0px 0px 10px white;
+      text-transform: uppercase;
+      font-family: variables.$font-family-caps;
+      -webkit-font-smoothing: auto;
+      -moz-osx-font-smoothing: auto;
+      font-weight: bold;
+      font-size: 2.4rem;
+      line-height: 0;
+      box-sizing: border-box;
+
+      @include utilities.breakpoint(sm) {
+        position: absolute;
+        display: inline-block;
+        margin: 0 0.5rem 0;
+      }
+
+      .artsci-component--gray &,
+      .bg--gray & {
+        box-shadow: inset 0px 0px 0px 10px variables.$light;
+      }
+    }
+  }
+}
+
+.element--circle-list>li,
+.artsci-component--circle-list>li {
+  display: block;
+  align-items: start;
+  padding-top: 1.275rem;
+}
+
+.element--circle-list h2,
+.artsci-component--circle-list h2,
+.element--circle-list h3,
+.artsci-component--circle-list h3,
+.element--circle-list h4,
+.artsci-component--circle-list h4,
+.element--circle-list h5,
+.artsci-component--circle-list h5,
+.element--circle-list h6,
+.artsci-component--circle-list h6 {
+  margin-bottom: 1.2rem;
+}
+
+.element--circle-list li a.bttn,
+.artsci-component--circle-list li a.bttn {
+  display: inline-block;
+}
+
+
+p,
+dl,
+ol,
+ul,
+blockquote,
+pre,
+table {
+  font-weight: variables.$font-weight-normal;
+}
+
+p {
+  line-height: 1.7;
+  font-size: variables.$content-font-size;
+  @include utilities.margin($bottom: variables.$md, $top: 0);
+}
+
+a {
+  color: variables.$link-color;
+  text-decoration: underline;
+}
+
+figcaption {
+  font-size: 90%;
+  line-height: 1.5;
+}
+
+figure img {
+  display: inline-block;
+  @include utilities.margin($bottom: variables.$md);
+}
+
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: variables.$md;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+small {
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 1.3;
+
+  &.small--inline {
+    display: inline;
+  }
+}
+
+sup,
+sub {
+  font-size: 75%;
+}
+
+mark {
+  background-color: variables.$primary;
+}
+
+pre {
+  font-family: variables.$font-family-serif;
+  line-height: 1.5;
+}
+
+.is-small {
+  font-size: variables.$small-font-size;
+}
+
+.is-medium {
+  font-size: variables.$h6-font-size;
+}
+
+.is-large {
+  font-size: variables.$h4-font-size;
+}
+
+.margin-top {
+  margin-top: variables.$sm-md;
+}
+
+.image {
+  position: relative;
+  display: block;
+}
+
+.image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.element--two-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 2;
+    column-gap: variables.$desktop-width-gutter;
+  }
+}
+
+.element--three-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 3;
+    column-gap: variables.$desktop-width-gutter;
+  }
+}
+
+hr {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-separator {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: variables.$gutter 0;
+}
+
+.element--spacer-thin {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-gold {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: 1.25rem 0;
+  &:after {
+    content: "";
+    display: block;
+    width: 33%;
+    height: 6px;
+    margin: 0;
+    background: variables.$primary;
+  }
+  &--centered {
+    &:after {
+      margin: 0 auto;
+    }
+  }
+  [class*="bg-"] & {
+    border: none;
+  }
+  .bg-pattern--brain-reversed &,
+  .bg--gold--pattern--brain &,
+  .bg--gold & {
+    &:after {
+      background: #fff;
+    }
+  }
+}
+
+// Bold intro component class
+
+.artsci-component--bold-intro,
+.element--bold-intro {
+  font-family: variables.$font-family-serif;
+  font-weight: variables.$font-weight-medium-bold;
+  line-height: 1.3;
+  font-size: 2.2rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.2
+  font-size: clamp(1.6rem, calc(1.3521vw + 1.093rem), 2.2rem);
+  margin-top: 0;
+}
+
+.artsci-component--light-intro,
+.element--light-intro {
+  font-weight: variables.$font-weight-light;
+  line-height: 1.4;
+  font-size: 2.1rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.1
+  font-size: clamp(1.6rem, calc(1.1268vw + 1.1775rem), 2.1rem);
+  margin-top: 0;
+}
+
+// mark
+mark {
+  background-color: variables.$primary;
+  padding: 0.1em;
+
+  // Nested class for deletion styling
+  &.deletion {
+    background-color: variables.$danger-light;
+  }
+
+  // Accessibility pseudo-elements for screen readers
+  &::before,
+  &::after {
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  &::before {
+    content: " [highlight start] ";
+  }
+
+  &::after {
+    content: " [highlight end] ";
+  }
+
+  .bg--gold & {
+    background-color: #fff;
+    color: variables.$artsci-black;
+
+    &.deletion {
+      background-color: variables.$artsci-black;
+      color: variables.$artsci-gold;
+    }
+  }
+}
+
+
+.grid--onecol {
+  .list-container__inner {
+    max-width: 81.875em;
+    margin: 0 auto;
+  }
+}
+
+.grid--onecol__narrow {
+  .list-container__inner {
+    max-width: 63.75em;
+    margin: 0 auto;
+  }
+}
+
+[class*="grid"].grid--gap__sm {
+  .list-container__inner {
+    @include utilities.breakpoint(sm) {
+      column-gap: var(--space-sm-width-gutter);
+    }
+  }
+}
+
+.grid--twocol--50-50 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      @include utilities.twocol-grid;
+    }
+  }
+}
+
+.grid--threecol--33-34-33 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      @include utilities.threecol-grid;
+    }
+  }
+}
+
+.grid--twocol--67-33 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      grid-template-columns: repeat(3, 1fr);
+
+      .grid__column:first-child {
+        grid-area: 1 / 1 / 2 / 3;
+        min-width: 0;
+      }
+    }
+
+    .grid__column:last-child {
+      @include utilities.breakpoint(sm) {
+        grid-area: 1 / 3 / 2 / 4;
+        min-width: 0;
+      }
+    }
+  }
+}
+
+.grid--fourcol--25 {
+  .list-container__inner {
+    gap: variables.$mobile-height-gutter;
+    @include utilities.grid-base;
+    @include utilities.breakpoint(sm) {
+      @include utilities.fourcol-grid;
+    }
+  }
+}
+
+// Declare which containers to query.
+@supports (contain: inline-size) {
+  .grid__column,
+  .column-container,
+  .layout-container{
+    container-type: inline-size;
+    container-name: column;
+  }
+}
+
+
+.element--flex-left,
+.flex--left {
+  flex-flow: column nowrap;
+  text-align: left;
+  width: 100%;
+  padding: 1.5rem 0;
+}
+
+.element--flex-center,
+.flex--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  text-align: center;
+
+  @include utilities.breakpoint(sm) {
+    padding: 1.5rem 0;
+  }
+}
+
+.flex--gap__sm {
+    @include utilities.breakpoint(sm) {
+      column-gap: var(--space-sm-width-gutter);
+    }
+}
+
+.flex--gap__md {
+  @include utilities.breakpoint(sm) {
+    column-gap: var(--space-md-width-gutter);
+  }
+}
+
+.flex {
+  @include utilities.breakpoint(sm) {
+    display: flex;
+  }
+}
+
+.flex--wrap {
+  flex-wrap: wrap;
+}
+
+.flex--break {
+  flex-basis: 100%;
+}
+
+.flex--1 {
+  flex: 1;
+}
+
+.flex--2 {
+  flex: 2;
+}
+
+.flex--3 {
+  flex: 3;
+}
+
+.flex--4 {
+  flex: 4;
+}
+
+.flex--5 {
+  flex: 5;
+}
+
+.flex--6 {
+  flex: 6;
+}
+
+.flex--7 {
+  flex: 7;
+}
+
+.flex--8 {
+  flex: 8;
+}
+
+.flex--9 {
+  flex: 9;
+}
+
+.flex--10 {
+  flex: 10;
+}
+
+.flex--11 {
+  flex: 11;
+}
+
+.flex--12 {
+  flex: 12;
+}
+
+
+:root {
+  // Colors - Brand official
+  --artsci-gold: #FFCD00;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+
+  // Colors - Unofficial
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+
+  // Margin/Padding
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:focus:not(:focus-visible) {
+  outline: none
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  :after, :before {
+    transition-duration: 0.01ms !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+//// Table Elements
+table[border] {
+  border-style: solid;
+  border-color: #eee;
+  td,
+  th {
+    border-color: #eee;
+  }
+}
+
+table {
+  background-color: variables.$white;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: variables.$secondary;
+  display: inline-block;
+  font-size: variables.$content-font-size;
+  line-height: 1.15;
+  max-width: 100%;
+  overflow-x: auto;
+  // @todo Add white-space: nowrap?
+  width: 100%;
+
+  tbody a {
+    [class*="bg--gray"] &,
+    [class*="bg--white"] &,
+    [class*="bg--black"] &,
+    [class*="bg--gold"] &,
+    .bg-pattern--brain-reversed &,
+    .bg--gold--pattern--brain &,
+    .bg-pattern--brain &,
+    .bg--white--pattern--brain &,
+    .bg--black--pattern--brain &,
+    .bg-pattern--brain-black & {
+      color: variables.$link-color;
+    }
+  }
+
+  @include utilities.breakpoint(sm) {
+    display: table;
+  }
+
+  p, ul, ol {
+    font-size: variables.$base-font-size;
+    line-height: 1.6;
+  }
+
+  ul, ol {
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  td,
+  th {
+    padding: variables.$md;
+    font-size: variables.$base-font-size;
+    line-height: 1.6;
+  }
+
+  th {
+    color: variables.$secondary;
+
+    &:not([align]) {
+      text-align: left;
+    }
+  }
+
+  thead th {
+    background-color: variables.$primary;
+    border: none;
+    a {
+      color: variables.$secondary;
+      [class*="bg--"] & {
+        color: variables.$secondary;
+      }
+    }
+  }
+
+  tbody th {
+    background-color: #fff;
+    border: none;
+    position: static;
+    left: 0;
+    padding-left: variables.$md;
+  }
+
+  tbody tr:not(.is-selected):nth-child(even),
+  tbody tr:not(.is-selected):nth-child(even) th {
+    background-color: variables.$light;
+  }
+
+  &.table--hover-highlight tbody tr:not(.is-selected),
+  &.table--hover-highlight tbody tr:not(.is-selected):nth-child(even) {
+    &:hover {
+      th {
+        background-color: #fff3c3
+      }
+      background-color: #fff3c3;
+    }
+  }
+
+  caption {
+    width: 100%;
+    padding: 1.05rem;
+    text-align: center;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #333;
+    font-weight: bold;
+    a,
+    :where(p) a:not(.bttn) {
+      color: variables.$primary;
+      [class*="bg--"] &,
+      [class*="bg--"] [class*="bg--"] & {
+        color: variables.$primary;
+      }
+    }
+  }
+
+  tbody tr:last-child td,
+  tbody tr:last-child th {
+    border-bottom-width: 0;
+  }
+
+  thead td,
+  thead th {
+    color: variables.$secondary;
+  }
+
+  &.table--width-default {
+    width: unset;
+    caption {
+      width: unset;
+    }
+  }
+}
+
+.table-responsive {
+  overflow: auto;
+
+  caption {
+    text-align: left;
+    @include utilities.breakpoint(sm) {
+      text-align: center;
+    }
+  }
+
+  &.table-sticky {
+    max-height: 80vh;
+
+    thead {
+      position: sticky;
+      top: 0;
+      border-top: 0;
+    }
+
+    .table--gray-borders {
+      thead th {
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: -1px;
+          top: 0;
+          width: calc(100% + 2px);
+          height: calc(100% + 1px);
+          border-left: #7c7c7c 1px solid;
+          border-bottom: #ddd 1px solid;
+        }
+        &:first-child:before {
+          border-left: none;
+        }
+      }
+    }
+  }
+
+  table {
+    display: table;
+  }
+}
+
+table.table--gray-borders {
+  & > tr,
+  & > tbody > tr,
+  & > tfoot > tr {
+    & > td,
+    & > th {
+      border: #ddd 1px solid;
+    }
+  }
+
+  & > thead > tr,
+  & > caption {
+    & > td,
+    & > th {
+      border: #7c7c7c 1px solid;
+    }
+  }
+
+  & > thead > tr {
+    & > td,
+    & > th {
+      border-bottom: #ddd 1px solid;
+      border-top: #ddd 1px solid;
+
+      &:first-child {
+        border-left: #ddd 1px solid;
+      }
+
+      &:last-child {
+        border-right: #ddd 1px solid;
+      }
+    }
+  }
+
+}
+
+
+.lb__container .table-responsive {
+  margin-right: auto;
+}
+
+table th {
+  a[href]::after {
+    content: none !important;
+  }
+}
+
+.table--align-top {
+  thead, tbody {
+    vertical-align: top;
+  }
+}
+.table--sort-arrow-inline {
+  th[aria-sort] a{
+    display: flex;
+    align-items: center;
+    margin-left: 2px;
+
+    .tablesort {
+      filter: saturate(0) brightness(0.2);
+    }
+  }
+}
+
+
+p,
+dl,
+ol,
+ul,
+blockquote,
+pre,
+table {
+  font-weight: variables.$font-weight-normal;
+}
+
+p {
+  line-height: 1.7;
+  font-size: variables.$content-font-size;
+  @include utilities.margin($bottom: variables.$md, $top: 0);
+}
+
+a {
+  color: variables.$link-color;
+  text-decoration: underline;
+}
+
+figcaption {
+  font-size: 90%;
+  line-height: 1.5;
+}
+
+figure img {
+  display: inline-block;
+  @include utilities.margin($bottom: variables.$md);
+}
+
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: variables.$md;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+small {
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 1.3;
+
+  &.small--inline {
+    display: inline;
+  }
+}
+
+sup,
+sub {
+  font-size: 75%;
+}
+
+mark {
+  background-color: variables.$primary;
+}
+
+pre {
+  font-family: variables.$font-family-serif;
+  line-height: 1.5;
+}
+
+.is-small {
+  font-size: variables.$small-font-size;
+}
+
+.is-medium {
+  font-size: variables.$h6-font-size;
+}
+
+.is-large {
+  font-size: variables.$h4-font-size;
+}
+
+.margin-top {
+  margin-top: variables.$sm-md;
+}
+
+.image {
+  position: relative;
+  display: block;
+}
+
+.image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.element--two-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 2;
+    column-gap: variables.$desktop-width-gutter;
+  }
+}
+
+.element--three-column {
+  @include utilities.breakpoint(sm) {
+    column-count: 3;
+    column-gap: variables.$desktop-width-gutter;
+  }
+}
+
+hr {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-separator {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: variables.$gutter 0;
+}
+
+.element--spacer-thin {
+  border: 0;
+  height: 0;
+  clear: both;
+  float: none;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.element--spacer-gold {
+  clear: both;
+  float: none;
+  width: 100%;
+  height: 0;
+  border: 1px solid transparent;
+  margin: 1.25rem 0;
+  &:after {
+    content: "";
+    display: block;
+    width: 33%;
+    height: 6px;
+    margin: 0;
+    background: variables.$primary;
+  }
+  &--centered {
+    &:after {
+      margin: 0 auto;
+    }
+  }
+  [class*="bg-"] & {
+    border: none;
+  }
+  .bg-pattern--brain-reversed &,
+  .bg--gold--pattern--brain &,
+  .bg--gold & {
+    &:after {
+      background: #fff;
+    }
+  }
+}
+
+// Bold intro component class
+
+.artsci-component--bold-intro,
+.element--bold-intro {
+  font-family: variables.$font-family-serif;
+  font-weight: variables.$font-weight-medium-bold;
+  line-height: 1.3;
+  font-size: 2.2rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.2
+  font-size: clamp(1.6rem, calc(1.3521vw + 1.093rem), 2.2rem);
+  margin-top: 0;
+}
+
+.artsci-component--light-intro,
+.element--light-intro {
+  font-weight: variables.$font-weight-light;
+  line-height: 1.4;
+  font-size: 2.1rem;
+
+  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.6&maxFont=2.1
+  font-size: clamp(1.6rem, calc(1.1268vw + 1.1775rem), 2.1rem);
+  margin-top: 0;
+}
+
+// mark
+mark {
+  background-color: variables.$primary;
+  padding: 0.1em;
+
+  // Nested class for deletion styling
+  &.deletion {
+    background-color: variables.$danger-light;
+  }
+
+  // Accessibility pseudo-elements for screen readers
+  &::before,
+  &::after {
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  &::before {
+    content: " [highlight start] ";
+  }
+
+  &::after {
+    content: " [highlight end] ";
+  }
+
+  .bg--gold & {
+    background-color: #fff;
+    color: variables.$artsci-black;
+
+    &.deletion {
+      background-color: variables.$artsci-black;
+      color: variables.$artsci-gold;
+    }
+  }
+}
+
+
+figure img {
+  margin-bottom: 0;
+}
+
+.card {
+  figure {
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  figure:not(:last-child) {
+    margin-bottom: 0;
+  }
+}
+
+.lead {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.small {
+  font-size: 80%!important;
+  line-height: 1.3!important;
+}
+
+a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cke_editable div,
+.text-formatted div:not([class*=element-]) {
+  line-height: 1.7;
+  font-size: 1.2rem;
+  margin-bottom: 1.05rem;
+}
+
+.block-content--type-artsci-text-area div {
+  line-height: 1.7;
+  font-size: 1.2rem;
+}
+
+.element--light-intro > p,
+.element--bold-intro > p {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+hr {
+  clear: both;
+}
+
+div.element--light-intro {
+  margin-bottom: 1.05rem;
+}
+
+/**
+* Temporary workaround for https://www.drupal.org/project/drupal/issues/3398223.
+* 1. Add the correct box sizing in Firefox.
+* 2. Show the overflow in Edge and IE.
+*/
+div.hr {
+  clear: both;
+  box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+[class*=bg-] .element--spacer-separator,
+[class*=bg-] [class*=bg-] .element--spacer-separator {
+  border: 1px solid transparent;
+}
+
+[class*=bg-] .element--spacer-thin,
+[class*=bg-] [class*=bg-] .element--spacer-thin {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+iframe {max-width: 100%;}
+
+.block-inline-blockartsci-text-area p:last-child,
+.block-field-blocknodepagebody p:last-child,
+.block-inline-blockartsci-collection p:last-child,
+.block-field-blocknodearticlebody p:last-child,
+.block-field-blocknodepersonbody p:last-child {
+  margin-bottom: 0;
+}
+
+.element--two-column,
+.element--three-column {
+  // Avoid breaking apart the content within the field__item.
+  .field__item {
+    break-inside: avoid;
+  }
+}
+
+
+
+// === Alert === //
+.alert {
+  --h2-font-size: 1.6rem;
+  border-radius: 2px;
+  padding: 1.5rem;
+  line-height: 1.3;
+  font-size: variables.$content-font-size;
+  @include utilities.border;
+
+  h2 {
+    font-size: var(--h2-font-size);
+  }
+  h3 {
+    font-size: calc(0.9 * var(--h2-font-size));
+  }
+  h4 {
+    font-size: calc(0.8 * var(--h2-font-size));
+  }
+  h5 {
+    font-size: calc(0.7 * var(--h2-font-size));
+  }
+  h6 {
+    font-size: calc(0.6 * var(--h2-font-size));
+  }
+
+  * {
+    margin-bottom: 0;
+
+    & + *:not(span):not(div):not(svg) {
+      margin-top: .2rem;
+      line-height: 1.6;
+    }
+  }
+}
+// === End: Alert === //
+
+// === Alert Icon === //
+.alert__icon {
+  padding: 0  1.5rem 0 0;
+
+  .fa-stack {
+    width: 2em;
+  }
+
+  .svg-inline--fa.fa-stack-2x,
+  .svg-inline--fa.fa-stack-1x {
+    width: 100%;
+  }
+
+  .fa-1x {
+    font-size: variables.$content-font-size;
+  }
+}
+// === End: Alert Icon === //
+
+// === Alert Colors === //
+.alert--danger {
+  background: variables.$danger-light;
+
+  .fa-circle {
+    color: variables.$danger;
+  }
+}
+
+.alert--success {
+  background: variables.$success-light;
+
+  .fa-circle {
+    color: variables.$success;
+  }
+}
+
+.alert--warning {
+  background: variables.$warning-light;
+
+  .fa-circle {
+    color: variables.$orange;
+  }
+
+  .fa-exclamation-triangle {
+    margin-top: -2px;
+  }
+}
+
+.alert--info {
+  background: variables.$info-light;
+
+  .fa-circle {
+    color: variables.$info;
+  }
+}
+// === End: Alert Icon === //
+
+// === Modifiers === //
+// === Alert horizontally centered === //
+.alert--centered {
+  display: flex;
+  justify-content: center;
+}
+// === End: Alert horizontally centered === //
+
+// === Alert vertically centered === //
+.alert--vertically-centered  {
+  display: flex;
+  align-items: center;
+}
+// === End: Alert vertically centered === //
+
+// === Alert dismissible === //
+.alert--dismissible {
+  position: relative;
+
+  button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: transparent;
+    border: none;
+    height: 42px;
+    width: 42px;
+
+    i {
+      font-size: 1.5rem;
+    }
+  }
+}
+// === End: Alert dismissible === //
+
+// === Alert icon flex property === //
+.alert--icon {
+  display: flex;
+}
+// === End: Alert icon flex property === //
+
+// === End: Modifiers === //
+
+
+blockquote {
+  font-weight: variables.$font-weight-normal;
+  font-style: normal;
+  font-family: variables.$font-family-serif;
+  border-left-style: solid;
+  border-width: 10px;
+  border-color: variables.$primary;
+  padding: variables.$lg;
+  font-size: 1.5rem;
+  line-height: 1.7;
+  @include utilities.padding($top: variables.$xsm, $bottom: variables.$xsm, $left: variables.$lg);
+
+  cite {
+    display: block;
+  }
+
+  .blockquote__media {
+    max-width: 160px;
+  }
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  // border color overrides for certain background colors
+  [class*="bg--black"] &,
+  [class*="bg--"] [class*="bg--black"] &,
+  [class*="bg--gray"] &,
+  [class*="bg--"] [class*="bg--gray"] &,
+  [class*="bg--white"] &,
+  [class*="bg--"] [class*="bg--white"] &, {
+    border-color: variables.$primary;
+
+    &::before {
+      background: variables.$primary;
+    }
+  }
+
+
+  [class*="bg--gold"] &,
+  [class*="bg--"] [class*="bg--gold"] & {
+    border-color: #fff;
+
+    &::before {
+      background: #fff;
+    }
+  }
+
+  p {
+    margin-top: 0;
+    font-weight: variables.$font-weight-normal;
+    font-size: 1.5rem;
+  }
+
+  footer {
+    font-family: variables.$font-family-sans-serif;
+    margin-top: variables.$md;
+    font-size: variables.$content-font-size;
+    line-height: 1.5;
+    p {
+      font-size: variables.$content-font-size;
+      line-height: 1.5;
+    }
+  }
+
+  p + footer {
+    margin-top: 0;
+  }
+
+  &.blockquote {
+    flex-basis: 100%;
+  }
+  // @todo 2020/12/08 Remove '.blockquote-center' class in v4.0.0
+  &.blockquote--center,
+  .blockquote-center & {
+    img {
+      margin: 0 auto;
+      display: block;
+    }
+
+    text-align: center;
+    border: none;
+    position: relative;
+
+    @include utilities.padding($top: variables.$xlg, $bottom: variables.$xsm, $left: variables.$xsm, $right: variables.$xsm);
+
+    &::before {
+      position: absolute;
+      content: '';
+      height: 10px;
+      top: 11px;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      width: 130px;
+      background: variables.$primary;
+      -webkit-transition: 0.5s;
+      transition: 0.5s;
+
+      .bg--gold--pattern--brain &,
+      .bg-pattern--brain-reversed &,
+      [class*="bg--gold"] & {
+        background: #fff;
+      }
+    }
+  }
+  // @todo 2020/12/08 Remove '.blockquote-right' class in v4.0.0
+  &.blockquote--right,
+  .blockquote-right & {
+    text-align: end;
+    border-left: none;
+    border-right-style: solid;
+    padding: variables.$xsm variables.$lg;
+  }
+  // Shared styles for above and below options.
+  &.blockquote--img-above,
+  &.blockquote--img-below {
+    .blockquote__media {
+      margin-right: 1.3rem;
+      margin-top: 0.7rem;
+    }
+    &.blockquote:not(.blockquote--center) {
+      margin-bottom: variables.$mobile-width-gutter;
+
+      .blockquote__media {
+        margin-bottom: variables.$sm-md;
+
+        @include utilities.breakpoint(sm) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    &.blockquote--right {
+      .blockquote__media {
+        margin-left: 1.3rem;
+        margin-top: 0.7rem;
+        margin-right: 0;
+      }
+    }
+  }
+  // Blockquote image above.
+  &.blockquote--img-above {
+    .blockquote__media {
+      @include utilities.breakpoint(sm) {
+        flex: 0 1 auto;
+      }
+    }
+
+    .blockquote__content {
+      @include utilities.breakpoint(sm) {
+        flex: 0 1 75%;
+      }
+    }
+
+    .blockquote__paragraph {
+      position: relative;
+      padding-bottom: variables.$lg;
+
+      &::after {
+        position: absolute;
+        content: '';
+        height: 10px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 130px;
+        background: variables.$primary;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+
+        .bg--black--pattern--brain &,
+        .bg--white--pattern--brain &,
+        .bg-pattern--brain &,
+        .bg-pattern--brain-black &,
+        [class*="bg--black"] &,
+        [class*="bg--gray"] &,
+        [class*="bg--white"] & {
+          background: variables.$primary;
+        }
+
+        .bg--gold--pattern--brain &,
+        .bg-pattern--brain-reversed &,
+        [class*="bg--gold"] & {
+          background: #fff;
+        }
+      }
+    }
+
+    &.blockquote:not(.blockquote--center) {
+      border: none;
+      margin-right: 0;
+      margin-left: 0;
+      padding: variables.$md 0;
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    &.blockquote--right {
+      flex-direction: row-reverse;
+
+      .blockquote__paragraph {
+        &::after {
+          right: 0;
+          left: inherit;
+        }
+      }
+    }
+
+    &.blockquote--center {
+      padding-top: 0;
+
+      &::before {
+        position: absolute;
+        content: '';
+        height: 0;
+        top: variables.$sm-md;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        width: 0;
+        background: none;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        display: none;
+      }
+
+      .blockquote__media {
+        position: relative;
+        margin: 0 auto variables.$md;
+      }
+
+      .blockquote__paragraph {
+        &::after {
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+  // Blockquote image below.
+  &.blockquote--img-below {
+    .blockquote__media {
+      max-width: 100px;
+    }
+
+    footer {
+      display: flex;
+      margin-top: .5rem;
+      align-items: center;
+    }
+
+    cite {
+      display: block;
+      text-align: start;
+    }
+
+    &.blockquote--center {
+      footer {
+        margin: .5rem auto 0;
+        justify-content: center;
+        text-align: left;
+        @include utilities.breakpoint(sm) {
+          max-width: 40%;
+        }
+      }
+    }
+
+    &.blockquote--right {
+      footer {
+        text-align: end;
+        flex-direction: row-reverse;
+        align-content: end;
+      }
+
+      cite {
+        text-align: end;
+      }
+    }
+  }
+
+  &.blockquote--remove-stylization {
+    border-width: 0;
+
+    &.blockquote--img-above {
+      .blockquote__paragraph {
+        padding-bottom: 0;
+      }
+    }
+
+    &::before {
+      height: 0;
+    }
+
+    .blockquote__paragraph {
+      &::after {
+        height: 0;
+      }
+    }
+  }
+
+  &.blockquote--remove-margin {
+    &.blockquote:not(.blockquote--center) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}
+// === End: Blockquote === //
+
+
+ol {
+  list-style-position: outside;
+  font-size: variables.$content-font-size;
+  @include utilities.margin($top: variables.$md, $left: variables.$lg, $bottom: variables.$md);
+}
+
+ol:not([type]) {
+  list-style-type: decimal;
+}
+
+ol:not([type]).is-lower-alpha {
+  list-style-type: lower-alpha;
+}
+
+ol:not([type]).is-lower-roman {
+  list-style-type: lower-roman;
+}
+
+ol:not([type]).is-upper-alpha {
+  list-style-type: upper-alpha;
+}
+
+ol:not([type]).is-upper-roman {
+  list-style-type: upper-roman;
+}
+
+ul {
+  list-style: disc outside;
+  font-size: variables.$content-font-size;
+  margin-top: 1.05rem;
+  margin-bottom: 1.05rem;
+  margin-left: 1.875rem;
+}
+
+ul li,
+ol li {
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+ul ul {
+  list-style-type: circle;
+}
+
+ul ul ul {
+  list-style-type: square;
+}
+
+ol ol, ol ul, ul ol, ul ul {
+  margin-top: 0;
+  margin-block-start: .75rem;
+  margin-bottom: 0;
+  margin-block-end: .75rem;
+}
+
+.element--list-none {
+  list-style: none;
+  li {
+    list-style: none;
+  }
+}
+
+dd {
+  @include utilities.margin($left: variables.$lg);
+}
+
+
+.artsci-component--circle-list,
+.element--circle-list {
+  margin: 0 0 0 -13px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: circle-counter;
+
+  li li {
+    list-style-type: disc;
+    display: list-item;
+  }
+
+  >li {
+    position: relative;
+    min-height: 90px;
+    margin-bottom: 0.25rem;
+    list-style: none;
+    counter-increment: circle-counter;
+    line-height: 1.7;
+    display: flex;
+    align-items: center;
+
+    @include utilities.breakpoint(sm) {
+      margin-left: 115px;
+    }
+
+    &:before {
+      display: block;
+      margin: 0 auto;
+      top: 0px;
+      left: -100px;
+      width: 5rem;
+      height: 5rem;
+      padding-top: 35px;
+      content: counter(circle-counter);
+      text-align: center;
+      text-transform: uppercase;
+      color: black;
+      border: 1px solid variables.$primary;
+      border-radius: 50%;
+      background-color: variables.$primary;
+      box-shadow: inset 0px 0px 0px 10px white;
+      text-transform: uppercase;
+      font-family: variables.$font-family-caps;
+      -webkit-font-smoothing: auto;
+      -moz-osx-font-smoothing: auto;
+      font-weight: bold;
+      font-size: 2.4rem;
+      line-height: 0;
+      box-sizing: border-box;
+
+      @include utilities.breakpoint(sm) {
+        position: absolute;
+        display: inline-block;
+        margin: 0 0.5rem 0;
+      }
+
+      .artsci-component--gray &,
+      .bg--gray & {
+        box-shadow: inset 0px 0px 0px 10px variables.$light;
+      }
+    }
+  }
+}
+
+.element--circle-list>li,
+.artsci-component--circle-list>li {
+  display: block;
+  align-items: start;
+  padding-top: 1.275rem;
+}
+
+.element--circle-list h2,
+.artsci-component--circle-list h2,
+.element--circle-list h3,
+.artsci-component--circle-list h3,
+.element--circle-list h4,
+.artsci-component--circle-list h4,
+.element--circle-list h5,
+.artsci-component--circle-list h5,
+.element--circle-list h6,
+.artsci-component--circle-list h6 {
+  margin-bottom: 1.2rem;
+}
+
+.element--circle-list li a.bttn,
+.artsci-component--circle-list li a.bttn {
+  display: inline-block;
+}
+
+
+.element--list-none {
+  .fa-field-item svg[class*="fa-"],
+  .fa-field-item span[class*="fa-"] {
+    top: .4rem;
+    &.h2, &.h3, &.h4, &.h5, &.h6 {
+      top: 0;
+    }
+  }
+  &.element--margin-none {
+    margin: 0;
+  }
+}
+
+// fa-field-item class is fa-ul fa-li replacement.
+// only use if you want to position fa-icon absolutely.
+  .fa-field-item {
+    > li {
+      position: relative;
+    }
+    position: relative;
+    margin-left: 2.5rem;
+    padding-left: 0;
+
+    svg[class*="fa-"],
+    span[class*="fa-"] {
+      position: absolute;
+      top: 0.5em;
+      left: -2rem;
+      width: 1.5rem;
+      & + .field__item {
+        display: inline-block;
+      }
+    }
+    .field--type-fontawesome-icon {
+      svg[class*="fa-"],
+      span[class*="fa-"] {
+        top: 0.3em;
+      }
+    }
+  }
+
+.fa-ul {
+  position: relative;
+}
+
+
+// unordered list styles
+ul[type="circle"] {
+  list-style-type: circle;
+}
+
+ul[type="disc"] {
+  list-style-type: disc;
+}
+
+ul[type="square"] {
+  list-style-type: square;
+}
+
+
+.bttn {
+  @include utilities.bttn;
+  @include utilities.border;
+
+  [class*="bg--"] &,
+  [class*="bg--"] [class*="bg--"] & {
+    border-color: rgba(0, 0, 0, .425);
+    color: variables.$secondary;
+  }
+
+  [class*="bg--black"] & {
+    border-color: rgba(255, 255, 255, .425);
+  }
+}
+// Options.
+.bttn--primary {
+  @include utilities.bttn--primary;
+  @include utilities.bttn--focus;
+
+  & {
+    border-color: variables.$primary;
+    color: variables.$secondary;
+  }
+
+  [class*="bg--"] [class*="bg--gray"] &,
+  [class*="bg--gray"] &,
+  [class*="bg--"] [class*="bg--white"] &,
+  [class*="bg--white"] & {
+    border-color: variables.$primary;
+  }
+
+  &:after {
+    background-color: variables.$secondary;
+  }
+}
+
+.bttn--secondary {
+  @include utilities.bttn--secondary;
+  @include utilities.bttn--focus;
+
+  &__light {
+    @include utilities.bttn--secondary__light;
+  }
+
+  [class*="bg--"] &,
+  [class*="bg--"] [class*="bg--"] & {
+    border-color: rgba(255,255,255,.425);
+    color: #fff;
+  }
+}
+
+.bttn--tertiary {
+  @include utilities.bttn--tertiary;
+  @include utilities.bttn--focus;
+  & {
+    background: #fff;
+  }
+}
+
+// Modifiers.
+.bttn--transparent {
+  @include utilities.bttn--transparent;
+  @include utilities.bttn--focus;
+
+  [class*="bg--black"] &,
+  [class*="bg--"] [class*="bg--black"] & {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.425);
+  }
+
+  i,
+  span[class*="fa-"],
+  svg {
+    [class*="bg--gold"] &,
+    [class*="bg--white"] [class*="bg--gold"] & {
+      color: #fff;
+    }
+
+    [class*="bg--white"] &,
+    [class*="bg--gold"] [class*="bg--white"] &,
+    [class*="bg--gold"] [class*="bg--gray"] & {
+      color: variables.$primary;
+    }
+  }
+
+  [class*="bg--black"] [class*="bg--white"] &,
+  [class*="bg--black"] [class*="bg--gray"] &,
+  [class*="bg--black"] [class*="bg--gold"] & {
+    color: variables.$secondary;
+  }
+}
+
+.bttn.borderless {
+  &.bttn--transparent {
+    &:focus,
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &.bttn--transparent:after {
+    display: none;
+  }
+}
+
+.bttn--no-text {
+
+  i,
+  span[class*="fa-"],
+  svg {
+    margin-left: 0;
+  }
+  &:not([class*="bttn--secondary"]) {
+    i,
+    span[class*="fa-"],
+    svg {
+      color: variables.$secondary;
+      [class*="bg--"] [class*="bg--black"] &,
+      [class*="bg--black"] & {
+        color: #fff;
+      }
+      [class*="bg--"] [class*="bg--white"] &,
+      [class*="bg--white"] &,
+      [class*="bg--"] [class*="bg--gray"] &,
+      [class*="bg--"] [class*="bg--gold"] & {
+        color: variables.$secondary;
+      }
+    }
+  }
+  &.bttn--transparent.bttn--secondary {
+    i,
+    span[class*="fa-"],
+    svg {
+      color: variables.$secondary;
+    }
+  }
+}
+
+.bttn--large {
+  padding: 1.5rem 2.5rem 1.7rem;
+  // @todo Change this to use css variables, calc the size.
+  font-size: 1.45rem;
+}
+.bttn--small {
+  padding: 0.6rem 1rem 0.8rem;
+  // @todo Change this to use css variables, calc the size.
+  font-size: 1.05rem;
+}
+
+.bttn--full {
+  display: flex;
+}
+
+.bttn--caps {
+  text-transform: uppercase;
+  font-family: variables.$font-family-caps-bold;
+}
+
+.bttn--lowercase {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+}
+
+.bttn--light-font {
+  font-family: variables.$font-family-sans-serif;
+  font-weight: variables.$font-weight-normal;
+  font-size: 0.9rem;
+  letter-spacing: 0.04rem;
+  display: inline-block;
+  padding: 1rem 2rem 1rem;
+
+  &:focus {
+    text-decoration: underline;
+  }
+
+  i,
+  span[class*="fa-"] {
+    font-size: 0.9rem;
+  }
+
+  &.bttn--full {
+    display: flex;
+    height: 100%;
+  }
+}
+
+.bttn--circle {
+  padding: .55rem .7em;
+  border-radius: 50%;
+  transform: none;
+  line-height: 1;
+
+  &:after {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: border-color .3s ease-in-out;
+    transform: none;
+    position: absolute;
+  }
+
+  &:hover:after,
+  &:focus:after {
+    transform: none;
+    transition: none;
+    border: 3px solid;
+    border-color: inherit;
+    background-color: transparent;
+  }
+}
+
+  // @import 'artsci_v2.scss';
+body.text--serif {
+  $text--serif: variables.$font-family-serif;
+
+  .field--name-body,
+  .block-inline-blockartsci-text-area,
+  .event-description,
+  .ck-content {
+    p,
+    li {
+      &:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
+        font-family: $text--serif, serif;
+        font-size: calc(#{variables.$content-font-size} + 1px);
+      }
+    }
+
+    .lead {
+      &:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
+        font-family: $text--serif, serif;
+        font-size: 1.6rem;
+      }
+    }
+  }
+}
+
+
+.callout {
+  --callout-spacing-lg: var(--space-lg-width-gutter);
+  --callout-spacing-md: var(--space-md-width-gutter);
+  --callout-spacing-sm: var(--space-sm-width-gutter);
+
+  padding: var(--callout-spacing-md);
+  @include utilities.breakpoint(sm) {
+    padding: var(--callout-spacing-md);
+    &[class*="bg-"] {
+      padding: var(--callout-spacing-lg);
+    }
+  }
+}
+
+[class*="inline--"] {
+  --inline-margin-xs: 0.5rem;
+  --inline-margin-sm: var(--space-sm-width-gutter);
+  --inline-margin-md: var(--space-md-width-gutter);
+  --inline-margin-lg: var(--space-lg-width-gutter);
+}
+
+// === Element media sizes === //
+[class*="inline--size-"] {
+  width: 100%;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-bottom: var(--inline-margin-sm);
+  margin-top: var(--inline-margin-xs);
+
+  &.inline--align-left {
+    margin-inline-end: var(--inline-margin-md);
+  }
+
+  &.inline--align-right {
+    margin-inline-start: var(--inline-margin-md);
+  }
+}
+
+figure[class*="inline--size-"] {
+  img {
+    width: 100%;
+  }
+}
+
+.inline--size-full {
+  margin-bottom: var(--inline-margin-sm);
+  margin-top: var(--inline-margin-xs);
+}
+
+.inline--size-small {
+  @include utilities.breakpoint(xxsm) {
+    width: 50%;
+  }
+  @include utilities.breakpoint(xsm) {
+    width: 40%;
+  }
+  @include utilities.breakpoint(md) {
+    width: 33%;
+  }
+}
+
+.inline--size-medium {
+  @include utilities.breakpoint(xsm) {
+    width: 67%;
+  }
+  @include utilities.breakpoint(xsm) {
+    width: 50%;
+  }
+}
+
+.inline--size-large {
+  @include utilities.breakpoint(md) {
+    width: 70%;
+  }
+  @include utilities.breakpoint(lg) {
+    width: 75%;
+  }
+}
+
+// Set container query max-width sizes for images.
+@supports (contain: inline-size) {
+  // Adding this to cover the smallest column size.
+  // In most cases, we want to avoid targeting the smallest breakpoint through max-width.
+  @container column (max-width: #{variables.$break-xxsm}) {
+    [class*="inline--size-"] {
+      width: 100%;
+    }
+  }
+
+  @container column (min-width: #{variables.$break-xxsm}) {
+    .inline--size-small {
+      width: 50%;
+    }
+  }
+
+  @container column (min-width: #{variables.$break-xsm}) {
+    .inline--size-small {
+      width: 40%;
+    }
+    .inline--size-medium {
+      width: 67%;
+    }
+  }
+
+  @container column (min-width: #{variables.$break-md}) {
+    .inline--size-small {
+      width: 33%;
+    }
+
+    .inline--size-medium {
+      width: 50%;
+    }
+
+    .inline--size-large {
+      width: 70%;
+    }
+  }
+
+  @container column (min-width: #{variables.$break-lg}) {
+    .inline--size-large {
+      width: 75%;
+    }
+  }
+}
+// === End: element media sizes === //
+
+// === Element alignment classes  === //
+.inline--align-left {
+  float: left;
+  clear: left;
+
+  &:after {
+    content: '';
+  }
+}
+
+.inline--align-center {
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+}
+
+.inline--align-right {
+  float: right;
+  clear: right;
+}
+// === End: element alignment classes === //
+
+
+
+  .element--circle-list>li:before, .artsci-component--circle-list>li:before {
+    width: 80px;
+    height: 80px;
+    line-height: 1.8;
+    padding-top: 0;
+  }
+
+  blockquote {
+    font-style: normal;
+  }
+
+  ul {
+    padding: initial;
+  }
+
+  .table {
+    table,
+    table caption,
+    table > tr > td,
+    table > tr > th,
+    table > tbody > tr > td,
+    table > tbody > tr > th,
+    table > thead > tr > td,
+    table > thead > tr > th,
+    table > tfoot > tr > td,
+    table > tfoot > tr > th {
+      border: #d3d3d3 1px dotted;
+    }
+    table th {
+      padding: 1.05rem;
+    }
+  }
+
+  // CKEditor uses figcaption for table captions, but renders as caption..
+  figure.table {
+    table {
+      display: table-footer-group;
+    }
+    figcaption {
+      display: table-caption;
+      width: 100%;
+      padding: 1.05rem;
+      text-align: center;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #333;
+      font-weight: bold;
+      em, strong, sup, sub {
+        color: inherit!important;
+      }
+      a,
+      :where(p) a:not(.bttn) {
+        color: variables.$primary;
+        [class*="bg--"] &,
+        [class*="bg--"] [class*="bg--"] & {
+          color: variables.$primary;
+        }
+      }
+    }
+  }
+
+  figure.table .table-responsive {
+    figcaption {
+      text-align: left;
+      @include utilities.breakpoint(sm) {
+        text-align: center;
+      }
+    }
+  }
+
+  figure.table table.table--gray-borders {
+    & > figcaption {
+      & > td,
+      & > th {
+        border: #7c7c7c 1px solid;
+      }
+    }
+  }
+
+
+  .drupal-media {
+    max-width: max-content;
+    figcaption {
+      display: block;
+    }
+    img {
+      min-width: initial;
+    }
+  }
+
+  .media--type-remote-video {
+    iframe {
+      position: relative;
+      top: 0;
+    }
+    &.media--view-mode-vertical .field--name-field-media-oembed-video {
+      height: 100%;
+    }
+  }
+
+  // Deal with drupal-media wysiwyg issue for align none originals.
+  .media:not(.align-left):not(.align-right):not(.align-center) {
+    &.media--type-remote-video.media--view-mode-default,
+    &.media--type-remote-video.media--view-mode-full,
+    &.media--type-panopto.media--view-mode-default,
+    &.media--type-panopto.media--view-mode-full {
+      width: 854px;
+      max-width: 100%;
+      height: 480px;
+      position: unset;
+      display: inherit;
+      padding: 0;
+      overflow: auto;
+
+      .field--name-field-media-oembed-video,
+      .field--name-field-media-panopto-url {
+        height: 100%;
+
+        & > iframe {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  figure.caption {
+    .media:not(.align-left):not(.align-right):not(.align-center) {
+      &.media--type-remote-video.media--view-mode-default,
+      &.media--type-remote-video.media--view-mode-full,
+      &.media--type-panopto.media--view-mode-default,
+      &.media--type-panopto.media--view-mode-full {
+        width: 300px;
+        // 150px + edit button + border/padding.
+        height: calc(150px + 40px + 9px);
+
+        .field--name-field-media-oembed-video,
+        .field--name-field-media-panopto-url {
+          height: unset;
+        }
+      }
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  // Adjust responsive positioning to make room for edit button
+  .embed-responsive embed,
+  .embed-responsive iframe,
+  .embed-responsive object,
+  .embed-responsive video,
+  .media--type-panopto embed,
+  .media--type-panopto iframe,
+  .media--type-panopto object,
+  .media--type-panopto video,
+  .media--type-remote-video embed,
+  .media--type-remote-video iframe,
+  .media--type-remote-video object,
+  .media--type-remote-video video {
+    top: 40px;
+  }
+
+  // Placeholder twitter for within CKEditor.
+  .media--type-twitter {
+    height: 150px !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center center !important;
+    background-image: url("../images/twitter.png") !important;
+  }
+}
+
+// Remove uppercase styling from editor buttons.
+.ck.ck-button {
+  text-transform: inherit;
+}
+
+// Fix overlapping grid spacing under styles dropdown.
+.ck.ck-style-panel .ck-style-grid {
+  row-gap: 2rem!important;
+}
+
+// @todo remove when https://www.drupal.org/project/drupal/issues/3332416 is resolved.
+.ck.ck-toolbar.ck-toolbar_grouping > .ck-toolbar__items {
+  flex-wrap: wrap!important;
+}
+
+// @todo remove when https://github.com/ckeditor/ckeditor5/issues/18215 is resolved.
+.ck.ck-splitbutton>.ck-splitbutton__arrow {
+  min-width: 24px!important;
+}
+
+// Add extra padding to the "About text formats" link text for formatted text fields.
+// Minimum size for interactive elements is 44px by 44px.
+// This is an override of the Claro admin theme, and can be removed if
+// it gets adjusted upstream.
+.filter-help>a {
+  padding: 1rem 0;
+}
+
+.ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library {
+  color: #00558c;
+  span {
+    text-decoration: underline;
+  }
+  &:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #00558c;;
+    transform-origin: center;
+    transform: translate(-50%) scaleX(0);
+    transition: transform .3s ease-in-out;
+
+  }
+  &:hover, &:focus {
+    &:before {
+      transform: translate(-50%) scaleX(1);
+    }
+  }
+}

@@ -1,8 +1,0 @@
-uuid: 41fe3b06-b82b-48e7-bde0-2e1b123bbb4f
-langcode: en
-status: true
-dependencies: {  }
-id: artsci_events
-label: Events
-revision: true
-description: 'Display one or more event(s) pulled directly from events.artsci.edu based with options for filtering.'

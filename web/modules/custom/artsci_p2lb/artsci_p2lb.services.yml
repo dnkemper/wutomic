@@ -1,6 +1,0 @@
-services:
-  logger.channel.artsci_p2lb:
-    parent: logger.channel_base
-    arguments: ['artsci_p2lb']
-  artsci_p2lb.converter_manager:
-    class: Drupal\artsci_p2lb\P2LbConverterManager

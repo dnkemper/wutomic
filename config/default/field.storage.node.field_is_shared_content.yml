@@ -1,0 +1,18 @@
+uuid: f6789012-abcd-ef12-3456-789012345679
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_is_shared_content
+field_name: field_is_shared_content
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

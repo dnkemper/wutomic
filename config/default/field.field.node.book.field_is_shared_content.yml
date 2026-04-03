@@ -1,0 +1,23 @@
+uuid: 01234567-89ab-cdef-0123-456789abcdef
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_is_shared_content
+    - node.type.book
+id: node.book.field_is_shared_content
+field_name: field_is_shared_content
+entity_type: node
+bundle: book
+label: 'Is shared content'
+description: 'Enable this to make this content available for syndication to other sites.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

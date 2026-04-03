@@ -4,18 +4,15 @@
 .bttn {
   @include utilities.bttn;
   @include utilities.border;
-  border-radius: 50px;
 
   [class*="bg--"] &,
   [class*="bg--"] [class*="bg--"] & {
-    border-color: white;
-    color: variables.$white;
+    border-color: rgba(0, 0, 0, .425);
+    color: variables.$secondary;
   }
 
-  [class*="bg--gray"] &,
-  [class*="bg--"] [class*="bg--gray"] & {
-    border-color: black;
-    color: inherit;
+  [class*="bg--black"] & {
+    border-color: rgba(255, 255, 255, .425);
   }
 }
 // Options.
@@ -60,7 +57,6 @@
   @include utilities.bttn--focus;
   & {
     background: #fff;
-    color: variables.$primary
   }
 }
 
@@ -69,8 +65,8 @@
   @include utilities.bttn--transparent;
   @include utilities.bttn--focus;
 
-  [class*="bg--black"] &,
-  [class*="bg--"] [class*="bg--black"] & {
+  [class*="bg--teal"] &,
+  [class*="bg--"] [class*="bg--teal"] & {
     color: #fff;
     border-color: rgba(255, 255, 255, 0.425);
   }
@@ -84,8 +80,8 @@
     }
 
     [class*="bg--white"] &,
-    [class*="bg--gray"] [class*="bg--white"] &,
-    [class*="bg--gray"] [class*="bg--gray"] & {
+    [class*="bg--gold"] [class*="bg--white"] &,
+    [class*="bg--gold"] [class*="bg--gray"] & {
       color: variables.$primary;
     }
   }
@@ -122,9 +118,9 @@
     span[class*="fa-"],
     svg {
       color: variables.$secondary;
-      [class*="bg--"] [class*="bg--black"] &,
-      [class*="bg--black"] &,
-      [class*="bg--"] [class*="bg--gold"] & {
+      [class*="bg--"] [class*="bg--teal"] &,
+      [class*="bg--teal"] &,
+      [class*="bg--"] [class*="bg--red"] & {
         color: #fff;
       }
       [class*="bg--"] [class*="bg--white"] &,

@@ -1,0 +1,18 @@
+uuid: c5293a8a-bfe3-4654-bc72-04e2e7ad05c1
+langcode: en
+status: true
+dependencies: {  }
+id: block_grid_onecol_100
+label: '1 column'
+classes: grid--onecol--100
+type: component
+group: grid_columns
+block_restrictions:
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+layout_restrictions: {  }
+weight: -20

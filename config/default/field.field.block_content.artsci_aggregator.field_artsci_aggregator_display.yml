@@ -1,0 +1,23 @@
+uuid: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_aggregator
+    - field.storage.block_content.field_artsci_aggregator_display
+  module:
+    - options
+id: block_content.artsci_aggregator.field_artsci_aggregator_display
+field_name: field_artsci_aggregator_display
+entity_type: block_content
+bundle: artsci_aggregator
+label: 'Content Type'
+description: 'Select which type of content to display.'
+required: true
+translatable: false
+default_value:
+  -
+    value: article_block
+default_value_callback: ''
+settings: {  }
+field_type: list_string

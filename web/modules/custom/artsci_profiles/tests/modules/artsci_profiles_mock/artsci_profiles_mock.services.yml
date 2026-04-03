@@ -1,7 +1,0 @@
-services:
-  artsci_profiles_mock.client:
-    decorates: 'artsci_profiles.client'
-    class: Drupal\artsci_profiles_mock\ClientMock
-    public: false
-    arguments:
-      [ '@artsci_profiles_mock.client.inner', '@config.factory', '@logger.channel.file', '@http_client' ]

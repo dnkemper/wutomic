@@ -1,9 +1,9 @@
 // Make breakpoints and container-query available as utilties.*.
 @forward 'breakpoints' show breakpoint, container-query;
-@forward 'mixins';
+@forward 'grid-mixins';
 @use 'breakpoints';
 @use 'placeholders';
-@use 'mixins';
+@use 'grid-mixins';
 @use 'variables';
 @use 'sass:list';
 

@@ -27,21 +27,26 @@
 #}
 {%
   set classes = [
-  'block',
-  'block-' ~ configuration.provider|clean_class,
-  'block-' ~ plugin_id|clean_class,
-]
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+    layout ? 'layout--' ~ layout|clean_class,
+  ]
 %}
 {% set content_rendered = content|render %}
 {% if content_rendered is not empty %}
-  <div{{ attributes.addClass(classes) }}>
-    {{ title_prefix }}
-{#    {% if label %}#}
-{#      <h2{{ title_attributes }}>{{ label }}</h2>#}
-{#    {% endif %}#}
-    {{ title_suffix }}
-    {% block content %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes.addClass('block__title') }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
+  {% block content %}
+    <div{{ content_attributes.addClass('block__content') }}>
       {{ content }}
-    {% endblock %}
-  </div>
+    </div>
+  {% endblock %}
+</div>
+
 {% endif %}

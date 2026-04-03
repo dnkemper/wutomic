@@ -16,14 +16,6 @@ targetEntityType: paragraph
 bundle: artsci_slide
 mode: default
 content:
-  field_collection_headline:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
   field_artsci_slide_content:
     type: text_default
     label: hidden
@@ -52,6 +44,14 @@ content:
       linkit_profile: default
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_collection_headline:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   entity_print_view_epub: true

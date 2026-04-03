@@ -7,7 +7,6 @@ dependencies:
     - artsci_people
 id: page-people-slf
 label: 'Artsci People'
-module: artsci
 routes:
   -
     route_name: view.people.page_people_slf

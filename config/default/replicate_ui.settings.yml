@@ -1,3 +1,6 @@
 entity_types:
+  - block_content
+  - media
   - node
+  - paragraph
 check_edit_access: false

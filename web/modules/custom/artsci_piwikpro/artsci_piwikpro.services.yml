@@ -1,6 +1,0 @@
-services:
-  artsci_piwikpro.piwik_pro_override:
-    class: Drupal\artsci_piwikpro\ConfigOverride\PiwikProOverride
-    arguments: [ '@request_stack' ]
-    tags:
-      - { name: config.factory.override }

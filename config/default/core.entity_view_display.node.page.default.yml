@@ -49,6 +49,22 @@ third_party_settings:
             weight: 0
             additional: {  }
             third_party_settings: {  }
+          -
+            uuid: d97004fb-53e1-4c3a-8f75-ea497a027be7
+            region: content
+            configuration:
+              id: 'field_block:node:page:private'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: private
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+            third_party_settings: {  }
         third_party_settings:
           layout_builder_lock:
             lock:
@@ -312,6 +328,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  private:
+    type: private
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   body: true

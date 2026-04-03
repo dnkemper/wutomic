@@ -7,7 +7,6 @@ dependencies:
     - artsci_articles
 id: settings-form
 label: 'Settings Form'
-module: artsci
 routes:
   -
     route_name: artsci_articles.settings_form

@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: site-settings
 label: 'Basic Site Settings'
-module: artsci
 routes:
   -
     route_name: system.site_information_settings

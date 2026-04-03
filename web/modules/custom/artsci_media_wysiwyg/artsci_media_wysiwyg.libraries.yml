@@ -7,3 +7,27 @@ ckeditor5-a11y:
     js/ckeditor5-a11y.js: {}
   dependencies:
     - core/drupal
+htmlEmbed:
+  remote: https://github.com/ckeditor/ckeditor5
+  version: "45.2.1"
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md
+    gpl-compatible: true
+  js:
+    js/build/html-embed.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+    - core/ckeditor5.translations
+
+# Loaded in the text format configuration form to provide styling for the icon
+# used in toolbar config.
+admin.htmlEmbed:
+  css:
+    theme:
+      css/htmlEmbed.admin.css: { }
+editor:
+  js:
+    js/build/list.js: { preprocess: false, minified: true }
+  dependencies:
+    - ckeditor5/ckeditor5

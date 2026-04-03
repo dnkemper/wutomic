@@ -6,7 +6,6 @@ dependencies:
     - artsci
 id: current-page
 label: 'Current Page'
-module: artsci
 routes:
   -
     route_name: entity.node.canonical

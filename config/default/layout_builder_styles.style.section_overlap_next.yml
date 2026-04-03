@@ -1,0 +1,20 @@
+uuid: ab25beee-c667-4289-9719-f30185b7e1d8
+langcode: en
+status: true
+dependencies: {  }
+id: section_overlap_next
+label: 'Overlap section'
+classes: section-overlap--next
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 54
