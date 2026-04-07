@@ -1,0 +1,10 @@
+uuid: c13a7932-aa80-4212-8c49-b6569a255fd7
+langcode: en
+status: true
+dependencies: {  }
+id: card_display
+label: ' Card: Display'
+multiselect: single
+form_type: select
+required: false
+weight: 0

@@ -249,8 +249,14 @@
 
 // === Pre-Title === //
 .card__pre-title {
-  font-size: 0.75rem;
-  opacity: .7;
+    color: #971b2f;
+    font-family: IvyStyle Sans;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 5%;
+    line-height: 150%;
+    margin: 10px 0;
+    text-transform: uppercase;
   i,
   span[class*="fa-"],
   svg {

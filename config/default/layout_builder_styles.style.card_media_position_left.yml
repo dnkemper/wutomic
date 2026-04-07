@@ -9,10 +9,26 @@ type: component
 group: card_media_position
 block_restrictions:
   - 'inline_block:artsci_card'
-  - 'inline_block:artsci_events'
+  - 'inline_block:artsci_image'
   - 'inline_block:artsci_aggregator'
   - 'views_block:article_list_block-list_article'
   - 'views_block:page_list_block-list_page'
   - 'views_block:people_list_block-list_card'
+  - aggregator_feed_block
+  - 'views_block:articles_author-articles_author'
+  - 'views_block:articles_block-block_articles'
+  - 'views_block:articles-block_articles_archive'
+  - 'views_block:people_block-block_people_sfl'
+  - 'views_block:people_block-block_people_slf'
+  - 'views_block:content_recent-block_1'
+  - 'views_block:region_items-region_items'
+  - 'views_block:related_content-block_related_headings_lists'
+  - 'views_block:related_manually_referenced_content-block_grid'
+  - 'views_block:rss_block-article_block'
+  - 'views_block:rss_block-book_block'
+  - 'views_block:rss_block-people_block'
+  - 'views_block:book_toc-block_book_toc'
+  - 'views_block:tags_list-tags_list'
+  - 'views_block:who_s_online-who_s_online_block'
 layout_restrictions: {  }
 weight: -47

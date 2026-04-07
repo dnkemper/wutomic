@@ -2,13 +2,13 @@
 
 namespace Drupal\artsci_core\Entity;
 
-use Drupal\book\Entity\Node\Book;
+use Drupal\node\Entity\Node;
 use Drupal\views\ViewExecutable;
 
 /**
  * Bundle-specific subclass of Node.
  */
-abstract class NodeBundleBase extends Book implements RendersAsCardInterface {
+abstract class NodeBundleBase extends Node implements RendersAsCardInterface {
 
   use RendersAsCardTrait;
 

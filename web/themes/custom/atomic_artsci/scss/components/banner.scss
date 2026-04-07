@@ -137,7 +137,7 @@
   .headline {
     color: var(--banner-text-color);
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     z-index: 1;
 
     a {
@@ -201,10 +201,16 @@
 
 // === Pre-title === //
 .banner__pre-title {
-  line-height: 1.1;
+font-family: "ivystyle-sans", "Calibri", sans-serif;
+font-weight: 600;
+line-height: 150%;
+letter-spacing: 5%;
+text-align: center;
+text-transform: uppercase;
+
 
   &.headline.headline--serif {
-    margin-bottom: 0;
+    margin-bottom: 1rem;
     font-weight: 500;
   }
 
@@ -225,11 +231,11 @@
   }
 
   &.headline--medium {
-    font-size: clamp(1.2rem, calc(0.4507vw + 1.031rem), 1.4rem);
+    font-size: clamp(1.2rem, calc(0.4507vw + 1.031rem), 1.2rem);
   }
 
   &.headline--small {
-    font-size: #{variables.$h5-font-size};
+    font-size: clamp(1rem, calc(0.4507vw + 1.031rem), 1rem);
   }
 }
 // === End: Pre-title === //
@@ -239,6 +245,8 @@
   z-index: 1;
   color: var(--banner-text-color);
   margin-bottom: 1.05rem;
+  font-family: "ivystyle-sans", "Calibri", sans-serif;
+
 
   blockquote {
     margin-left: 0;
@@ -254,9 +262,13 @@
   }
 
   p {
-    line-height: 1.5;
     margin-top: 0;
     color: var(--banner-text-color);
+    font-weight: 400;
+    line-height: 140%;
+    letter-spacing: 0%;
+    text-align: center;
+    
 
     a {
       position: relative;
@@ -312,10 +324,10 @@
 .banner:not([class*="bg--"]) {
   background-color: var(--banner-bg-failsafe);
 
-  .headline,
-  .banner__text {
-    text-shadow: 0 1px 3px rgb(var(--banner-overlay-color-rgb));
-  }
+  // .headline,
+  // .banner__text {
+  //   text-shadow: 0 1px 3px rgb(var(--banner-overlay-color-rgb));
+  // }
 }
 // === End: Background colors === //
 

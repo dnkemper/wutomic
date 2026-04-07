@@ -4,7 +4,7 @@
 // Define the editor styles scope
 .ck.ck-content,
 .ck-content {
-  font-family: Roboto, sans-serif;
+  font-family: variables.$font-family-sans-serif;
 
   // Colors
   --brand-primary: #FFCD00;

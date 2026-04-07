@@ -4,21 +4,6 @@
 
 $backgrounds: (
   // Black.
-  'bg--black--pattern--brain': (
-    'type': 'dark',
-    'background-color': variables.$secondary,
-    'background-image': '#{variables.$imgpath}/brain-pattern-black.svg',
-  ),
-  'bg--black--pattern--community': (
-    'type': 'dark',
-    'background-color': variables.$secondary,
-    'background-image': '#{variables.$imgpath}/community-pattern--black.png',
-  ),
-  'bg--black--pattern--particle': (
-    'type': 'dark',
-    'background-color': variables.$secondary,
-    'background-image': '#{variables.$imgpath}/particle-pattern--black.png',
-  ),
   'bg--teal': (
     'type': 'dark',
     'background-color': variables.$color-teal,
@@ -27,57 +12,9 @@ $backgrounds: (
     'type': 'dark',
     'background-color': variables.$primary,
   ),
-  // Gold.
-  'bg--gold--pattern--brain': (
-    'type': 'light',
-    'background-color': variables.$primary,
-    'background-image': '#{variables.$imgpath}/brain-pattern-reversed.svg',
-  ),
-  'bg--gold--pattern--community': (
-    'type': 'light',
-    'background-color': variables.$primary,
-    'background-image': '#{variables.$imgpath}/community-pattern--white.png',
-  ),
-  'bg--gold--pattern--particle': (
-    'type': 'light',
-    'background-color': variables.$primary,
-    'background-image': '#{variables.$imgpath}/particle-pattern.png',
-  ),
-  // Gray.
-  'bg--gray--pattern--brain': (
-    'type': 'light',
-    'background-color': variables.$light,
-    'background-image': '#{variables.$imgpath}/brain-pattern-white.svg',
-  ),
-  'bg--gray--pattern--community': (
-    'type': 'light',
-    'background-color': variables.$light,
-    'background-image': '#{variables.$imgpath}/community-pattern--gray.png',
-  ),
-  'bg--gray--pattern--particle': (
-    'type': 'light',
-    'background-color': variables.$light,
-    'background-image': '#{variables.$imgpath}/particle-pattern--white.png',
-  ),
   'bg--gray': (
     'type': 'light',
     'background-color': variables.$light,
-  ),
-  // White.
-  'bg--white--pattern--brain': (
-    'type': 'light',
-    'background-color': variables.$white,
-    'background-image': '#{variables.$imgpath}/brain-pattern.svg',
-  ),
-  'bg--white--pattern--community': (
-    'type': 'light',
-    'background-color': variables.$white,
-    'background-image': '#{variables.$imgpath}/community-pattern--gray.png',
-  ),
-  'bg--white--pattern--particle': (
-    'type': 'light',
-    'background-color': variables.$white,
-    'background-image': '#{variables.$imgpath}/particle-pattern--gold.png',
   ),
   'bg--white': (
     'type': 'light',

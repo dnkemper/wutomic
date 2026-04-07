@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Primary module hooks for Artsci Core module.
+ * Primary module hooks for Uiowa Core module.
  */
 
 use Drupal\Component\Utility\Html;
@@ -50,18 +50,6 @@ function artsci_core_cron() {
     \Drupal::state()->set($state_key, $today);
     Cache::invalidateTags(['time:daily']);
 
-    // if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
-    //   $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
-    //   $purgeQueuers = \Drupal::service('purge.queuers');
-    //   $purgeQueue = \Drupal::service('purge.queue');
-    //   $queuer = $purgeQueuers->get('coretags');
-
-    //   $invalidations = [
-    //     $purgeInvalidationFactory->get('tag', 'time:daily'),
-    //   ];
-
-    //   $purgeQueue->add($queuer, $invalidations);
-    // }
   }
 
   // Hourly.
@@ -73,18 +61,6 @@ function artsci_core_cron() {
     \Drupal::state()->set($state_key, $request_time);
     Cache::invalidateTags(['time:hourly']);
 
-    // if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
-    //   $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
-    //   $purgeQueuers = \Drupal::service('purge.queuers');
-    //   $purgeQueue = \Drupal::service('purge.queue');
-    //   $queuer = $purgeQueuers->get('coretags');
-
-    //   $invalidations = [
-    //     $purgeInvalidationFactory->get('tag', 'time:hourly'),
-    //   ];
-
-    //   $purgeQueue->add($queuer, $invalidations);
-    // }
   }
 }
 
@@ -908,12 +884,12 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
         $protected = \Drupal::config('artsci_core.protected');
         // If protected...
         if ($protected->get('protect')) {
-          // Get uartsci of protected blocks.
+          // Get uuids of protected blocks.
           $protected_blocks = $protected->get('protected_blocks');
-          $uartsci = array_keys($protected_blocks);
+          $uuids = array_keys($protected_blocks);
 
           // See if current block matches any protected and prevent deletion.
-          if (in_array($uuid, $uartsci)) {
+          if (in_array($uuid, $uuids)) {
             \Drupal::messenger()
               ->addWarning(t('This block is protected from deletion. Remove content from the block instead.'));
             $form['actions']['submit']['#disabled'] = TRUE;
@@ -1607,6 +1583,9 @@ function artsci_core_preprocess_views_view(&$variables) {
     'student_profiles',
     'academic_groups_taxonomy_term',
     'people_list_block',
+    'people_block',
+    'book_block',
+    'article_block',
     'article_list_block',
     'page_list_block',
     'related_manually_referenced_content',

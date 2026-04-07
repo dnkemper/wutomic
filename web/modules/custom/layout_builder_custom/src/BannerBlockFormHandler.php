@@ -4,7 +4,6 @@ namespace Drupal\layout_builder_custom;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\layout_builder\Form\ConfigureBlockFormBase;
-use Drupal\artsci_core\LinkAnalyticsHelper;
 
 /**
  * Handles form alterations for the artsci_banner block.
@@ -62,6 +61,7 @@ class BannerBlockFormHandler {
 
     // Hide admin label in favor of custom heading.
     unset($form['settings']['admin_label']);
+    unset($form['field_artsci_banner_title_size']);
 
     /*
      * Headline section.
@@ -83,11 +83,11 @@ class BannerBlockFormHandler {
 
     // Set weights and clean up defaults for headline fields.
     if (isset($form['layout_builder_style_headline_type'])) {
-      $form['layout_builder_style_headline_type']['#weight'] = 62;
+      $form['layout_builder_style_headline_type']['#weight'] = 65;
     }
 
     if (isset($form['layout_builder_style_headline_size'])) {
-      $form['layout_builder_style_headline_size']['#weight'] = 63;
+      $form['layout_builder_style_headline_size']['#weight'] = 66;
     }
 
     // Duplicate headline fields into headline group.
@@ -222,10 +222,22 @@ class BannerBlockFormHandler {
     self::createDuplicateField($form, 'layout_builder_style_button_style', 'button_group');
     self::createDuplicateField($form, 'layout_builder_style_button_font', 'button_group');
 
-    /*
-     * Layout section.
-     */
-    // Layout group heading.
+    // Only show button style when a link URI is entered.
+    if (isset($form['button_group']['layout_builder_style_button_style_duplicate'])) {
+      $form['button_group']['layout_builder_style_button_style_duplicate']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][field_artsci_banner_link][0][uri]"]' => ['filled' => TRUE],
+        ],
+      ];
+    }
+
+    if (isset($form['button_group']['layout_builder_style_button_font_duplicate'])) {
+      $form['button_group']['layout_builder_style_button_font_duplicate']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][field_artsci_banner_link][0][uri]"]' => ['filled' => TRUE],
+        ],
+      ];
+    }
     $form['layout_group_heading'] = [
       '#type' => 'html_tag',
       '#tag' => 'h3',
@@ -241,7 +253,7 @@ class BannerBlockFormHandler {
       '#title' => t('<span class="element-invisible">Layout</span> Options'),
       '#weight' => 97,
       '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
-      '#open' => FALSE,
+      '#open' => TRUE,
       '#suffix' => '</div>',
     ];
 
@@ -255,8 +267,8 @@ class BannerBlockFormHandler {
     }
 
     // Duplicate layout fields into layout settings container.
-    self::createDuplicateField($form, 'layout_builder_style_container', 'layout_settings');
-    self::createDuplicateField($form, 'layout_builder_style_banner_height', 'layout_settings');
+    self::createDuplicateField($form, 'layout_builder_style_vertical_alignment', 'layout_settings');
+    self::createDuplicateField($form, 'layout_builder_style_horizontal_alignment', 'layout_settings');
 
     /*
      * Styles section.
@@ -277,13 +289,43 @@ class BannerBlockFormHandler {
       '#title' => t('<span class="element-invisible">Style</span> Options'),
       '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
       '#weight' => 102,
-      '#open' => FALSE,
+      '#open' => TRUE,
       '#suffix' => '</div>',
     ];
 
     // Duplicate style fields into style options container.
+    // if (isset($form['layout_builder_style_horizontal_alignment'])) {
+    //   $form['layout_builder_style_horizontal_alignment']['#weight'] = 95;
+    // }
+
+    // if (isset($form['layout_builder_style_vertical_alignment'])) {
+    //   $form['layout_builder_style_vertical_alignment']['#weight'] = 96;
+    // }
+
+    // Duplicate style fields into style options container.
+    self::createDuplicateField($form, 'layout_builder_style_container', 'style_options');
+    self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
+    self::createDuplicateField($form, 'layout_builder_style_banner_card_background', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_default', 'style_options');
+
+    // Only show banner card background when background type is color-pattern.
+    if (isset($form['style_options']['layout_builder_style_banner_card_background_duplicate'])) {
+      $form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          ':input[name="layout_builder_style_default_duplicate"]' => ['value' => 'banner_offset_content'],
+        ],
+      ];
+    }
+
+    if (isset($form['layout_builder_style_banner_card_background'])) {
+      $form['layout_builder_style_banner_card_background']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          ':input[name="layout_builder_style_default_duplicate"]' => ['value' => 'banner_offset_content'],        ],
+      ];
+    }
 
     /*
      * Bottom section.
@@ -309,6 +351,7 @@ class BannerBlockFormHandler {
   public static function validateForm(array &$form, FormStateInterface $form_state) {
     // Sync duplicated fields back to original fields.
     $fields_to_sync = [
+      'layout_builder_style_banner_card_background',
       'layout_builder_style_banner_gradient',
       'layout_builder_style_banner_height',
       'layout_builder_style_button_style',
@@ -317,37 +360,41 @@ class BannerBlockFormHandler {
       'layout_builder_style_default',
       'layout_builder_style_headline_type',
       'layout_builder_style_headline_size',
+      'layout_builder_style_horizontal_alignment',
       'layout_builder_style_margin',
       'layout_builder_style_media_overlay',
+      'layout_builder_style_vertical_alignment',
     ];
 
     self::syncDuplicateFields($form_state, $fields_to_sync);
-
-    // Sanitize analytics attributes on banner links.
-    LinkAnalyticsHelper::sanitizeLinkAnalyticsAttributes($form_state, 'field_artsci_banner_link', 'button');
 
     // Validation for links.
     $link_set = FALSE;
     $link_text = FALSE;
 
     // First check if there is a link set.
-    foreach ($form_state->getValue([
+    $links = $form_state->getValue([
       'settings',
       'block_form',
       'field_artsci_banner_link',
-    ]) as $key => $link) {
-      if ($key === 'add_more' || empty($link['uri'])) {
-        // If there is no uri, then we don't care about anything else.
-        continue;
-      }
-      else {
-        $link_set = TRUE;
-      }
+    ]);
 
-      if (!empty($link['title'])) {
-        $link_text = TRUE;
+    if (is_array($links)) {
+      foreach ($links as $key => $link) {
+        if ($key === 'add_more' || empty($link['uri'])) {
+          // If there is no uri, then we don't care about anything else.
+          continue;
+        }
+        else {
+          $link_set = TRUE;
+        }
+
+        if (!empty($link['title'])) {
+          $link_text = TRUE;
+        }
       }
     }
+
     // If there is a link and no text, check if there is a title.
     if ($link_set && !empty($form_state->getValue([
       'settings',
@@ -425,16 +472,11 @@ class BannerBlockFormHandler {
           $form_state->setValue('layout_builder_style_background', 'block_background_style_black');
           $background_type = 'color-pattern';
         }
-        // @todo Add feedback for user that they didn't upload an image.
-        // @todo Add validation to check whether image uploaded or not. See
-        // https://github.com/artsci/artsci/issues/5012
       }
       elseif ($background_type === 'color-pattern') {
         // For color-pattern, clear any media reference if it was previously
         // set.
         $form_state->unsetValue($form_media_selection);
-        // @todo Trigger file deletion if the media item is unused elsewhere. See
-        // https://github.com/artsci/artsci/issues/5013
       }
     }
 
@@ -475,15 +517,19 @@ class BannerBlockFormHandler {
     /*
      * Assign fields to groups.
      */
-    // Assign block fields to groups.
     if (isset($element['field_artsci_banner_pre_title'])) {
       $element['field_artsci_banner_pre_title']['#group'] = 'headline_group';
       $element['field_artsci_banner_pre_title']['#weight'] = 60;
     }
 
+    if (isset($element['field_artsci_headline'])) {
+      $element['field_artsci_headline']['#group'] = 'headline_group';
+      $element['field_artsci_headline']['#weight'] = 61;
+    }
+
     if (isset($element['field_artsci_banner_title'])) {
       $element['field_artsci_banner_title']['#group'] = 'headline_group';
-      $element['field_artsci_banner_title']['#weight'] = 61;
+      $element['field_artsci_banner_title']['#weight'] = 62;
       // Update the label for the Heading sizes to remove Size label.
       if (isset($element['field_artsci_banner_title']['widget'][0]['container']['size']['#title'])) {
         $element['field_artsci_banner_title']['widget'][0]['container']['size']['#title'] = t('Level');
@@ -523,8 +569,6 @@ class BannerBlockFormHandler {
     }
 
     // Add radio buttons for background type selection.
-    // This is added to block settings form for convenience of positioning it
-    // on the form.
     $element['background_type'] = [
       '#type' => 'radios',
       '#title' => t('Background type'),
@@ -551,44 +595,59 @@ class BannerBlockFormHandler {
       $complete_form['layout_builder_style_background']['#access'] = FALSE;
     }
 
+    if (isset($complete_form['style_options']['layout_builder_style_banner_card_background_duplicate'])) {
+      $complete_form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+        ],
+      ];
+    }
+
     /*
      * Configure media fields.
      */
-    $element['field_artsci_banner_image'] = [
-      '#states' => [
-        'visible' => [
-          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+    if (isset($element['field_artsci_banner_image'])) {
+      $element['field_artsci_banner_image'] = [
+        '#states' => [
+          'visible' => [
+            ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          ],
         ],
-      ],
-      '#weight' => 30,
-    ] + $element['field_artsci_banner_image'];
+        '#weight' => 30,
+      ] + $element['field_artsci_banner_image'];
+      unset($element['field_artsci_banner_image']['widget']['#title']);
+    }
 
-    $element['field_artsci_banner_autoplay'] = [
-      '#states' => [
-        'visible' => [
-          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+    if (isset($element['field_artsci_banner_autoplay'])) {
+      $element['field_artsci_banner_autoplay'] = [
+        '#states' => [
+          'visible' => [
+            ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          ],
         ],
-      ],
-      '#weight' => 40,
-    ] + $element['field_artsci_banner_autoplay'];
-
-    unset($element['field_artsci_banner_image']['widget']['#title']);
-    unset($element['field_artsci_banner_autoplay']['widget']['#title']);
+        '#weight' => 40,
+      ] + $element['field_artsci_banner_autoplay'];
+      unset($element['field_artsci_banner_autoplay']['widget']['#title']);
+    }
 
     /*
      * Configure gradient fields.
      */
-    $complete_form['layout_builder_style_media_overlay']['#states'] = [
-      'visible' => [
-        ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
-      ],
-    ];
+    if (isset($complete_form['layout_builder_style_media_overlay'])) {
+      $complete_form['layout_builder_style_media_overlay']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+        ],
+      ];
+    }
 
-    $complete_form['layout_builder_style_banner_gradient']['#states'] = [
-      'visible' => [
-        ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
-      ],
-    ];
+    if (isset($complete_form['layout_builder_style_banner_gradient'])) {
+      $complete_form['layout_builder_style_banner_gradient']['#states'] = [
+        'visible' => [
+          ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+        ],
+      ];
+    }
 
     // Handle field_styles_gradient_midpoint field placement and behavior.
     if (isset($element['field_styles_gradient_midpoint'])) {
@@ -598,11 +657,10 @@ class BannerBlockFormHandler {
       }
 
       // Move the field to gradient options if the container exists in form.
-      $form = &$form_state->getCompleteForm();
-      if (isset($form['gradient_options'])) {
-        $form['gradient_options']['field_styles_gradient_midpoint'] = $element['field_styles_gradient_midpoint'];
-        $form['gradient_options']['field_styles_gradient_midpoint']['#weight'] = 4;
-        $form['gradient_options']['field_styles_gradient_midpoint']['#states'] = [
+      if (isset($complete_form['gradient_options'])) {
+        $complete_form['gradient_options']['field_styles_gradient_midpoint'] = $element['field_styles_gradient_midpoint'];
+        $complete_form['gradient_options']['field_styles_gradient_midpoint']['#weight'] = 4;
+        $complete_form['gradient_options']['field_styles_gradient_midpoint']['#states'] = [
           'visible' => [
             ':input[name="gradient_options[adjust_gradient_midpoint]"]' => ['checked' => TRUE],
             ':input[name="layout_builder_style_media_overlay_duplicate"]' => ['!value' => ''],
@@ -610,12 +668,12 @@ class BannerBlockFormHandler {
         ];
 
         // Remove the _none option from the moved field as well.
-        if (isset($form['gradient_options']['field_styles_gradient_midpoint']['widget']['#options']['_none'])) {
-          unset($form['gradient_options']['field_styles_gradient_midpoint']['widget']['#options']['_none']);
+        if (isset($complete_form['gradient_options']['field_styles_gradient_midpoint']['widget']['#options']['_none'])) {
+          unset($complete_form['gradient_options']['field_styles_gradient_midpoint']['widget']['#options']['_none']);
         }
 
         // Visually hide the fieldset legend span.
-        $form['gradient_options']['field_styles_gradient_midpoint']['widget']['#title_display'] = 'invisible';
+        $complete_form['gradient_options']['field_styles_gradient_midpoint']['widget']['#title_display'] = 'invisible';
 
         // Hide the original field.
         $element['field_styles_gradient_midpoint']['#access'] = FALSE;
@@ -627,17 +685,16 @@ class BannerBlockFormHandler {
      */
     if (isset($element['field_artsci_banner_link'])) {
       $element['field_artsci_banner_link']['#weight'] = -69;
-    }
 
-    // Check the max_delta to see how many banner links have been added
-    // and unset the add more button if we've reached the third link.
-    if (isset($element['field_artsci_banner_link']) &&
-      $element['field_artsci_banner_link']['widget']['#max_delta'] >= 2) {
-      unset($element['field_artsci_banner_link']['widget']['add_more']);
-      // If we're editing a banner with 3 existing links
-      // we also need to unset the fourth pre-added link field.
-      if (isset($element['field_artsci_banner_link']['widget'][3])) {
-        unset($element['field_artsci_banner_link']['widget'][3]);
+      // Check the max_delta to see how many banner links have been added
+      // and unset the add more button if we've reached the third link.
+      if ($element['field_artsci_banner_link']['widget']['#max_delta'] >= 2) {
+        unset($element['field_artsci_banner_link']['widget']['add_more']);
+        // If we're editing a banner with 3 existing links
+        // we also need to unset the fourth pre-added link field.
+        if (isset($element['field_artsci_banner_link']['widget'][3])) {
+          unset($element['field_artsci_banner_link']['widget'][3]);
+        }
       }
     }
 
@@ -691,10 +748,13 @@ class BannerBlockFormHandler {
   }
 
   /**
-   * Adds the gradient midpoint checkbox to the form.
+   * Gets the default value for the gradient midpoint checkbox.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
+   *
+   * @return bool
+   *   The default value for the checkbox.
    */
   protected static function getGradientMidpointCheckboxDefaultValue(FormStateInterface $form_state) {
     // Get the saved checkbox state from third-party settings.
@@ -706,12 +766,6 @@ class BannerBlockFormHandler {
       $stored_checkbox_value = $component->getThirdPartySetting('layout_builder_custom', 'adjust_gradient_midpoint');
       if ($stored_checkbox_value !== NULL) {
         $default_value = (bool) $stored_checkbox_value;
-      }
-      else {
-        // If no saved state exists, fallback to checking if gradient midpoint
-        // field has a value.
-        $has_midpoint_value = !empty($form['layout_builder_style_banner_gradient_midpoint']['#default_value']);
-        $default_value = $has_midpoint_value;
       }
     }
 

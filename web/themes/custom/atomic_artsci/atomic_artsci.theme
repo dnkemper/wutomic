@@ -416,22 +416,6 @@ function atomic_artsci_preprocess_node(&$variables) {
       $variables['heading_size'] = $variables['elements']['#heading_size'];
     }
 
-    // Add appropriate card styles for v2/3 teaser view modes.
-    // @todo Remove after v2 dies.
-    //   See https://github.com/artsci/artsci/issues/4948
-    $is_v2 = \Drupal::config('config_split.config_split.artsci_v2')->get('status');
-
-    if ($node->getType() === 'page') {
-      // Style stacked for Artsci v2, otherwise media right.
-      if ($is_v2) {
-        $variables['attributes']['class'][] = 'card--stacked';
-        $variables['media_classes'] = [
-          'media--widescreen',
-          'card__media--large',
-        ];
-      }
-
-    }
   }
 
   $admin_context = \Drupal::service('router.admin_context');
@@ -800,14 +784,6 @@ function atomic_artsci_preprocess_layout(&$variables) {
 
     }
 
-    // Add artsci library if artsci_v2 config split is active.
-    // @todo Remove after v2 dies.
-    //   See https://github.com/artsci/artsci/issues/4948
-    $is_v2 = \Drupal::config('config_split.config_split.artsci_v2')->get('status');
-
-    if ($is_v2) {
-      $variables['#attached']['library'][] = 'atomic_artsci/artsci';
-    }
   }
 }
 

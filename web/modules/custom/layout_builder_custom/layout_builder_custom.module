@@ -45,14 +45,77 @@ function layout_builder_custom_form_layout_builder_configure_section_alter(&$for
     '#type' => 'textfield',
     '#title' => t('Unique ID'),
     '#description' => t('Provide a unique identifier for this section. Primarily used for anchor links. Input will be cleaned to convert spaces and remove special characters.'),
-    '#default_value' => $config['layout_builder_custom_unique_id'] ?? '',
+    '#default_value' => $config['layout_builder_custom_unique_id'] ?: '',
     '#ajax' => [
       'callback' => '_layout_builder_custom_unique_id',
       'wrapper' => $wrapper_id,
       'disable-refocus' => TRUE,
     ],
   ];
-
+  // Section headline fields.
+  $headline_config = $config['layout_builder_custom_headline'] ?? [];
+  $form['section_headline'] = [
+    '#type' => 'details',
+    '#title' => t('Section headline'),
+    '#tree' => TRUE,
+    '#weight' => -10,
+    '#open' => !empty($headline_config['headline']),
+  ];
+  $form['section_headline']['headline'] = [
+    '#type' => 'textfield',
+    '#title' => t('Headline'),
+    '#default_value' => $headline_config['headline'] ?? '',
+  ];
+  $form['section_headline']['hide_headline'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Visually hide title'),
+    '#default_value' => $headline_config['hide_headline'] ?? 0,
+    '#states' => [
+      'visible' => [
+        ':input[name="section_headline[headline]"]' => ['filled' => TRUE],
+      ],
+    ],
+  ];
+  $form['section_headline']['heading_size'] = [
+    '#type' => 'select',
+    '#title' => t('Headline size'),
+    '#options' => HeadlineHelper::getHeadingOptions(),
+    '#default_value' => $headline_config['heading_size'] ?? 'h2',
+    '#states' => [
+      'visible' => [
+        ':input[name="section_headline[headline]"]' => ['filled' => TRUE],
+      ],
+    ],
+  ];
+  $form['section_headline']['headline_style'] = [
+    '#type' => 'select',
+    '#title' => t('Headline style'),
+    '#options' => [
+      'default' => t('Default'),
+      'headline_bold_serif' => t('Bold serif'),
+      'headline_bold_serif_underline' => t('Bold serif, underlined'),
+    ],
+    '#default_value' => $headline_config['headline_style'] ?? 'default',
+    '#states' => [
+      'visible' => [
+        ':input[name="section_headline[headline]"]' => ['filled' => TRUE],
+      ],
+    ],
+  ];
+  $form['section_headline']['headline_alignment'] = [
+    '#type' => 'select',
+    '#title' => t('Headline alignment'),
+    '#options' => [
+      'default' => t('Left (default)'),
+      'headline_alignment_center' => t('Center'),
+    ],
+    '#default_value' => $headline_config['headline_alignment'] ?? 'default',
+    '#states' => [
+      'visible' => [
+        ':input[name="section_headline[headline]"]' => ['filled' => TRUE],
+      ],
+    ],
+  ];
   // Add custom validation for section form.
   $form['#validate'][] = '_layout_builder_custom_section_form_validate';
 
@@ -100,7 +163,19 @@ function _layout_builder_custom_submit_section_form(array &$form, FormStateInter
   else {
     unset($config['layout_builder_custom_unique_id']);
   }
-
+  $headline_values = $form_state->getValue('section_headline');
+  if (!empty($headline_values['headline'])) {
+    $config['layout_builder_custom_headline'] = [
+      'headline' => $headline_values['headline'],
+      'hide_headline' => $headline_values['hide_headline'] ?? 0,
+      'heading_size' => $headline_values['heading_size'] ?? 'h2',
+      'headline_style' => $headline_values['headline_style'] ?? 'default',
+      'headline_alignment' => $headline_values['headline_alignment'] ?? 'default',
+    ];
+  }
+  else {
+    unset($config['layout_builder_custom_headline']);
+  }
   $formObject
     ->getLayout()
     ->setConfiguration($config);
@@ -195,9 +270,40 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
         // Modifications to $lb_styles_extra_settings based on block plugin.
         switch ($block->getPluginId()) {
           case 'inline_block:artsci_card':
-            // Stacked by default.
-            $lb_styles_extra_settings['card_media_position']['default'] = 'card_media_position_stacked';
-            break;
+            $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
+                        $lb_styles_extra_settings['card_media_position']['default'] = 'card_media_position_stacked';
+
+            // Selector for checking if image field has a selection
+            // Media library stores selections in hidden inputs
+          $image_filled_condition = [
+            ':input[name="settings[block_form][field_artsci_card_image][selection][0][target_id]"]' => ['filled' => TRUE],
+          ];
+
+          // Only show media position when image is present
+          $form['layout_builder_style_card_media_position']['#states'] = [
+            'visible' => $image_filled_condition,
+          ];
+                    $form['layout_builder_style_media_format']['#states'] = [
+            'visible' => $image_filled_condition,
+          ];
+          $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+
+          // Only show media format when image is present
+          $form['layout_builder_style_media_format']['#states'] = [
+            'visible' => $image_filled_condition,
+          ];
+
+          // Media size: show when image present AND (circle format OR non-stacked position)
+          $form['layout_builder_style_media_size']['#states'] = [
+            'visible' => [
+              $image_filled_condition,
+              [
+                [':input[name="layout_builder_style_media_format"]' => ['value' => 'media_format_circle']],
+                [':input[name="layout_builder_style_card_media_position"]' => ['!value' => 'card_media_position_stacked']],
+              ],
+            ],
+          ];
+          break;
 
           // Set square to default for image gallery.
           case 'inline_block:artsci_image_gallery':
@@ -206,6 +312,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
           // Media left, media circle, and no border are the defaults.
           case 'inline_block:artsci_events':
+          case 'inline_block:artsci_aggregator':
           case 'views_block:events-card_list':
           case 'views_block:events_list_block-card_list':
           case 'views_block:people_list_block-list_card':
@@ -335,7 +442,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           case 'views_block:page_list_block-list_page':
           case 'views_block:people_list_block-list_card':
             // Set help text for media position.
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
             // Set '#states' for card image size.
             $form['layout_builder_style_media_size']['#states'] = [
               'visible' => [
@@ -535,22 +642,6 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
             break;
 
-          case 'sitenow_dispatch_sign_up_form':
-            // Checks to see if there is an API key set, and if not we
-            // shouldn't be able to add the block, so remove the button.
-            if (empty(\Drupal::config('sitenow_dispatch.settings')
-              ->get('api_key'))) {
-              $form['actions']['submit']['#access'] = FALSE;
-            }
-            break;
-
-          case 'sitenow_dispatch_thankyou_form':
-            // This block has to be explicitly enabled by an administrator.
-            if (!\Drupal::config('sitenow_dispatch.settings')
-              ->get('thanks.enabled')) {
-              $form['actions']['submit']['#access'] = FALSE;
-            }
-            break;
         }
       }
 
@@ -770,32 +861,32 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
 
           if ($media_option) {
 
-            $form_image_selection = [
-              'settings',
-              'block_form',
-              'field_artsci_card_image',
-              'selection',
-            ];
+            // $form_image_selection = [
+            //   'settings',
+            //   'block_form',
+            //   'field_artsci_card_image',
+            //   'selection',
+            // ];
 
-            $form_icon_selection = [
-              'settings',
-              'block_form',
-              'field_icon',
-              0,
-              'value',
-              'icon',
-            ];
+            // $form_icon_selection = [
+            //   'settings',
+            //   'block_form',
+            //   'field_icon',
+            //   0,
+            //   'value',
+            //   'icon',
+            // ];
 
-            if ($media_option === 'image') {
-              if ($form_state->hasValue($form_icon_selection)) {
-                $form_state->unsetValue($form_icon_selection);
-              }
-            }
-            elseif ($media_option === 'icon') {
-              if ($form_state->hasValue($form_image_selection)) {
-                $form_state->unsetValue($form_image_selection);
-              }
-            }
+            // if ($media_option === 'image') {
+            //   if ($form_state->hasValue($form_icon_selection)) {
+            //     $form_state->unsetValue($form_icon_selection);
+            //   }
+            // }
+            // elseif ($media_option === 'icon') {
+            //   if ($form_state->hasValue($form_image_selection)) {
+            //     $form_state->unsetValue($form_image_selection);
+            //   }
+            // }
 
             // Save as a third-party setting.
             if (!empty($media_option)) {
@@ -935,19 +1026,27 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
             '#weight' => 5,
           ] + $element['field_artsci_card_image'];
         }
-
-        // if (isset($element['field_icon'])) {
-        //   $element['field_icon'] = [
-        //     '#states' => [
-        //       'visible' => [
-        //         ':input[name="settings[block_form][media_types]"]' => [
-        //           'value' => 'icon',
-        //         ],
+        // $element['field_artsci_card_image'] = [
+        //   '#states' => [
+        //     'visible' => [
+        //       ':input[name="settings[block_form][media_types]"]' => [
+        //         'value' => 'image',
         //       ],
         //     ],
-        //     '#weight' => 5,
-        //   ] + $element['field_icon'];
-        // }
+        //   ],
+        //   '#weight' => 5,
+        // ] + $element['field_artsci_card_image'];
+
+        // $element['field_icon'] = [
+        //   '#states' => [
+        //     'visible' => [
+        //       ':input[name="settings[block_form][media_types]"]' => [
+        //         'value' => 'icon',
+        //       ],
+        //     ],
+        //   ],
+        //   '#weight' => 5,
+        // ] + $element['field_icon'];
 
         if (isset($element['field_artsci_card_button_display'])) {
           $element['field_artsci_card_button_display']['widget']['#options']['_none'] = 'Use site default';
@@ -1082,24 +1181,24 @@ function layout_builder_custom_field_widget_single_element_paragraphs_form_alter
 /**
  * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
  */
-function layout_builder_custom_field_widget_single_element_linkit_attributes_form_alter(array &$element, FormStateInterface &$form_state, array $context) {
-  if (!\Drupal::currentUser()
-    ->hasPermission('administer link field attributes')) {
-    $element['options']['attributes']['#access'] = FALSE;
-  }
-  if (isset($element['options']['attributes']['data-sn-event-component'])) {
-    // The default for this is set on a per-component basis,
-    // e.g. in the BannerBlockFormHandler,
-    // and should not be set by the user.
-    $element['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
-  }
-  if (isset($element['options']['attributes']['data-sn-event-type'])) {
-    // The default for this is set platform-wide as 'click'
-    // in artsci_core_link_attributes_plugin_alter, so
-    // remove access to change.
-    $element['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
-  }
-}
+// function layout_builder_custom_field_widget_single_element_linkit_attributes_form_alter(array &$element, FormStateInterface &$form_state, array $context) {
+//   if (!\Drupal::currentUser()
+//     ->hasPermission('administer link field attributes')) {
+//     $element['options']['attributes']['#access'] = FALSE;
+//   }
+//   if (isset($element['options']['attributes']['data-sn-event-component'])) {
+//     // The default for this is set on a per-component basis,
+//     // e.g. in the BannerBlockFormHandler,
+//     // and should not be set by the user.
+//     $element['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
+//   }
+//   if (isset($element['options']['attributes']['data-sn-event-type'])) {
+//     // The default for this is set platform-wide as 'click'
+//     // in artsci_core_link_attributes_plugin_alter, so
+//     // remove access to change.
+//     $element['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
+//   }
+// }
 
 /**
  * Add an element to delineate the layout builder styles form section.
@@ -1253,7 +1352,24 @@ function layout_builder_custom_preprocess_layout(&$variables) {
   if (isset($variables['settings']['layout_builder_custom_unique_id'])) {
     $variables['attributes']['id'] = $variables['settings']['layout_builder_custom_unique_id'];
   }
-}
+
+  // Process section headline configuration.
+  if (!empty($variables['settings']['layout_builder_custom_headline'])) {
+    $headline_config = $variables['settings']['layout_builder_custom_headline'];
+
+    // Get styles from HeadlineHelper.
+    $style_map = HeadlineHelper::getStyles();
+    $alignment_map = HeadlineHelper::getHeadingAlignment();
+
+    $variables['section_headline'] = [
+      'text' => $headline_config['headline'],
+      'size' => $headline_config['heading_size'] ?? 'h2',
+      'styles' => $style_map[$headline_config['headline_style'] ?? 'default'] ?? 'headline block__headline',
+      'alignment' => $alignment_map[$headline_config['headline_alignment'] ?? 'default'] ?? 'headline--left',
+      'hide_headline' => !empty($headline_config['hide_headline']),
+    ];
+  }
+    }
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -1347,6 +1463,10 @@ function layout_builder_custom_preprocess_views_view(&$variables) {
         }
       }
     }
+
+    // Clear static variables to prevent style bleed between blocks.
+    drupal_static_reset('layout_builder_custom_card_override_styles');
+    drupal_static_reset('layout_builder_custom_card_hide_fields');
   }
 }
 
@@ -1371,17 +1491,13 @@ function layout_builder_custom_preprocess_views_view_unformatted(&$variables) {
 function layout_builder_custom_views_plugins_display_alter(&$displays) {
   $moduleHandler = \Drupal::service('module_handler');
 
-  $is_v2 = \Drupal::config('config_split.config_split.sitenow_v2')->get('status');
 
-  // Only proceed if this is a V3 site or sitenow_p2lb is enabled.
-  // @todo Remove check and always set after v2 is removed.
-  //   See https://github.com/artsci/artsci/issues/4948
-  if ($is_v2 === FALSE || $moduleHandler->moduleExists('sitenow_p2lb')) {
+
     // Swap the block class if it can be swapped.
     if (!empty($displays['block']['class']) && $displays['block']['class'] === Block::class) {
       $displays['block']['class'] = ListBlock::class;
     }
-  }
+
 }
 
 /**
@@ -1423,6 +1539,37 @@ function layout_builder_custom_views_pre_render(ViewExecutable $view) {
   ];
   if (!in_array($display->display['id'], $exceptions) && $view->display_handler instanceof ListBlock) {
     $view->exposed_raw_input = [];
+  }
+
+  // Inject card override styles and hide_fields BEFORE entities render.
+  // Use drupal_static so entities can access during buildCard().
+  if ($view->display_handler instanceof ListBlock) {
+    $layout_builder_styles = $view->display_handler->getOption('layout_builder_styles');
+
+    if (!empty($layout_builder_styles)) {
+      $style_map = LayoutBuilderStylesHelper::getLayoutBuilderStylesMap($layout_builder_styles);
+      $override_styles = Card::filterCardStyles($style_map);
+      // Store in static so entities can access during buildCard().
+      $static_styles = &drupal_static('layout_builder_custom_card_override_styles');
+      $static_styles = $override_styles;
+      // Also attach to view for backward compatibility.
+      $view->card_override_styles = $override_styles;
+    }
+
+    $block_config = $view->display_handler->getOption('block_config');
+    if (!empty($block_config['fields'])) {
+      $hide_fields = [];
+      foreach ($block_config['fields'] as $field_name => $hide_field) {
+        if ((int) $hide_field['hide'] === 1) {
+          $hide_fields[] = $field_name;
+        }
+      }
+      // Store in static so entities can access during buildCard().
+      $static_hide_fields = &drupal_static('layout_builder_custom_card_hide_fields');
+      $static_hide_fields = $hide_fields;
+      // Also attach to view for backward compatibility.
+      $view->card_hide_fields = $hide_fields;
+    }
   }
 }
 

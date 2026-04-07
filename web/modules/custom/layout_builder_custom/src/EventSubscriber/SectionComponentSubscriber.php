@@ -83,7 +83,6 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
 
     // Set an ID for this block if the third-party key is set.
     if ($unique_id = $event->getComponent()->getThirdPartySetting('layout_builder_custom', 'unique_id')) {
-            // $unique_id = $third_party_settings['layout_builder_custom']['unique_id'];
       $build['#attributes']['id'] = $unique_id;
     }
 
@@ -127,7 +126,7 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
       if (!is_null($content)) {
         // @todo Remove the duplicate section of code below once the
         //   following issue is resolved:
-        //   https://github.com/washu-artsci/artsci/issues/4993
+        //   https://github.com/artsci/artsci/issues/4993
         $build = [
           '#theme' => 'block',
           '#configuration' => $block->getConfiguration(),
@@ -176,7 +175,6 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
           // Filter the style map to just classes related to the card.
           $style_map = Card::filterCardStyles($style_map);
           $build['#attributes'] = $build['#attributes'] ?? [];
-
 
           LayoutBuilderStylesHelper::removeStylesFromAttributes($build['#attributes'], $style_map);
 

@@ -105,19 +105,76 @@ function artsci_aggregator_aggregator_item_view(array &$build, EntityInterface $
   // Set the URL.
   $build['#url'] = $entity->link?->value;
 
+  // Get override styles from build array or static variable.
   $override_styles = $build['#override_styles'] ?? [];
+  if (empty($override_styles)) {
+    $static_styles = &drupal_static('artsci_aggregator_card_override_styles');
+    if (!empty($static_styles)) {
+      $override_styles = $static_styles;
+    }
+  }
 
-  $style_map = [
-    'card_headline_style' => 'headline--serif',
-    'card_media_position' => 'card--layout-right',
-    'media_format' => 'media--widescreen',
-    'media_size' => 'media--small',
-    'border' => 'borderless',
-    ...$override_styles,
-    'aggregator_item' => 'aggregator-item',
+  // Build style map dynamically based on selected styles.
+  // Start with defaults, then override with selected styles.
+  $default_styles = [
+    'headline--serif',
+    'card--layout-right',
+    'media--widescreen',
+    'media--small',
+    'borderless',
   ];
 
-  $build['#attributes']['class'] = array_values($style_map);
+  // Define which prefixes each default covers.
+  $default_prefix_map = [
+    'headline--serif' => 'headline',
+    'card--layout-right' => 'card',
+    'media--widescreen' => 'media_format',
+    'media--small' => 'media_size',
+    'borderless' => 'borderless',
+  ];
+
+  // Determine which prefixes are covered by override styles.
+  $covered_prefixes = [];
+  foreach ($override_styles as $style) {
+    if (str_starts_with($style, 'headline')) {
+      $covered_prefixes['headline'] = TRUE;
+    }
+    elseif (str_starts_with($style, 'card')) {
+      $covered_prefixes['card'] = TRUE;
+    }
+    elseif (str_starts_with($style, 'media--widescreen') || str_starts_with($style, 'media--square') || str_starts_with($style, 'media--circle') || str_starts_with($style, 'media--no-crop')) {
+      $covered_prefixes['media_format'] = TRUE;
+    }
+    elseif (str_starts_with($style, 'media--small') || str_starts_with($style, 'media--medium') || str_starts_with($style, 'media--large')) {
+      $covered_prefixes['media_size'] = TRUE;
+    }
+    elseif (str_starts_with($style, 'borderless') || str_starts_with($style, 'no_border')) {
+      $covered_prefixes['borderless'] = TRUE;
+    }
+  }
+
+  // Build final styles: use defaults only where not overridden.
+  $final_styles = [];
+  foreach ($default_styles as $default_style) {
+    $prefix = $default_prefix_map[$default_style];
+    if (empty($covered_prefixes[$prefix])) {
+      $final_styles[] = $default_style;
+    }
+  }
+
+  // Add override styles (use array_values since it's an associative array)
+  // and the aggregator_item class.
+  $final_styles = array_merge($final_styles, array_values($override_styles), ['aggregator-item']);
+
+  $build['#attributes']['class'] = $final_styles;
+
+  // Build style_map for media format mapping (used below for image view mode).
+  $style_map = ['media_format' => 'media--widescreen']; // Default fallback.
+  foreach ($final_styles as $style) {
+    if (str_starts_with($style, 'media--widescreen') || str_starts_with($style, 'media--square') || str_starts_with($style, 'media--circle') || str_starts_with($style, 'media--no-crop')) {
+      $style_map['media_format'] = $style;
+    }
+  }
 
   // Only add the feed image  and heading size to the aggregator item if we're
   // not on the canonical feed page.
@@ -175,17 +232,34 @@ function artsci_aggregator_preprocess_block__inline_block__artsci_aggregator(&$v
 
   $variables['attributes']['class'][] = 'list-container';
 
+  // Get layout builder styles from the block elements.
+  $layout_builder_styles = $variables['elements']['#layout_builder_style'] ?? [];
+
   // Get configuration from block fields.
-  $view_display = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
+  $display_type = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
   $per_page = (int) $block->get('field_artsci_aggregator_count')->getString() ?: 10;
   $show_pager = (bool) $block->get('field_artsci_aggregator_pager')->getString();
 
-  // Load and configure the view.
-  $view = \Drupal\views\Views::getView('rss_block');
+  // Map display types to actual view/display combinations that use ListBlock.
+  $view_map = [
+    'article_block' => ['view' => 'article_list_block', 'display' => 'list_article'],
+    'people_block' => ['view' => 'people_list_block', 'display' => 'list_card'],
+    'book_block' => ['view' => 'rss_block', 'display' => 'book_block'],
+  ];
+
+  $view_config = $view_map[$display_type] ?? $view_map['article_block'];
+  $view = \Drupal\views\Views::getView($view_config['view']);
+  $view_display = $view_config['display'];
 
   if ($view && $view->access($view_display)) {
     $view->setDisplay($view_display);
     $view->setItemsPerPage($per_page);
+
+    // Pass layout builder styles to the view's display handler.
+    // This allows ListBlock to pick them up in views_pre_render.
+    if (!empty($layout_builder_styles)) {
+      $view->display_handler->setOption('layout_builder_styles', $layout_builder_styles);
+    }
 
     // Configure pager based on block settings.
     $pager_options = $view->display_handler->getOption('pager');

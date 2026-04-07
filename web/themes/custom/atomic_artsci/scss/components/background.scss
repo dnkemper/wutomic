@@ -17,16 +17,6 @@
   background-position: center center;
 }
 
-[class*="--pattern--particle"],
-[class*="bg--"][class*="--pattern--particle"] {
-  background-size: 1400px;
-}
-
-[class*="--pattern--community"],
-[class*="bg--"][class*="--pattern--community"] {
-  background-size: 1000px;
-}
-
 // Add background rules
 @include background-mixins.add-backgrounds();
 

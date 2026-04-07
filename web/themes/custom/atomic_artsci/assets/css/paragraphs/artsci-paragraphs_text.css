@@ -1,1 +1,61 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#00558c;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:rgba(0,0,0,.125);--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.paragraph--type--text{padding-bottom:1.5rem;padding-top:1.5rem}.paragraph--type--text.bg-light,.paragraph--type--text.bg-light blockquote p,.paragraph--type--text.bg-yellow,.paragraph--type--text.bg-yellow blockquote p{color:#333}.paragraph--type--text.bg-light a:not(.btn):not(.bttn):not(.button),.paragraph--type--text.bg-yellow a:not(.btn):not(.bttn):not(.button){color:#000;text-decoration:underline}.paragraph--type--text.bg-light a:not(.btn):not(.bttn):not(.button):focus,.paragraph--type--text.bg-light a:not(.btn):not(.bttn):not(.button):hover,.paragraph--type--text.bg-yellow a:not(.btn):not(.bttn):not(.button):focus,.paragraph--type--text.bg-yellow a:not(.btn):not(.bttn):not(.button):hover{text-decoration:none}.paragraph--type--text.bg-black,.paragraph--type--text.bg-black blockquote p,.paragraph--type--text.bg-dark,.paragraph--type--text.bg-dark blockquote p{color:#fff}.paragraph--type--text.bg-black a:not(.btn):not(.bttn):not(.button),.paragraph--type--text.bg-dark a:not(.btn):not(.bttn):not(.button){color:#ba0c2f}.paragraph--type--text.bg-black .alert a,.paragraph--type--text.bg-dark .alert a{color:#000!important}/*# sourceMappingURL=artsci-paragraphs_text.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.paragraph--type--text {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.paragraph--type--text.bg-yellow,
+.paragraph--type--text.bg-light {
+  color: #333333;
+}
+.paragraph--type--text.bg-yellow blockquote p,
+.paragraph--type--text.bg-light blockquote p {
+  color: #333333;
+}
+.paragraph--type--text.bg-yellow a:not(.btn):not(.bttn):not(.button),
+.paragraph--type--text.bg-light a:not(.btn):not(.bttn):not(.button) {
+  color: #000000;
+  text-decoration: underline;
+}
+.paragraph--type--text.bg-yellow a:not(.btn):not(.bttn):not(.button):hover, .paragraph--type--text.bg-yellow a:not(.btn):not(.bttn):not(.button):focus,
+.paragraph--type--text.bg-light a:not(.btn):not(.bttn):not(.button):hover,
+.paragraph--type--text.bg-light a:not(.btn):not(.bttn):not(.button):focus {
+  text-decoration: none;
+}
+
+.paragraph--type--text.bg-dark,
+.paragraph--type--text.bg-black {
+  color: #fff;
+}
+.paragraph--type--text.bg-dark blockquote p,
+.paragraph--type--text.bg-black blockquote p {
+  color: #fff;
+}
+.paragraph--type--text.bg-dark a:not(.btn):not(.bttn):not(.button),
+.paragraph--type--text.bg-black a:not(.btn):not(.bttn):not(.button) {
+  color: #BA0C2F;
+}
+.paragraph--type--text.bg-dark .alert a,
+.paragraph--type--text.bg-black .alert a {
+  color: #000000 !important;
+}/*# sourceMappingURL=artsci-paragraphs_text.css.map */

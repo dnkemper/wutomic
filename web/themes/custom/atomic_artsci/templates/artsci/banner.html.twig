@@ -36,7 +36,7 @@
 {% set headline_class = headline_class ? headline_class|merge(['headline']) : [
   'headline',
   'headline--serif',
-  'headline--large',
+  'headline--medium',
 ] %}
 
 <div{{ attributes.addClass(banner_classes) }}{% if layout_builder_style_media_overlay is not empty and field_styles_gradient_midpoint is not empty %} style="--banner-overlay-gradient-midpoint: {{ field_styles_gradient_midpoint }};"{% endif %}>

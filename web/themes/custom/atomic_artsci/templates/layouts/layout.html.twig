@@ -2,6 +2,14 @@
 /**
  * @file
  * Template for a generic layout.
+ *
+ * Available variables:
+ * - section_headline: Optional section headline configuration with:
+ *   - text: The headline text
+ *   - size: The heading element to use (h2, h3, etc.)
+ *   - styles: CSS classes for headline styling
+ *   - alignment: CSS class for headline alignment
+ *   - hide_headline: Boolean to visually hide headline
  */
 #}
 {%
@@ -39,6 +47,21 @@
   <div{{ attributes.addClass(classes) }}>
     {# Middle container is necessary for having a fixed width container inside a section with a visible background. #}
     <div class="layout__spacing_container">
+      {# Section headline if configured #}
+      {% if section_headline.text %}
+        {% set headline_classes = [
+          section_headline.styles|default('headline block__headline'),
+          section_headline.alignment|default('headline--left'),
+          section_headline.hide_headline ? 'visually-hidden' : '',
+          'section__headline',
+        ] %}
+        {% include '@atomic_artsci/artsci/headline.html.twig' with {
+          headline_text: section_headline.text,
+          headline_level: section_headline.size|default('h2'),
+          headline_class: headline_classes,
+        } only %}
+      {% endif %}
+
       {% for region in layout.getRegionNames %}
 
         {% if render_sections[region] %}

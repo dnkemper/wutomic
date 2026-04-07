@@ -7,6 +7,11 @@ label: Teal
 classes: bg--teal
 type: component
 group: background
-block_restrictions: {  }
+block_restrictions:
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_cta'
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_statistic'
+  - 'inline_block:artsci_text_area'
 layout_restrictions: {  }
 weight: 0

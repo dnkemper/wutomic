@@ -1,1 +1,262 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#00558c;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:rgba(0,0,0,.125);--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.embed-responsive,.media--type-panopto,.media--type-remote-video{display:block;overflow:hidden;padding:0;position:relative;width:100%}.embed-responsive embed,.embed-responsive iframe,.embed-responsive object,.embed-responsive video,.media--type-panopto embed,.media--type-panopto iframe,.media--type-panopto object,.media--type-panopto video,.media--type-remote-video embed,.media--type-remote-video iframe,.media--type-remote-video object,.media--type-remote-video video{border:0;bottom:0;height:100%;left:0;position:absolute;top:0;width:100%}.embed-responsive-1by1{padding-bottom:100%}.embed-responsive-4by3,.media--type-panopto.media--view-mode-full__square,.media--type-panopto.media--view-mode-large__square,.media--type-panopto.media--view-mode-medium__square,.media--type-panopto.media--view-mode-small__square,.media--type-remote-video.media--view-mode-full__square,.media--type-remote-video.media--view-mode-large__square,.media--type-remote-video.media--view-mode-medium__square,.media--type-remote-video.media--view-mode-small__square{padding-bottom:75%}.embed-responsive-16by9,.media--type-panopto,.media--type-panopto.media--view-mode-default,.media--type-panopto.media--view-mode-full__no-crop,.media--type-panopto.media--view-mode-full__widescreen,.media--type-panopto.media--view-mode-large__no-crop,.media--type-panopto.media--view-mode-large__widescreen,.media--type-panopto.media--view-mode-medium__no-crop,.media--type-panopto.media--view-mode-medium__widescreen,.media--type-panopto.media--view-mode-small__no-crop,.media--type-panopto.media--view-mode-small__widescreen,.media--type-remote-video,.media--type-remote-video.media--view-mode-default,.media--type-remote-video.media--view-mode-full__no-crop,.media--type-remote-video.media--view-mode-full__widescreen,.media--type-remote-video.media--view-mode-large__no-crop,.media--type-remote-video.media--view-mode-large__widescreen,.media--type-remote-video.media--view-mode-medium__no-crop,.media--type-remote-video.media--view-mode-medium__widescreen,.media--type-remote-video.media--view-mode-small__no-crop,.media--type-remote-video.media--view-mode-small__widescreen{padding-bottom:56.25%}.embed-responsive-21by9,.media--type-panopto.media--view-mode-full__ultrawide,.media--type-panopto.media--view-mode-large__ultrawide,.media--type-panopto.media--view-mode-medium__ultrawide,.media--type-panopto.media--view-mode-small__ultrawide,.media--type-remote-video.media--view-mode-full__ultrawide,.media--type-remote-video.media--view-mode-large__ultrawide,.media--type-remote-video.media--view-mode-medium__ultrawide,.media--type-remote-video.media--view-mode-small__ultrawide{padding-bottom:42.85714286%}@media (min-width:768px){.align-right .media,.align-right figcaption,.align-right.media{margin-left:1.25rem}.align-left .media,.align-left figcaption,.align-left.media{margin-right:1.25rem}}.align-right.media--type-panopto,.align-right.media--type-remote-video:not(.media--view-mode-vertical){width:auto}@media (min-width:768px){.align-right.media--type-panopto,.align-right.media--type-remote-video:not(.media--view-mode-vertical){margin-left:1.25rem}.align-right.media--type-panopto .field--name-field-media-oembed-video iframe,.align-right.media--type-panopto .field--name-field-media-panopto-url iframe,.align-right.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-oembed-video iframe,.align-right.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-panopto-url iframe{float:right}}.align-left.media--type-panopto,.align-left.media--type-remote-video:not(.media--view-mode-vertical){width:auto}@media (min-width:768px){.align-left.media--type-panopto,.align-left.media--type-remote-video:not(.media--view-mode-vertical){margin-right:1.25rem}.align-left.media--type-panopto .field--name-field-media-oembed-video iframe,.align-left.media--type-panopto .field--name-field-media-panopto-url iframe,.align-left.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-oembed-video iframe,.align-left.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-panopto-url iframe{float:left}}.align-center.media--type-panopto .field--name-field-media-oembed-video iframe,.align-center.media--type-panopto .field--name-field-media-panopto-url iframe,.align-center.media--type-remote-video .field--name-field-media-oembed-video iframe,.align-center.media--type-remote-video .field--name-field-media-panopto-url iframe{margin:0 auto}.media--type-panopto.media--view-mode-default,.media--type-panopto.media--view-mode-full,.media--type-remote-video.media--view-mode-default,.media--type-remote-video.media--view-mode-full{aspect-ratio:16/9;width:100%}.media--type-panopto.media--view-mode-vertical,.media--type-remote-video.media--view-mode-vertical{aspect-ratio:9/16;max-width:100%}@supports (contain:inline-size){@container column (min-width: 768px){.media--type-panopto.media--view-mode-vertical,.media--type-remote-video.media--view-mode-vertical{max-width:50%}}}@supports not (contain:inline-size){@media (min-width:768px){.media--type-panopto.media--view-mode-vertical,.media--type-remote-video.media--view-mode-vertical{max-width:50%}}}@media (min-width:768px){.media--type-panopto.media--view-mode-image-large,.media--type-panopto.media--view-mode-image-medium,.media--type-panopto.media--view-mode-image-small,.media--type-panopto.media--view-mode-large,.media--type-panopto.media--view-mode-medium,.media--type-panopto.media--view-mode-small,.media--type-remote-video.media--view-mode-image-large,.media--type-remote-video.media--view-mode-image-medium,.media--type-remote-video.media--view-mode-image-small,.media--type-remote-video.media--view-mode-large,.media--type-remote-video.media--view-mode-medium,.media--type-remote-video.media--view-mode-small,figure.caption .media--type-panopto,figure.caption .media--type-remote-video{padding-bottom:0}.media--type-panopto.media--view-mode-large iframe,.media--type-panopto.media--view-mode-medium iframe,.media--type-panopto.media--view-mode-small iframe,.media--type-remote-video.media--view-mode-image-large iframe,.media--type-remote-video.media--view-mode-image-medium iframe,.media--type-remote-video.media--view-mode-image-small iframe,.media--type-remote-video.media--view-mode-large iframe,.media--type-remote-video.media--view-mode-medium iframe,.media--type-remote-video.media--view-mode-small iframe,figure.caption .media--type-panopto iframe,figure.caption .media--type-remote-video iframe{display:inherit;height:auto;overflow:auto;padding:0;position:unset;width:auto}.media--type-panopto.media--view-mode-large iframe,.media--type-remote-video.media--view-mode-image-large iframe,.media--type-remote-video.media--view-mode-large iframe,figure.caption .media--type-panopto.media--view-mode-full iframe,figure.caption .media--type-panopto.media--view-mode-large iframe,figure.caption .media--type-remote-video.media--view-mode-full iframe,figure.caption .media--type-remote-video.media--view-mode-image-large iframe,figure.caption .media--type-remote-video.media--view-mode-large iframe{height:480px;width:854px}.media--type-panopto.media--view-mode-medium iframe,.media--type-remote-video.media--view-mode-image-medium iframe,.media--type-remote-video.media--view-mode-medium iframe,figure.caption .media--type-panopto.media--view-mode-medium iframe,figure.caption .media--type-remote-video.media--view-mode-image-medium iframe,figure.caption .media--type-remote-video.media--view-mode-medium iframe{height:360px;width:640px}.media--type-panopto.media--view-mode-small iframe,.media--type-remote-video.media--view-mode-image-small iframe,.media--type-remote-video.media--view-mode-small iframe,figure.caption .media--type-panopto.media--view-mode-small iframe,figure.caption .media--type-remote-video.media--view-mode-image-small iframe,figure.caption .media--type-remote-video.media--view-mode-small iframe{height:240px;width:426px}}figure.caption-drupal-media{margin:0;width:100%}@media (min-width:768px){figure.caption-drupal-media{margin:inherit;width:unset}}/*# sourceMappingURL=video-utilities.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.embed-responsive, .media--type-remote-video,
+.media--type-panopto {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive embed, .media--type-remote-video embed,
+.media--type-panopto embed,
+.embed-responsive iframe,
+.media--type-remote-video iframe,
+.media--type-panopto iframe,
+.embed-responsive object,
+.media--type-remote-video object,
+.media--type-panopto object,
+.embed-responsive video,
+.media--type-remote-video video,
+.media--type-panopto video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-responsive-1by1 {
+  padding-bottom: 100%;
+}
+
+.embed-responsive-4by3, .media--type-remote-video.media--view-mode-small__square,
+.media--type-remote-video.media--view-mode-medium__square,
+.media--type-remote-video.media--view-mode-large__square,
+.media--type-remote-video.media--view-mode-full__square,
+.media--type-panopto.media--view-mode-small__square,
+.media--type-panopto.media--view-mode-medium__square,
+.media--type-panopto.media--view-mode-large__square,
+.media--type-panopto.media--view-mode-full__square {
+  padding-bottom: 75%;
+}
+
+.embed-responsive-16by9, .media--type-remote-video.media--view-mode-default,
+.media--type-remote-video.media--view-mode-small__no-crop,
+.media--type-remote-video.media--view-mode-medium__no-crop,
+.media--type-remote-video.media--view-mode-large__no-crop,
+.media--type-remote-video.media--view-mode-full__no-crop,
+.media--type-panopto.media--view-mode-default,
+.media--type-panopto.media--view-mode-small__no-crop,
+.media--type-panopto.media--view-mode-medium__no-crop,
+.media--type-panopto.media--view-mode-large__no-crop,
+.media--type-panopto.media--view-mode-full__no-crop, .media--type-remote-video.media--view-mode-small__widescreen,
+.media--type-remote-video.media--view-mode-medium__widescreen,
+.media--type-remote-video.media--view-mode-large__widescreen,
+.media--type-remote-video.media--view-mode-full__widescreen,
+.media--type-panopto.media--view-mode-small__widescreen,
+.media--type-panopto.media--view-mode-medium__widescreen,
+.media--type-panopto.media--view-mode-large__widescreen,
+.media--type-panopto.media--view-mode-full__widescreen, .media--type-remote-video,
+.media--type-panopto {
+  padding-bottom: 56.25%;
+}
+
+.embed-responsive-21by9, .media--type-remote-video.media--view-mode-small__ultrawide,
+.media--type-remote-video.media--view-mode-medium__ultrawide,
+.media--type-remote-video.media--view-mode-large__ultrawide,
+.media--type-remote-video.media--view-mode-full__ultrawide,
+.media--type-panopto.media--view-mode-small__ultrawide,
+.media--type-panopto.media--view-mode-medium__ultrawide,
+.media--type-panopto.media--view-mode-large__ultrawide,
+.media--type-panopto.media--view-mode-full__ultrawide {
+  padding-bottom: 42.85714286%;
+}
+
+@media (min-width: 768px) {
+  .align-right.media, .align-right .media, .align-right figcaption {
+    margin-left: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .align-left.media, .align-left .media, .align-left figcaption {
+    margin-right: 1.25rem;
+  }
+}
+
+.align-right.media--type-remote-video:not(.media--view-mode-vertical),
+.align-right.media--type-panopto {
+  width: auto;
+}
+@media (min-width: 768px) {
+  .align-right.media--type-remote-video:not(.media--view-mode-vertical),
+  .align-right.media--type-panopto {
+    margin-left: 1.25rem;
+  }
+}
+@media (min-width: 768px) {
+  .align-right.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-oembed-video iframe,
+  .align-right.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-panopto-url iframe,
+  .align-right.media--type-panopto .field--name-field-media-oembed-video iframe,
+  .align-right.media--type-panopto .field--name-field-media-panopto-url iframe {
+    float: right;
+  }
+}
+
+.align-left.media--type-remote-video:not(.media--view-mode-vertical),
+.align-left.media--type-panopto {
+  width: auto;
+}
+@media (min-width: 768px) {
+  .align-left.media--type-remote-video:not(.media--view-mode-vertical),
+  .align-left.media--type-panopto {
+    margin-right: 1.25rem;
+  }
+}
+@media (min-width: 768px) {
+  .align-left.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-oembed-video iframe,
+  .align-left.media--type-remote-video:not(.media--view-mode-vertical) .field--name-field-media-panopto-url iframe,
+  .align-left.media--type-panopto .field--name-field-media-oembed-video iframe,
+  .align-left.media--type-panopto .field--name-field-media-panopto-url iframe {
+    float: left;
+  }
+}
+
+.align-center.media--type-remote-video .field--name-field-media-oembed-video iframe, .align-center.media--type-remote-video .field--name-field-media-panopto-url iframe,
+.align-center.media--type-panopto .field--name-field-media-oembed-video iframe,
+.align-center.media--type-panopto .field--name-field-media-panopto-url iframe {
+  margin: 0 auto;
+}
+
+.media--type-remote-video.media--view-mode-default, .media--type-remote-video.media--view-mode-full,
+.media--type-panopto.media--view-mode-default,
+.media--type-panopto.media--view-mode-full {
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.media--type-remote-video.media--view-mode-vertical,
+.media--type-panopto.media--view-mode-vertical {
+  aspect-ratio: 9/16;
+  max-width: 100%;
+}
+@supports (contain: inline-size) {
+  @container column (min-width: 768px) {
+    .media--type-remote-video.media--view-mode-vertical,
+    .media--type-panopto.media--view-mode-vertical {
+      max-width: 50%;
+    }
+  }
+}
+@supports not (contain: inline-size) {
+  @media (min-width: 768px) {
+    .media--type-remote-video.media--view-mode-vertical,
+    .media--type-panopto.media--view-mode-vertical {
+      max-width: 50%;
+    }
+  }
+}
+@media (min-width: 768px) {
+  .media--type-remote-video.media--view-mode-image-large, .media--type-remote-video.media--view-mode-image-medium, .media--type-remote-video.media--view-mode-image-small, .media--type-remote-video.media--view-mode-large, .media--type-remote-video.media--view-mode-medium, .media--type-remote-video.media--view-mode-small, figure.caption .media--type-remote-video,
+  .media--type-panopto.media--view-mode-image-large,
+  .media--type-panopto.media--view-mode-image-medium,
+  .media--type-panopto.media--view-mode-image-small,
+  .media--type-panopto.media--view-mode-large,
+  .media--type-panopto.media--view-mode-medium,
+  .media--type-panopto.media--view-mode-small,
+  figure.caption .media--type-panopto {
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  figure.caption .media--type-remote-video iframe,
+  figure.caption .media--type-panopto iframe,
+  .media--type-remote-video.media--view-mode-image-medium iframe,
+  .media--type-remote-video.media--view-mode-image-large iframe,
+  .media--type-remote-video.media--view-mode-image-small iframe,
+  .media--type-remote-video.media--view-mode-medium iframe,
+  .media--type-remote-video.media--view-mode-large iframe,
+  .media--type-remote-video.media--view-mode-small iframe,
+  .media--type-panopto.media--view-mode-medium iframe,
+  .media--type-panopto.media--view-mode-large iframe,
+  .media--type-panopto.media--view-mode-small iframe {
+    position: unset;
+    display: inherit;
+    width: auto;
+    height: auto;
+    padding: 0;
+    overflow: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  figure.caption .media--type-remote-video.media--view-mode-image-large iframe,
+  figure.caption .media--type-remote-video.media--view-mode-large iframe,
+  figure.caption .media--type-remote-video.media--view-mode-full iframe,
+  figure.caption .media--type-panopto.media--view-mode-large iframe,
+  figure.caption .media--type-panopto.media--view-mode-full iframe,
+  .media--type-remote-video.media--view-mode-large iframe,
+  .media--type-remote-video.media--view-mode-image-large iframe,
+  .media--type-panopto.media--view-mode-large iframe {
+    width: 854px;
+    height: 480px;
+  }
+}
+
+@media (min-width: 768px) {
+  figure.caption .media--type-remote-video.media--view-mode-image-medium iframe,
+  figure.caption .media--type-remote-video.media--view-mode-medium iframe,
+  figure.caption .media--type-panopto.media--view-mode-medium iframe,
+  .media--type-remote-video.media--view-mode-image-medium iframe,
+  .media--type-remote-video.media--view-mode-medium iframe,
+  .media--type-panopto.media--view-mode-medium iframe {
+    width: 640px;
+    height: 360px;
+  }
+}
+
+@media (min-width: 768px) {
+  figure.caption .media--type-remote-video.media--view-mode-image-small iframe,
+  figure.caption .media--type-remote-video.media--view-mode-small iframe,
+  figure.caption .media--type-panopto.media--view-mode-small iframe,
+  .media--type-remote-video.media--view-mode-small iframe,
+  .media--type-panopto.media--view-mode-small iframe,
+  .media--type-remote-video.media--view-mode-image-small iframe {
+    width: 426px;
+    height: 240px;
+  }
+}
+
+figure.caption-drupal-media {
+  width: 100%;
+  margin: 0;
+}
+@media (min-width: 768px) {
+  figure.caption-drupal-media {
+    width: unset;
+    margin: inherit;
+  }
+}/*# sourceMappingURL=video-utilities.css.map */

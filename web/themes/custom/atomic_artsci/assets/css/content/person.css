@@ -1,1 +1,88 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#00558c;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:rgba(0,0,0,.125);--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.page-node-type-mentor.layout-builder-enabled .field--name-field-person-position,.page-node-type-person.layout-builder-enabled .field--name-field-person-position{margin-top:.6rem}.page-node-type-mentor.layout-builder-enabled .field--name-field-person-position .field__item,.page-node-type-person.layout-builder-enabled .field--name-field-person-position .field__item{font-size:clamp(1.8rem,1.1268vw + 1.3775rem,2.3rem);font-weight:300;line-height:1.1;margin-bottom:.5rem}.field--name-field-person-education.field--label-visually_hidden .field__item{display:inline-block}.field--name-field-person-education.field--label-visually_hidden .field__item+.field__item{margin-top:.5rem}.block-inline-blockfeatured-content .field--name-field-person-position.field--label-visually_hidden .field__items,.paragraph--type--featured-content .field--name-field-person-position.field--label-visually_hidden .field__items,.view-people .field--name-field-person-position.field--label-visually_hidden .field__items,.view-people-block .field--name-field-person-position.field--label-visually_hidden .field__items,.view-people-list-block .field--name-field-person-position.field--label-visually_hidden .field__items{display:grid}.img--empty{aspect-ratio:1/1;background-color:#f3f3f3;background-image:url(/themes/custom/atomic_artsci/assets/images/person-one.svg);background-position:50%;background-repeat:no-repeat;background-size:75%;width:100%}.media--border .img--empty{aspect-ratio:1/1;background-position:50% 105%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.125),inset 0 0 0 9px #fff}.media--widescreen .img--empty{aspect-ratio:16/9;background-position:50% -5%}@supports not (aspect-ratio:16/9){.media--border .img--empty{padding-top:85%}.card__media--large.media--circle .img--empty,.card__media--medium.media--circle .img--empty{padding-top:90%}@media (min-width:768px){.card__media--large.media--circle .img--empty,.card__media--medium.media--circle .img--empty{padding-top:95%}}.media--widescreen .img--empty{padding-top:45%}.media--square .img--empty{padding-top:100%}}/*# sourceMappingURL=person.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.page-node-type-person.layout-builder-enabled .field--name-field-person-position,
+.page-node-type-mentor.layout-builder-enabled .field--name-field-person-position {
+  margin-top: 0.6rem;
+}
+.page-node-type-person.layout-builder-enabled .field--name-field-person-position .field__item,
+.page-node-type-mentor.layout-builder-enabled .field--name-field-person-position .field__item {
+  font-size: clamp(1.8rem, 1.1268vw + 1.3775rem, 2.3rem);
+  line-height: 1.1;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+.field--name-field-person-education.field--label-visually_hidden .field__item {
+  display: inline-block;
+}
+.field--name-field-person-education.field--label-visually_hidden .field__item + .field__item {
+  margin-top: 0.5rem;
+}
+
+.view-people-list-block .field--name-field-person-position.field--label-visually_hidden .field__items,
+.view-people-block .field--name-field-person-position.field--label-visually_hidden .field__items,
+.view-people .field--name-field-person-position.field--label-visually_hidden .field__items,
+.block-inline-blockfeatured-content .field--name-field-person-position.field--label-visually_hidden .field__items,
+.paragraph--type--featured-content .field--name-field-person-position.field--label-visually_hidden .field__items {
+  display: grid;
+}
+
+.img--empty {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background-size: 75%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #F3F3F3;
+  background-image: url("/themes/custom/atomic_artsci/assets/images/person-one.svg");
+}
+.media--border .img--empty {
+  aspect-ratio: 1/1;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.125), inset 0 0 0 9px #fff;
+  background-position: 50% 105%;
+}
+.media--widescreen .img--empty {
+  background-position: 50% -5%;
+  aspect-ratio: 16/9;
+}
+
+@supports not (aspect-ratio: 16/9) {
+  .media--border .img--empty {
+    padding-top: 85%;
+  }
+  .card__media--large.media--circle .img--empty,
+  .card__media--medium.media--circle .img--empty {
+    padding-top: 90%;
+  }
+  @media (min-width: 768px) {
+    .card__media--large.media--circle .img--empty,
+    .card__media--medium.media--circle .img--empty {
+      padding-top: 95%;
+    }
+  }
+  .media--widescreen .img--empty {
+    padding-top: 45%;
+  }
+  .media--square .img--empty {
+    padding-top: 100%;
+  }
+}/*# sourceMappingURL=person.css.map */

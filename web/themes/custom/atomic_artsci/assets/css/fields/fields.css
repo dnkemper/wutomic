@@ -1,1 +1,190 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#00558c;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:rgba(0,0,0,.125);--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.field--label-above .field--label-inline:after,.field--label-above .field__label:after,.field--label-inline .field--label-inline:after,.field--label-inline .field__label:after{content:":"}.field--label-above .field--label-inline.headline:after,.field--label-above .field__label.headline:after,.field--label-inline .field--label-inline.headline:after,.field--label-inline .field__label.headline:after{content:""}.field--separator:after{color:#737373;content:"-";margin:0 .325rem 0 .625rem}.field.field--label-above{line-height:1.5}.field__label{font-size:1.2rem;font-weight:700;line-height:1.7;margin-bottom:.325rem}.field__label--icon{margin-right:.625rem}.field__label.headline{line-height:1}[class*=bttn] .field__label,[class*=card__] .field__label{font-size:inherit;line-height:inherit}.field--label-inline{margin-bottom:.625rem}.block-margin__default--removed .field--label-inline,[class*=card__] .field--label-inline{margin-bottom:0}.field--label-inline .svg-inline--fa{margin-right:.3rem}.field--label-inline *{display:inline}.field__item{line-height:1.7;margin-top:0}.field__item.element--bold-intro,.field__item.element--light-intro,.field__item.h1,.field__item.h2,.field__item.h3,.field__item.h4,.field__item.h5,.field__item.h6{line-height:inherit}[class*=bttn] .field__item,[class*=card__] .field__item{font-size:inherit;line-height:inherit}div.field__item,p.field__item{font-size:1.2rem}.element--bold-intro div.field__item,.element--bold-intro p.field__item,.element--light-intro div.field__item,.element--light-intro p.field__item,.h1 div.field__item,.h1 p.field__item,.h2 div.field__item,.h2 p.field__item,.h3 div.field__item,.h3 p.field__item,.h4 div.field__item,.h4 p.field__item,.h5 div.field__item,.h5 p.field__item,.h6 div.field__item,.h6 p.field__item{font-size:inherit;line-height:inherit}.field__item.headline{line-height:1}.field--label-above{margin-bottom:.625rem}.block-margin__default--removed .field--label-above{margin-bottom:0}.field--label-above ul{margin-top:0}.field--label-visually_hidden .svg-inline--fa{margin-right:.3rem}.field--label-visually_hidden .field__items{display:inline}.field--label-visually_hidden .field__items.artsci-image-gallery{display:grid}.field--label-visually_hidden .field__item,.field--type-text-long.field--label-inline p{display:inline}.field--label-inline.field--type-link .link-title{margin-right:.325rem}.field--label-hidden.field__items+.field--label-inline{margin-top:.625rem}.field--label-hidden.field__item+.field--label-hidden.field__item,.field--label-hidden.field__items+.field--label-hidden.field__item,.field--label-hidden.field__items+.field--label-hidden.field__items{margin-bottom:.625rem}.field--label-hidden.field__item+.field--label-hidden.field__item{margin-top:.625rem}.card__subtitle .field--label-hidden.field__item+.field--label-hidden.field__item{margin-top:0}@media (min-width:768px){.element--three-column .field--label-hidden.field__item+.field--label-hidden.field__item,.element--two-column .field--label-hidden.field__item+.field--label-hidden.field__item{margin-top:0}}.field--label-hidden+.field--label-above,.field--label-hidden+.field--label-inline,.field--label-visually_hidden+.field--label-above{margin-top:1.05rem}.text-formatted.field--type-text div{margin-bottom:.625rem}.text-formatted.field--type-text p{margin-bottom:0}.field--type-link{word-break:break-word}.field--type-address--inline br{display:none}[class*=card__] .field p.address{font-size:1.1rem}.field p.address .organization{font-weight:700}/*# sourceMappingURL=fields.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.field--label-above .field--label-inline::after,
+.field--label-above .field__label::after,
+.field--label-inline .field--label-inline::after,
+.field--label-inline .field__label::after {
+  content: ":";
+}
+.field--label-above .field--label-inline.headline::after,
+.field--label-above .field__label.headline::after,
+.field--label-inline .field--label-inline.headline::after,
+.field--label-inline .field__label.headline::after {
+  content: "";
+}
+
+.field--separator:after {
+  content: "-";
+  color: #737373;
+  margin: 0 0.325rem 0 0.625rem;
+}
+
+.field.field--label-above {
+  line-height: 1.5;
+}
+
+.field__label {
+  font-weight: bold;
+  line-height: 1.7;
+  font-size: 1.2rem;
+  margin-bottom: 0.325rem;
+}
+.field__label--icon {
+  margin-right: 0.625rem;
+}
+.field__label.headline {
+  line-height: 1;
+}
+[class*=card__] .field__label, [class*=bttn] .field__label {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.field--label-inline {
+  margin-bottom: 0.625rem;
+}
+[class*=card__] .field--label-inline, .block-margin__default--removed .field--label-inline {
+  margin-bottom: 0;
+}
+.field--label-inline .svg-inline--fa {
+  margin-right: 0.3rem;
+}
+
+.field--label-inline * {
+  display: inline;
+}
+
+.field__item {
+  line-height: 1.7;
+}
+
+.field__item {
+  margin-top: 0;
+}
+.field__item.h1, .field__item.h2, .field__item.h3, .field__item.h4, .field__item.h5, .field__item.h6, .field__item.element--bold-intro, .field__item.element--light-intro {
+  line-height: inherit;
+}
+[class*=card__] .field__item, [class*=bttn] .field__item {
+  font-size: inherit;
+  line-height: inherit;
+}
+div.field__item,
+p.field__item {
+  font-size: 1.2rem;
+}
+.element--bold-intro div.field__item, .element--light-intro div.field__item, .h1 div.field__item, .h2 div.field__item, .h3 div.field__item, .h4 div.field__item, .h5 div.field__item, .h6 div.field__item,
+.element--bold-intro p.field__item,
+.element--light-intro p.field__item,
+.h1 p.field__item,
+.h2 p.field__item,
+.h3 p.field__item,
+.h4 p.field__item,
+.h5 p.field__item,
+.h6 p.field__item {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.field__item.headline {
+  line-height: 1;
+}
+
+.field--label-above {
+  margin-bottom: 0.625rem;
+}
+.block-margin__default--removed .field--label-above {
+  margin-bottom: 0;
+}
+.field--label-above ul {
+  margin-top: 0;
+}
+
+.field--label-visually_hidden .svg-inline--fa {
+  margin-right: 0.3rem;
+}
+.field--label-visually_hidden .field__items {
+  display: inline;
+}
+.field--label-visually_hidden .field__items.artsci-image-gallery {
+  display: grid;
+}
+.field--label-visually_hidden .field__item {
+  display: inline;
+}
+
+.field--type-text-long.field--label-inline p {
+  display: inline;
+}
+
+.field--label-inline.field--type-link .link-title {
+  margin-right: 0.325rem;
+}
+
+.field--label-hidden.field__items + .field--label-inline {
+  margin-top: 0.625rem;
+}
+
+.field--label-hidden.field__item + .field--label-hidden.field__item,
+.field--label-hidden.field__items + .field--label-hidden.field__item,
+.field--label-hidden.field__items + .field--label-hidden.field__items {
+  margin-bottom: 0.625rem;
+}
+
+.field--label-hidden.field__item + .field--label-hidden.field__item {
+  margin-top: 0.625rem;
+}
+.card__subtitle .field--label-hidden.field__item + .field--label-hidden.field__item {
+  margin-top: 0;
+}
+@media (min-width: 768px) {
+  .element--three-column .field--label-hidden.field__item + .field--label-hidden.field__item, .element--two-column .field--label-hidden.field__item + .field--label-hidden.field__item {
+    margin-top: 0;
+  }
+}
+
+.field--label-hidden + .field--label-above,
+.field--label-hidden + .field--label-inline,
+.field--label-visually_hidden + .field--label-above {
+  margin-top: 1.05rem;
+}
+
+.text-formatted.field--type-text div {
+  margin-bottom: 0.625rem;
+}
+.text-formatted.field--type-text p {
+  margin-bottom: 0;
+}
+
+.field--type-link {
+  word-break: break-word;
+}
+
+.field--type-address--inline br {
+  display: none;
+}
+
+[class*=card__] .field p.address {
+  font-size: 1.1rem;
+}
+.field p.address .organization {
+  font-weight: 500;
+}/*# sourceMappingURL=fields.css.map */

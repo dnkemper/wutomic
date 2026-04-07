@@ -1,1 +1,134 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#00558c;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:rgba(0,0,0,.125);--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.accordion{--trans-time:0.2s;--accordion-label-color:var(--artsci-light);--accordion-label-color-hover:#e6e6e6;--accordion-outline-color:var(--artsci-gray-cool);--accordion-border-color:var(--artsci-gray-light)}.accordion details[open] summary i,.accordion details[open] summary svg{transform:rotate(0deg) translateY(.1em)}.accordion summary{background-color:var(--accordion-label-color);cursor:pointer;display:flex;list-style:none}.accordion summary:focus,.accordion summary:hover{background-color:var(--accordion-label-color-hover);outline:1px solid var(--accordion-outline-color)}.accordion summary::-webkit-details-marker{visibility:hidden}.accordion summary i,.accordion summary svg{align-items:center;background-color:transparent;border-radius:50%;color:#ba0c2f;display:flex;height:1.4rem;justify-content:center;margin:-.3rem .7rem 0 0;transform:rotate(-180deg) translateY(-.1em);transition:all var(--trans-time) ease-in-out;transition-property:transform,background-color;width:1.4rem}.accordion .accordion__heading :is(h2,h3,h4,h5,h6){all:inherit;align-items:center;border:none;cursor:pointer;display:flex;font-size:1.2rem;font-weight:700;padding:1.05rem;width:100%}.accordion .accordion__heading :is(h2,h3,h4,h5,h6):focus{outline:2px auto -webkit-focus-ring-color}.accordion .accordion__content{background-color:#fff;border-top:1px solid var(--accordion-border-color);padding:1.05rem}.accordion .accordion__content p:last-child{margin-bottom:0}.accordion ol li,.accordion p,.accordion ul li{font-size:1.3rem}.accordion table ol li,.accordion table p,.accordion table ul li{font-size:inherit}.accordion__item{border:1px solid var(--accordion-border-color)}.accordion__item:not(:first-child){margin-top:1rem}.accordion--white{--accordion-label-color:#fff;--accordion-label-color-hover:var(--artsci-light);--accordion-outline-color:var(--artsci-gray-mid);--accordion-border-color:var(--artsci-gray-light)}.collection--accordion .accordion__content{background-color:#fff}.collection--accordion .accordion__content:not([hidden]){display:flow-root}.collection--accordion .accordion__content blockquote{border-color:#ba0c2f;color:#000}.collection--accordion .accordion__content blockquote a{color:var(--link-color)}details.accordion__item summary{white-space:wrap}.accordion .accordion__item{margin:1rem 0 0}.accordion .accordion__heading{color:#000}.accordion .accordion__heading button.border{border:1px solid rgba(0,0,0,.25)}/*# sourceMappingURL=accordion.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.accordion {
+  --trans-time: 0.2s;
+  --accordion-label-color: var(--artsci-light);
+  --accordion-label-color-hover: rgb(229.5, 229.5, 229.5);
+  --accordion-outline-color: var(--artsci-gray-cool);
+  --accordion-border-color: var(--artsci-gray-light);
+}
+.accordion details[open] summary i, .accordion details[open] summary svg {
+  transform: rotate(0deg) translate(0px, 0.1em);
+}
+.accordion summary {
+  list-style: none;
+  background-color: var(--accordion-label-color);
+  display: flex;
+  cursor: pointer;
+}
+.accordion summary:hover, .accordion summary:focus {
+  background-color: var(--accordion-label-color-hover);
+  outline: 1px solid var(--accordion-outline-color);
+}
+.accordion summary::-webkit-details-marker {
+  visibility: hidden;
+}
+.accordion summary i, .accordion summary svg {
+  transition: all var(--trans-time) ease-in-out;
+  width: 1.4rem;
+  height: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: -0.3rem 0.7rem 0 0;
+  border-radius: 50%;
+  transition-property: transform, background-color;
+  background-color: transparent;
+  transform: rotate(-180deg) translate(0px, -0.1em);
+  color: #BA0C2F;
+}
+.accordion .accordion__heading :is(h2, h3, h4, h5, h6) {
+  all: inherit;
+  border: none;
+  display: flex;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 1.05rem;
+  width: 100%;
+  align-items: center;
+  cursor: pointer;
+}
+.accordion .accordion__heading :is(h2, h3, h4, h5, h6):focus {
+  outline: 2px auto -webkit-focus-ring-color;
+}
+.accordion .accordion__content {
+  background-color: #fff;
+  padding: 1.05rem;
+  border-top: 1px solid var(--accordion-border-color);
+}
+.accordion .accordion__content p:last-child {
+  margin-bottom: 0px;
+}
+.accordion ul li,
+.accordion ol li,
+.accordion p {
+  font-size: 1.3rem;
+}
+.accordion table ul li,
+.accordion table ol li,
+.accordion table p {
+  font-size: inherit;
+}
+
+.accordion__item {
+  border: 1px solid var(--accordion-border-color);
+}
+.accordion__item:not(:first-child) {
+  margin-top: 1rem;
+}
+
+.accordion--white {
+  --accordion-label-color: #fff;
+  --accordion-label-color-hover: var(--artsci-light);
+  --accordion-outline-color: var(--artsci-gray-mid);
+  --accordion-border-color: var(--artsci-gray-light);
+}
+
+.collection--accordion .accordion__content {
+  background-color: #fff;
+}
+.collection--accordion .accordion__content:not([hidden]) {
+  display: flow-root;
+}
+.collection--accordion .accordion__content blockquote {
+  border-color: #BA0C2F;
+  color: #000000;
+}
+.collection--accordion .accordion__content blockquote a {
+  color: var(--link-color);
+}
+
+details.accordion__item summary {
+  white-space: wrap;
+}
+
+.accordion .accordion__item {
+  margin: 1rem 0 0;
+}
+
+.accordion .accordion__heading {
+  color: #000000;
+}
+
+.accordion .accordion__heading button.border {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}/*# sourceMappingURL=accordion.css.map */

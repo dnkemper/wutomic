@@ -601,12 +601,20 @@ class ListBlock extends CoreBlock {
     // Change fields output based on block configuration.
     if ($this->view->getStyle()->usesFields() &&
       !empty($allow_settings['hide_fields']) &&
-      !empty($config['fields'])) {
+      !empty($config['fields']) &&
+      is_array($config['fields'])) {
       $fields = $this->view->getHandlers('field');
       foreach (array_keys($fields) as $field_name) {
+        // Skip if the field definition is not an array.
+        if (!is_array($fields[$field_name])) {
+          continue;
+        }
         // Remove each field in sequence and re-add them if not hidden.
         $this->view->removeHandler($display_id, 'field', $field_name);
-        if (empty($config['fields'][$field_name]['hide'])) {
+        // Check if this field's config is an array with a 'hide' key.
+        $field_config = $config['fields'][$field_name] ?? NULL;
+        $is_hidden = is_array($field_config) && !empty($field_config['hide']);
+        if (!$is_hidden) {
           $this->view->addHandler($display_id, 'field', $fields[$field_name]['table'], $fields[$field_name]['field'], $fields[$field_name], $field_name);
         }
       }
@@ -619,37 +627,17 @@ class ListBlock extends CoreBlock {
       foreach ($sorts as $sort_name => $sort) {
         $this->view->removeHandler($display_id, 'sort', $sort_name);
       }
-      if (!empty($config['sort'])) {
+      if (!empty($config['sort']) && is_array($config['sort'])) {
         uasort($config['sort'], '\Drupal\ctools_views\Plugin\Display\Block::sortFieldsByWeight');
-        foreach ($config['sort'] as $sort_name => $sort_config) {
-          if (!empty($config['sort'][$sort_name]) && !empty($sorts[$sort_name])) {
-            $sort = $sorts[$sort_name];
-            // Ensure order is a string (ASC/DESC), not an array.
-            $order = $config['sort'][$sort_name]['order'] ?? 'ASC';
-            if (is_array($order)) {
-              // Log corrupted config for debugging.
-              \Drupal::logger('layout_builder_custom')->error('Corrupted sort order in view @view, display @display, sort @sort: @order', [
-                '@view' => $this->view->id(),
-                '@display' => $display_id,
-                '@sort' => $sort_name,
-                '@order' => print_r($order, TRUE),
-              ]);
-              // Handle corrupted config: use first value or default to ASC.
-              $order = reset($order) ?: 'ASC';
-            }
-            // Ensure we have a valid string.
-            if (!is_string($order) || !in_array(strtoupper($order), ['ASC', 'DESC'])) {
-              \Drupal::logger('layout_builder_custom')->error('Invalid sort order value in view @view: @order (type: @type)', [
-                '@view' => $this->view->id(),
-                '@order' => print_r($order, TRUE),
-                '@type' => gettype($order),
-              ]);
-              $order = 'ASC';
-            }
-            $sort['order'] = $order;
-            // Re-add sorts in the order that was selected for the block.
-            $this->view->setHandler($display_id, 'sort', $sort_name, $sort);
+        foreach ($config['sort'] as $sort_name => $sort) {
+          // Skip if sort config is not an array or sorts handler doesn't exist.
+          if (!is_array($config['sort'][$sort_name]) || empty($sorts[$sort_name]) || !is_array($sorts[$sort_name])) {
+            continue;
           }
+          $sort = $sorts[$sort_name];
+          $sort['order'] = $config['sort'][$sort_name]['order'] ?? 'ASC';
+          // Re-add sorts in the order that was selected for the block.
+          $this->view->setHandler($display_id, 'sort', $sort_name, $sort);
         }
       }
     }

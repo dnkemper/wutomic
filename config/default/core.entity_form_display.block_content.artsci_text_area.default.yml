@@ -6,6 +6,7 @@ dependencies:
     - block_content.type.artsci_text_area
     - field.field.block_content.artsci_text_area.field_artsci_headline
     - field.field.block_content.artsci_text_area.field_artsci_text_area
+    - field.field.block_content.artsci_text_area.field_pre_title
   module:
     - layout_builder_custom
     - text
@@ -28,6 +29,14 @@ content:
     region: content
     settings:
       rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_pre_title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
       placeholder: ''
     third_party_settings: {  }
   info:

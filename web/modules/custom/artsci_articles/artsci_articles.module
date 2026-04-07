@@ -383,6 +383,7 @@ function artsci_articles_preprocess_views_view(&$variables) {
       break;
 
     case 'article_list_block':
+    case 'rss_block':
       $variables['#attached']['library'][] = 'atomic_artsci/view-articles-list';
       break;
 

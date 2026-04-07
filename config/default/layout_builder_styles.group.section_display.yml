@@ -1,0 +1,10 @@
+uuid: cc7c4c4f-a676-482b-96b0-ea70a3884bab
+langcode: en
+status: true
+dependencies: {  }
+id: section_display
+label: 'Section: Display'
+multiselect: single
+form_type: select
+required: false
+weight: 0

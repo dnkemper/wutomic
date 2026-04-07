@@ -21,7 +21,7 @@ h1, .h1 {
   &.bold-headline--serif,
   &.headline--serif {
     @include utilities.h1;
-    font-weight: variables.$font-weight-bold;
+    font-weight: variables.$font-weight-medium;
   }
 }
 

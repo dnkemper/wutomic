@@ -33,17 +33,47 @@ trait RendersAsCardTrait {
    * {@inheritdoc}
    */
   public function buildCardStyles(array &$build) {
-    // Check for override styles.
+    // Check for override styles from build array first (for non-view contexts).
     $override_styles = $build['#override_styles'] ?? [];
 
-    // Merge default styles with override styles.
-    // Using array_merge so overrides replace defaults by key (e.g., media_format).
-    $styles = array_merge($this->getDefaultCardStyles(), $override_styles);
+    // If not in build, check drupal_static (set by views_pre_render).
+    if (empty($override_styles)) {
+      $static_styles = &drupal_static('layout_builder_custom_card_override_styles');
+      if (!empty($static_styles)) {
+        $override_styles = $static_styles;
+      }
+    }
 
-    // Add all style classes.
-    foreach ($styles as $style) {
+    // Loop through combined default and override styles and add them.
+    foreach ([
+      ...$this->getDefaultCardStyles(),
+      ...$override_styles,
+    ] as $style) {
       $build['#attributes']['class'][] = $style;
     }
+  }
+
+  /**
+   * Get hide_fields from build array or view context.
+   *
+   * @param array $build
+   *   A renderable array representing the entity content.
+   *
+   * @return array
+   *   The list of fields to hide.
+   */
+  protected function getHideFields(array &$build): array {
+    $hide_fields = $build['#hide_fields'] ?? [];
+
+    // If not in build, check drupal_static (set by views_pre_render).
+    if (empty($hide_fields)) {
+      $static_hide_fields = &drupal_static('layout_builder_custom_card_hide_fields');
+      if (!empty($static_hide_fields)) {
+        $hide_fields = $static_hide_fields;
+      }
+    }
+
+    return $hide_fields;
   }
 
   /**
@@ -55,7 +85,7 @@ trait RendersAsCardTrait {
    *   Array of field names.
    */
   protected function mapFieldsToCardBuild(array &$build, array $mapping): void {
-    $hide_fields = $build['#hide_fields'] ?? [];
+    $hide_fields = $this->getHideFields($build);
 
     // Map fields to the card parts.
     foreach ($mapping as $prop => $fields) {

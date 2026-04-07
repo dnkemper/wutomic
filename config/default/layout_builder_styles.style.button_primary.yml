@@ -3,12 +3,11 @@ langcode: en
 status: true
 dependencies: {  }
 id: button_primary
-label: Gold
+label: Red
 classes: 'bttn bttn--primary'
 type: component
 group: button_style
 block_restrictions:
   - 'inline_block:artsci_banner'
-  - 'inline_block:artsci_button'
 layout_restrictions: {  }
 weight: -6

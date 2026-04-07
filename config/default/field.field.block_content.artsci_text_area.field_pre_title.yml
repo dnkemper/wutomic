@@ -1,0 +1,19 @@
+uuid: c3481251-dec6-4ffd-a56d-8bed0210f1b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_text_area
+    - field.storage.block_content.field_pre_title
+id: block_content.artsci_text_area.field_pre_title
+field_name: field_pre_title
+entity_type: block_content
+bundle: artsci_text_area
+label: Pre-title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

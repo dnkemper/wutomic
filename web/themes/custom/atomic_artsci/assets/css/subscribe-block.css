@@ -1,1 +1,126 @@
-input#subscribe-email{background:unset;border:unset;border-bottom:2px solid gray}.subscribe-block{max-width:600px}.subscribe-block button.subscribe-block__submit{background:none;border:none}.subscribe-block svg.svg-inline--fa.fa-arrow-right{fill:#fff;background:#000;color:#fff}.subscribe-block p.subscribe-block__subheading{color:#fff;font-family:IvyStyle Sans;font-size:14px;font-weight:400;letter-spacing:0;line-height:200%}.subscribe-block p.subscribe-block__heading{color:#fff;font-family:IvyStyle Sans;font-size:18px;font-weight:600;letter-spacing:0;line-height:200%}.subscribe-block input#subscribe-email{background:unset;border:unset;border-bottom:2px solid gray}.subscribe-block__heading{color:#fff;font-size:1rem;font-weight:700;line-height:1.4;margin:0 0 .25rem}.subscribe-block__subheading{color:hsla(0,0%,100%,.8);font-size:.875rem;font-weight:400;line-height:1.5;margin:0 0 1.25rem}.subscribe-block__input-wrapper{align-items:stretch;display:flex}.subscribe-block__input{background-color:transparent;border:1px solid hsla(0,0%,100%,.5);border-radius:0;border-right:none;color:#fff;flex:1;font-size:.9375rem;line-height:1.4;outline:none;padding:.625rem .875rem;transition:border-color .2s ease}.subscribe-block__input::-moz-placeholder{color:hsla(0,0%,100%,.5)}.subscribe-block__input::placeholder{color:hsla(0,0%,100%,.5)}.subscribe-block__input:focus{border-color:#fff}.subscribe-block__submit{align-items:center;background-color:transparent;border:1px solid hsla(0,0%,100%,.5);border-left:none;border-radius:0;color:#fff;cursor:pointer;display:flex;justify-content:center;padding:0;transition:background-color .2s ease,border-color .2s ease;width:3rem}.subscribe-block__submit:focus-visible,.subscribe-block__submit:hover{background-color:hsla(0,0%,100%,.1)}.subscribe-block__submit--loading{cursor:wait;opacity:.5}.subscribe-block__arrow{font-size:1.25rem;line-height:1}.subscribe-block .svg-inline--fa{height:1rem;width:1rem}.subscribe-block__messages{font-size:.8125rem;line-height:1.4;margin-top:.5rem;min-height:1.5em}.subscribe-block__messages--success{color:#a8d5a2}.subscribe-block__messages--error{color:#f5a8a8}/*# sourceMappingURL=subscribe-block.css.map */
+/**
+ * @file
+ * Styles for the Ampersand newsletter subscribe block.
+ *
+ * Designed for placement in the footer region on a dark background.
+ */
+input#subscribe-email {
+  background: unset;
+  border: unset;
+  border-bottom: 2px solid gray;
+}
+
+.subscribe-block {
+  max-width: 600px;
+}
+.subscribe-block button.subscribe-block__submit {
+  background: none;
+  border: none;
+}
+.subscribe-block svg.svg-inline--fa.fa-arrow-right {
+  fill: white;
+  color: white;
+  background: black;
+}
+.subscribe-block p.subscribe-block__subheading {
+  font-family: IvyStyle Sans;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 200%;
+  letter-spacing: 0%;
+  color: white;
+}
+.subscribe-block p.subscribe-block__heading {
+  font-family: IvyStyle Sans;
+  font-weight: 600;
+  font-size: 18px;
+  color: white;
+  line-height: 200%;
+  letter-spacing: 0%;
+}
+.subscribe-block input#subscribe-email {
+  background: unset;
+  border: unset;
+  border-bottom: 2px solid gray;
+}
+.subscribe-block__heading {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin: 0 0 0.25rem;
+  color: #fff;
+}
+.subscribe-block__subheading {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+.subscribe-block__input-wrapper {
+  display: flex;
+  align-items: stretch;
+}
+.subscribe-block__input {
+  flex: 1;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: #fff;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: none;
+  border-radius: 0;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.subscribe-block__input::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.subscribe-block__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.subscribe-block__input:focus {
+  border-color: #fff;
+}
+.subscribe-block__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: none;
+  border-radius: 0;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.subscribe-block__submit:hover, .subscribe-block__submit:focus-visible {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.subscribe-block__submit--loading {
+  opacity: 0.5;
+  cursor: wait;
+}
+.subscribe-block__arrow {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.subscribe-block .svg-inline--fa {
+  width: 1rem;
+  height: 1rem;
+}
+.subscribe-block__messages {
+  min-height: 1.5em;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.subscribe-block__messages--success {
+  color: #a8d5a2;
+}
+.subscribe-block__messages--error {
+  color: #f5a8a8;
+}/*# sourceMappingURL=subscribe-block.css.map */

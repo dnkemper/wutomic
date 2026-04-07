@@ -1,1 +1,51 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#00558c;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:rgba(0,0,0,.125);--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.field--name-field-uip-title{font-size:clamp(1.95rem,.7887vw + 1.6542rem,2.3rem);font-weight:500;line-height:1.25;margin-bottom:.325rem;margin-top:0}.field--name-field-uip-title:not(:first-child){margin-top:1.875rem}.paragraph--type--section.has-section-image .field--name-field-uip-title{text-shadow:2px 2px 3px hsla(0,0%,100%,.5)}.paragraph--type--section.has-section-image .paragraph--type--text .field--name-field-uip-title,.paragraph--type--section.has-section-image .paragraph--type--webform .field--name-field-uip-title{text-shadow:none}.paragraph--type--section.bg-dark .field--name-field-uip-title{color:#fff}.bg-dark.has-section-image.paragraph--type--section .field--name-field-uip-title{text-shadow:2px 2px 3px rgba(0,0,0,.5)}.bg-dark.has-section-image.paragraph--type--section .paragraph--type--text .field--name-field-uip-title,.bg-dark.has-section-image.paragraph--type--section .paragraph--type--webform .field--name-field-uip-title{text-shadow:none}/*# sourceMappingURL=field--name-field-uip-title.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #00558C;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, .125);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.field--name-field-uip-title {
+  line-height: 1.25;
+  font-weight: 500;
+  font-size: clamp(1.95rem, 0.7887vw + 1.6542rem, 2.3rem);
+  margin-top: 0;
+  margin-bottom: 0.325rem;
+}
+.field--name-field-uip-title:not(:first-child) {
+  margin-top: 1.875rem;
+}
+
+.paragraph--type--section.has-section-image .field--name-field-uip-title {
+  text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.5);
+}
+.paragraph--type--section.has-section-image .paragraph--type--text .field--name-field-uip-title,
+.paragraph--type--section.has-section-image .paragraph--type--webform .field--name-field-uip-title {
+  text-shadow: none;
+}
+
+.paragraph--type--section.bg-dark .field--name-field-uip-title {
+  color: #fff;
+}
+
+.bg-dark.has-section-image.paragraph--type--section .field--name-field-uip-title {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+.bg-dark.has-section-image.paragraph--type--section .paragraph--type--text .field--name-field-uip-title,
+.bg-dark.has-section-image.paragraph--type--section .paragraph--type--webform .field--name-field-uip-title {
+  text-shadow: none;
+}/*# sourceMappingURL=field--name-field-uip-title.css.map */

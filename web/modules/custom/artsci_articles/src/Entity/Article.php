@@ -42,7 +42,7 @@ class Article extends NodeBundleBase implements ArticleInterface, RendersAsCardI
 
     // Add a byline
     // Check if hidden field have been provided.
-    $hide_fields = $build['#hide_fields'] ?? [];
+    $hide_fields = $this->getHideFields($build);
     // If the source link is hidden or not set, its value is NULL.
     $source_link = !in_array('field_article_source_link', $hide_fields) ? $this->get('field_article_source_link')->uri : NULL;
     // If the source org is hidden or not set, its value is NULL.
