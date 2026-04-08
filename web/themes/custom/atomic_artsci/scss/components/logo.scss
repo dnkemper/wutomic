@@ -10,7 +10,7 @@
   height: 70px;
   width:  109px;
   padding: 25px variables.$gutter;
-  background: variables.$secondary;
+  // background: variables.$secondary;
 
   a:focus svg {
     opacity: .5;
@@ -53,35 +53,6 @@
   }
 }
 // === End: Logo SVG === //
-
-// === Logo Healthcare === //
-.logo--tab {
-  &.logo--healthcare {
-    padding: 20px 1.25rem;
-    @include utilities.breakpoint(md) {
-      height: 100px;
-      padding: 23px 22px;
-    }
-    @include utilities.breakpoint(page-container) {
-      height: 113px;
-    }
-  }
-}
-
-.logo--healthcare {
-  .logo-icon {
-    height: 32px;
-    @include utilities.breakpoint(md) {
-      height: 47px;
-    }
-
-    @include utilities.breakpoint(page-container) {
-      height: 67px;
-    }
-  }
-}
-// === End: Logo Healthcare === //
-
 
 // Using display: contents to make h1 act as a semantic wrapper for accessibility
 // without generating a layout box or affecting visual rendering.

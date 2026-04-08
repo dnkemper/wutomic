@@ -15,13 +15,6 @@
 }
 
 .artsci-bar.artsci-bar--narrow {
-  &.artsci-bar--healthcare {
-    .toggle-nav__bttn {
-      @include utilities.breakpoint(page-container) {
-        top: 64px;
-      }
-    }
-  }
 
   .toggle-nav__bttn {
     display: flex;
@@ -165,10 +158,6 @@ body {
 
     .artsci-bar--narrow & {
       padding: 9px 35px 7px;
-    }
-
-    .artsci-bar--healthcare & {
-      height: 100px;
     }
   }
 

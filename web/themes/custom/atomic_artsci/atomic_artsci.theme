@@ -277,13 +277,8 @@ function atomic_artsci_preprocess_page(&$variables) {
   $variables['site_parent_url'] = $config->get('parent.url');
 
   $variables['artsci_logo'] = TRUE;
-  $variables['is_off_brand'] = FALSE;
 
   $style_selector = theme_get_setting('style.style_selector');
-  if (!empty($style_selector) && $style_selector !== 'brand') {
-    $variables['artsci_logo'] = FALSE;
-    $variables['is_off_brand'] = TRUE;
-  }
 
   if (!theme_get_setting('logo.use_default')) {
     $logo_path = theme_get_setting('logo.path');
@@ -975,7 +970,7 @@ function atomic_artsci_preprocess_block(&$variables) {
 
         $url = $link['#url'] ?? NULL;
         $title = $link['#title'] ?? NULL;
-        $link_attributes = $url?->getOptions()['attributes'] ?? [];
+        // $link_attributes = $url?->getOptions()['attributes'] ?? [];
 
         if ($url) {
           if (LinkHelper::shouldClearTitle($title)) {
@@ -985,28 +980,10 @@ function atomic_artsci_preprocess_block(&$variables) {
           $links[] = [
             'link_url' => $url->toString(),
             'link_text' => $title,
-            'link_attributes' => $link_attributes,
           ];
         }
       }
 
-      $variables['links'] = $links;
-    }
-  }
-
-  if ($variables['derivative_plugin_id'] === 'artsci_button') {
-    if (isset($variables['elements']['content']['field_artsci_button_link'])) {
-      $links = [];
-      foreach (Element::children($variables['elements']['content']['field_artsci_button_link']) as $delta) {
-        $link = $variables['elements']['content']['field_artsci_button_link'][$delta];
-        $url = $link['#url'] ?? NULL;
-        $link_attributes = $url?->getOptions()['attributes'] ?? [];
-        $links[] = [
-          'link_url' => $link['#url']->toString(),
-          'link_text' => $link['#title'],
-          'link_attributes' => $link_attributes,
-        ];
-      }
       $variables['links'] = $links;
     }
   }
@@ -1025,7 +1002,6 @@ function atomic_artsci_preprocess_block(&$variables) {
   // Check if the hover effect should be applied on the stat block.
   if ($variables['derivative_plugin_id'] === 'artsci_statistic') {
     $class_array = $variables['elements']['#attributes']['class'] ?? [];
-    $variables['has_hover_effect'] = !in_array('stat--static', $class_array);
   }
 
   // Check if the collection view mode is accordion.

@@ -40,5 +40,27 @@
       });
     }
   };
-
+  Drupal.behaviors.cardMediaStyles = {
+    attach: function (context, settings) {
+      const mediaField = $(context).find('[data-drupal-selector="edit-settings-block-form-field-artsci-card-image"]');
+      
+      // Target the wrapper divs, not just the inputs
+      const styleFields = $(context).find(
+        '[data-drupal-selector="edit-layout-builder-style-card-media-position"], ' +
+        '[data-drupal-selector="edit-layout-builder-style-media-format"], ' +
+        '[data-drupal-selector="edit-layout-builder-style-media-size"]'
+      ).closest('.form-item');
+      
+      function toggleStyles() {
+        const hasMedia = mediaField.find('.js-media-library-item').length > 0;
+        styleFields.toggle(hasMedia);
+      }
+      
+      // Initial check
+      toggleStyles();
+      
+      // Listen for media library changes
+      $(document).on('media-library-selection-change', toggleStyles);
+    }
+  };
 })(jQuery, Drupal, once);

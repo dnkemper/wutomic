@@ -8,11 +8,18 @@ classes: bg--red
 type: component
 group: background
 block_restrictions:
+  - 'inline_block:artsci_aggregator'
   - 'inline_block:artsci_banner'
   - 'inline_block:artsci_cta'
   - 'inline_block:artsci_card'
+  - 'inline_block:artsci_statistic'
   - 'inline_block:artsci_collection'
   - 'inline_block:featured_content'
   - 'inline_block:artsci_aggregator'
+  - 'inline_block:artsci_text_area'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+  - webform_block
 layout_restrictions: {  }
 weight: 0

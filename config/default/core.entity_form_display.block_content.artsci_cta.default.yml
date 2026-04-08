@@ -28,10 +28,10 @@ content:
       linkit_profile: default
       linkit_auto_link_text: false
       enabled_attributes:
-        data-sn-event: true
-        data-sn-event-type: true
-        data-sn-event-component: true
-        data-sn-event-label: true
+        data-sn-event: false
+        data-sn-event-type: false
+        data-sn-event-component: false
+        data-sn-event-label: false
         id: false
         name: false
         target: false

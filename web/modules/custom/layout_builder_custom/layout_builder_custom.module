@@ -225,9 +225,29 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
       unset($form['settings']['views_label_checkbox']);
       unset($form['settings']['views_label']);
 
-      if (isset($form['layout_builder_style_grid_columns'])) {
+      if (isset($form['layout_builder_style_list_format'])) {
         // Set '#states' for block grid columns.
-        $form['layout_builder_style_grid_columns']['#states'] = [
+        $form['layout_builder_style_media_format']['#states'] = [
+          'visible' => [
+            // Always show when list format is grid.
+            [
+              ':input[name="layout_builder_style_list_format"]' => [
+                'value' => 'list_format_grid',
+              ],
+            ],
+          ],
+        ];
+        $form['layout_builder_style_media_size']['#states'] = [
+          'visible' => [
+            // Always show when list format is grid.
+            [
+              ':input[name="layout_builder_style_list_format"]' => [
+                'value' => 'list_format_grid',
+              ],
+            ],
+          ],
+        ];
+        $form['layout_builder_style_card_media_position']['#states'] = [
           'visible' => [
             // Always show when list format is grid.
             [
@@ -238,7 +258,6 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           ],
         ];
       }
-
       $form_object = $form_state->getFormObject();
       if ($form_object instanceof ConfigureBlockFormBase) {
         /** @var \Drupal\layout_builder\SectionComponent $component */
@@ -269,41 +288,6 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
         // Modifications to $lb_styles_extra_settings based on block plugin.
         switch ($block->getPluginId()) {
-          case 'inline_block:artsci_card':
-            $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
-                        $lb_styles_extra_settings['card_media_position']['default'] = 'card_media_position_stacked';
-
-            // Selector for checking if image field has a selection
-            // Media library stores selections in hidden inputs
-          $image_filled_condition = [
-            ':input[name="settings[block_form][field_artsci_card_image][selection][0][target_id]"]' => ['filled' => TRUE],
-          ];
-
-          // Only show media position when image is present
-          $form['layout_builder_style_card_media_position']['#states'] = [
-            'visible' => $image_filled_condition,
-          ];
-                    $form['layout_builder_style_media_format']['#states'] = [
-            'visible' => $image_filled_condition,
-          ];
-          $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
-
-          // Only show media format when image is present
-          $form['layout_builder_style_media_format']['#states'] = [
-            'visible' => $image_filled_condition,
-          ];
-
-          // Media size: show when image present AND (circle format OR non-stacked position)
-          $form['layout_builder_style_media_size']['#states'] = [
-            'visible' => [
-              $image_filled_condition,
-              [
-                [':input[name="layout_builder_style_media_format"]' => ['value' => 'media_format_circle']],
-                [':input[name="layout_builder_style_card_media_position"]' => ['!value' => 'card_media_position_stacked']],
-              ],
-            ],
-          ];
-          break;
 
           // Set square to default for image gallery.
           case 'inline_block:artsci_image_gallery':
@@ -322,7 +306,6 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
             break;
 
           // No border is the default.
-          case 'inline_block:artsci_aggregator':
           case 'views_block:article_list_block-list_article':
             $lb_styles_extra_settings['border']['default'] = 'no_border';
             break;
@@ -405,33 +388,18 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
             ];
             break;
 
+          case 'inline_block:artsci_card':
+            $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+            // Note: #states for media style fields removed because Media Library
+            // widget selectors are not reliably targetable with Drupal States API.
+            // These fields will always be visible. Consider adding JavaScript-based
+            // visibility toggle in card-block-form library if needed.
+            break;
+
           case 'inline_block:artsci_text_area':
           case 'webform_block':
             $form['layout_builder_style_padding']['#empty_option'] = 'None';
-            break;
-
-          case 'inline_block:artsci_card':
-            $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
-            // Set help text for media position.
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
-
-            // Set '#states' for card image size.
-            $form['layout_builder_style_media_size']['#states'] = [
-              'visible' => [
-                // Always show when media format is set to 'circle'.
-                [
-                  ':input[name="layout_builder_style_media_format"]' => [
-                    'value' => 'media_format_circle',
-                  ],
-                ],
-                // Show when a media position is selected.
-                [
-                  ':input[name="layout_builder_style_card_media_position"]' => [
-                    '!value' => 'card_media_position_stacked',
-                  ],
-                ],
-              ],
-            ];
             break;
 
           case 'inline_block:artsci_aggregator':
@@ -443,23 +411,6 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           case 'views_block:people_list_block-list_card':
             // Set help text for media position.
             $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
-            // Set '#states' for card image size.
-            $form['layout_builder_style_media_size']['#states'] = [
-              'visible' => [
-                // Always show when media format is set to 'circle'.
-                [
-                  ':input[name="layout_builder_style_media_format"]' => [
-                    'value' => 'media_format_circle',
-                  ],
-                ],
-                // Show when a media position is selected.
-                [
-                  ':input[name="layout_builder_style_card_media_position"]' => [
-                    '!value' => 'card_media_position_stacked',
-                  ],
-                ],
-              ],
-            ];
 
             // Listblock specific default.
             if ($form_id === 'layout_builder_add_block') {
@@ -845,10 +796,7 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
           'media_format_widescreen',
           'media_format_square',
         ])) {
-          $form_state->setValue('layout_builder_style_media_size', 'media_size_large');
-          // @todo Should we set a message here to let the user
-          //   know the image size was changed? See
-          //   https://github.com/artsci/artsci/issues/5036
+          $form_state->setValue('layout_builder_style_media_size', 'media_size_medium');
         }
 
         if ($block->getPluginId() === 'inline_block:artsci_card') {
@@ -860,34 +808,6 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
           ]);
 
           if ($media_option) {
-
-            // $form_image_selection = [
-            //   'settings',
-            //   'block_form',
-            //   'field_artsci_card_image',
-            //   'selection',
-            // ];
-
-            // $form_icon_selection = [
-            //   'settings',
-            //   'block_form',
-            //   'field_icon',
-            //   0,
-            //   'value',
-            //   'icon',
-            // ];
-
-            // if ($media_option === 'image') {
-            //   if ($form_state->hasValue($form_icon_selection)) {
-            //     $form_state->unsetValue($form_icon_selection);
-            //   }
-            // }
-            // elseif ($media_option === 'icon') {
-            //   if ($form_state->hasValue($form_image_selection)) {
-            //     $form_state->unsetValue($form_image_selection);
-            //   }
-            // }
-
             // Save as a third-party setting.
             if (!empty($media_option)) {
               $component->setThirdPartySetting('layout_builder_custom', 'media_types', $media_option);
@@ -1000,54 +920,6 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
         break;
 
       case 'inline_block:artsci_card':
-        // $media_types = [
-        //   'image' => 'Image',
-        //   'icon' => 'Icon',
-        // ];
-        // $default_bg = 'image';
-
-        // $element['media_types'] = [
-        //   '#type' => 'radios',
-        //   '#title' => t('Media type'),
-        //   '#options' => $media_types,
-        //   '#default_value' => $component->getThirdPartySetting('layout_builder_custom', 'media_types') ?: $default_bg,
-        //   '#weight' => 4,
-        // ];
-
-        if (isset($element['field_artsci_card_image'])) {
-          $element['field_artsci_card_image'] = [
-            '#states' => [
-              'visible' => [
-                ':input[name="settings[block_form][media_types]"]' => [
-                  'value' => 'image',
-                ],
-              ],
-            ],
-            '#weight' => 5,
-          ] + $element['field_artsci_card_image'];
-        }
-        // $element['field_artsci_card_image'] = [
-        //   '#states' => [
-        //     'visible' => [
-        //       ':input[name="settings[block_form][media_types]"]' => [
-        //         'value' => 'image',
-        //       ],
-        //     ],
-        //   ],
-        //   '#weight' => 5,
-        // ] + $element['field_artsci_card_image'];
-
-        // $element['field_icon'] = [
-        //   '#states' => [
-        //     'visible' => [
-        //       ':input[name="settings[block_form][media_types]"]' => [
-        //         'value' => 'icon',
-        //       ],
-        //     ],
-        //   ],
-        //   '#weight' => 5,
-        // ] + $element['field_icon'];
-
         if (isset($element['field_artsci_card_button_display'])) {
           $element['field_artsci_card_button_display']['widget']['#options']['_none'] = 'Use site default';
           $element['field_artsci_card_button_display']['widget']['#description'] .= t('&nbsp;If "Use site default" is selected, this setting can be changed on the <a href="@settings_url">SiteNow Pages settings</a>.', [
@@ -1181,24 +1053,24 @@ function layout_builder_custom_field_widget_single_element_paragraphs_form_alter
 /**
  * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
  */
-// function layout_builder_custom_field_widget_single_element_linkit_attributes_form_alter(array &$element, FormStateInterface &$form_state, array $context) {
-//   if (!\Drupal::currentUser()
-//     ->hasPermission('administer link field attributes')) {
-//     $element['options']['attributes']['#access'] = FALSE;
-//   }
-//   if (isset($element['options']['attributes']['data-sn-event-component'])) {
-//     // The default for this is set on a per-component basis,
-//     // e.g. in the BannerBlockFormHandler,
-//     // and should not be set by the user.
-//     $element['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
-//   }
-//   if (isset($element['options']['attributes']['data-sn-event-type'])) {
-//     // The default for this is set platform-wide as 'click'
-//     // in artsci_core_link_attributes_plugin_alter, so
-//     // remove access to change.
-//     $element['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
-//   }
-// }
+function layout_builder_custom_field_widget_single_element_linkit_attributes_form_alter(array &$element, FormStateInterface &$form_state, array $context) {
+  if (!\Drupal::currentUser()
+    ->hasPermission('administer link field attributes')) {
+    $element['options']['attributes']['#access'] = FALSE;
+  }
+  // if (isset($element['options']['attributes']['data-sn-event-component'])) {
+  //   // The default for this is set on a per-component basis,
+  //   // e.g. in the BannerBlockFormHandler,
+  //   // and should not be set by the user.
+  //   $element['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
+  // }
+  // if (isset($element['options']['attributes']['data-sn-event-type'])) {
+  //   // The default for this is set platform-wide as 'click'
+  //   // in artsci_core_link_attributes_plugin_alter, so
+  //   // remove access to change.
+  //   $element['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
+  // }
+}
 
 /**
  * Add an element to delineate the layout builder styles form section.
@@ -1304,7 +1176,6 @@ function layout_builder_custom_preprocess_block__inline_block__featured_content(
     if (!in_array('list_format_list', $lb_styles_array)) {
       $variables['attributes']['class'][] = 'grid--first-item-full-width';
     }
-
   }
 
   foreach ($block->get('field_featured_content_item') as $item) {
@@ -1369,7 +1240,7 @@ function layout_builder_custom_preprocess_layout(&$variables) {
       'hide_headline' => !empty($headline_config['hide_headline']),
     ];
   }
-    }
+}
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -1491,13 +1362,10 @@ function layout_builder_custom_preprocess_views_view_unformatted(&$variables) {
 function layout_builder_custom_views_plugins_display_alter(&$displays) {
   $moduleHandler = \Drupal::service('module_handler');
 
-
-
-    // Swap the block class if it can be swapped.
-    if (!empty($displays['block']['class']) && $displays['block']['class'] === Block::class) {
-      $displays['block']['class'] = ListBlock::class;
-    }
-
+  // Swap the block class if it can be swapped.
+  if (!empty($displays['block']['class']) && $displays['block']['class'] === Block::class) {
+    $displays['block']['class'] = ListBlock::class;
+  }
 }
 
 /**
@@ -1506,8 +1374,6 @@ function layout_builder_custom_views_plugins_display_alter(&$displays) {
 function layout_builder_custom_views_pre_build(ViewExecutable $view) {
   // Dynamically set pager id using cache.
   // Temp workaround until https://www.drupal.org/project/drupal/issues/3225987.
-  // @todo Allow view config to override this (non-zero pager id?).
-  //   https://github.com/artsci/artsci/issues/5045
   $pager = $view->display_handler->getOption('pager');
   if (isset($pager) && $pager['type'] === 'full') {
     if ($cached = \Drupal::cache('layout_builder_custom_views_pager_elements')->get($view->dom_id)) {
@@ -1529,8 +1395,6 @@ function layout_builder_custom_views_pre_build(ViewExecutable $view) {
 function layout_builder_custom_views_pre_render(ViewExecutable $view) {
   // Hotfix shim to not display exposed blocks, necessary because
   // of the hotfix above.
-  // @todo Remove this exception when these view displays are removed. See
-  //   https://github.com/artsci/artsci/issues/5047
   $display = $view->getDisplay();
   $exceptions = [
     'block_people_slf',

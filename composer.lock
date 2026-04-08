@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae5db183a3d8b0693ef33d1233a762a8",
+    "content-hash": "d0dc981aa3ae00e85001b6123f0004fd",
     "packages": [
         {
             "name": "apvarun/toastify-js",

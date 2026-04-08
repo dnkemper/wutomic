@@ -1,0 +1,10 @@
+layout_builder_custom.media_type:
+  path: '/layout-builder-custom/media-type/{media}'
+  defaults:
+    _controller: '\Drupal\layout_builder_custom\Controller\MediaTypeController::getMediaType'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      media:
+        type: entity:media

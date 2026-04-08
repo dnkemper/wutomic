@@ -930,25 +930,25 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
       }
 
       // Restrict access to link_attributes fieldset on menu_link_content.
-      if (!\Drupal::currentUser()
-        ->hasPermission('administer menu link attributes')) {
-        $form['link']['widget'][0]['options']['attributes']['#access'] = FALSE;
-      }
+      // if (!\Drupal::currentUser()
+      //   ->hasPermission('administer menu link attributes')) {
+      //   $form['link']['widget'][0]['options']['attributes']['#access'] = FALSE;
+      // }
 
       // Change the details title to be more specific.
-      if (isset($form['link']['widget'][0]['options']['attributes']['#title'])) {
-        $form['link']['widget'][0]['options']['attributes']['#title'] = t('Link attributes');
-      }
+      // if (isset($form['link']['widget'][0]['options']['attributes']['#title'])) {
+      //   $form['link']['widget'][0]['options']['attributes']['#title'] = t('Link attributes');
+      // }
 
       // Setting defaults for menu link attributes.
-      if ($form['link']['widget'][0]['options']['attributes']['data-sn-event-type']) {
-        $form['link']['widget'][0]['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
-      }
-      if ($form['link']['widget'][0]['options']['attributes']['data-sn-event-component']) {
-        $form['link']['widget'][0]['options']['attributes']['data-sn-event-component']['#default_value'] = 'link';
-        $form['link']['widget'][0]['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
-      }
-      $form['#validate'][] = 'artsci_core_menu_link_analytics_validate';
+      // if ($form['link']['widget'][0]['options']['attributes']['data-sn-event-type']) {
+      //   $form['link']['widget'][0]['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
+      // }
+      // if ($form['link']['widget'][0]['options']['attributes']['data-sn-event-component']) {
+      //   $form['link']['widget'][0]['options']['attributes']['data-sn-event-component']['#default_value'] = 'link';
+      //   $form['link']['widget'][0]['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
+      // }
+      // $form['#validate'][] = 'artsci_core_menu_link_analytics_validate';
       break;
 
     case 'artsci_core_region_settings':
@@ -1077,6 +1077,7 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
       }
 
       break;
+
 
     case 'workbench_email_template_add_form':
       // Provide some defaults for hand-holding purposes.
@@ -1471,25 +1472,6 @@ function artsci_core_preprocess_block(&$variables) {
           $variables['#cache']['tags'][] = 'node:' . $node->id();
         }
 
-        // Add the login link if we didn't break out.
-        $variables['content']['login_link'] = [
-          '#type' => 'link',
-          '#title' => t('HawkID Login'),
-          '#url' => Url::fromRoute('samlauth.saml_controller_login', [
-            'destination' => $request->getRequestUri(),
-          ]),
-          '#prefix' => '<p class="text-align-center">',
-          '#suffix' => '</p>',
-          '#attributes' => [
-            'class' => [
-              'bttn',
-              'bttn--primary',
-              'bttn--caps',
-            ],
-            'rel' => 'nofollow',
-          ],
-        ];
-
         // Try cache contexts instead of max-age=0.
         $variables['#cache']['contexts'][] = 'user.roles';
         $variables['#cache']['contexts'][] = 'url.path';
@@ -1514,10 +1496,6 @@ function artsci_core_token_info(): array {
   $info['tokens']['node']['revision_log'] = [
     'name' => t('Revision log message'),
     'description' => t('Outputs the revision log message with a prepended label.'),
-  ];
-  $info['tokens']['artsci_core']['favicon_assets_path'] = [
-    'name' => 'Favicon assets path',
-    'description' => 'A token to override the default favicons path.',
   ];
   return $info;
 }
@@ -1546,11 +1524,6 @@ function artsci_core_tokens($type, $tokens, array $data, array $options, Bubblea
 
       // Find the desired token by name.
       switch ($name) {
-        case 'favicon_assets_path':
-          $favicon_path = $uihc_site ? '/profiles/custom/artsci/assets/uihc_favicons/' : '/profiles/custom/artsci/assets/';
-          $replacements[$original] = $config->get('artsci_core.favicon_assets_path') ?? $favicon_path;
-
-          break;
 
         case 'combined_org':
           $site_settings = $config_factory->getEditable('system.site');

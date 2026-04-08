@@ -201,7 +201,7 @@ class LayoutBuilderStylesHelper {
         'default' => 'headline_large',
       ],
       'list_format' => [
-        'default' => 'list_format_list',
+        'default' => 'list_format_grid',
       ],
       'media_format' => [
         'default' => 'media_format_widescreen',

@@ -115,7 +115,7 @@ tabs:
     component:
       assets/css/components/tabs.css: {}
   js:
-    artsci/assets/js/tabs.js: {}
+    assets/js/tabs.js: {}
 header-sticky:
   js:
     assets/js/brand-bar.js: { attributes: { type: module } }
@@ -133,7 +133,7 @@ slider:
       assets/css/components/slider.css: {}
       assets/css/components/banner.css: {}
   js:
-    artsci/assets/js/slider.js: {}
+    assets/js/slider.js: {}
 remote-video:
   css:
     component:
@@ -143,7 +143,7 @@ lazy-load-animation:
     assets/js/lazy_load_animation.js: {}
 video:
   js:
-    artsci/assets/js/video.js: {}
+    assets/js/video.js: {}
 hero:
   css:
     component:

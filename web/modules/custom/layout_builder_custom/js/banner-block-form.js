@@ -1,6 +1,65 @@
 (function (Drupal, once) {
 
   'use strict';
+  Drupal.behaviors.bannerBlockFormMediaType = {
+    attach: function (context, settings) {
+      // Find the media type tracker input.
+      const trackers = once('banner-media-type', '[data-media-type-tracker]', context);
+      
+      trackers.forEach(function (tracker) {
+        // Find the media library widget container.
+        const form = tracker.closest('form');
+        if (!form) return;
+
+        const mediaField = form.querySelector('[data-drupal-selector*="field-artsci-banner-image"]');
+        if (!mediaField) return;
+
+        // Function to update tracker based on selected media.
+        const updateMediaType = function () {
+          // Look for the selected media item's data.
+          const selectedItem = mediaField.querySelector('.media-library-item[data-media-library-item-delta]');
+          
+          if (selectedItem) {
+            // Try to get media type from data attribute or fetch via AJAX.
+            const mediaId = mediaField.querySelector('input[type="hidden"][name*="target_id"]')?.value ||
+                           mediaField.querySelector('input[type="hidden"][name*="selection"]')?.value;
+            
+            if (mediaId) {
+              // Fetch media type via AJAX.
+              fetch(Drupal.url('layout-builder-custom/media-type/' + mediaId))
+                .then(response => response.json())
+                .then(data => {
+                  tracker.value = data.bundle || '';
+                  // Trigger change event so #states updates.
+                  tracker.dispatchEvent(new Event('change', { bubbles: true }));
+                })
+                .catch(() => {
+                  tracker.value = '';
+                  tracker.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+            }
+          } else {
+            // No media selected.
+            tracker.value = '';
+            tracker.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        };
+
+        // Watch for changes in the media library widget.
+        const observer = new MutationObserver(function (mutations) {
+          updateMediaType();
+        });
+
+        observer.observe(mediaField, {
+          childList: true,
+          subtree: true,
+        });
+
+        // Initial check.
+        updateMediaType();
+      });
+    }
+  };
 
   // Behaviors for banner video and background options.
   Drupal.behaviors.bannerBlock = {

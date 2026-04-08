@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.book.body
+    - field.field.node.book.book_amended_date
     - field.field.node.book.book_owner
     - field.field.node.book.book_tags
     - field.field.node.book.field_book_author
@@ -23,6 +24,7 @@ dependencies:
     - link
     - media_library
     - path
+    - private_content
     - rabbit_hole
     - text
 id: node.book.default

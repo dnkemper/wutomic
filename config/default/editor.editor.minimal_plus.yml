@@ -38,6 +38,17 @@ settings:
       - horizontalLine
       - fontawesome
   plugins:
+    artsci_media_wysiwyg_linkStyles:
+      styles:
+        -
+          label: 'Open in New Window'
+          element: '<a class="link--new-window">'
+        -
+          label: 'Add Arrow'
+          element: '<a class="link--arrow">'
+        -
+          label: 'Button Style'
+          element: '<a class="bttn bttn--outline">'
     ckeditor5_alignment:
       enabled_alignments:
         - center

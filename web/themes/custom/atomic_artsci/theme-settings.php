@@ -21,7 +21,7 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
 
   $form['header'] = [
     '#type' => 'details',
-    '#title' => t('IOWA bar settings'),
+    '#title' => t('Artsci bar settings'),
     '#description' => t('Configure the overall type of header, the style of navigation to be used, and whether or not the header is sticky.'),
     '#weight' => -1000,
     '#open' => TRUE,
@@ -33,8 +33,8 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
     '#title' => t('Site name display'),
     '#description' => t('Select an option'),
     '#options' => [
-      'inline' => t('Display inline with the IOWA bar'),
-      'below' => t('Display below the IOWA bar'),
+      'inline' => t('Display inline with the Artsci bar'),
+      'below' => t('Display below the Artsci bar'),
     ],
     '#default_value' => theme_get_setting('header.type'),
   ];
@@ -144,15 +144,6 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
     '#default_value' => ($top_links_limit ? $top_links_limit : 2),
   ];
 
-  // Change theme style.
-  $form['style'] = [
-    '#type' => 'details',
-    '#title' => t('Color Palette'),
-    '#description' => t('Configure the color palette for the atomic_artsci theme.'),
-    '#weight' => -1000,
-    '#open' => TRUE,
-    '#tree' => TRUE,
-  ];
 
   $form['style']['style_selector'] = [
     '#type' => 'select',
@@ -234,12 +225,6 @@ function atomic_artsci_form_system_theme_settings_alter(&$form, FormStateInterfa
  */
 function atomic_artsci_form_system_theme_settings_submit(&$form, FormStateInterface $form_state) {
   // Set color option based on branding_option.
-  if ($form_state->getValue(['header', 'branding_options']) == 'regents') {
-    $form_state->setValue('style.style_selector', 'gray');
-  }
-  else {
-    $form_state->setValue('style.style_selector', 'brand');
-  }
 
   $nav_style = $form_state->getValue(['header', 'nav_style']);
 

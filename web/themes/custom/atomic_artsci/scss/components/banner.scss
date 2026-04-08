@@ -202,16 +202,14 @@
 // === Pre-title === //
 .banner__pre-title {
 font-family: "ivystyle-sans", "Calibri", sans-serif;
-font-weight: 600;
+font-weight: 700;
 line-height: 150%;
 letter-spacing: 5%;
-text-align: center;
-text-transform: uppercase;
 
 
   &.headline.headline--serif {
     margin-bottom: 1rem;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   &.headline.headline--underline {
@@ -223,7 +221,7 @@ text-transform: uppercase;
 
   &.headline.headline--uppercase {
     margin-bottom: 0.7rem;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   &.headline--large {
@@ -231,7 +229,7 @@ text-transform: uppercase;
   }
 
   &.headline--medium {
-    font-size: clamp(1.2rem, calc(0.4507vw + 1.031rem), 1.2rem);
+    font-size: clamp(1rem, calc(0.4507vw + 1.031rem), 1rem);
   }
 
   &.headline--small {
@@ -267,7 +265,6 @@ text-transform: uppercase;
     font-weight: 400;
     line-height: 140%;
     letter-spacing: 0%;
-    text-align: center;
     
 
     a {
@@ -321,14 +318,14 @@ text-transform: uppercase;
 }
 // Add text shadow to the headline and text when there is
 // no background class.
-.banner:not([class*="bg--"]) {
-  background-color: var(--banner-bg-failsafe);
+// .banner:not([class*="bg--"]) {
+//   background-color: var(--banner-bg-failsafe);
 
   // .headline,
   // .banner__text {
   //   text-shadow: 0 1px 3px rgb(var(--banner-overlay-color-rgb));
   // }
-}
+// }
 // === End: Background colors === //
 
 // === Stacked === //

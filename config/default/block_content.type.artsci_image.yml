@@ -3,6 +3,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: artsci_image
-label: Image
+label: Media
 revision: true
 description: 'A component that allows adding a single image.'

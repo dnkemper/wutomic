@@ -1,5 +1,14 @@
 @use 'abstracts/variables.scss';
 @use 'abstracts/_utilities.scss';
+
+a.link--arrow.arrow.bttn.bttn--primary {
+  &:after {
+    position: unset !important;
+    transform: unset !important;
+    width: unset !important;
+    background-color: unset !important;
+  }
+}
 a.arrow {
   color: black;
     &::after {
@@ -17,9 +26,34 @@ a.arrow {
     line-height: 1;
     margin-right: 15px;
     text-rendering: auto;
+    margin-left: .625rem;
     }
 }
+.section-shield {
+  position: relative;
+  overflow: hidden;
 
+  &::after {
+    content: "";
+    position: absolute;
+    right: -5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 450px;
+    height: 450px;
+    background-color: rgba(255, 255, 255, 0.15);
+    -webkit-mask-image: url('/themes/custom/atomic_artsci/images/wustl-shield.png');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    mask-image: url('/themes/custom/atomic_artsci/images/wustl-shield.png');
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
 .section-ampersand {
   position: relative;
   overflow: hidden;
@@ -1321,7 +1355,11 @@ mark {
   }
 }
 
-
+.list-container--list {
+  .media {
+    display: none !important;
+  }
+}
 .grid--onecol {
   .list-container__inner {
     max-width: 81.875em;
@@ -1968,118 +2006,6 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
   }
 }
 
-// Reverse column order lb style
-
-.section-order__reversed {
-  // sidebar layout
-  &.layout--has-sidebar {
-    .layout__spacing_container {
-      .layout__region--sidebar {
-        order: 2;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-    }
-  }
-  // two column
-  &.layout--twocol {
-    .layout__spacing_container {
-      display: grid;
-
-      .layout__region--first,
-      .layout__region--sidebar,
-      .layout__region--main {
-        order: 2;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      // Layout with card sidebar.
-      .layout__region-container.card {
-        order: 1;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      .layout__region--second,
-      .layout__region--content,
-      .layout__region-container {
-        order: 1;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-      .layout__region-container {
-        margin-bottom: variables.$mobile-height-gutter;
-      }
-    }
-  }
-  // three col reverse column order lb style
-  &.layout--threecol {
-    .layout__spacing_container {
-      display: grid;
-
-      .layout__region--first {
-        order: 3;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      .layout__region--second {
-        order: 2;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      .layout__region--third {
-        order: 1;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-    }
-  }
-  // four col reverse column order lb style
-  &.layout--fourcol {
-    .layout__spacing_container {
-      display: grid;
-
-      .layout__region--first {
-        order: 4;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      .layout__region--second {
-        order: 3;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      .layout__region--third {
-        order: 2;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-
-      .layout__region--fourth {
-        order: 1;
-        @include utilities.breakpoint(md) {
-          order: inherit;
-        }
-      }
-    }
-  }
-}
-
 // Add margins for all stacked layout regions for mobile.
 .layout--fourcol,
 .layout--threecol,
@@ -2092,30 +2018,10 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
     }
   }
 
-
-  // If section order is reversed, add margin back into last-child.
-  &.section-order__reversed {
-    .layout__region:last-child {
-      margin-bottom: variables.$mobile-height-gutter;
-      @include utilities.breakpoint(md) {
-        margin-bottom: 0;
-      }
-    }
-
-    .layout__region:first-child {
-      margin-bottom: 0;
-    }
-  }
-
   // Remove mobile margins if column spacing is removed.
   &.column-spacing__removed {
     .layout__region:not(:last-child) {
       margin-bottom: 0;
-    }
-    &.section-order__reversed {
-      .layout__region:last-child {
-        margin-bottom: 0;
-      }
     }
   }
 }

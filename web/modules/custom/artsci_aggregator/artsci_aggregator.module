@@ -106,11 +106,19 @@ function artsci_aggregator_aggregator_item_view(array &$build, EntityInterface $
   $build['#url'] = $entity->link?->value;
 
   // Get override styles from build array or static variable.
+  // Check layout_builder_custom static first (set by views_pre_render for ListBlock),
+  // then fall back to artsci_aggregator static (legacy).
   $override_styles = $build['#override_styles'] ?? [];
   if (empty($override_styles)) {
-    $static_styles = &drupal_static('artsci_aggregator_card_override_styles');
+    $static_styles = &drupal_static('layout_builder_custom_card_override_styles');
     if (!empty($static_styles)) {
       $override_styles = $static_styles;
+    }
+    else {
+      $static_styles = &drupal_static('artsci_aggregator_card_override_styles');
+      if (!empty($static_styles)) {
+        $override_styles = $static_styles;
+      }
     }
   }
 
@@ -236,7 +244,8 @@ function artsci_aggregator_preprocess_block__inline_block__artsci_aggregator(&$v
   $layout_builder_styles = $variables['elements']['#layout_builder_style'] ?? [];
 
   // Get configuration from block fields.
-  $display_type = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
+    $display_type = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
+
   $per_page = (int) $block->get('field_artsci_aggregator_count')->getString() ?: 10;
   $show_pager = (bool) $block->get('field_artsci_aggregator_pager')->getString();
 
@@ -250,6 +259,8 @@ function artsci_aggregator_preprocess_block__inline_block__artsci_aggregator(&$v
   $view_config = $view_map[$display_type] ?? $view_map['article_block'];
   $view = \Drupal\views\Views::getView($view_config['view']);
   $view_display = $view_config['display'];
+  //   $view = \Drupal\views\Views::getView('aggregator_rss_feed');
+  // $view_display = 'list_block';
 
   if ($view && $view->access($view_display)) {
     $view->setDisplay($view_display);

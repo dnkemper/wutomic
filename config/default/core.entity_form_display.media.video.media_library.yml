@@ -40,6 +40,7 @@ hidden:
   publish_state: true
   replace_file: true
   status: true
+  thumbnail: true
   uid: true
   unpublish_on: true
   unpublish_state: true

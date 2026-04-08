@@ -162,3 +162,102 @@ display:
         - user.permissions
       tags: {  }
       cacheable: false
+  list_block:
+    id: list_block
+    display_title: 'RSS Feed Block'
+    display_plugin: block
+    position: 2
+    display_options:
+      title: ''
+      fields: {  }
+      sorts:
+        timestamp:
+          id: timestamp
+          table: aggregator_item
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: aggregator_item
+          entity_field: timestamp
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
+      arguments:
+        fid:
+          id: fid
+          table: aggregator_item
+          field: fid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: aggregator_item
+          entity_field: fid
+          plugin_id: numeric
+          default_action: ignore
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: fixed
+          default_argument_options:
+            argument: ''
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: true
+          not: false
+      filters: {  }
+      filter_groups:
+        operator: AND
+        groups: {  }
+      defaults:
+        title: false
+        fields: false
+        sorts: false
+        arguments: false
+        filters: false
+        filter_groups: false
+      display_description: 'Block display for aggregator items'
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      block_description: 'RSS Feed Items'
+      block_category: Lists
+      allow:
+        items_per_page: true
+        offset: '0'
+        pager: pager
+        hide_fields: '0'
+        sort_fields: '0'
+        configure_filters: '0'
+        disable_filters: '0'
+        configure_sorts: '0'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+      cacheable: false

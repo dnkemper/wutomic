@@ -75,19 +75,6 @@
     }
   }
 
-  &.artsci-bar--healthcare {
-    &:not(.artsci-bar--narrow) {
-      @include utilities.breakpoint(md) {
-        height: 100px;
-      }
-      .logo--tab {
-        @include utilities.breakpoint(md) {
-          padding-top: 27px;
-        }
-      }
-    }
-  }
-
   .logo--tab {
     margin-right: 20px;
 
@@ -135,28 +122,6 @@
 
   // Styles for the narrow version of the artsci bar.
   &--narrow {
-
-    &.artsci-bar--healthcare {
-      @include utilities.breakpoint(md) {
-        min-height: 50px;
-        position: relative;
-      }
-      .logo--tab {
-        @include utilities.breakpoint(md) {
-          height: 70px;
-          width: 119px;
-          padding: 15px;
-        }
-
-      }
-      .logo-icon {
-        height: 33px;
-
-        @include utilities.breakpoint(md) {
-          height: 41px;
-        }
-      }
-    }
 
 
     @include utilities.breakpoint(md) {

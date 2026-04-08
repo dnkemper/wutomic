@@ -1,17 +1,20 @@
-uuid: 7039cdb2-3d18-47fe-92a6-c252c799c5ce
+uuid: 51a24c54-2640-4102-8496-4bae76092f3c
 langcode: en
 status: true
 dependencies: {  }
-id: section_order_reversed
-label: 'Reverse column order on mobile'
-classes: section-order__reversed
+id: section_background_style_white
+label: White
+classes: bg--white
 type: section
-group: default
+group: background
 block_restrictions: {  }
 layout_restrictions:
+  - layout_onecol
   - layout_twocol
   - layout_threecol
   - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
   - layout_page
   - layout_twocol_card_sidebar
-weight: 23
+weight: -12

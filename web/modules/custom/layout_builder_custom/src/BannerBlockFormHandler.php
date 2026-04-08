@@ -110,6 +110,7 @@ class BannerBlockFormHandler {
     }
 
     // Gradient options details element.
+    // Only visible when background type is media AND media is video/remote_video.
     $form['gradient_options'] = [
       '#type' => 'details',
       '#title' => t('Overlay options'),
@@ -122,10 +123,13 @@ class BannerBlockFormHandler {
         ],
       ],
       '#suffix' => '</div>',
-      // Gradient options visible when background type is media.
       '#states' => [
         'visible' => [
           ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          [
+            [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'video']],
+            [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'remote_video']],
+          ],
         ],
       ],
     ];
@@ -294,15 +298,6 @@ class BannerBlockFormHandler {
     ];
 
     // Duplicate style fields into style options container.
-    // if (isset($form['layout_builder_style_horizontal_alignment'])) {
-    //   $form['layout_builder_style_horizontal_alignment']['#weight'] = 95;
-    // }
-
-    // if (isset($form['layout_builder_style_vertical_alignment'])) {
-    //   $form['layout_builder_style_vertical_alignment']['#weight'] = 96;
-    // }
-
-    // Duplicate style fields into style options container.
     self::createDuplicateField($form, 'layout_builder_style_container', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_banner_card_background', 'style_options');
@@ -323,7 +318,8 @@ class BannerBlockFormHandler {
       $form['layout_builder_style_banner_card_background']['#states'] = [
         'visible' => [
           ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
-          ':input[name="layout_builder_style_default_duplicate"]' => ['value' => 'banner_offset_content'],        ],
+          ':input[name="layout_builder_style_default_duplicate"]' => ['value' => 'banner_offset_content'],
+        ],
       ];
     }
 
@@ -484,6 +480,16 @@ class BannerBlockFormHandler {
     if ($background_type && !is_null($component)) {
       $component->setThirdPartySetting('layout_builder_custom', 'background_type', $background_type);
     }
+
+    // Save the media type for future reference.
+    $media_type = $form_state->getValue([
+      'settings',
+      'block_form',
+      'media_type_tracker',
+    ]);
+    if ($media_type && !is_null($component)) {
+      $component->setThirdPartySetting('layout_builder_custom', 'media_type', $media_type);
+    }
   }
 
   /**
@@ -513,6 +519,21 @@ class BannerBlockFormHandler {
       // @phpstan-ignore-next-line
       $configuration = $plugin->getConfiguration();
     }
+
+    /*
+     * Add hidden field to track media type for #states.
+     */
+    $default_media_type = self::getDefaultMediaType($component, $configuration);
+
+    $element['media_type_tracker'] = [
+      '#type' => 'hidden',
+      '#default_value' => $default_media_type,
+      '#attributes' => [
+        'data-media-type-tracker' => TRUE,
+        'class' => ['banner-media-type-tracker'],
+      ],
+      '#weight' => 5,
+    ];
 
     /*
      * Assign fields to groups.
@@ -618,11 +639,16 @@ class BannerBlockFormHandler {
       unset($element['field_artsci_banner_image']['widget']['#title']);
     }
 
+    // Autoplay only visible when background type is media AND media is video.
     if (isset($element['field_artsci_banner_autoplay'])) {
       $element['field_artsci_banner_autoplay'] = [
         '#states' => [
           'visible' => [
             ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+            [
+              [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'video']],
+              [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'remote_video']],
+            ],
           ],
         ],
         '#weight' => 40,
@@ -637,6 +663,10 @@ class BannerBlockFormHandler {
       $complete_form['layout_builder_style_media_overlay']['#states'] = [
         'visible' => [
           ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          [
+            [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'video']],
+            [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'remote_video']],
+          ],
         ],
       ];
     }
@@ -645,6 +675,10 @@ class BannerBlockFormHandler {
       $complete_form['layout_builder_style_banner_gradient']['#states'] = [
         'visible' => [
           ':input[name="settings[block_form][background_type]"]' => ['value' => 'media'],
+          [
+            [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'video']],
+            [':input[name="settings[block_form][media_type_tracker]"]' => ['value' => 'remote_video']],
+          ],
         ],
       ];
     }
@@ -706,6 +740,75 @@ class BannerBlockFormHandler {
     }
 
     return $element;
+  }
+
+  /**
+   * Gets the default media type from the existing block content.
+   *
+   * @param \Drupal\layout_builder\SectionComponent $component
+   *   The section component.
+   * @param array $configuration
+   *   The block configuration.
+   *
+   * @return string
+   *   The media bundle type (e.g., 'image', 'video', 'remote_video') or empty.
+   */
+  protected static function getDefaultMediaType($component, array $configuration) {
+    // First check third-party settings for cached media type.
+    $stored_media_type = $component->getThirdPartySetting('layout_builder_custom', 'media_type');
+    if (!empty($stored_media_type)) {
+      return $stored_media_type;
+    }
+
+    // Try to get media type from the block content entity.
+    if (isset($configuration['block_serialized'])) {
+      try {
+        $block_content = unserialize($configuration['block_serialized']);
+        if ($block_content instanceof \Drupal\block_content\BlockContentInterface) {
+          return self::getMediaTypeFromBlockContent($block_content);
+        }
+      }
+      catch (\Exception $e) {
+        // Ignore unserialization errors.
+      }
+    }
+
+    // Try via block_revision_id.
+    if (isset($configuration['block_revision_id'])) {
+      try {
+        $block_content = \Drupal::entityTypeManager()
+          ->getStorage('block_content')
+          ->loadRevision($configuration['block_revision_id']);
+        if ($block_content instanceof \Drupal\block_content\BlockContentInterface) {
+          return self::getMediaTypeFromBlockContent($block_content);
+        }
+      }
+      catch (\Exception $e) {
+        // Ignore loading errors.
+      }
+    }
+
+    return '';
+  }
+
+  /**
+   * Extracts the media type from a block content entity.
+   *
+   * @param \Drupal\block_content\BlockContentInterface $block_content
+   *   The block content entity.
+   *
+   * @return string
+   *   The media bundle type or empty string.
+   */
+  protected static function getMediaTypeFromBlockContent($block_content) {
+    if ($block_content->hasField('field_artsci_banner_image') &&
+        !$block_content->get('field_artsci_banner_image')->isEmpty()) {
+      $media = $block_content->get('field_artsci_banner_image')->entity;
+      if ($media instanceof \Drupal\media\MediaInterface) {
+        return $media->bundle();
+      }
+    }
+    return '';
   }
 
   /**

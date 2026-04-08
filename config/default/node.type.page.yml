@@ -5,6 +5,8 @@ dependencies:
   module:
     - menu_ui
     - node_revision_delete
+    - private_content
+    - scheduler
 third_party_settings:
   menu_ui:
     available_menus:
@@ -26,6 +28,25 @@ third_party_settings:
       status: false
       settings:
         age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
+  private_content:
+    private: 0
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_past_date_created: false
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    show_message_after_update: true
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
 _core:
   default_config_hash: hs9nW8rf2ckLhmXkCgS7Yj5jIsdVZzTa2fLm7wfaL1M
 name: Page

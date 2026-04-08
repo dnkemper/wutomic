@@ -10,32 +10,6 @@
   margin: 0;
   width: 100%;
   transition: all .55s cubic-bezier(.95, 1.25, .375, 1.15);
-
-  &.stat--static {
-    &:hover .stat__content {
-      @include utilities.breakpoint(md) {
-        max-height: 100vh;
-      }
-      @include utilities.breakpoint(md) {
-        @supports (interpolate-size: allow-keywords) {
-          max-height: max-content;
-          overflow: hidden;
-        }
-      }
-    }
-  }
-
-  &:hover .stat__content {
-    @include utilities.breakpoint(md) {
-      max-height: 100vh;
-    }
-    @include utilities.breakpoint(md) {
-      @supports (interpolate-size: allow-keywords) {
-        max-height: max-content;
-        overflow: hidden;
-      }
-    }
-  }
 }
 
 .stat {
@@ -101,14 +75,6 @@
       max-height: 0;
       transition: max-height 0.4s ease-in-out;
       overflow: hidden;
-    }
-
-    .stat--static & {
-      @include utilities.breakpoint(md) {
-        max-height: max-content;
-        transition: none;
-        overflow: unset;
-      }
     }
 
     [class*="bg--black"] &,
@@ -255,10 +221,6 @@
   flex-wrap: wrap;
   cursor: inherit;
   transition: all .55s cubic-bezier(.95, 1.25, .375, 1.15);
-}
-
-.stat:not(.stat--static) {
-  cursor: pointer;
 }
 
 

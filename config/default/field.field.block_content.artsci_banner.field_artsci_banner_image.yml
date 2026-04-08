@@ -7,6 +7,7 @@ dependencies:
     - field.storage.block_content.field_artsci_banner_image
     - media.type.image
     - media.type.remote_video
+    - media.type.video
 _core:
   default_config_hash: 5p6OV6Y82r_HCWFChYgC_16p6citYJZuLw4s19VdGqc
 id: block_content.artsci_banner.field_artsci_banner_image
@@ -25,6 +26,7 @@ settings:
     target_bundles:
       image: image
       remote_video: remote_video
+      video: video
     sort:
       field: _none
       direction: ASC

@@ -166,7 +166,35 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
         case 'inline_block:artsci_card':
 
           unset($build['content']['#theme']);
+  $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
+  
+  // Selector for checking if image field has a selection
+  // Media library stores selections in hidden inputs
+  $image_filled_condition = [
+    ':input[name="settings[block_form][field_artsci_card_image][selection][0]"]' => ['filled' => TRUE],
+  ];
 
+  // Only show media position when image is present
+  $form['layout_builder_style_card_media_position']['#states'] = [
+    'visible' => $image_filled_condition,
+  ];
+  $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+
+  // Only show media format when image is present
+  $form['layout_builder_style_media_format']['#states'] = [
+    'visible' => $image_filled_condition,
+  ];
+
+  // Media size: show when image present AND (circle format OR non-stacked position)
+  $form['layout_builder_style_media_size']['#states'] = [
+    'visible' => [
+      $image_filled_condition,
+      [
+        [':input[name="layout_builder_style_media_format"]' => ['value' => 'media_format_circle']],
+        [':input[name="layout_builder_style_card_media_position"]' => ['!value' => 'card_media_position_stacked']],
+      ],
+    ],
+  ];
           // @phpstan-ignore-next-line
           $selected_styles = $event->getComponent()->get('layout_builder_styles_style');
           // Convert the style list into a map that can be used for overriding

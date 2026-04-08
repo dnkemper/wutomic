@@ -79,13 +79,6 @@ $search-img-path: '../../images/search-01.svg';
     }
   }
 
-  .artsci-bar--full.artsci-bar--healthcare & {
-
-    @include utilities.breakpoint(md) {
-      height: 100px;
-    }
-  }
-
   .artsci-bar--narrow & {
     height: 70px;
     background: none;
@@ -298,12 +291,6 @@ $search-img-path: '../../images/search-01.svg';
       margin-top: 18px;
     }
   }
-
-  .artsci-bar--healthcare.artsci-bar--full & {
-    @include utilities.breakpoint(md) {
-      margin-top: 30px;
-    }
-  }
 }
 
 .search-overlay .artsci-search [type="submit"] {
@@ -495,13 +482,6 @@ $search-img-path: '../../images/search-01.svg';
 .artsci-bar--full.horizontal,
 .artsci-bar--full.mega,
 .artsci-bar--full.toggle {
-  &.artsci-bar--healthcare {
-    .search-button {
-      @include utilities.breakpoint(page-container) {
-        height: 110px;
-      }
-    }
-  }
   .search-button {
     @include utilities.breakpoint(page-container) {
       height: 85px;

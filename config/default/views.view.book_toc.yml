@@ -769,6 +769,7 @@ display:
         title: 'Table of Contents'
         description: ''
         weight: -49
+        enabled: false
         expanded: false
         menu_name: main
         parent: ''

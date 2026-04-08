@@ -13,6 +13,7 @@ layout_restrictions:
   - layout_twocol
   - layout_threecol
   - layout_fourcol
+  - layout_onecol_fixed
   - layout_header
   - layout_page
   - layout_twocol_card_sidebar

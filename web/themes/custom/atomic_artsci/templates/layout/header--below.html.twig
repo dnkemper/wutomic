@@ -14,17 +14,6 @@
   <div class="artsci-bar__below {{ header_nav }}">
     <div class="artsci-bar__container">
 
-      {# {% if logo_path and is_off_brand %}
-        <div class="site-name">
-          <a href="{{ path('<front>') }}"><img alt="{{ site_name }}" src ="{{ logo_path }}" /></a>
-        </div>
-      {% else %}
-        {% include '@atomic_artsci/artsci/site-name.html.twig' with {
-          'site_name': site_name,
-          'site_url': path('<front>'),
-        } %}
-      {% endif %} #}
-
       {% if page.search %}
         {% include '@atomic_artsci/artsci/global/search-toggle.html.twig' with {
           'search_form': page.search,

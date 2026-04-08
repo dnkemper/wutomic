@@ -1,4 +1,4 @@
-import { applyAccordion } from '../../artsci/assets/js/accordion.js';
+import { applyAccordion } from '../../assets/js/accordion.js';
 
 (function ($, Drupal) {
   "use strict";

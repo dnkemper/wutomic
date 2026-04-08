@@ -1,6 +1,6 @@
 uuid: 3df46662-3779-4a6c-9af5-29330a2be4fe
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - artsci_search

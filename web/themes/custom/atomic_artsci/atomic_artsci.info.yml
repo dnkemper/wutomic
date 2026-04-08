@@ -4,7 +4,6 @@ base theme: classy
 description: A flexible theme with a responsive, mobile-first layout.
 package: Custom
 core_version_requirement: ^11 || ^12
-screenshot: screenshot.png
 dependencies:
   - classy:classy
 libraries-override:
@@ -15,9 +14,6 @@ libraries-extend:
     - atomic_artsci/message
 libraries:
   - atomic_artsci/global-styling
-favicon:
-  use_default: false
-  path: favicon.ico
 regions:
   page_top: 'Page top'
   header: 'Header'

@@ -27,14 +27,14 @@ class BannerBlockFormHandlerTest extends UnitTestCase {
       [
         'uri' => 'https://example.com',
         'title' => 'Learn more',
-        'options' => [
-          'attributes' => [
-            'data-sn-event' => '',
-            'data-sn-event-type' => 'click',
-            'data-sn-event-component' => 'button',
-            'data-sn-event-label' => 'Example',
-          ],
-        ],
+        // 'options' => [
+        //   'attributes' => [
+        //     'data-sn-event' => '',
+        //     'data-sn-event-type' => 'click',
+        //     'data-sn-event-component' => 'button',
+        //     'data-sn-event-label' => 'Example',
+        //   ],
+        // ],
       ],
     ]);
     $form_state->setValue([
@@ -77,14 +77,14 @@ class BannerBlockFormHandlerTest extends UnitTestCase {
       [
         'uri' => 'https://example.com',
         'title' => 'Apply now',
-        'options' => [
-          'attributes' => [
-            'data-sn-event' => 'Apply Now',
-            'data-sn-event-type' => 'click',
-            'data-sn-event-component' => 'button',
-            'data-sn-event-label' => '',
-          ],
-        ],
+        // 'options' => [
+        //   'attributes' => [
+        //     'data-sn-event' => 'Apply Now',
+        //     'data-sn-event-type' => 'click',
+        //     'data-sn-event-component' => 'button',
+        //     'data-sn-event-label' => '',
+        //   ],
+        // ],
       ],
     ]);
 

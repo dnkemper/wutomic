@@ -14,20 +14,6 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\artsci_media_wysiwyg\Plugin\media\Source\Panopto;
 
 /**
- * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
- */
-function artsci_media_wysiwyg_field_widget_single_element_panopto_url_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
-  // There is a second help message that adds more confusion to the link field.
-  // @see: LinkWidget::formElement().
-  // Extra checking due to "Cannot use object of type
-  // Drupal\Core\StringTranslation\TranslatableMarkup as array"
-  // error when editing field.
-  if (isset($element['uri']['#description']) && is_array($element['uri']['#description']) && isset($element['uri']['#description']['#items'][1])) {
-    unset($element['uri']['#description']['#items'][1]);
-  }
-}
-
-/**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
 function artsci_media_wysiwyg_inline_entity_form_entity_form_alter(&$entity_form, &$form_state) {
@@ -47,44 +33,6 @@ function artsci_media_wysiwyg_form_fontawesome_icon_dialog_alter(&$form, FormSta
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function artsci_media_wysiwyg_media_presave($entity): void {
-  // Only process Panopto media.
-  if ($entity->bundle() === 'panopto') {
-    // Only proceed if we have a source field value.
-    $source_field = 'field_media_panopto_url';
-    if (!$entity->hasField($source_field) || $entity->get($source_field)->isEmpty()) {
-      return;
-    }
-    // Get the source field value.
-    $source_field_value = $entity->get($source_field)->getValue();
-    $parsed = UrlHelper::parse($source_field_value[0]['uri']);
-    $id = $parsed['query']['id'];
-
-    try {
-      $url_response = \Drupal::httpClient()->get(
-        Panopto::BASE_URL . '/Panopto/Pages/Embed.aspx',
-        ['query' => ['id' => $id]]
-      );
-      $html = $url_response->getBody();
-      $document = Html::load($html);
-      $title = $document->getElementsByTagName('title')->item(0)?->textContent;
-      // Trim up the title.
-      if ($title) {
-        // Trim any extra whitespace.
-        $title = trim($title);
-        $source_field_value[0]['title'] = $title;
-        $entity->set('field_media_panopto_url', $source_field_value);
-      }
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('artsci_media_wysiwyg')->error('Failed to retrieve and save Panopto video information: @error', ['@error' => $e->getMessage()]);
-    }
-  }
-}
-
-/**
  * Implements hook_form_FORMID_alter().
  */
 function artsci_media_wysiwyg_form_editor_media_dialog_alter(&$form, FormStateInterface $form_state) {
@@ -100,103 +48,6 @@ function artsci_media_wysiwyg_form_media_library_add_form_alter(&$form, FormStat
   $form['#attached']['library'][] = 'artsci_media_wysiwyg/media_overrides';
 }
 
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function artsci_media_wysiwyg_media_update(EntityInterface $entity) {
-  // If not local, try to clear the varnish cache for the file.
-  // if (\Drupal::moduleHandler()->moduleExists('acquia_purge')) {
-  //   $purgeInvalidationFactory = \Drupal::service('purge.invalidation.factory');
-  //   $purgeQueuers = \Drupal::service('purge.queuers');
-  //   $purgeQueue = \Drupal::service('purge.queue');
-  //   $queuer = $purgeQueuers->get('coretags');
-  //   $invalidations = [];
-
-  //   switch ($entity->bundle()) {
-  //     case 'file':
-  //       $field = 'field_media_file';
-  //       break;
-
-  //     case 'audio':
-  //       $field = 'field_media_audio_file';
-  //       break;
-
-  //     case 'image':
-  //       $field = 'field_media_image';
-  //       $styles = ImageStyle::loadMultiple();
-  //       break;
-  //   }
-
-  //   if (isset($field) && $entity->hasField($field)) {
-  //     $file = File::load($entity->$field->target_id);
-  //     $invalidations[] = $purgeInvalidationFactory->get('url', $file->createFileUrl(FALSE));
-
-  //     // Note that media_entity_file_replace flushes derivative images.
-  //     if (isset($styles)) {
-  //       foreach ($styles as $style) {
-  //         $invalidations[] = $purgeInvalidationFactory->get('url', $style->buildUrl($file->getFileUri()));
-  //       }
-  //     }
-
-  //     $purgeQueue->add($queuer, $invalidations);
-  //   }
-  // }
-}
-
-/**
- * Function to import brand icons from the JSON file and create media entities.
- */
-function artsci_media_wysiwyg_media_import_icons() {
-  $theme_path = \Drupal::theme()->getActiveTheme()->getPath();
-  $json_file_path = $theme_path . '/brand-icons/icons.json';
-
-  $json_data = file_get_contents($json_file_path);
-  $data = json_decode($json_data, TRUE);
-  $icons = $data['icons'] ?? [];
-
-  $created_count = 0;
-  $updated_count = 0;
-
-  foreach ($icons as $icon_data) {
-    $file_url = '/themes/custom/atomic_artsci/brand-icons/icons/' . $icon_data['name'] . '-two-color.svg';
-    $alt_text = str_replace('-', ' ', $icon_data['name']);
-    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-
-    // Load or create media entity.
-    $existing_media = $media_storage->loadByProperties([
-      'bundle' => 'brand_icon',
-      'field_media_brand_icon.icon_id' => $icon_data['id'],
-    ]);
-
-    if (empty($existing_media)) {
-      $media = $media_storage->create([
-        'bundle' => 'brand_icon',
-        'name' => $icon_data['name'],
-        'status' => 1,
-        'uid' => 1,
-      ]);
-      $created_count++;
-    }
-    else {
-      $media = reset($existing_media);
-      $updated_count++;
-    }
-
-    $media->setName($icon_data['name']);
-    $media->set('field_media_brand_icon', [
-      'uri' => $file_url,
-      'alt' => $alt_text,
-      'icon_id' => $icon_data['id'],
-    ]);
-
-    $media->save();
-  }
-
-  \Drupal::messenger()->addStatus(t('Icons import completed. Created: @created, Updated: @updated', [
-    '@created' => $created_count,
-    '@updated' => $updated_count,
-  ]));
-}
 
 /**
  * Implements hook_config_schema_info_alter().

@@ -522,8 +522,8 @@ function artsci_form_alter(&$form, FormStateInterface $form_state, $form_id) {
     case 'system_theme_settings':
       if ($access->isForbidden()) {
         $form['theme_settings']['#access'] = FALSE;
-        $form['logo']['#access'] = FALSE;
-        $form['favicon']['#access'] = FALSE;
+        $form['logo']['#access'] = TRUE;
+        $form['favicon']['#access'] = TRUE;
         $form['layout']['#access'] = FALSE;
       }
       break;
@@ -1074,6 +1074,26 @@ function artsci_toolbar() {
         ],
       ],
     ],
+  ];
+  $items['toolbar_menu_olympian_media_wysiwyg'] = [
+    '#type' => 'toolbar_item',
+    'tab' => [
+      '#type' => 'link',
+      '#title' => 'Home',
+      '#url' => Url::fromRoute('<front>'),
+      '#options' => [
+        'attributes' => [
+          'title' => t('Go to front page'),
+          'class' => [
+            'toolbar-item',
+            'toolbar-icon',
+            'toolbar-icon-olympian-media-wysiwyg',
+          ],
+        ],
+      ],
+    ],
+    '#weight' => 0,
+    
   ];
 
   return $items;
