@@ -48,7 +48,6 @@ core/.phpstan-baseline.php text eol=lf whitespace=blank-at-eol,-blank-at-eof,-sp
 # Define binary file attributes.
 # - Do not treat them as text.
 # - Include binary diff in patches instead of "binary files differ."
-*.avif    -text diff
 *.eot     -text diff
 *.exe     -text diff
 *.gif     -text diff
@@ -63,3 +62,21 @@ core/.phpstan-baseline.php text eol=lf whitespace=blank-at-eol,-blank-at-eof,-sp
 *.ttf     -text diff
 *.woff    -text diff
 *.woff2   -text diff
+
+# =============================================================================
+# Upstream-managed files: always take the upstream version on merge.
+#
+# "merge=ours" keeps the version from the branch being merged INTO — which
+# during a Pantheon upstream update is the upstream itself. This prevents
+# site-level divergence from causing conflicts on every upstream apply.
+#
+# composer.lock: upstream is the single source of truth. Sites must never
+# run `composer require/update` directly; all dependency changes go in deps.
+#
+# pantheon.yml / pantheon.upstream.yml / .github/workflows/*: platform and
+# CI files should only ever be updated via the upstream, never at site level.
+# =============================================================================
+composer.lock            merge=ours
+pantheon.yml             merge=ours
+pantheon.upstream.yml    merge=ours
+.github/workflows/*      merge=ours
