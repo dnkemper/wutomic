@@ -12,7 +12,7 @@
         const $form_wrapper = $(this).parent().parent().parent();
         const $image_format_field = $form_wrapper.find('.form-item-layout-builder-style-media-format').find('select');
         const $image_size_field_default = $form_wrapper.find('.form-item-layout-builder-style-media-size').find('select');
-        const $image_small_field = $form_wrapper.find('.form-item-layout-builder-style-media-size').find('select option[value="media_size_small"]');
+        const $image_small_field = $form_wrapper.find('.form-item-layout-builder-style-media-size').find('select option[value="media_size_large"]');
 
         if ($image_format_field.length || $image_small_field.length) {
           // Check if the referenced media is a video.

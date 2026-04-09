@@ -207,7 +207,7 @@ class LayoutBuilderStylesHelper {
         'default' => 'media_format_widescreen',
       ],
       'media_size' => [
-        'default' => 'media_size_small',
+        'default' => 'media_size_large',
       ],
       'menu_orientation' => [
         'default' => 'block_menu_vertical',

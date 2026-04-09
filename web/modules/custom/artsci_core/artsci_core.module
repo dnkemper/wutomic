@@ -1518,7 +1518,6 @@ function artsci_core_tokens($type, $tokens, array $data, array $options, Bubblea
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('artsci_core.settings');
     $theme_config = $config_factory->getEditable('atomic_artsci.settings');
-    $uihc_site = ($theme_config->get('header.branding_options') == 'uihc');
 
     foreach ($tokens as $name => $original) {
 
@@ -1527,12 +1526,9 @@ function artsci_core_tokens($type, $tokens, array $data, array $options, Bubblea
 
         case 'combined_org':
           $site_settings = $config_factory->getEditable('system.site');
-          $combined_org = $config->get('artsci_core.org_name') ?? 'The University of Iowa';
+          $combined_org = $config->get('artsci_core.org_name') ?? 'Washington University in St. Louis';
           $has_parent = $site_settings->get('has_parent');
 
-          if ($uihc_site) {
-            $combined_org = 'University of Iowa Health Care';
-          }
           if ($has_parent) {
             $parent_org = $site_settings->get('parent.name');
             $combined_org = $parent_org . ' | ' . $combined_org;
@@ -2153,5 +2149,55 @@ function artsci_core_configure_fontawesome_icon_field(array &$icon_element, $che
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function artsci_core_form_google_analytics_admin_settings_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Restrict access to some Google Analytics form items for all roles
+  // except administrator.
+  /** @var Drupal\artsci_core\Access\ArtsciCoreAccess $check */
+  $check = \Drupal::service('artsci_core.access_checker');
+
+  /** @var Drupal\Core\Access\AccessResultInterface $access */
+  $access = $check->access(\Drupal::currentUser()->getAccount());
+
+  $default_paths = [
+    '/admin',
+    '/admin/*',
+    '/batch',
+    '/node/add*',
+    '/node/*/*',
+    '/user/*/*',
+  ];
+
+  $description_addition = '<br /><br /><strong>The default Artsci pages to exclude are:</strong><br>' .
+    implode('<br>', $default_paths);
+
+  $form['tracking']['page_visibility_settings']['google_analytics_visibility_request_path_pages']['#description'] .= $description_addition;
+
+  if ($access->isForbidden()) {
+    $form['advanced']['#access'] = FALSE;
+    // Disable access to all tracking config except dimensions and metrics.
+    $allowed_children = ['parameters', 'page_visibility_settings'];
+    foreach (Element::children($form['tracking']) as $child) {
+      if (!in_array($child, $allowed_children)) {
+        $form['tracking'][$child]['#access'] = FALSE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_metatags_alter().
+ */
+function artsci_core_metatags_alter(array &$metatags, array &$context) {
+  // Append the page number to the title, if it is set and greater than 0.
+  $page = \Drupal::service('pager.parameters')->findPage();
+
+  if ($page) {
+    $metatags['title'] .= " | Page {$page}";
   }
 }

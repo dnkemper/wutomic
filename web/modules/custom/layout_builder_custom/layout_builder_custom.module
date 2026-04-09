@@ -288,9 +288,21 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
         // Modifications to $lb_styles_extra_settings based on block plugin.
         switch ($block->getPluginId()) {
-
+          case 'inline_block:artsci_card':
+            $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+            
+            // Hide margin field - will default to block_margin_default_removed.
+            if (isset($form['layout_builder_style_margin'])) {
+              $form['layout_builder_style_margin']['#access'] = FALSE;
+            }
+            
+            // Hide default/card style field - will default to card_style_button_position.
+            if (isset($form['layout_builder_style_default'])) {
+              $form['layout_builder_style_default']['#access'] = FALSE;
+            }
+            break;
           // Media left, media circle, and no border are the defaults.
-          case 'inline_block:artsci_events':
           case 'inline_block:artsci_aggregator':
           case 'views_block:events-card_list':
           case 'views_block:events_list_block-card_list':
@@ -636,54 +648,6 @@ function _layout_builder_custom_block_validate(array &$form, FormStateInterface 
         LinkAnalyticsHelper::sanitizeLinkAnalyticsAttributes($form_state, 'field_artsci_cta_link', 'button');
         break;
 
-      case 'inline_block:artsci_button':
-        LinkAnalyticsHelper::sanitizeLinkAnalyticsAttributes($form_state, 'field_artsci_button_link', 'button');
-        break;
-
-      case 'inline_block:artsci_events':
-        // Require time range if date_range timeframe is selected.
-        if ($form_state->getValue('settings')['block_form']['field_artsci_events_timeframe'][0]['value'] === 'date_range') {
-          if (empty($form_state->getValue([
-            'settings',
-            'block_form',
-            'field_artsci_events_date_range',
-            0,
-            'time_wrapper',
-            'value',
-          ]))) {
-            $form_state->setErrorByName('settings][block_form][field_artsci_events_date_range][0][time_wrapper][value',
-              t('Provide a date range.'));
-          }
-          else {
-            // Restrict time range values.
-            $min = $form['settings']['block_form']['field_artsci_events_date_range']['widget'][0]['time_wrapper']['value']['#attributes']['min'];
-            $max = $form['settings']['block_form']['field_artsci_events_date_range']['widget'][0]['time_wrapper']['value']['#attributes']['max'];
-            if ($min && $max) {
-              $min = strtotime($min);
-              $max = strtotime($max);
-              $start = $form_state->getValue([
-                'settings',
-                'block_form',
-                'field_artsci_events_date_range',
-              ])[0]['time_wrapper']['value']->format('U');
-              $end = $form_state->getValue([
-                'settings',
-                'block_form',
-                'field_artsci_events_date_range',
-              ])[0]['time_wrapper']['end_value']->format('U');
-              if ($start < $min || $start > $max) {
-                $form_state->setErrorByName('settings][block_form][field_artsci_events_date_range][0][time_wrapper][end_value',
-                  t('Invalid start date.'));
-              }
-              if ($end < $min || $end > $max) {
-                $form_state->setErrorByName('settings][block_form][field_artsci_events_date_range][0][time_wrapper][end_value',
-                  t('Invalid end date.'));
-              }
-            }
-          }
-        }
-        break;
-
       case 'inline_block:artsci_statistic':
         $block_form = $form_state->getValue('settings')['block_form'];
         $prefix = $block_form['field_artsci_statistic_title_pre'][0]['value'];
@@ -736,10 +700,89 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
       case 'inline_block:artsci_banner':
         BannerBlockFormHandler::submitForm($form, $form_state);
         break;
-
-      case 'inline_block:artsci_aggregator':
       case 'inline_block:artsci_card':
-      case 'inline_block:artsci_events':
+        // Force default values for hidden style fields.
+        $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
+        $form_state->setValue('layout_builder_style_default', 'card_style_button_position');
+                $media_position = $form_state->getValue('layout_builder_style_card_media_position');
+        $media_format = $form_state->getValue('layout_builder_style_media_format');
+
+        // If the media position is stacked and the media format is square or
+        // widescreen, set the media size to large.
+        if ($media_position === '' && in_array($media_format, [
+          'media_format_widescreen',
+          'media_format_square',
+        ])) {
+          $form_state->setValue('layout_builder_style_media_size', 'media_size_medium');
+        }
+
+        if ($block->getPluginId() === 'inline_block:artsci_card') {
+          // Remove image or icon based on media_options selection.
+          $media_option = $form_state->getValue([
+            'settings',
+            'block_form',
+            'media_types',
+          ]);
+
+          if ($media_option) {
+
+            $form_image_selection = [
+              'settings',
+              'block_form',
+              'field_artsci_card_image',
+              'selection',
+            ];
+
+            $form_icon_selection = [
+              'settings',
+              'block_form',
+              'field_icon',
+              0,
+              'value',
+              'icon',
+            ];
+
+            if ($media_option === 'image') {
+              if ($form_state->hasValue($form_icon_selection)) {
+                $form_state->unsetValue($form_icon_selection);
+              }
+            }
+            elseif ($media_option === 'icon') {
+              if ($form_state->hasValue($form_image_selection)) {
+                $form_state->unsetValue($form_image_selection);
+              }
+            }
+
+            // Save as a third-party setting.
+            if (!empty($media_option)) {
+              $component->setThirdPartySetting('layout_builder_custom', 'media_types', $media_option);
+            }
+          }
+
+          // Make sure button display field is checked
+          // if the link title field is filled in.
+          $link_title = $form_state->getValue(
+            [
+              'settings',
+              'block_form',
+              'field_artsci_card_link',
+            ]
+            )[0]['title'];
+          if ($link_title) {
+            $form_state->setValue(
+            [
+              'settings',
+              'block_form',
+              'field_artsci_card_button_display',
+            ],
+            [
+              'value' => 1,
+            ],
+            );
+          }
+        }
+        break;
+      case 'inline_block:artsci_aggregator':
       case 'views_block:article_list_block-list_article':
       case 'views_block:page_list_block-list_page':
       case 'views_block:events-card_list':
@@ -881,31 +924,12 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
       case 'inline_block:artsci_banner':
         return BannerBlockFormHandler::processElement($element, $form_state);
 
-      case 'inline_block:artsci_button':
-        if (isset($element['field_artsci_button_link'])) {
-          $element['field_artsci_button_link']['widget'][0]['title']['#maxlength'] = 25;
-          if (isset($element['field_artsci_button_link']['widget'][1])) {
-            $element['field_artsci_button_link']['widget'][1]['title']['#maxlength'] = 25;
-          }
-          if (isset($element['field_artsci_button_link']['widget'][2])) {
-            $element['field_artsci_button_link']['widget'][2]['title']['#maxlength'] = 25;
-          }
-        }
-
-        // Check the max_delta to see how many button links have been added
-        // and unset the add more button if we've reached the third link.
-        if (isset($element['field_artsci_button_link']) &&
-        $element['field_artsci_button_link']['widget']['#max_delta'] >= 2) {
-          unset($element['field_artsci_button_link']['widget']['add_more']);
-          // If we're editing a button with 3 existing links
-          // we also need to unset the fourth pre-added link field.
-          if (isset($element['field_artsci_button_link']['widget'][3])) {
-            unset($element['field_artsci_button_link']['widget'][3]);
-          }
-        }
-        break;
-
       case 'inline_block:artsci_card':
+        // Hide heading size field and default to h2.
+        if (isset($element['field_artsci_card_title']['widget'][0]['container']['size'])) {
+          $element['field_artsci_card_title']['widget'][0]['container']['size']['#access'] = FALSE;
+          $element['field_artsci_card_title']['widget'][0]['container']['size']['#default_value'] = 'h2';
+        }
         if (isset($element['field_artsci_card_button_display'])) {
           $element['field_artsci_card_button_display']['widget']['#options']['_none'] = 'Use site default';
           $element['field_artsci_card_button_display']['widget']['#description'] .= t('&nbsp;If "Use site default" is selected, this setting can be changed on the <a href="@settings_url">SiteNow Pages settings</a>.', [
@@ -919,28 +943,6 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
               ],
               ':input[name="settings[block_form][field_artsci_card_link][0][title]"]' => [
                 'filled' => FALSE,
-              ],
-            ],
-          ];
-        }
-        break;
-
-      case 'inline_block:artsci_events':
-        if (isset($element['field_artsci_events_date_range'])) {
-          // Show date range field when timeframe is set to date_range.
-          $element['field_artsci_events_date_range']['#states'] = [
-            'visible' => [
-              ':input[name="settings[block_form][field_artsci_events_timeframe]"]' => [
-                'value' => 'date_range',
-              ],
-            ],
-          ];
-        }
-        if (isset($element['field_collection_more_path'])) {
-          $element['field_collection_more_path']['#states'] = [
-            'visible' => [
-              ':input[name="settings[block_form][field_collection_more][value]"]' => [
-                'checked' => TRUE,
               ],
             ],
           ];
