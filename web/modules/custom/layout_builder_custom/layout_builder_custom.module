@@ -316,6 +316,17 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           case 'views_block:article_list_block-list_article':
             $lb_styles_extra_settings['border']['default'] = 'no_border';
             break;
+          
+          case 'inline_block:featured_content':
+            // Hide list format field - will default to grid.
+            if (isset($form['layout_builder_style_list_format'])) {
+              $form['layout_builder_style_list_format']['#access'] = FALSE;
+            }
+            // Hide margin field - will default to block_margin_default_removed.
+            if (isset($form['layout_builder_style_margin'])) {
+              $form['layout_builder_style_margin']['#access'] = FALSE;
+            }
+            break;
         }
 
         // Loop through map of default styles and append text indicating
@@ -782,6 +793,11 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
           }
         }
         break;
+      case 'inline_block:featured_content':
+        $form_state->setValue('layout_builder_style_list_format', 'list_format_grid');
+        $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
+        
+        break;
       case 'inline_block:artsci_aggregator':
       case 'views_block:article_list_block-list_article':
       case 'views_block:page_list_block-list_page':
@@ -910,14 +926,20 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
 
     switch ($block->getPluginId()) {
       case 'inline_block:artsci_text_area':
-        if (isset($element['field_artsci_headline'])) {
-          // Unset the unnecessary 'child_heading_size' field option.
-          unset($element['field_artsci_headline']['widget'][0]['container']['child_heading_size']);
-          // Update the help text.
-          $element['field_artsci_headline']['widget'][0]['container']['heading_size']['#description'] =
-            t('The heading size for the block title.');
-          // Add in the 'h6' option.
-          $element['field_artsci_headline']['widget'][0]['container']['heading_size']['#options']['h6'] = 'Heading 6';
+        if (isset($element['field_artsci_headline']['widget'][0]['container'])) {
+          $container = &$element['field_artsci_headline']['widget'][0]['container'];
+          
+          // Hide heading size field and default to h2.
+          if (isset($container['heading_size'])) {
+            $container['heading_size']['#access'] = FALSE;
+            $container['heading_size']['#default_value'] = 'h2';
+          }
+          
+          // Hide child heading size field and default to h2.
+          if (isset($container['child_heading_size'])) {
+            $container['child_heading_size']['#access'] = FALSE;
+            $container['child_heading_size']['#default_value'] = 'h2';
+          }
         }
         break;
 
@@ -950,12 +972,20 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
         break;
 
       case 'inline_block:artsci_collection':
-        if (isset($element['field_artsci_headline'])) {
-          // Update the help text.
-          $element['field_artsci_headline']['widget'][0]['container']['heading_size']['#description'] =
-            t('The heading size for the block title. Accordion item headings will be set one heading level lower. Does not apply to descriptive list.');
-          $element['field_artsci_headline']['widget'][0]['container']['child_heading_size']['#description'] =
-            t('The heading size for all accordion headings. Does not apply to descriptive list.');
+        if (isset($element['field_artsci_headline']['widget'][0]['container'])) {
+          $container = &$element['field_artsci_headline']['widget'][0]['container'];
+          
+          // Hide heading size field and default to h2.
+          if (isset($container['heading_size'])) {
+            $container['heading_size']['#access'] = FALSE;
+            $container['heading_size']['#default_value'] = 'h2';
+          }
+          
+          // Hide child heading size field and default to h2.
+          if (isset($container['child_heading_size'])) {
+            $container['child_heading_size']['#access'] = FALSE;
+            $container['child_heading_size']['#default_value'] = 'h2';
+          }
         }
 
         // Default to multiselect and remove the empty option.
@@ -1000,9 +1030,24 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
           $element['field_artsci_cta_summary']['widget'][0]['#format'] = 'plain_text';
         }
         break;
-
-      case 'inline_block:artsci_event':
-        artsci_core_configure_fontawesome_icon_field($element['field_artsci_event_icon']['widget'][0]);
+      case 'inline_block:artsci_aggregator':
+      case 'inline_block:featured_content':
+        if (isset($element['field_artsci_headline']['widget'][0]['container'])) {
+          $container = &$element['field_artsci_headline']['widget'][0]['container'];
+          
+          // Hide heading size field and default to h2.
+          if (isset($container['heading_size'])) {
+            $container['heading_size']['#access'] = FALSE;
+            $container['heading_size']['#default_value'] = 'h2';
+          }
+          
+          // Hide child heading size field and default to h2.
+          if (isset($container['child_heading_size'])) {
+            $container['child_heading_size']['#access'] = FALSE;
+            $container['child_heading_size']['#default_value'] = 'h2';
+          }
+        }
+      
         break;
 
     }
