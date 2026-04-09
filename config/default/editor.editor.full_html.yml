@@ -41,17 +41,6 @@ settings:
       - redo
       - horizontalLine
   plugins:
-    artsci_media_wysiwyg_linkStyles:
-      styles:
-        -
-          label: 'Open in New Window'
-          element: '<a class="link--new-window">'
-        -
-          label: 'Add Arrow'
-          element: '<a class="link--arrow">'
-        -
-          label: 'Button Style'
-          element: '<a class="bttn bttn--primary">'
     ckeditor5_alignment:
       enabled_alignments:
         - center
@@ -173,14 +162,9 @@ settings:
         -
           label: 'Button Secondary'
           element: '<a class="bttn bttn--secondary">'
-    editor_advanced_link_link:
-      enabled_attributes:
-        - aria-label
-        - class
-        - id
-        - rel
-        - target
-        - title
+        -
+          label: 'Add Arrow'
+          element: '<a class="link--arrow">'
     linkit_extension:
       linkit_enabled: true
       linkit_profile: default

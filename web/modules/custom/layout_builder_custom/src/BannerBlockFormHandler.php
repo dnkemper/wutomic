@@ -92,8 +92,10 @@ class BannerBlockFormHandler {
 
     // Duplicate headline fields into headline group.
     self::createDuplicateField($form, 'layout_builder_style_headline_type', 'headline_group');
-    self::createDuplicateField($form, 'layout_builder_style_headline_size', 'headline_group');
-
+    // self::createDuplicateField($form, 'layout_builder_style_headline_size', 'headline_group');
+    if (isset($form['layout_builder_style_headline_size'])) {
+      $form['layout_builder_style_headline_size']['#access'] = FALSE;
+    }
     /*
      * Background section.
      */
@@ -296,10 +298,13 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
       '#open' => TRUE,
       '#suffix' => '</div>',
     ];
+    if (isset($form['layout_builder_style_banner_height'])) {
+      $form['layout_builder_style_banner_height']['#access'] = FALSE;
+    }
 
     // Duplicate style fields into style options container.
     self::createDuplicateField($form, 'layout_builder_style_container', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
+    // self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_banner_card_background', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_default', 'style_options');
@@ -328,7 +333,7 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
      */
 
     // Move unique_id to the bottom.
-    $form['unique_id']['#weight'] = 200;
+    $form['unique_id']['#weight'] = -200;
 
     // Make sure the actions (buttons) come after everything.
     if (isset($form['actions'])) {
@@ -424,6 +429,9 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
     if ($heading_style) {
       $form_state->setValue('layout_builder_style_headline_type', $heading_style);
     }
+    // Force default values for hidden style fields.
+    $form_state->setValue('layout_builder_style_headline_size', 'headline_size_large');
+    $form_state->setValue('layout_builder_style_banner_height', 'banner_height_medium');
 
     // Gradient midpoint checkbox.
     $adjust_gradient = $form_state->getValue(['gradient_options', 'adjust_gradient_midpoint']);

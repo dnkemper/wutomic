@@ -3,6 +3,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: artsci_aggregator
-label: 'Content Block Displays'
+label: 'RSS Feeds'
 revision: false
 description: 'Use <em>RSS feeds</em> to display the most recent items from one or more aggregator feeds defined on the site.'
