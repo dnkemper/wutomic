@@ -244,37 +244,44 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
         ],
       ];
     }
-    $form['layout_group_heading'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'h3',
-      '#value' => t('Layout'),
-      '#weight' => 94,
-      '#attributes' => ['class' => ['heading-a']],
-      '#prefix' => '<div class="off-canvas-background padding--inline--md padding--block-start--md margin--block-start--md">',
-    ];
+    // $form['layout_group_heading'] = [
+    //   '#type' => 'html_tag',
+    //   '#tag' => 'h3',
+    //   '#value' => t('Layout'),
+    //   '#weight' => 94,
+    //   '#attributes' => ['class' => ['heading-a']],
+    //   '#prefix' => '<div class="off-canvas-background padding--inline--md padding--block-start--md margin--block-start--md">',
+    // ];
 
-    // Layout settings details element.
-    $form['layout_settings'] = [
-      '#type' => 'details',
-      '#title' => t('<span class="element-invisible">Layout</span> Options'),
-      '#weight' => 97,
-      '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
-      '#open' => TRUE,
-      '#suffix' => '</div>',
-    ];
+    // // Layout settings details element.
+    // $form['layout_settings'] = [
+    //   '#type' => 'details',
+    //   '#title' => t('<span class="element-invisible">Layout</span> Options'),
+    //   '#weight' => 97,
+    //   '#attributes' => ['class' => ['off-canvas-form-group__collapsible']],
+    //   '#open' => TRUE,
+    //   '#suffix' => '</div>',
+    // ];
 
     // Set weights for layout fields.
     if (isset($form['layout_builder_style_horizontal_alignment'])) {
-      $form['layout_builder_style_horizontal_alignment']['#weight'] = 95;
+      $form['layout_builder_style_horizontal_alignment']['#weight'] = 5;
+      // $form['layout_builder_style_horizontal_alignment']['#access'] = FALSE;
     }
 
     if (isset($form['layout_builder_style_vertical_alignment'])) {
-      $form['layout_builder_style_vertical_alignment']['#weight'] = 96;
+      $form['layout_builder_style_vertical_alignment']['#weight'] = 6;
+      // $form['layout_builder_style_vertical_alignment']['#access'] = FALSE;
+    }
+
+    // Hide margin field - will default to block_margin_default_removed.
+    if (isset($form['layout_builder_style_margin'])) {
+      $form['layout_builder_style_margin']['#access'] = FALSE;
     }
 
     // Duplicate layout fields into layout settings container.
-    self::createDuplicateField($form, 'layout_builder_style_vertical_alignment', 'layout_settings');
-    self::createDuplicateField($form, 'layout_builder_style_horizontal_alignment', 'layout_settings');
+    // self::createDuplicateField($form, 'layout_builder_style_vertical_alignment', 'layout_settings');
+    // self::createDuplicateField($form, 'layout_builder_style_horizontal_alignment', 'layout_settings');
 
     /*
      * Styles section.
@@ -303,12 +310,16 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
     }
 
     // Duplicate style fields into style options container.
+    // // self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
+    // self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_container', 'style_options');
-    // self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
     self::createDuplicateField($form, 'layout_builder_style_banner_card_background', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
-    self::createDuplicateField($form, 'layout_builder_style_default', 'style_options');
-
+    // Add alignment fields to style options.
+    self::createDuplicateField($form, 'layout_builder_style_vertical_alignment', 'style_options');
+    self::createDuplicateField($form, 'layout_builder_style_horizontal_alignment', 'style_options');
+        self::createDuplicateField($form, 'layout_builder_style_default', 'style_options');
+    // Remove margin duplicate - now hidden with forced default.
+    // self::createDuplicateField($form, 'layout_builder_style_margin', 'style_options');
     // Only show banner card background when background type is color-pattern.
     if (isset($form['style_options']['layout_builder_style_banner_card_background_duplicate'])) {
       $form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [
@@ -354,14 +365,14 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
     $fields_to_sync = [
       'layout_builder_style_banner_card_background',
       'layout_builder_style_banner_gradient',
-      'layout_builder_style_banner_height',
+      // 'layout_builder_style_banner_height', // Already removed
       'layout_builder_style_button_style',
       'layout_builder_style_container',
       'layout_builder_style_default',
       'layout_builder_style_headline_type',
-      'layout_builder_style_headline_size',
+      // 'layout_builder_style_headline_size', // Already removed
       'layout_builder_style_horizontal_alignment',
-      'layout_builder_style_margin',
+      // 'layout_builder_style_margin', // Remove this
       'layout_builder_style_media_overlay',
       'layout_builder_style_vertical_alignment',
     ];
@@ -432,7 +443,7 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
     // Force default values for hidden style fields.
     $form_state->setValue('layout_builder_style_headline_size', 'headline_size_large');
     $form_state->setValue('layout_builder_style_banner_height', 'banner_height_medium');
-
+    $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
     // Gradient midpoint checkbox.
     $adjust_gradient = $form_state->getValue(['gradient_options', 'adjust_gradient_midpoint']);
 
