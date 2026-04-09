@@ -483,7 +483,7 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
         else {
           // If no media selected, switch to color-pattern with black
           // background.
-          $form_state->setValue('layout_builder_style_background', 'block_background_style_black');
+          $form_state->setValue('layout_builder_style_background', 'block_background_style_white');
           $background_type = 'color-pattern';
         }
       }
@@ -586,6 +586,81 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
       $element['field_artsci_banner_link']['#weight'] = 70;
       $element['field_artsci_banner_link']['#attributes']['class'][] = 'padding--inline--md';
     }
+    // In processElement(), add this logic:
+
+/**
+ * Determine the appropriate default heading level.
+ */
+$default_heading = 'h2';
+
+try {
+  if ($form_object instanceof ConfigureBlockFormBase) {
+    $section_storage = $form_object->getSectionStorage();
+    $sections = $section_storage->getSections();
+    $has_h1 = FALSE;
+
+    foreach ($sections as $section) {
+      foreach ($section->getComponents() as $section_component) {
+        // Skip the current component we're editing.
+        if ($section_component->getUuid() === $component->getUuid()) {
+          continue;
+        }
+
+        $plugin = $section_component->getPlugin();
+        $plugin_id = $plugin->getPluginId();
+
+        // Check for page title block.
+        if ($plugin_id === 'page_title_block' || $plugin_id === 'field_block:node:page:title') {
+          $has_h1 = TRUE;
+          break 2;
+        }
+
+        // Check other banner blocks for h1.
+        if (str_contains($plugin_id, 'artsci_banner')) {
+          $config = [];
+          if (method_exists($plugin, 'getConfiguration')) {
+            $config = $plugin->getConfiguration();
+          }
+
+          // Check serialized block content for heading level.
+          if (isset($config['block_serialized'])) {
+            try {
+              $block_content = unserialize($config['block_serialized']);
+              if ($block_content instanceof \Drupal\block_content\BlockContentInterface &&
+                  $block_content->hasField('field_artsci_banner_title') &&
+                  !$block_content->get('field_artsci_banner_title')->isEmpty()) {
+                $title_value = $block_content->get('field_artsci_banner_title')->first()->getValue();
+                if (isset($title_value['size']) && $title_value['size'] === 'h1') {
+                  $has_h1 = TRUE;
+                  break 2;
+                }
+              }
+            }
+            catch (\Exception $e) {
+              // Ignore.
+            }
+          }
+        }
+      }
+    }
+
+    // If no h1 found, this banner should be h1; otherwise h2.
+    $default_heading = $has_h1 ? 'h2' : 'h1';
+  }
+}
+catch (\Exception $e) {
+  // Fallback to h2 on any error.
+  $default_heading = 'h2';
+}
+
+// Apply the default only if no value is already set.
+if (isset($element['field_artsci_banner_title']['widget'][0]['container']['size'])) {
+  $current_value = $element['field_artsci_banner_title']['widget'][0]['container']['size']['#default_value'] ?? NULL;
+  // Only set default if this is a new block (no existing value).
+  if (empty($current_value) || $current_value === '_none') {
+    $element['field_artsci_banner_title']['widget'][0]['container']['size']['#default_value'] = $default_heading;
+  }
+}
 
     /*
      * Configure background type.
