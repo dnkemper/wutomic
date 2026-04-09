@@ -208,28 +208,6 @@ function atomic_artsci_preprocess_html(&$variables) {
   // Set a variable for whether layout builder is enabled.
   $variables['layout_builder_enabled'] = FALSE;
 
-  $style_selector = theme_get_setting('style.style_selector');
-  if ($style_selector !== NULL && $style_selector !== 'brand') {
-    $variables['#attached']['library'][] = 'atomic_artsci/theme-overrides';
-  }
-
-  if (theme_get_setting('style.style_selector') === 'gray') {
-    $variables['attributes']['class'][] = 'off-brand';
-    $css = ':root {--brand-primary: #d7d7d7!important;}';
-    $variables['#attached']['html_head'][] = [
-      [
-        '#type' => 'html_tag',
-        '#tag' => 'style',
-        '#value' => $css,
-        '#attributes' => [
-          'type' => 'text/css',
-        ],
-        '#weight' => 100,
-      ],
-      'custom_css',
-    ];
-  }
-
   // Only set 'text--serif' if 'fonts.font-family' setting is set to serif.
   if (theme_get_setting('fonts.font-family') === 'serif') {
     $variables['attributes']['class'][] = 'text--serif';
@@ -277,8 +255,6 @@ function atomic_artsci_preprocess_page(&$variables) {
 
   $variables['artsci_logo'] = TRUE;
 
-  $style_selector = theme_get_setting('style.style_selector');
-
   if (!theme_get_setting('logo.use_default')) {
     $logo_path = theme_get_setting('logo.path');
     if (!empty($logo_path)) {
@@ -322,7 +298,7 @@ function atomic_artsci_preprocess_page(&$variables) {
 
 $variables['artsci_url'] = Url::fromRoute('<front>')->toString();
   // This is the homepage.
-  if (\Drupal::getContainer()->getParameter('site.path') === 'sites/artsci.edu') {
+  if (\Drupal::getContainer()->getParameter('site.path') === 'sites/artsci.washu.edu') {
     $variables['header_classes'][] = 'artsci-bar--full';
     $variables['header_type'] = 'homepage';
     $variables['artsci_url'] = \Drupal::request()->getSchemeAndHttpHost();

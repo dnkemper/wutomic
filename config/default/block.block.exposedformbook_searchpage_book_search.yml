@@ -14,7 +14,7 @@ _core:
 id: exposedformbook_searchpage_book_search
 theme: atomic_artsci
 region: header
-weight: 0
+weight: -10
 provider: null
 plugin: 'views_exposed_filter_block:book_search-page_book_search'
 settings:

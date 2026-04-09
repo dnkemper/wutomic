@@ -768,7 +768,7 @@ display:
         type: normal
         title: 'Table of Contents'
         description: ''
-        weight: -49
+        weight: -47
         enabled: false
         expanded: false
         menu_name: main

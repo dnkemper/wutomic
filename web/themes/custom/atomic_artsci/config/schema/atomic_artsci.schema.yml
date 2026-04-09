@@ -1,18 +1,39 @@
+# config/schema/atomic_artsci.schema.yml
+
 atomic_artsci.settings:
-  type: theme_settings
-  label: 'ARTSCI Base settings'
+  type: config_object
+  label: 'Atomic Artsci theme settings'
   mapping:
     header:
-      label: 'Header settings'
       type: mapping
+      label: 'Header settings'
       mapping:
         type:
-          label: 'Header type'
           type: string
-    footer:
-      label: 'Footer settings'
-      type: mapping
-      mapping:
-        login_link:
-          label: 'Whether to display login link in footer'
+          label: 'Site name display'
+        nav_style:
+          type: string
+          label: 'Header navigation style'
+        sticky:
           type: boolean
+          label: 'Sticky header'
+        toppage:
+          type: boolean
+          label: 'Back to top button'
+        footer_logo:
+          type: boolean
+          label: 'Footer logo'
+        top_links_limit:
+          type: integer
+          label: 'Top links limit'
+    fonts:
+      type: mapping
+      label: 'Font settings'
+      mapping:
+        font-family:
+          type: string
+          label: 'Font family'
+    footer:
+      type: mapping
+      label: 'Footer settings'
+      mapping: {}

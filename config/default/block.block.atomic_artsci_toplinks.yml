@@ -11,7 +11,7 @@ dependencies:
 id: atomic_artsci_toplinks
 theme: atomic_artsci
 region: action_menu
-weight: 0
+weight: -12
 provider: null
 plugin: 'menu_block:top-links'
 settings:
@@ -21,6 +21,7 @@ settings:
   provider: menu_block
   follow: false
   follow_parent: '0'
+  display_empty: false
   label_link: false
   label_type: block
   level: 1

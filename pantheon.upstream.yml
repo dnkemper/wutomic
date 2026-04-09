@@ -3,8 +3,8 @@ web_docroot: true
 enforce_https: transitional
 php_version: 8.3
 database:
-  version: 10.11.16
-drush_version: 13.7.1.0
+  version: 10.11
+drush_version: 13
 build_step: true
 protected_web_paths:
   - /private/

@@ -1,15 +1,8 @@
 {% set header_classes = header_classes|merge([
   'artsci-bar',
-  header_nav,
+  'horizontal',
 ]) %}
 
-{% if header_nav == 'toggle' %}
-  {% if not logged_in %}
-    {{ attach_library('atomic_artsci/header-sticky') }}
-  {% elseif logged_in and header_sticky %}
-    {{ attach_library('atomic_artsci/header-sticky') }}
-  {% endif %}
-{% endif %}
     {% block artsci_bar %}
       {# Artsci bar content #}
     {% endblock %}
@@ -33,8 +26,6 @@
     } %}
     {% endblock %}
 {% block horizontal_nav %}
-  {% if header_nav in['horizontal', 'mega'] %}
-    {{ attach_library('atomic_artsci/mega-menu') }}
     {{ attach_library('atomic_artsci/horizontal-menu') }}
     {% set nav_attributes = create_attribute() %}
     {% set nav_classes = [
@@ -47,7 +38,6 @@
         {{ page.primary_menu }}
       {# </div> #}
     </nav>
-  {% endif %}
 
 {% endblock %}
     {# {% block artsci_bar %}
@@ -59,22 +49,3 @@
     {# Tertiary content #}
   {% endblock %}
 </header>
-
-{# {% block horizontal_nav %}
-  {% if header_nav in['horizontal', 'mega'] %}
-    {{ attach_library('atomic_artsci/mega-menu') }}
-    {{ attach_library('atomic_artsci/horizontal-menu') }}
-    {% set nav_attributes = create_attribute() %}
-    {% set nav_classes = [
-      'nav--horizontal',
-      'nav--' ~ header_nav,
-    ] %}
-
-    <nav{{ nav_attributes.addClass(nav_classes) }} aria-label="Primary menu">
-      <div class="page__container">
-        {{ page.primary_menu }}
-      </div>
-    </nav>
-  {% endif %}
-
-{% endblock %} #}

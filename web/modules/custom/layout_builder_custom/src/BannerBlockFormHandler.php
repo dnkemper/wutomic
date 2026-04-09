@@ -365,7 +365,7 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
     $fields_to_sync = [
       'layout_builder_style_banner_card_background',
       'layout_builder_style_banner_gradient',
-      // 'layout_builder_style_banner_height', // Already removed
+      'layout_builder_style_banner_height', // Already removed
       'layout_builder_style_button_style',
       'layout_builder_style_container',
       'layout_builder_style_default',
@@ -441,8 +441,8 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
       $form_state->setValue('layout_builder_style_headline_type', $heading_style);
     }
     // Force default values for hidden style fields.
-    $form_state->setValue('layout_builder_style_headline_size', 'headline_size_large');
-    $form_state->setValue('layout_builder_style_banner_height', 'banner_height_medium');
+    $form_state->setValue('layout_builder_style_headline_size', 'headline_large');
+    $form_state->setValue('layout_builder_style_banner_height', 'banner_medium');
     $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
     // Gradient midpoint checkbox.
     $adjust_gradient = $form_state->getValue(['gradient_options', 'adjust_gradient_midpoint']);
