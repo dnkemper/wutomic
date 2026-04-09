@@ -910,4 +910,9 @@ if (file_exists($local_settings)) {
 }
 ini_set('memory_limit', '512M');
 $settings['shared_content_webhook_secret'] = 'AgjDvZxEv9knCGo2LXi7LfOrETM+NHIOJoweeYG3Jx7b+KKZk46yT4ISbhLie';
-include  __DIR__ . "/pantheon_rewrites.php";
+
+// Automatically generated include for settings managed by ddev.
+$ddev_settings = __DIR__ . '/settings.ddev.php';
+if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
+  require $ddev_settings;
+}
