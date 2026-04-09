@@ -820,85 +820,94 @@ $settings['entity_update_backup'] = TRUE;
 $settings['state_cache'] = TRUE;
 
 /**
- * Node migration type.
+ * Include the Pantheon-specific settings file.
  *
- * This is used to force the migration system to use the classic node migrations
- * instead of the default complete node migrations. The migration system will
- * use the classic node migration only if there are existing migrate_map tables
- * for the classic node migrations and they contain data. These tables may not
- * exist if you are developing custom migrations and do not want to use the
- * complete node migrations. Set this to TRUE to force the use of the classic
- * node migrations.
+ * n.b. The settings.pantheon.php file makes some changes
+ *      that affect all environments that this site
+ *      exists in.  Always include this file, even in
+ *      a local development environment, to ensure that
+ *      the site settings remain consistent.
  */
-$settings['migrate_node_migrate_type_classic'] = FALSE;
+include __DIR__ . "/settings.pantheon.php";
+
 
 /**
- * The default settings for migration sources.
- *
- * These settings are used as the default settings on the Credential form at
- * /upgrade/credentials.
- *
- * - migrate_source_version - The version of the source database. This can be
- *   '6' or '7'. Defaults to '7'.
- * - migrate_source_connection - The key in the $databases array for the source
- *   site.
- * - migrate_file_public_path - The location of the source Drupal 6 or Drupal 7
- *   public files. This can be a local file directory containing the source
- *   Drupal 6 or Drupal 7 site (e.g /var/www/docroot), or the site address
- *   (e.g http://example.com).
- * - migrate_file_private_path - The location of the source Drupal 7 private
- *   files. This can be a local file directory containing the source Drupal 7
- *   site (e.g /var/www/docroot), or empty to use the same value as Public
- *   files directory.
- *
- * Sample configuration for a drupal 6 source site with the source files in a
- * local directory.
- *
- * @code
- * $settings['migrate_source_version'] = '6';
- * $settings['migrate_source_connection'] = 'migrate';
- * $settings['migrate_file_public_path'] = '/var/www/drupal6';
- * @endcode
- *
- * Sample configuration for a drupal 7 source site with public source files on
- * the source site and the private files in a local directory.
- *
- * @code
- * $settings['migrate_source_version'] = '7';
- * $settings['migrate_source_connection'] = 'migrate';
- * $settings['migrate_file_public_path'] = 'https://drupal7.com';
- * $settings['migrate_file_private_path'] = '/var/www/drupal7';
- * @endcode
+ * If there are pmt settings file, then include it.
  */
-# $settings['migrate_source_connection'] = '';
-# $settings['migrate_source_version'] = '';
-# $settings['migrate_file_public_path'] = '';
-# $settings['migrate_file_private_path'] = '';
-
-// Automatically generated include for settings managed by ddev.
-if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev.php')) {
-  include __DIR__ . '/settings.ddev.php';
+if (file_exists(__DIR__ . "/pmt.settings.php")) {
+  include __DIR__ . "/pmt.settings.php";
+}
+$settings["config_sync_directory"] = "../config/default";
+$settings["http_client_config"]["force_ip_resolve"] = "v4";
+$config['image.settings']['suppress_itok_output'] = TRUE;
+$config['image.settings']['allow_insecure_derivatives'] = TRUE;
+// This is used to override variables on secondary (staging, development, etc.)
+if (getenv('IS_DDEV_PROJECT') == 'true') {
+  $settings["hash_salt"] =
+  "OqKArBqu_H9AtlcG2zQB9fGOiW4Ig6L1HLqJBGv-VVLfPedBd4JgoyMsK5LA7s7LeNbq283AwA";
+  // $config['config_split.config_split.local']['status'] = TRUE;
+  // $config['config_split.config_split.live']['status'] = FALSE;
+  /**
+   * Load local development override configuration, if available.
+   *
+   * Create a settings.local.php file to override variables on secondary (staging,
+   * development, etc.) installations of this site.
+   *
+   * Typical uses of settings.local.php include:
+   * - Disabling caching.
+   * - Disabling JavaScript/CSS compression.
+   * - Rerouting outgoing emails.
+   *
+   * Keep this code block at the end of this file to take full effect.
+   */
+  $settings['trusted_host_patterns'] = [
+    '^ddev\.site$',
+    '^.+\.ddev\.site$',
+  ];
+  $config["system.performance"]["css"]["preprocess"] = FALSE;
+  $config["system.performance"]["js"]["preprocess"] = FALSE;
+  $databases['default']['default'] = array (
+    'database' => 'db',
+    'username' => 'db',
+    'password' => 'db',
+    'prefix' => '',
+    'host' => 'db',
+    'port' => '3306',
+    'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+    'driver' => 'mysql',
+  );
+  $config['system.logging']['error_level'] = 'verbose';
+}
+else {
+  // $config['config_split.config_split.local']['status'] = FALSE;
+  // $config['config_split.config_split.live']['status'] = TRUE;
 }
 
-  $settings['container_yamls'][] = DRUPAL_ROOT . '/sites/development.services.yml';
-$settings['cache']['bins']['render'] = 'cache.backend.null';
-$settings['cache']['bins']['page'] = 'cache.backend.null';
-$settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
+
+$settings['file_temp_path'] = 'sites/default/files/private/tmp';
+$conf['views_data_export_directory'] = 'public://';
+
+$config["system.performance"]["css"]["preprocess"] = FALSE;
+$config["system.performance"]["js"]["preprocess"] = FALSE;
+
+
 
 /**
- * Load local development override configuration, if available.
+ * Skipping permissions hardening will make scaffolding
+ * work better, but will also raise a warning when you
+ * install Drupal.
  *
- * Create a settings.local.php file to override variables on secondary (staging,
- * development, etc.) installations of this site.
- *
- * Typical uses of settings.local.php include:
- * - Disabling caching.
- * - Disabling JavaScript/CSS compression.
- * - Rerouting outgoing emails.
- *
- * Keep this code block at the end of this file to take full effect.
+ * https://www.drupal.org/project/drupal/issues/3091285
  */
-#
-# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-#   include $app_root . '/' . $site_path . '/settings.local.php';
-# }
+// $settings[skip_permissions_hardening] = TRUE;
+
+/**
+ * If there is a local settings file, then include it
+ */
+$local_settings = __DIR__ . "/settings.local.php";
+if (file_exists($local_settings)) {
+  include $local_settings;
+}
+ini_set('memory_limit', '512M');
+$settings['shared_content_webhook_secret'] = 'AgjDvZxEv9knCGo2LXi7LfOrETM+NHIOJoweeYG3Jx7b+KKZk46yT4ISbhLie';
+include  __DIR__ . "/pantheon_rewrites.php";
