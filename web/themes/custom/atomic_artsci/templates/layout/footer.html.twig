@@ -11,21 +11,6 @@
     <div class="footer__links footer__links--contact">
     {# {% set test = "{{ base_path ~ directory }}/images/logo.svg" %} #}
 <img src="{{ base_path ~ directory }}/images/logo.svg" alt="Washington University in St. Louis">
-      {# {% if artsci_logo is not empty %} #}
-      {# {{ attach_library('atomic_artsci/logo') }} #}
-
-      {# {% if (header_branding == 'artsci' or footer_logo) %}
-      {% include '@atomic_artsci/artsci/logo.twig' with {
-        path: artsci_url,
-        logo_path_png: test,
-        logo_classes: 'logo--footer',
-        logo_id: 'footer',
-        is_homepage: is_homepage|default(false),
-      } %}
-
-      {% endif %}
-
-       {% endif %} #}
 
       {% block site_slogan %}
         {% if site_has_parent %}

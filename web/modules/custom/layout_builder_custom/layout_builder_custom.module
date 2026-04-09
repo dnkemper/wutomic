@@ -302,6 +302,12 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
               $form['layout_builder_style_default']['#access'] = FALSE;
             }
             break;
+            
+            case 'inline_block:artsci_image_gallery':
+              $form['#attached']['library'][] = 'layout_builder_custom/image-block-form';
+              $lb_styles_extra_settings['media_format']['default'] = 'media_format_square';
+              break;
+
           // Media left, media circle, and no border are the defaults.
           case 'inline_block:artsci_aggregator':
           case 'views_block:events-card_list':
@@ -1030,7 +1036,9 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
           $element['field_artsci_cta_summary']['widget'][0]['#format'] = 'plain_text';
         }
         break;
+
       case 'inline_block:artsci_aggregator':
+      case 'inline_block:artsci_image_gallery':
       case 'inline_block:featured_content':
         if (isset($element['field_artsci_headline']['widget'][0]['container'])) {
           $container = &$element['field_artsci_headline']['widget'][0]['container'];

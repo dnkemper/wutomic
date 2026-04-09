@@ -1,0 +1,21 @@
+uuid: fd977c2d-cedd-4514-a37e-03f8b65704d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_image_gallery
+    - field.storage.block_content.field_artsci_gallery_media
+id: block_content.artsci_image_gallery.field_artsci_gallery_media
+field_name: field_artsci_gallery_media
+entity_type: block_content
+bundle: artsci_image_gallery
+label: Images
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings: {  }
+field_type: entity_reference

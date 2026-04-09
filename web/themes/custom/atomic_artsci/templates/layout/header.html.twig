@@ -1,7 +1,6 @@
 {% set header_classes = header_classes|merge([
   'artsci-bar',
   header_nav,
-  header_branding == 'uihc' ? 'artsci-bar--healthcare' : ''
 ]) %}
 
 {% if header_nav == 'toggle' %}
@@ -11,33 +10,49 @@
     {{ attach_library('atomic_artsci/header-sticky') }}
   {% endif %}
 {% endif %}
-
+    {% block artsci_bar %}
+      {# Artsci bar content #}
+    {% endblock %}
 <header data-artsci-header {{ attributes.addClass(header_classes) }}>
   <div class="artsci-bar__container">
     {% block logo %}
       {% if artsci_logo is not empty %}
         {{ attach_library('atomic_artsci/logo') }}
+        {% include '@atomic_artsci/artsci/logo.twig' with {
+          path: artsci_url,
+          logo_classes: 'logo--tab',
+          logo_path_png: logo_path,
+          logo_id: 'header',
+          is_homepage: is_homepage|default(false),
+        } %}
 
-        {% if header_branding == 'artsci' %}
-          {% include '@atomic_artsci/artsci/logo.twig' with {
-            path: artsci_url,
-            logo_classes: 'logo--tab',
-            logo_path_png: logo_path_head,
-            logo_id: 'header',
-            is_homepage: is_homepage|default(false),
-          } %}
-        {% endif %}
       {% endif %}
-      {% if artsci_logo is empty %}
-        {% if header_branding == 'regents' %}
-          <div class="top-bar"></div>
-        {% endif %}
-      {% endif %}
+          {% include '@atomic_artsci/artsci/site-name.html.twig' with {
+      'site_name': site_name,
+      'site_url': path('<front>'),
+    } %}
     {% endblock %}
+{% block horizontal_nav %}
+  {% if header_nav in['horizontal', 'mega'] %}
+    {{ attach_library('atomic_artsci/mega-menu') }}
+    {{ attach_library('atomic_artsci/horizontal-menu') }}
+    {% set nav_attributes = create_attribute() %}
+    {% set nav_classes = [
+      'nav--horizontal',
+      'nav--' ~ header_nav,
+    ] %}
 
-    {% block artsci_bar %}
-      {# Artsci bar content #}
-    {% endblock %}
+    <nav{{ nav_attributes.addClass(nav_classes) }} aria-label="Primary menu">
+      {# <div class="page__container"> #}
+        {{ page.primary_menu }}
+      {# </div> #}
+    </nav>
+  {% endif %}
+
+{% endblock %}
+    {# {% block artsci_bar %}
+      {# Artsci bar content 
+    {% endblock %} #}
   </div>
 
   {% block tertiary_content %}
@@ -45,7 +60,7 @@
   {% endblock %}
 </header>
 
-{% block horizontal_nav %}
+{# {% block horizontal_nav %}
   {% if header_nav in['horizontal', 'mega'] %}
     {{ attach_library('atomic_artsci/mega-menu') }}
     {{ attach_library('atomic_artsci/horizontal-menu') }}
@@ -62,4 +77,4 @@
     </nav>
   {% endif %}
 
-{% endblock %}
+{% endblock %} #}

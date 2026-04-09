@@ -185,7 +185,7 @@
 
     & .artsci-bar__container {
       flex-wrap: wrap;
-      justify-content: space-between;
+      // justify-content: space-between;
       margin-right: 0;
       margin-left: 0;
 
@@ -248,7 +248,7 @@
       text-align: left;
       font-size: 1.7rem;
       font-size: 2rem;
-      flex: 0 1 43%;
+      flex: 0 1 15%;
       font-weight: 400;
     }
     @include utilities.breakpoint(page-container) {
