@@ -1,1 +1,7 @@
-.paragraph--type--people.hide-descriptions .field--name-body,.paragraph--type--people.hide-images figure img{display:none}/*# sourceMappingURL=people.css.map */
+.paragraph--type--people.hide-images figure img {
+  display: none;
+}
+
+.paragraph--type--people.hide-descriptions .field--name-body {
+  display: none;
+}/*# sourceMappingURL=people.css.map */

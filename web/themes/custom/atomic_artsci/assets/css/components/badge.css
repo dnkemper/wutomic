@@ -1,1 +1,69 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#ba0c2f;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:transparent;--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.badge{border:1px solid transparent;border-radius:1em;color:#fff;display:inline-block;font-size:75%;font-weight:500;line-height:1.67;padding:0 .75em}.badge--primary{background:#ba0c2f;color:#000}.badge--secondary{background:#000}.badge--cool-gray{background:#63666a}.badge--blue{background:#00558c}.badge--green{background:#00664f}.badge--orange{background:#bd472a}.badge--light{background:#f3f3f3;color:#000}.badge{display:inline-flex}.badge .svg-inline--fa{align-self:center;margin-right:.4rem}/*# sourceMappingURL=badge.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #BA0C2F;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, 0);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 0.75em;
+  line-height: 1.67;
+  font-size: 75%;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 1em;
+}
+
+.badge--primary {
+  background: #BA0C2F;
+  color: #000;
+}
+
+.badge--secondary {
+  background: #000000;
+}
+
+.badge--cool-gray {
+  background: #63666A;
+}
+
+.badge--blue {
+  background: #00558C;
+}
+
+.badge--green {
+  background: #00664F;
+}
+
+.badge--orange {
+  background: #BD472A;
+}
+
+.badge--light {
+  background: #F3F3F3;
+  color: #000000;
+}
+
+.badge {
+  display: inline-flex;
+}
+.badge .svg-inline--fa {
+  margin-right: 0.4rem;
+  align-self: center;
+}/*# sourceMappingURL=badge.css.map */

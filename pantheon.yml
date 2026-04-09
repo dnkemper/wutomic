@@ -1,0 +1,62 @@
+# Put overrides to your pantheon.upstream.yml file here.
+# For more information, see: https://pantheon.io/docs/pantheon-yml/
+api_version: 1
+php_version: 8.3.30
+
+# Quicksilver Workflows
+# Inherited by ALL sites connected to this upstream.
+# NOTE: Scripts live at web/private/scripts/quicksilver/ on disk,
+# but paths here must NOT include the web/ prefix — Pantheon resolves
+# relative to the web docroot automatically when web_docroot: true.
+workflows:
+
+  # Fires when code is pushed to dev (git push or dashboard commit)
+  sync_code:
+    after:
+      - type: webphp
+        description: "Clear SimpleSAMLphp temp/cache directories"
+        script: private/scripts/quicksilver/clear_simplesaml_cache.php
+      - type: webphp
+        description: "Clear Drupal caches after code sync"
+        script: private/scripts/quicksilver/clear_cache.php
+
+  # Fires when a database is cloned between environments
+  clone_database:
+    after:
+      - type: webphp
+        description: "Clear SimpleSAMLphp temp/cache directories"
+        script: private/scripts/quicksilver/clear_simplesaml_cache.php
+      - type: webphp
+        description: "Run DB updates after clone"
+        script: private/scripts/quicksilver/db_updates.php
+      - type: webphp
+        description: "Import config splits after clone"
+        script: private/scripts/quicksilver/config_splits_import.php
+      - type: webphp
+        description: "Clear all caches"
+        script: private/scripts/quicksilver/clear_cache.php
+  # Fires on deploy (dev→test or test→live via dashboard or Terminus)
+  deploy:
+    after:
+      - type: webphp
+        description: "Clear SimpleSAMLphp temp/cache directories"
+        script: private/scripts/quicksilver/clear_simplesaml_cache.php
+      - type: webphp
+        description: "Run database updates"
+        script: private/scripts/quicksilver/db_updates.php
+      - type: webphp
+        description: "Import configuration"
+        script: private/scripts/quicksilver/config_import.php
+      - type: webphp
+        description: "Clear all caches"
+        script: private/scripts/quicksilver/clear_cache.php
+
+  # Fires after upstream updates are applied
+  deploy_product:
+    after:
+      - type: webphp
+        description: "Clear SimpleSAMLphp temp/cache directories"
+        script: private/scripts/quicksilver/clear_simplesaml_cache.php
+      - type: webphp
+        description: "Run updatedb + config:import + cache:rebuild after upstream update"
+        script: private/scripts/quicksilver/upstream_updates.php

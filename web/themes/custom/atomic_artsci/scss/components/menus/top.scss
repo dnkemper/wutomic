@@ -18,7 +18,7 @@
         padding: variables.$md;
         color: #fff;
         @include utilities.breakpoint(md) {
-          color: variables.$secondary;
+          color: variables.$white;
         }
         &:hover,
         &:focus {
@@ -81,7 +81,8 @@
 }
 
   .nav.menu--top .menu li a {
-    font-weight: variables.$font-weight-light;
+    font-weight: variables.$font-weight-normal;
+    color: variables.$white;
   }
 
   // artsci Bar Full adjustments
@@ -123,7 +124,7 @@
           @include utilities.breakpoint(md) {
             display: block;
             text-decoration: none;
-            color: variables.$secondary;
+            color: variables.$white;
             font-size: 1.1rem;
             position: relative;
             line-height: 1.3;
@@ -222,7 +223,7 @@
         }
 
         a {
-          color: variables.$secondary;
+          color: variables.$white;
           padding: .325rem 0;
           font-size: 1rem;
         }

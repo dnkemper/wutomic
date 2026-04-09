@@ -224,6 +224,23 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "autoload": {
+        "classmap": ["upstream-configuration/scripts/ComposerScripts.php"],
+        "psr-4": {
+            "Drush\\Commands\\": "drush/commands/"
+        }
+    },
+    "scripts": {
+        "post-drupal-scaffold-cmd": [
+        "patch -p1 < patches/development_services.patch"
+        ],
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "nuke": [
+        "rm -rf vendor web/core web/modules/contrib web/profiles/contrib web/themes/contrib",
+        "@composer clearcache --ansi",
+        "@composer install --ansi"
+        ]
+    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
@@ -299,6 +316,8 @@
             },
             "drupal/linkit": {
                 "Add Webform Matcher": "https://www.drupal.org/files/issues/2023-06-13/linkit-webform-matcher-2946234-36.patch",
+                "[3223781]Add Support for <nolink>": "patches/3223781.patch"
+
             },
             "drupal/paragraphs": {
                 "find the correct revision ID of the parent": "https://www.drupal.org/files/issues/2020-07-08/access-controll-issue-3090200-22.patch"

@@ -1,0 +1,12 @@
+api_version: 1
+web_docroot: true
+enforce_https: transitional
+php_version: 8.3.30
+database:
+  version: 10.11.16
+drush_version: 13.7.1.0
+build_step: true
+protected_web_paths:
+  - /private/
+  - /sites/default/files/private/
+  - /sites/default/files/config/

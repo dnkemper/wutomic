@@ -61,7 +61,7 @@ class BannerBlockFormHandler {
 
     // Hide admin label in favor of custom heading.
     unset($form['settings']['admin_label']);
-    unset($form['field_artsci_banner_title_size']);
+    // unset($form['field_artsci_banner_title_size']);
 
     /*
      * Headline section.
@@ -708,6 +708,7 @@ if (isset($element['field_artsci_banner_title']['widget'][0]['container']['size'
       // Hide the original field.
       $complete_form['layout_builder_style_background']['#access'] = FALSE;
     }
+    
 
     if (isset($complete_form['style_options']['layout_builder_style_banner_card_background_duplicate'])) {
       $complete_form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [

@@ -1,1 +1,82 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#ba0c2f;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:transparent;--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}.logo{display:block}.logo--tab{height:70px;padding:25px 1.25rem;width:109px}.logo--tab a:focus svg{opacity:.5}@media (min-width:980px){.logo--tab{height:80px;padding:25px;width:154px}}@media (min-width:84.375em){.logo--tab{height:90px;padding:23px 20px;width:188px}}.logo-icon{fill:#ba0c2f;height:20px}.logo-icon .logo-text{fill:#fff}@media (min-width:980px){.logo-icon{height:30px}}@media (min-width:84.375em){.logo-icon{height:43px}}.logo-icon:focus,.logo-icon:hover{opacity:.7}.logo--tab h1{all:inherit;display:contents}.search-is-open .logo--tab{opacity:0}@media (min-width:980px){.search-is-open .logo--tab{opacity:1}}/*# sourceMappingURL=logo.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #BA0C2F;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, 0);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.logo {
+  display: block;
+}
+
+.logo--tab {
+  height: 70px;
+  width: 109px;
+  padding: 25px 1.25rem;
+}
+.logo--tab a:focus svg {
+  opacity: 0.5;
+}
+@media (min-width: 980px) {
+  .logo--tab {
+    width: 154px;
+    height: 80px;
+    padding: 25px;
+  }
+}
+@media (min-width: 84.375em) {
+  .logo--tab {
+    width: 188px;
+    height: 90px;
+    padding: 23px 20px;
+  }
+}
+
+.logo-icon {
+  fill: #BA0C2F;
+  height: 20px;
+}
+.logo-icon .logo-text {
+  fill: #fff;
+}
+@media (min-width: 980px) {
+  .logo-icon {
+    height: 30px;
+  }
+}
+@media (min-width: 84.375em) {
+  .logo-icon {
+    height: 43px;
+  }
+}
+.logo-icon:hover, .logo-icon:focus {
+  opacity: 0.7;
+}
+
+.logo--tab h1 {
+  all: inherit;
+  display: contents;
+}
+
+.search-is-open .logo--tab {
+  opacity: 0;
+}
+@media (min-width: 980px) {
+  .search-is-open .logo--tab {
+    opacity: 1;
+  }
+}/*# sourceMappingURL=logo.css.map */

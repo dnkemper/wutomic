@@ -1,1 +1,39 @@
-:root{font-size:16px;--bg-teal:#367b88;--bg-red:#ba0c2f;--bg-gray:#edeae1;--artsci-gold:#ba0c2f;--artsci-black:#000;--brand-primary:var(--artsci-gold);--brand-secondary:var(--artsci-black);--artsci-gray-cool:#63666a;--link-color:#ba0c2f;--artsci-light:#f3f3f3;--artsci-gray-mid:#9a9a9a;--artsci-gray:#737373;--artsci-gray-light:#cacaca;--transparent-border:transparent;--space-lg-width-gutter:3rem;--space-md-width-gutter:2rem;--space-sm-width-gutter:1.25rem}body.text--serif .block-inline-blockartsci-text-area li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .block-inline-blockartsci-text-area p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .ck-content li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .ck-content p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .event-description li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .event-description p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .field--name-body li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .field--name-body p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif){font-family:ivypresto-headline,Georgia,serif;font-size:calc(1.2rem + 1px)}body.text--serif .block-inline-blockartsci-text-area .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .ck-content .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .event-description .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),body.text--serif .field--name-body .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif){font-family:ivypresto-headline,Georgia,serif;font-size:1.6rem}/*# sourceMappingURL=global-serif.css.map */
+:root {
+  font-size: 16px;
+  --bg-teal: #367B88;
+  --bg-red: #BA0C2F;
+  --bg-gray: #EDEAE1;
+  --artsci-gold: #BA0C2F;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-gold);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #63666A;
+  --link-color: #BA0C2F;
+  --artsci-light: #F3F3F3;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #CACACA;
+  --transparent-border: rgb(0, 0, 0, 0);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+body.text--serif .field--name-body p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .field--name-body li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .block-inline-blockartsci-text-area p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .block-inline-blockartsci-text-area li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .event-description p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .event-description li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .ck-content p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .ck-content li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
+  font-family: "ivypresto-headline", "Georgia", serif, serif;
+  font-size: calc(1.2rem + 1px);
+}
+body.text--serif .field--name-body .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .block-inline-blockartsci-text-area .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .event-description .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
+body.text--serif .ck-content .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
+  font-family: "ivypresto-headline", "Georgia", serif, serif;
+  font-size: 1.6rem;
+}/*# sourceMappingURL=global-serif.css.map */
