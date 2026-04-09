@@ -4,13 +4,13 @@ status: true
 dependencies:
   config:
     - block_content.type.artsci_banner
-    - field.field.block_content.artsci_banner.field_styles_gradient_midpoint
     - field.field.block_content.artsci_banner.field_artsci_banner_autoplay
     - field.field.block_content.artsci_banner.field_artsci_banner_excerpt
     - field.field.block_content.artsci_banner.field_artsci_banner_image
     - field.field.block_content.artsci_banner.field_artsci_banner_link
     - field.field.block_content.artsci_banner.field_artsci_banner_pre_title
     - field.field.block_content.artsci_banner.field_artsci_banner_title
+    - field.field.block_content.artsci_banner.field_styles_gradient_midpoint
   module:
     - field_delimiter
     - heading
@@ -26,7 +26,7 @@ mode: default
 content:
   field_artsci_banner_autoplay:
     type: boolean
-    label: above
+    label: hidden
     settings:
       format: default
       format_custom_false: ''
@@ -36,7 +36,7 @@ content:
     region: content
   field_artsci_banner_excerpt:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 2
@@ -82,7 +82,7 @@ content:
     region: content
   field_styles_gradient_midpoint:
     type: list_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 6

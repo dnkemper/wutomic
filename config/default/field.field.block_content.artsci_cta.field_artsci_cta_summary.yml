@@ -5,10 +5,8 @@ dependencies:
   config:
     - block_content.type.artsci_cta
     - field.storage.block_content.field_artsci_cta_summary
-    - filter.format.minimal
-    - filter.format.plain_text
+    - filter.format.minimal_plus
   module:
-    - allowed_formats
     - text
 _core:
   default_config_hash: 4vFszaUxeTr6om6ugZ2o6nBn7Atao3aOwmts5uj1mAY
@@ -24,6 +22,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   allowed_formats:
-    - minimal
-    - plain_text
+    - minimal_plus
 field_type: text_long

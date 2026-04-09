@@ -140,7 +140,7 @@
     [class*=bg--black] & {
       color: variables.$primary;
     }
-    [class*=bg--gold] & {
+    [class*=bg--red] & {
       color: variables.$secondary;
     }
   }
@@ -275,7 +275,7 @@ li:first-child .timeline--card.js-scroll {
   width: 100%;
   position: fixed;
   top: 0;
-  [class*=bg--gold] & {
+  [class*=bg--red] & {
     background-color: variables.$secondary;
   }
 }

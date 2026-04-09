@@ -159,14 +159,14 @@
   .bttn--primary {
 
     &:after {
-      [class*="bg--gold"] & {
+      [class*="bg--red"] & {
         background: variables.$primary;
       }
     }
 
     i,
     svg {
-      [class*="bg--gold"] & {
+      [class*="bg--red"] & {
         color: variables.$primary;
       }
     }
@@ -177,20 +177,20 @@
       border: none;
     }
 
-    [class*="bg--black"] [class*="bg--gold"] &,
-    [class*="bg--white"] [class*="bg--gold"] &,
-    [class*="bg--gray"] [class*="bg--gold"] &,
-    [class*="bg--gold"] [class*="bg--gold"] &,
+    [class*="bg--black"] [class*="bg--red"] &,
+    [class*="bg--white"] [class*="bg--red"] &,
+    [class*="bg--gray"] [class*="bg--red"] &,
+    [class*="bg--red"] [class*="bg--red"] &,
     .bg-pattern--brain-reversed &,
-    [class*="bg--gold"] & {
+    [class*="bg--red"] & {
       background: variables.$secondary;
       color: #fff;
     }
 
     .bg-pattern--brain-reversed [class*="bg--gray"] &,
-    [class*="bg--gold"] [class*="bg--gray"] &,
+    [class*="bg--red"] [class*="bg--gray"] &,
     .bg-pattern--brain-reversed [class*="bg--white"] &,
-    [class*="bg--gold"] [class*="bg--white"] & {
+    [class*="bg--red"] [class*="bg--white"] & {
       background: variables.$primary;
       color: variables.$secondary;
       border: none;
@@ -205,7 +205,7 @@
       }
     }
 
-    [class*="bg--gold"] [class*="bg--black"] & {
+    [class*="bg--red"] [class*="bg--black"] & {
       background: variables.$primary;
       color: variables.$secondary;
 

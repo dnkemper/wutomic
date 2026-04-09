@@ -102,7 +102,7 @@
   }
 
   function adjustedWidth(width) {
-    return minmax(300, width, maxOffWidth());
+    return minmax(600, width, maxOffWidth());
   }
 
   function maxOffWidth() {

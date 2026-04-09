@@ -51,7 +51,7 @@
     }
 
     .bg-pattern--brain-reversed &,
-    [class*="bg--gold"] & {
+    [class*="bg--red"] & {
       border-bottom: 8px solid white;
     }
 
@@ -83,7 +83,7 @@
     }
 
     .bg-pattern--brain-reversed &,
-    [class*="bg--gold"] & {
+    [class*="bg--red"] & {
       color: variables.$secondary;
     }
 
@@ -146,9 +146,9 @@
 .stat--horizontal:not(.element--flex-center) {
 
   &.bg-pattern--brain-reversed,
-  &[class*="bg--gold"],
+  &[class*="bg--red"],
   .bg-pattern--brain-reversed &,
-  [class*="bg--gold"] & {
+  [class*="bg--red"] & {
     .stat__content {
       @include utilities.breakpoint(page-container) {
         border-top: 8px solid variables.$secondary;

@@ -66,7 +66,6 @@ class Person extends NodeBundleBase implements RendersAsCardInterface {
       '#subtitle' => 'field_person_position',
       '#meta' => [
         'field_person_email',
-        'field_person_phone',
         'field_person_website',
       ],
     ]);

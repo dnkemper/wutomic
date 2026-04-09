@@ -65,7 +65,7 @@
       display: block;
 
       [class*="bg--black"] &,
-      [class*="bg--gold"] & {
+      [class*="bg--red"] & {
         border-bottom: 1px solid rgba(255, 255, 255, 0.5);
       }
 
@@ -548,7 +548,7 @@
     }
     // Background colors
     &[class*="bg--black"],
-    &[class*="bg--gold"],
+    &[class*="bg--red"],
     &[class*="bg--gray"] {
       .menu-wrapper--horizontal {
         > .menu {
@@ -594,7 +594,7 @@
       }
     }
 
-    &[class*="bg--gold"] {
+    &[class*="bg--red"] {
       .menu-wrapper--horizontal {
         > .menu > {
           li:before {
@@ -699,7 +699,7 @@
           background: variables.$light;
 
           [class*="bg--black"] &,
-          [class*="bg--gold"] &,
+          [class*="bg--red"] &,
           [class*="bg--gray"] & {
             background: #fff;
           }
@@ -724,7 +724,7 @@
             transition: transform 0.3s ease-in-out;
             transform: translate(-50%) scaleX(1);
 
-            [class*="bg--gold"] & {
+            [class*="bg--red"] & {
               background-color: variables.$brand-cool-gray;
             }
           }
@@ -751,7 +751,7 @@
             background: variables.$light;
 
             [class*="bg--black"] &,
-            [class*="bg--gold"] &,
+            [class*="bg--red"] &,
             [class*="bg--gray"] & {
               background: #fff;
             }
@@ -776,7 +776,7 @@
               transition: transform 0.3s ease-in-out;
               transform: translate(-50%) scaleX(1);
 
-              [class*="bg--gold"] & {
+              [class*="bg--red"] & {
                 background-color: variables.$brand-cool-gray;
               }
             }

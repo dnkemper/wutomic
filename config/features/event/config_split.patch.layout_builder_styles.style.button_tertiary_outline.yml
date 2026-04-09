@@ -1,0 +1,4 @@
+adding: {  }
+removing:
+  block_restrictions:
+    - 'inline_block:artsci_card'

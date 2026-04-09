@@ -2,18 +2,29 @@
 
 ckeditor5.plugin.artsci_media_wysiwyg_linkStyles:
   type: mapping
-  label: 'Link Styles CKEditor 5 plugin'
+  label: Link Styles
   mapping:
     styles:
       type: sequence
       label: 'Styles'
+      constraints:
+        UniqueLabelInList:
+          labelKey: label
       sequence:
         type: mapping
-        label: 'Style'
+        label: 'Link Style'
         mapping:
           label:
             type: label
-            label: 'Label'
+            label: 'Link style label'
           element:
-            type: string
-            label: 'Element'
+            type: ckeditor5.element
+            constraints:
+              # Validate that this contains exactly 1 attribute (class) and >=1 class attr value.
+              CKEditor5Element:
+                requiredAttributes:
+                  -
+                    attributeName: class
+                    minAttributeValueCount: 1
+              StyleSensibleElement: []
+            label: 'Style tag + classes'

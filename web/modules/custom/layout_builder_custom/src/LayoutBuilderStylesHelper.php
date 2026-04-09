@@ -170,7 +170,7 @@ class LayoutBuilderStylesHelper {
         'default' => 'button_medium',
       ],
       'button_style' => [
-        'default' => 'button_primary',
+        'default' => 'button_tertiary_outline',
       ],
       'horizontal_alignment' => [
         'default' => 'horizontal_alignment_left',

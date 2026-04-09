@@ -9,7 +9,7 @@ a.link--arrow.arrow.bttn.bttn--primary {
     background-color: unset !important;
   }
 }
-a.arrow {
+a.arrow, a.link--arrow {
   color: black;
     &::after {
 
@@ -89,6 +89,7 @@ a.arrow {
   iframe,
   video {
     width: 100%;
+    height: 100%;
     aspect-ratio: 16 / 9;
     display: block;
   }
@@ -155,23 +156,26 @@ h3 {
     }
   }
 
-  .banner__content {
-    position: relative !important;
-    z-index: 2;
-    margin-top: -8rem;
-    margin-bottom: 2rem;
-    margin-inline: auto;
-    max-width: var(--container-max, 80rem);
-    width: calc(100% - var(--gutter, 2rem) * 2);
-    border-radius: 1rem;
-    padding: 3rem 4rem;
-    text-align: center;
-    top: auto !important;
-    // Default fallback
+.banner__content {
+  position: relative !important;
+  z-index: 2;
+  margin-top: -8rem;
+  margin-bottom: 2rem;
+  margin-inline: auto;
+  max-width: var(--container-max, 80rem);
+  width: calc(100% - var(--gutter, 2rem) * 2);
+  border-radius: 1rem;
+  padding: 3rem 4rem;
+  text-align: center;
+  top: auto !important;
+
+  // Only apply background when there's content
+  &--has-content {
     background: var(--bg--teal);
     --banner-text-color: #fff;
     --link-color: #fff;
   }
+}
 
   // Card background options
   &.card-bg--teal .banner__content {
@@ -189,7 +193,7 @@ h3 {
     --banner-text-color: #fff;
   }
 
-  &.card-bg--gold .banner__content {
+  &.card-bg--red .banner__content {
     background: var(--brand-gold, #ffd700);
     --banner-text-color: var(--color-black, #1d1d1b);
   }
@@ -220,22 +224,31 @@ h3 {
     border-radius: 50px;
   }
 }
+.block--two-col {
+  .text-formatted {
+    column-count: 2;
+  }
+}
 .section-overlap--next {
   position: relative;
   z-index: 2;
+  background: transparent;
 
-  // Rounded corners on the banner inside
   .banner {
     border-radius: 1rem;
     overflow: hidden;
   }
 
-  // Next section pulls up behind this one
   + .layout__container {
     position: relative;
     z-index: 1;
-    // margin-top: -8rem;
+    margin-top: -8rem;
     padding-top: calc(8rem + var(--section-padding-top, 3rem));
+    
+    // Reset if this section is also an overlap trigger
+    &.section-overlap--next {
+      padding-top: var(--section-padding-top, 3rem);
+    }
   }
 }
 :root {
@@ -911,6 +924,7 @@ h6 {
   font-weight: variables.$font-weight-medium;
   line-height: 1.125;
   letter-spacing: 0;
+  font-family: variables.$font-family-serif;
 }
 
 h1, .h1 {
@@ -1282,8 +1296,8 @@ hr {
     border: none;
   }
   .bg-pattern--brain-reversed &,
-  .bg--gold--pattern--brain &,
-  .bg--gold & {
+  .bg--red--pattern--brain &,
+  .bg--red & {
     &:after {
       background: #fff;
     }
@@ -1344,7 +1358,7 @@ mark {
     content: " [highlight end] ";
   }
 
-  .bg--gold & {
+  .bg--red & {
     background-color: #fff;
     color: variables.$artsci-black;
 
@@ -1709,7 +1723,6 @@ details {
   .card,
   .banner,
   .cta__wrapper,
-  .slider,
   .stat {
     flex-basis: 100%;
     min-width: 0;
@@ -1783,7 +1796,7 @@ details {
   // Define a list of background treatments.
   $backgrounds:
     ':not([class*="bg-"])',
-    '.bg--gold',
+    '.bg--red',
     '.bg--black',
     '.bg--gray',
     '.bg-pattern--brain',

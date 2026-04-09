@@ -15,13 +15,13 @@ libraries-extend:
 libraries:
   - atomic_artsci/global-styling
 regions:
+  under_search: 'Under search'
   page_top: 'Page top'
   header: 'Header'
   alert: 'Alert'
   action_menu: 'Action menu'
   primary_menu: 'Primary menu'
   secondary_menu: 'Secondary menu'
-  under_search: 'Under search'
   search: 'Search'
   featured: 'Featured'
   breadcrumb: 'Breadcrumb'

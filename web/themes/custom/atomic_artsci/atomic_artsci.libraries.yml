@@ -12,7 +12,6 @@ global-styling:
       assets/css/components/badge.css: {}
       assets/css/components/breadcrumbs.css: {}
       assets/css/components/colors.css: {}
-      assets/css/components/blockquote.css: {}
       assets/css/components/button.css: {}
       assets/css/components/form/forms.css: {}
       assets/css/components/typography/headings.css: {}
@@ -29,7 +28,6 @@ global-styling:
       assets/css/components/menus/top.css: {}
       assets/css/components/menus/quick.css: {}
       assets/css/components/artsci-bar.css: {}
-      assets/css/components/image-gallery-block.css: {}
       assets/css/fields/fields.css: {}
       assets/css/components/background.css: { weight: 200 }
       assets/css/components/grid.css: {}
@@ -107,7 +105,6 @@ accordion:
   css:
     component:
       assets/css/components/accordion.css: {}
-      assets/css/paragraphs/artsci_paragraphs_accordion.css: {}
   js:
     assets/js/accordion-init.js: { attributes: { type: module } }
 tabs:
@@ -116,6 +113,9 @@ tabs:
       assets/css/components/tabs.css: {}
   js:
     assets/js/tabs.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
 header-sticky:
   js:
     assets/js/brand-bar.js: { attributes: { type: module } }
@@ -127,13 +127,6 @@ video-cookie:
     - core/once
     - core/js-cookie
     - atomic_artsci/video
-slider:
-  css:
-    component:
-      assets/css/components/slider.css: {}
-      assets/css/components/banner.css: {}
-  js:
-    assets/js/slider.js: {}
 remote-video:
   css:
     component:
@@ -156,14 +149,6 @@ aggregator-feed:
   css:
     component:
       assets/css/content/aggregator-feed.css: {}
-hero-block-video:
-  js:
-    assets/js/video.js: {}
-    assets/js/video-cookie.js: {}
-  dependencies:
-    - core/jquery
-    - core/once
-    - core/js-cookie
 vertical-video:
   css:
     component:
@@ -186,8 +171,8 @@ banner:
 card:
   css:
     component:
+      assets/css/components/banner.css: {}
       assets/css/components/card.css: {}
-      assets/css/paragraphs/artsci-paragraphs-card.css: {}
   dependencies:
     - atomic_artsci/click-a11y
 media:
@@ -248,40 +233,6 @@ artsci-events-single:
   css:
     component:
       assets/css/content/artsci-event-single.css: {}
-paragraphs-lists:
-  css:
-    component:
-      assets/css/paragraphs/artsci-paragraphs-lists.css: {}
-paragraphs-carousel:
-  css:
-    component:
-      assets/css/paragraphs/artsci_paragraphs_carousel.css: {}
-  js:
-    assets/js/carousel.js: {}
-  dependencies:
-    - atomic_artsci/slick
-    - core/jquery
-    - core/once
-paragraphs-featured-content:
-  css:
-    component:
-      assets/css/paragraphs/featured-content.css: {}
-paragraphs-image-gallery:
-  css:
-    component:
-      assets/css/paragraphs/artsci_paragraphs_image_gallery.css: {}
-paragraphs:
-  css:
-    component:
-      assets/css/paragraphs/artsci_paragraphs.css: {}
-paragraphs-text:
-  css:
-    component:
-      assets/css/paragraphs/artsci-paragraphs_text.css: {}
-paragraphs-webform:
-  css:
-    component:
-      assets/css/paragraphs/artsci-paragraphs-webform.css: {}
 chosen:
   css:
     component:

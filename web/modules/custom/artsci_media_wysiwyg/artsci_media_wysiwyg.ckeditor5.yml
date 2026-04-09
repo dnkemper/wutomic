@@ -6,20 +6,6 @@
 #   configuration options.
 # cSpell:ignore simplebox demobox
 
-artsci_media_wysiwyg_linkStyles:
-  ckeditor5:
-    plugins: []
-    config: []
-  drupal:
-    label: Link styles
-    class: Drupal\artsci_media_wysiwyg\Plugin\CKEditor5Plugin\LinkStyles
-    library: false
-    admin_library: false
-    elements:
-      - <a class>
-    conditions:
-      plugins:
-        - ckeditor5_link
 artsci_media_wysiwyg_html_embed:
   # Use the provider: property for this plugin to depend on another module.
   # Configuration that will be sent to CKEditor 5 JavaScript plugins.

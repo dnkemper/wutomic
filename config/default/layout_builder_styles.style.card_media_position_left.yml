@@ -10,6 +10,7 @@ group: card_media_position
 block_restrictions:
   - 'inline_block:artsci_card'
   - 'inline_block:artsci_image'
+  - 'inline_block:featured_content'
   - 'inline_block:artsci_aggregator'
   - 'views_block:article_list_block-list_article'
   - 'views_block:page_list_block-list_page'

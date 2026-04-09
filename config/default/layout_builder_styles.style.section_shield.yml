@@ -1,0 +1,20 @@
+uuid: 8de542ee-5d8d-48ac-92a6-5fea5d6639c1
+langcode: en
+status: true
+dependencies: {  }
+id: section_shield
+label: 'Shield Section'
+classes: section-shield
+type: section
+group: default
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 0

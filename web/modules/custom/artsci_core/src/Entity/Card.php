@@ -24,6 +24,7 @@ class Card extends BlockContent implements RendersAsCardInterface {
       '#pre_title' => 'field_pre_title',
       '#media' => [
         'field_artsci_card_image',
+        'field_icon',
       ],
       '#subtitle' => 'field_artsci_card_author',
       '#content' => 'field_artsci_card_excerpt',

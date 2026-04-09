@@ -28,12 +28,12 @@ class ArtsciHeadline extends FieldItemBase {
       'columns' => [
         'headline' => [
           'type' => 'varchar',
-          'length' => 255,
+          'length' => 355,
           'not null' => FALSE,
         ],
         'heading_size' => [
           'type' => 'varchar',
-          'length' => 255,
+          'length' => 355,
           'not null' => TRUE,
         ],
         'hide_headline' => [
@@ -43,17 +43,17 @@ class ArtsciHeadline extends FieldItemBase {
         ],
         'headline_style' => [
           'type' => 'varchar',
-          'length' => 255,
+          'length' => 355,
           'not null' => FALSE,
         ],
         'headline_alignment' => [
           'type' => 'varchar',
-          'length' => 255,
+          'length' => 355,
           'not null' => TRUE,
         ],
         'child_heading_size' => [
           'type' => 'varchar',
-          'length' => 255,
+          'length' => 355,
           'not null' => TRUE,
         ],
       ],

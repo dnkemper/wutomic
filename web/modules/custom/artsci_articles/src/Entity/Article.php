@@ -69,19 +69,19 @@ class Article extends NodeBundleBase implements ArticleInterface, RendersAsCardI
           ->toString();
       }
       // Add the output for whatever we've generated up to this point.
-      $build['#meta']['byline'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'span',
-        '#weight' => 99,
-        '#attributes' => [
-          'class' => [
-            'field--article-byline',
-          ],
-        ],
-        'source' => [
-          '#markup' => $source_output,
-        ],
-      ];
+      // $build['#meta']['byline'] = [
+      //   '#type' => 'html_tag',
+      //   '#tag' => 'span',
+      //   '#weight' => 99,
+      //   '#attributes' => [
+      //     'class' => [
+      //       'field--article-byline',
+      //     ],
+      //   ],
+      //   'source' => [
+      //     '#markup' => $source_output,
+      //   ],
+      // ];
     }
 
     // Add the published date if it has not been hidden.

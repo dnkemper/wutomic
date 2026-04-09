@@ -150,7 +150,7 @@
   // --------------------------------
   .webform-scale {
     & input:checked + label {
-      [class*="bg--gold"] & {
+      [class*="bg--red"] & {
         border-color: variables.$secondary;
         background-color: variables.$light;
         color: variables.$secondary;
@@ -197,7 +197,7 @@
     background-color: variables.$primary;
     color: variables.$secondary;
 
-    [class*="bg--gold"] & {
+    [class*="bg--red"] & {
       background: variables.$secondary;
       color: #fff;
     }
@@ -230,7 +230,7 @@
         background-color: variables.$light;
       }
 
-      [class*="bg--gold"] & {
+      [class*="bg--red"] & {
         background-color: variables.$primary;
       }
 

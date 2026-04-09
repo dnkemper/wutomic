@@ -56,7 +56,7 @@
   -webkit-box-decoration-break: clone;
   color: variables.$secondary;
   text-shadow: none;
-  [class*="bg--gold"] & {
+  [class*="bg--red"] & {
     background: variables.$secondary;
     color: #fff;
   }
@@ -69,12 +69,12 @@
   margin-top: .8rem;
   padding: .4rem 1.2rem .8rem;
   color: variables.$secondary;
-  [class*="bg--gold"] & {
+  [class*="bg--red"] & {
     background: variables.$secondary;
     color: #fff;
     font-weight: 400;
   }
-  [class*="bg--gold"] [class*="bg--black"] & {
+  [class*="bg--red"] [class*="bg--black"] & {
     background: variables.$primary;
     color: variables.$secondary;
   }
@@ -101,7 +101,7 @@
   }
 
   .bg-pattern--brain-reversed &,
-  [class*="bg--gold"] & {
+  [class*="bg--red"] & {
     &:after {
       background: variables.$light;
     }
@@ -283,7 +283,7 @@ body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-
 .bold-headline--caps .headline__heading,
 .headline--uppercase .headline__heading,
 .headline--uppercase .headline__text {
-  [class*="bg--gold"] & {
+  [class*="bg--red"] & {
     font-weight: 400;
   }
 }
@@ -338,9 +338,9 @@ h6,
 .bg-pattern--brain-black [class*="bg--gray"],
 [class*="bg--black"] [class*="bg--gray"],
 .bg-pattern--brain-reversed [class*="bg--gray"],
-[class*="bg--gold"] [class*="bg--gray"],
+[class*="bg--red"] [class*="bg--gray"],
 .bg-pattern--brain-reversed [class*="bg--white"],
-[class*="bg--gold"] [class*="bg--white"] {
+[class*="bg--red"] [class*="bg--white"] {
   .bold-headline--underline,
   .headline--underline {
     &:after {

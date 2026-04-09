@@ -158,8 +158,8 @@ hr {
     border: none;
   }
   .bg-pattern--brain-reversed &,
-  .bg--gold--pattern--brain &,
-  .bg--gold & {
+  .bg--red--pattern--brain &,
+  .bg--red & {
     &:after {
       background: #fff;
     }
@@ -220,7 +220,7 @@ mark {
     content: " [highlight end] ";
   }
 
-  .bg--gold & {
+  .bg--red & {
     background-color: #fff;
     color: variables.$artsci-black;
 

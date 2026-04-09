@@ -1,4 +1,4 @@
-@use '../abstracts/variables.scss';
+@use '../abstracts/variables';
 @use '../abstracts/_utilities.scss';
 
 
@@ -13,105 +13,89 @@
   }
 
   [role="tablist"] {
-    margin: 0 0 -0.1rem;
+    margin: 0;
+    display: flex;
+    background-color: variables.$lighter-gray;
+    border: 1px solid variables.$gray-light;
+    border-radius: 0;
     overflow: visible;
-    font-size: 0;
+    padding: 0.3rem;
   }
 
   [role="tab"] {
     position: relative;
+    flex: 1 1 0%;
     margin: 0;
-    padding: 1rem 1rem 1.3rem;
-    border: none;
+    padding: 0.85rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0;
     overflow: visible;
     font-family: variables.$font-family-sans-serif;
     font-size: variables.$content-font-size;
     font-weight: variables.$font-weight-medium;
-    background: none;
-    transition: background 0.8s ease-out;
+    text-align: center;
+    background: transparent;
+    color: variables.$secondary;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     cursor: pointer;
-
-    &::before {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 5px;
-      content: "";
-      transition: 0.3s;
-      z-index: 1;
-    }
 
     [class*="bg--black"] & {
       color: variables.$light;
     }
 
+    // ── Selected tab: white card ──
     &[aria-selected="true"] {
-      border-radius: 0;
+      background: variables.$white;
+      border-color: variables.$gray-light;
+      color: variables.$primary;
+      font-weight: variables.$font-weight-medium-bold;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       outline: 0;
 
-      &:focus-visible::before {
-        background: variables.$primary;
-      }
-
-      &::after {
-        width: 100%;
-        background: variables.$primary;
-
-        [class*="bg--gold"] & {
-          background: variables.$secondary;
-        }
-      }
-
       [class*="bg--black"] & {
+        background: variables.$secondary;
+        border-color: variables.$med-gray;
         color: variables.$primary;
+      }
+
+      [class*="bg--red"] & {
+        background: variables.$white;
+        color: variables.$secondary;
       }
     }
 
+    // ── Unselected tab ──
     &[aria-selected="false"] {
-      color: variables.$med-gray;
-
-      &::after {
-        width: 100%;
-        background: variables.$gray-light;
-
-        [class*="bg--gold"] & {
-          background: variables.$light;
-        }
-      }
+      color: variables.$dark-gray;
 
       [class*="bg--black"] & {
         color: variables.$light;
       }
     }
 
-    &::after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 5px;
-      content: "";
-      transition: 0.3s;
+    // ── Hover / focus ──
+    &:hover,
+    &:focus-visible {
+      color: variables.$primary;
     }
 
-    &:focus-visible::before,
-    &:hover::before {
-      background: variables.$brand-cool-gray;
-      width: 100%;
-
-      [class*="bg--gold"] & {
-        background: variables.$med-gray;
-      }
+    &:focus-visible {
+      outline: 2px solid variables.$primary;
+      outline-offset: -2px;
     }
 
     &:active,
-    &:focus,
-    &:hover {
+    &:focus {
       outline: 0;
+    }
+
+    &:focus-visible {
+      outline: 2px solid variables.$primary;
+      outline-offset: -2px;
     }
   }
 
+  // ── Tab panels ──
   [role="tabpanel"] {
     position: relative;
     z-index: 2;
@@ -126,4 +110,3 @@
     margin-top: 1rem;
   }
 }
-

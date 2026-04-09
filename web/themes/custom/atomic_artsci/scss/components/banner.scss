@@ -277,7 +277,7 @@ letter-spacing: 5%;
   // Set the border color for blockquote when background is gold.
   blockquote {
     // Match gold background color and patterns.
-    [class*="bg--gold"] & {
+    [class*="bg--red"] & {
       border-left-color: #{variables.$light};
     }
   }
@@ -310,7 +310,7 @@ letter-spacing: 5%;
 // === Background colors === //
 // 'bg--*' selectors match solid color and patterns.
 .banner {
-  &[class*="bg--gold"],
+  &[class*="bg--red"],
   &[class*="bg--white"],
   &[class*="bg--gray"] {
     --banner-text-color: #{variables.$secondary};

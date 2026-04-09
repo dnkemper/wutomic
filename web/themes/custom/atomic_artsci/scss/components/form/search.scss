@@ -168,7 +168,7 @@
         }
       }
       [class*=bg--gray] &,
-      [class*=bg--gold] &,
+      [class*=bg--red] &,
       [class*=bg--white] &{
         @include utilities.bttn--secondary;
         & {

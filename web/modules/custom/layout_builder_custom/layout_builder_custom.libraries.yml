@@ -20,13 +20,6 @@ card-block-form:
   dependencies:
     - core/jquery
     - core/once
-quote-block-form:
-  js:
-    js/quote-block-form.js: { }
-  dependencies:
-    - core/jquery
-    - core/once
-    - core/jquery.once
 image-block-form:
   js:
     js/image-block-form.js: { }

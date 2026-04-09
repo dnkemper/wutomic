@@ -238,7 +238,7 @@
     }
   }
   // We should revisit to have appropriate color/styling for each background color option.
-  &[class*="bg--gold"]{
+  &[class*="bg--red"]{
     .media--date {
       border: 1px solid variables.$artsci-black;
     }
@@ -261,6 +261,11 @@
   span[class*="fa-"],
   svg {
     margin-right: .2rem;
+  }
+}
+.bg--red {
+  .card__pre-title {
+    color: white !important;
   }
 }
 // === End: Pre-Title === //

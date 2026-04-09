@@ -23,7 +23,7 @@
 [class*="bg--"] {
   *,
   & [class*="bg--"] * {
-    border-color: inherit;
+    // border-color: inherit;
 
     &:before,
     &:after {
@@ -36,7 +36,7 @@
 // border color overrides for certain background colors
 [class*="bg--gray"],
 [class*="bg--white"],
-[class*="bg--gold"],
+[class*="bg--red"],
 .bg-pattern--brain-reversed,
 .bg-pattern--brain {
   border-color: var(--transparent-border);
@@ -57,9 +57,9 @@
 }
 
 // set link color for black and gold nesting.
-[class*="bg--white"] [class*="bg--gold"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
+[class*="bg--white"] [class*="bg--red"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
 [class*="bg--white"] [class*="bg--black"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg--gray"] [class*="bg--gold"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
+[class*="bg--gray"] [class*="bg--red"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
 [class*="bg--gray"] [class*="bg--black"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn) {
   color: inherit;
 }

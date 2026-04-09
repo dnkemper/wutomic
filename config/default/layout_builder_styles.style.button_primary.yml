@@ -9,5 +9,6 @@ type: component
 group: button_style
 block_restrictions:
   - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_card'
 layout_restrictions: {  }
 weight: -6

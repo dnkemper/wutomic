@@ -1,0 +1,26 @@
+uuid: 1116ca12-f3a9-4782-90f8-b21bdc716153
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: C0rPwIBtVtE3z86PVJcLfLkhz1mfkp9gs29CFdUHr4k
+id: block_background_style_white
+label: White
+classes: bg--white
+type: component
+group: background
+block_restrictions:
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_cta'
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_events'
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_aggregator'
+  - 'inline_block:artsci_text_area'
+  - 'inline_block:artsci_statistic'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+  - webform_block
+layout_restrictions: {  }
+weight: -56

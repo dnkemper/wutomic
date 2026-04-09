@@ -45,7 +45,7 @@ class LinkStyles extends CKEditor5PluginDefault implements CKEditor5PluginConfig
     $form['styles'] = [
       '#title' => $this->t('Link Styles'),
       '#type' => 'textarea',
-      '#description' => $this->t('A list of classes that will be provided as Link Styles. Enter one or more classes on each line in the format: a.classA.classB|Label. Example: a.btn|Button. Advanced example: a.btn.large-button|Large Button.<br />These link styles should be available in your theme\'s CSS file.'),
+      '#description' => $this->t("A list of classes that will be provided as Link Styles. Enter one or more classes on each line in the format: a.classA.classB|Label. Example: a.btn|Button. Advanced example: a.btn.large-button|Large Button.<br />These link styles should be available in your theme's CSS file."),
     ];
     if (!empty($this->configuration['styles'])) {
       $as_selectors = '';

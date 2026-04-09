@@ -32,7 +32,7 @@ content:
     region: content
   field_artsci_card_excerpt:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 1
@@ -68,7 +68,7 @@ content:
     region: content
   field_pre_title:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }

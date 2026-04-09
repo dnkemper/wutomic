@@ -892,25 +892,6 @@ function atomic_artsci_preprocess_block(&$variables) {
     }
   }
 
-  // Add the system breadcrumb to the page title hero block.
-  if ($variables['derivative_plugin_id'] === 'artsci_page_title_hero') {
-    $block_manager = \Drupal::service('plugin.manager.block');
-    $config = [];
-    $plugin_block = $block_manager->createInstance('system_breadcrumb_block', $config);
-
-    $variables['page_title'] = NULL;
-    $node = \Drupal::routeMatch()->getParameter('node');
-    if ($node instanceof NodeInterface) {
-      $variables['page_title'] = $node->getTitle();
-    }
-    else {
-      $request = \Drupal::request();
-      $route_match = \Drupal::routeMatch();
-      $variables['page_title'] = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
-    }
-
-    $variables['breadcrumb'] = $plugin_block->build();
-  }
 
   if ($variables['derivative_plugin_id'] === 'artsci_banner') {
     $block = $variables['elements']['content']['#block_content'];
@@ -1017,12 +998,9 @@ function atomic_artsci_preprocess_block(&$variables) {
     if ($variables['content']['#view_mode'] === 'accordion') {
       $variables['is_accordion'] = TRUE;
     }
-  }
-
-  // Check for blockquote image placement.
-  if ($variables['derivative_plugin_id'] === 'artsci_quote' && isset($variables['elements']['#attributes']['class'])) {
-    $variables['has_image_below'] = !in_array('blockquote--img-above', $variables['elements']['#attributes']['class']);
-    $variables['has_image_above'] = !in_array('blockquote--img-below', $variables['elements']['#attributes']['class']);
+    elseif ($variables['content']['#view_mode'] === 'tab') {
+      $variables['is_tab'] = TRUE;
+    }
   }
 
   // Add banner__text class for caption to receive banner text colors.
@@ -1190,7 +1168,6 @@ function atomic_artsci_preprocess_paragraph(&$variables) {
     $paragraph = $variables['paragraph'];
 
     $collection_types = [
-      'artsci_slide' => 'field_artsci_slider_slides',
       'artsci_collection_item' => 'field_artsci_collection_items',
       'artsci_timeline_item' => 'field_artsci_timeline_items',
     ];
@@ -1215,7 +1192,7 @@ function atomic_artsci_preprocess_paragraph(&$variables) {
             }
           }
         }
-        // This works for collections, sliders, and timeline not other blocks.
+        // This works for collections and timeline not other blocks.
         if ($parent->hasField('field_artsci_headline')) {
           $headline_fields = $parent->get('field_artsci_headline')->getValue();
           foreach ($headline_fields as $headline_field) {

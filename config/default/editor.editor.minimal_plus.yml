@@ -48,7 +48,7 @@ settings:
           element: '<a class="link--arrow">'
         -
           label: 'Button Style'
-          element: '<a class="bttn bttn--outline">'
+          element: '<a class="bttn bttn--primary">'
     ckeditor5_alignment:
       enabled_alignments:
         - center

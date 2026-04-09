@@ -92,7 +92,7 @@ screen and (min-width: 40em) {
   [class*=bg--white] & {
     background-color: variables.$white;
   }
-  [class*=bg--gold] & {
+  [class*=bg--red] & {
     background-color: variables.$primary;
   }
   [class*=bg--gray] & {
@@ -104,7 +104,7 @@ screen and (min-width: 40em) {
   background-color: variables.$light;
   color: variables.$secondary;
   [class*=bg--black] &,
-  [class*=bg--gold] & {
+  [class*=bg--red] & {
     background-color: variables.$white;
   }
   [class*=bg--gray] & {
@@ -132,7 +132,7 @@ screen and (min-width: 40em) {
     background-color: variables.$primary;
     color: variables.$secondary;
     [class*=bg--black] &,
-    [class*=bg--gold] & {
+    [class*=bg--red] & {
       background-color: variables.$white;
     }
   }

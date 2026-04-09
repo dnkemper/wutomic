@@ -9,8 +9,6 @@ dependencies:
     - block_content.type.artsci_collection
     - block_content.type.artsci_cta
     - block_content.type.artsci_image
-    - block_content.type.artsci_image_gallery
-    - block_content.type.artsci_slider
     - block_content.type.artsci_statistic
     - block_content.type.artsci_text_area
     - block_content.type.featured_content
@@ -116,8 +114,6 @@ permissions:
   - 'create artsci_collection block content'
   - 'create artsci_cta block content'
   - 'create artsci_image block content'
-  - 'create artsci_image_gallery block content'
-  - 'create artsci_slider block content'
   - 'create artsci_statistic block content'
   - 'create artsci_text_area block content'
   - 'create featured_content block content'
@@ -134,8 +130,6 @@ permissions:
   - 'delete any artsci_collection block content'
   - 'delete any artsci_cta block content'
   - 'delete any artsci_image block content'
-  - 'delete any artsci_image_gallery block content'
-  - 'delete any artsci_slider block content'
   - 'delete any artsci_statistic block content'
   - 'delete any artsci_text_area block content'
   - 'delete any featured_content block content'
@@ -159,8 +153,6 @@ permissions:
   - 'edit any artsci_collection block content'
   - 'edit any artsci_cta block content'
   - 'edit any artsci_image block content'
-  - 'edit any artsci_image_gallery block content'
-  - 'edit any artsci_slider block content'
   - 'edit any artsci_statistic block content'
   - 'edit any artsci_text_area block content'
   - 'edit any featured_content block content'

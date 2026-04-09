@@ -44,6 +44,17 @@ settings:
       - code
       - codeBlock
   plugins:
+    artsci_media_wysiwyg_linkStyles:
+      styles:
+        -
+          label: 'Open in New Window'
+          element: '<a class="link--new-window">'
+        -
+          label: 'Add Arrow'
+          element: '<a class="link--arrow">'
+        -
+          label: 'Button Style'
+          element: '<a class="bttn bttn--primary">'
     ckeditor5_alignment:
       enabled_alignments:
         - center

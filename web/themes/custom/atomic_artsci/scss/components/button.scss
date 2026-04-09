@@ -74,21 +74,21 @@
   i,
   span[class*="fa-"],
   svg {
-    [class*="bg--gold"] &,
-    [class*="bg--white"] [class*="bg--gold"] & {
+    [class*="bg--red"] &,
+    [class*="bg--white"] [class*="bg--red"] & {
       color: #fff;
     }
 
     [class*="bg--white"] &,
-    [class*="bg--gold"] [class*="bg--white"] &,
-    [class*="bg--gold"] [class*="bg--gray"] & {
+    [class*="bg--red"] [class*="bg--white"] &,
+    [class*="bg--red"] [class*="bg--gray"] & {
       color: variables.$primary;
     }
   }
 
   [class*="bg--black"] [class*="bg--white"] &,
   [class*="bg--black"] [class*="bg--gray"] &,
-  [class*="bg--black"] [class*="bg--gold"] & {
+  [class*="bg--black"] [class*="bg--red"] & {
     color: variables.$secondary;
   }
 }

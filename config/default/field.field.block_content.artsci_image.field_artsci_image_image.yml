@@ -7,6 +7,7 @@ dependencies:
     - field.storage.block_content.field_artsci_image_image
     - media.type.image
     - media.type.remote_video
+    - media.type.video
 id: block_content.artsci_image.field_artsci_image_image
 field_name: field_artsci_image_image
 entity_type: block_content
@@ -23,6 +24,7 @@ settings:
     target_bundles:
       image: image
       remote_video: remote_video
+      video: video
     sort:
       field: _none
       direction: ASC

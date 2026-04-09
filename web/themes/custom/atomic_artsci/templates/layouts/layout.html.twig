@@ -44,10 +44,9 @@
 
 {% if render_sections is not empty %}
   {# Exterior container is necessary so that background colors can go all the way to the edge. #}
+  
   <div{{ attributes.addClass(classes) }}>
     {# Middle container is necessary for having a fixed width container inside a section with a visible background. #}
-    <div class="layout__spacing_container">
-      {# Section headline if configured #}
       {% if section_headline.text %}
         {% set headline_classes = [
           section_headline.styles|default('headline block__headline'),
@@ -61,6 +60,9 @@
           headline_class: headline_classes,
         } only %}
       {% endif %}
+    <div class="layout__spacing_container">
+      {# Section headline if configured #}
+
 
       {% for region in layout.getRegionNames %}
 

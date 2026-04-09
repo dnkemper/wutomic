@@ -161,7 +161,7 @@ class BannerBlockFormHandler {
     self::createDuplicateField($form, 'layout_builder_style_media_overlay', 'gradient_options');
     self::createDuplicateField($form, 'layout_builder_style_banner_gradient', 'gradient_options');
     self::createDuplicateField($form, 'layout_builder_style_banner_gradient_midpoint', 'gradient_options');
-
+$form['settings']['block_form']['field_artsci_banner_title'][0]['container']['size']['#access'] = FALSE;
     if (isset($form['layout_builder_style_background'])) {
       // Background style field visible when background type is color-pattern.
       $form['layout_builder_style_background']['#states'] = [
@@ -351,7 +351,6 @@ class BannerBlockFormHandler {
       'layout_builder_style_banner_gradient',
       'layout_builder_style_banner_height',
       'layout_builder_style_button_style',
-      'layout_builder_style_button_font',
       'layout_builder_style_container',
       'layout_builder_style_default',
       'layout_builder_style_headline_type',

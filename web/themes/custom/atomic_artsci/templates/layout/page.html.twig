@@ -61,7 +61,9 @@
     {% set content_classes = content_classes|merge(sticky_classes) %}
   {% endif %}
 {% endif %}
-
+{% if page.under_search %}
+  {{ page.under_search }}
+{% endif %}
 {% if page.header %}
 {% include '@atomic_artsci/layout/header--inline.html.twig' %}
 {% endif %}

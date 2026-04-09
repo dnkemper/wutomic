@@ -6,8 +6,6 @@ dependencies:
     - block_content.type.artsci_card
     - field.storage.block_content.field_artsci_card_excerpt
     - filter.format.full_html
-    - filter.format.minimal_plus
-    - filter.format.plain_text
   module:
     - text
 _core:
@@ -24,7 +22,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   allowed_formats:
-    - minimal_plus
     - full_html
-    - plain_text
 field_type: text_long

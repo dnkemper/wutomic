@@ -37,10 +37,15 @@
 {% set rendered_content = content|render %}
 
 <div{{ attributes.addClass(classes) }}>
+      {% if content.field_pre_title is not empty %}
+      <div class="card__pre-title">
+        {{ content.field_pre_title }}
+      </div>
+      {% endif %}
   {{ title_prefix }}
   {{ title_suffix }}
 
   {% block content %}
-    {{ content }}
+    {{ content|without('field_pre_title') }}
   {% endblock %}
 </div>

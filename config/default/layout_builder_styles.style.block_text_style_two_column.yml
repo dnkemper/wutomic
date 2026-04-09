@@ -1,0 +1,13 @@
+uuid: 39b4fb8b-7033-4fff-bd2b-277153d4946e
+langcode: en
+status: true
+dependencies: {  }
+id: block_text_style_two_column
+label: 'Two column'
+classes: block--two-col
+type: component
+group: default
+block_restrictions:
+  - 'inline_block:artsci_text_area'
+layout_restrictions: {  }
+weight: 6

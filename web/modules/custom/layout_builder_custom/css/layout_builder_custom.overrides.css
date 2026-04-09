@@ -16,7 +16,7 @@
   overflow: visible;
   padding: 0px;
   margin-right: -1px;
-  width: var(--off-canvas-width, 300) !important;
+  width: var(--off-canvas-width, 600) !important;
   top: var(--drupal-displace-offset-top, 0px) !important;
 }
 

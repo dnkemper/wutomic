@@ -285,12 +285,6 @@ blockquote {
   }
 }
 
-.blockquote-center blockquote::before,
-blockquote.blockquote--center::before,
-blockquote.blockquote--img-above .blockquote__paragraph::after {
-  background: #000;
-}
-
 /* Accordion
 ----------------------------------------- */
 .accordion .accordion__heading button {

@@ -97,6 +97,40 @@
         const adjustGradientCheckbox = context.querySelector('input[name="gradient_options[adjust_gradient_midpoint]"]');
         const gradientMidpointRadios = context.querySelectorAll('input[name="settings[block_form][field_styles_gradient_midpoint]"]');
         const backgroundStyleSelect = context.querySelector('select[name="layout_builder_style_background"]');
+        
+        // Card background field and its dependencies.
+        const cardBackgroundWrapper = context.querySelector('select[name="layout_builder_style_banner_card_background"]')?.closest('.form-item, .form-wrapper');
+        const defaultStyleCheckboxes = context.querySelectorAll('input[name^="layout_builder_style_default_duplicate"]');
+        const mediaField = context.querySelector('[data-drupal-selector*="field-artsci-banner-image"]');
+
+        // Handle card background visibility based on background type, offset content, and media selection.
+        function handleCardBackgroundVisibility() {
+          if (!cardBackgroundWrapper) return;
+
+          const backgroundTypeChecked = context.querySelector(
+            'input[name="settings[block_form][background_type]"]:checked'
+          );
+          const isMediaSelected = backgroundTypeChecked && backgroundTypeChecked.value === 'media';
+          
+          // Check if banner_offset_content is selected.
+          const offsetContentCheckbox = context.querySelector(
+            'input[name^="layout_builder_style_default_duplicate"][value="banner_offset_content"]'
+          );
+          const isOffsetContentSelected = offsetContentCheckbox && offsetContentCheckbox.checked;
+
+          // Check if media field has a value.
+          const hasMediaValue = mediaField && mediaField.querySelector('.media-library-item[data-media-library-item-delta]');
+
+          if (isMediaSelected && isOffsetContentSelected && hasMediaValue) {
+            cardBackgroundWrapper.classList.remove('js-hide');
+            cardBackgroundWrapper.removeAttribute('tabindex');
+            cardBackgroundWrapper.removeAttribute('aria-hidden');
+          } else {
+            cardBackgroundWrapper.classList.add('js-hide');
+            cardBackgroundWrapper.tabIndex = -1;
+            cardBackgroundWrapper.setAttribute('aria-hidden', 'true');
+          }
+        }
 
         // Handle changes in the background type.
         function handleBackgroundChange() {
@@ -130,6 +164,9 @@
               backgroundStyleSelect.value = "";
             }
           }
+
+          // Update card background visibility.
+          handleCardBackgroundVisibility();
         }
 
         // Handle media overlay changes to auto-set gradient midpoint.
@@ -176,8 +213,26 @@
           input.addEventListener('change', handleBackgroundChange);
         });
 
+        // Bind change event to default style checkboxes for card background visibility.
+        defaultStyleCheckboxes.forEach(function (checkbox) {
+          checkbox.addEventListener('change', handleCardBackgroundVisibility);
+        });
+
+        // Watch for changes in the media field to update card background visibility.
+        if (mediaField) {
+          const mediaObserver = new MutationObserver(function () {
+            handleCardBackgroundVisibility();
+          });
+
+          mediaObserver.observe(mediaField, {
+            childList: true,
+            subtree: true,
+          });
+        }
+
         handleBackgroundChange();
         handleMediaOverlayChange();
+        handleCardBackgroundVisibility();
       });
     },
   };

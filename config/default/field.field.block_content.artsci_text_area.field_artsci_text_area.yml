@@ -6,6 +6,8 @@ dependencies:
     - block_content.type.artsci_text_area
     - field.storage.block_content.field_artsci_text_area
     - filter.format.full_html
+    - filter.format.minimal
+    - filter.format.minimal_plus
   module:
     - text
 _core:
@@ -22,5 +24,7 @@ default_value: {  }
 default_value_callback: ''
 settings:
   allowed_formats:
+    - minimal
+    - minimal_plus
     - full_html
 field_type: text_long
