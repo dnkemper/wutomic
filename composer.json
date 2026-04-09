@@ -1,5 +1,5 @@
 {
-    "name": "drupal/recommended-project",
+    "name": "pantheon-upstreams/drupal-composer-managed",
     "description": "Project template for Drupal projects with a relocated document root",
     "type": "project",
     "license": "GPL-2.0-or-later",
@@ -9,6 +9,14 @@
         "chat": "https://www.drupal.org/node/314178"
     },
     "repositories": {
+        "0":{
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "1": {
+            "type": "path",
+            "url": "upstream-configuration"
+        },
         "accessible-menu": {
             "type": "package",
             "package": {
@@ -41,10 +49,6 @@
         "asset-packagist": {
             "type": "composer",
             "url": "https://asset-packagist.org"
-        },
-        "blt-drupal-test": {
-            "type": "git",
-            "url": "https://github.com/modularlab/blt-drupal-test.git"
         },
         "drupal": {
             "type": "composer",
@@ -217,7 +221,9 @@
         "drush/drush": "^13.7",
         "npm-asset/photoswipe-dynamic-caption-plugin": "^1.2",
         "npm-asset/slick-carousel": "^1.8",
-        "oomphinc/composer-installers-extender": "^2.0"
+        "oomphinc/composer-installers-extender": "^2.0",
+        "pantheon-systems/drupal-integrations": "^11.2",
+        "pantheon-upstreams/upstream-configuration": "dev-main"
     },
     "conflict": {
         "drupal/drupal": "*"
