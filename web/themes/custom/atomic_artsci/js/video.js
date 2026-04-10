@@ -17,10 +17,6 @@
         this.video_btn = this.element.querySelector('.video-controls .video-btn');
         this.video_btn.id = this.video_btn.id + '-' + index;
 
-        // Do a reduced motion check, and attach a listener to do on every time it changes.
-        Video.reducedMotionCheck(this.video, this.video_btn);
-        motionQuery.addListener(function() { Video.reducedMotionCheck(this.video, this.video_btn) });
-
         // Add an event listener to the button of this banner video to toggle pause/play on the video.
         const videoInstance = this;
         this.video_btn.addEventListener('click', function () {
@@ -48,7 +44,7 @@
   }
 
   Video.reducedMotionCheck = function(video, btn) {
-    if (motionQuery.matches) {
+    if (motionQuery.matches && motionQuery.media.includes('reduce')) {
       // Pause the video.
       video.pause();
       // When the video is paused, offer the user the option to play.
@@ -87,13 +83,13 @@
     btn.setAttribute("aria-label", "Play");
   }
 
-  window.UidsVideo = Video;
+  window.ArtsciVideo = Video;
 
   // Instantiate videos on the page.
   const videos = document.getElementsByClassName('media--video');
 
   for (let i = 0; i < videos.length; i++) {
-    new UidsVideo(videos[i], i);
+    new ArtsciVideo(videos[i], i);
   }
 
 })();

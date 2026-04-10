@@ -198,12 +198,7 @@ timeline:
       assets/css/components/timeline.css: {}
   js:
     assets/js/scroll.js: {}
-artsci-gallery:
-  css:
-    component:
-      assets/css/components/blocks/gallery.css: {}
-  dependencies:
-    - core/drupal
+
 top-scroll:
   css:
     component:

@@ -182,8 +182,18 @@ h3 {
   height: auto !important;
   max-height: 500px;
 }
-.banner--offset-content .media img {
+.banner--offset-content .media img,
+.banner--offset-content .media video,
+.banner--offset-content .media iframe,
+.banner--offset-content .media .media__video-wrapper {
   max-height: 500px;
+  width: 100%;
+  height: auto;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.banner--offset-content .media video {
+  display: block;
 }
 .banner--offset-content .media::after {
   display: none !important;
@@ -191,7 +201,7 @@ h3 {
 .banner--offset-content .banner__content {
   position: relative !important;
   z-index: 2;
-  margin-top: -8rem;
+  margin-top: -5%;
   margin-bottom: 2rem;
   margin-inline: auto;
   max-width: var(--container-max, 80rem);
@@ -266,6 +276,32 @@ h3 {
 }
 .section-overlap--next + .layout__container.section-overlap--next {
   padding-top: var(--section-padding-top, 3rem);
+}
+
+.layout__container:has(.section-overlap--next) {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+.layout__container:has(.section-overlap--next) + .layout__container {
+  margin-top: -5%;
+  padding-top: calc(8rem + var(--section-padding-top, 3rem));
+}
+
+.layout__container:has(.banner--offset-content) {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+.layout__container:has(.banner--offset-content) .banner {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.layout__container:has(.banner--offset-content) + .layout__container {
+  position: relative;
+  z-index: 1;
+  margin-top: -5%;
+  padding-top: calc(8rem + var(--section-padding-top, 3rem));
 }
 
 :root {

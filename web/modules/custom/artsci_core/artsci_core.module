@@ -129,110 +129,6 @@ function artsci_core_link_attributes_plugin_alter(&$plugins) {
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function artsci_core_module_implements_alter(&$implementations, $hook) {
-  // Our artsci_core_cron() needs to run before purge_processor_cron().
-  if ($hook === 'cron' && isset($implementations['purge_processor_cron'])) {
-    $group = $implementations['purge_processor_cron'];
-    unset($implementations['purge_processor_cron']);
-    $implementations['purge_processor_cron'] = $group;
-  }
-}
-
-/**
- * Implements hook_mail().
- */
-function artsci_core_mail($key, &$message, $params) {
-  // Empty to trigger LegacyEmailBuilder for instances where mail is sent from
-  // MailManagerReplacement::mail() directly.
-}
-
-/**
- * Implements hook_mail_alter().
- */
-function artsci_core_mail_alter(&$message) {
-  if (!in_array($message['module'], [
-    'webform',
-  ])) {
-    // Add header in use by email team to avoid spam/external tagging.
-    $message['headers']['X-UI-Hosted'] = 'ITS-Acquia';
-
-    // Set a from address to the site email address if none are set.
-    if (empty($message['from'])) {
-      $message['from'] = \Drupal::config('system.site')->get('mail');
-    }
-
-    // Override the from address if it doesn't match our Platform Email domain
-    // of artsci.edu. Otherwise, the email will not be sent. We aren't handling
-    // multiple from addresses here because that doesn't seem to work currently
-    // hook_mail_alter isn't even invoked for some reason.
-    try {
-      $from = Address::create($message['from']);
-      $domain = explode('@', $from->getAddress());
-      $domain = array_pop($domain);
-
-      if ($domain != 'artsci.edu') {
-        $name = $from->getName() ?: \Drupal::config('system.site')->get('name');
-        $from = new Address('artsci-noreply@artsci.edu', $name);
-        $message['headers']['From'] = $from->toString();
-      }
-    }
-    catch (RfcComplianceException $e) {
-      \Drupal::logger('artsci_core')->error(t('Unable to alter outgoing email using from address @from', [
-        '@from' => $message['from'],
-      ]));
-    }
-  }
-  // Add a notice to workbench_email messages.
-  if ($message['module'] === 'workbench_email') {
-    $site_url = \Drupal::request()->getSchemeAndHttpHost();
-    $notice = "\n\n---\n\nThis is an automated message from $site_url.";
-
-    // Different handling based on plain text or html (array).
-    if (is_array($message['body'])) {
-      $message['body'][] = $notice;
-    }
-    else {
-      $message['body'] .= $notice;
-    }
-  }
-}
-
-/**
- * Implements hook_mailer_PHASE().
- */
-function artsci_core_mailer_build(EmailInterface $email) {
-  // Add header in use by email team to avoid spam/external tagging.
-  $email->addTextHeader('X-UI-Hosted', 'ITS-Acquia');
-
-  // Set a from address to the site email address if none are set.
-  if (empty($email->getFrom())) {
-    $email->setFrom([
-      new Address(\Drupal::config('system.site')->get('mail'), \Drupal::config('system.site')->get('name')),
-    ]);
-  }
-
-  // Override the from address if it doesn't match our Platform Email domain
-  // of artsci.edu. Otherwise, the email will not be sent. We aren't handling
-  // multiple from addresses here because that doesn't seem to work currently -
-  // hook_mail_alter isn't even invoked for some reason.
-  $from_addresses = $email->getFrom();
-
-  foreach ($from_addresses as &$from) {
-
-    $domain = explode('@', $from->getEmail());
-    $domain = array_pop($domain);
-
-    if ($domain != 'artsci.edu') {
-      $name = $from->getDisplayName() ?: \Drupal::config('system.site')->get('name');
-      $from = new Address('artsci-noreply@artsci.edu', $name);
-    }
-  }
-  $email->setFrom($from_addresses);
-}
-
-/**
  * Implements hook_entity_presave().
  */
 function artsci_core_entity_presave(EntityInterface $entity) {
@@ -290,6 +186,7 @@ function artsci_core_node_presave(Node $node) {
     'article' => 'articles',
     'page' => 'pages',
     'person' => 'people',
+    'book' => 'books',
   ];
 
   // Only proceed if this is a supported content type.
@@ -745,6 +642,7 @@ function artsci_core_preprocess_page(&$variables) {
           case 'article':
           case 'page':
           case 'person':
+          case 'book':
             switch ($related_display_config[$node_type]) {
 
               case 'headings_lists':
@@ -890,17 +788,6 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
       }
       break;
 
-    case 'google_analytics_admin_settings':
-      $artsci_core_ga = (int) \Drupal::config('artsci_core.settings')->get('artsci_core.ga');
-      // Inform on configuration form that the functionality is
-      // currently being blocked from being inserted.
-      if ($artsci_core_ga === 0) {
-        $form["general"]["accounts"]['#disabled'] = TRUE;
-        \Drupal::messenger()
-          ->addWarning(t('Google Analytics is currently blocked from being inserted on this website. Please contact the ITS Help Desk about enabling this functionality.'));
-      }
-      break;
-
     // Add delete forms as the types of protected blocks changes.
     case 'block_content_artsci_text_area_delete_form':
       // Get current block uuid.
@@ -959,26 +846,6 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
         }
       }
 
-      // Restrict access to link_attributes fieldset on menu_link_content.
-      // if (!\Drupal::currentUser()
-      //   ->hasPermission('administer menu link attributes')) {
-      //   $form['link']['widget'][0]['options']['attributes']['#access'] = FALSE;
-      // }
-
-      // Change the details title to be more specific.
-      // if (isset($form['link']['widget'][0]['options']['attributes']['#title'])) {
-      //   $form['link']['widget'][0]['options']['attributes']['#title'] = t('Link attributes');
-      // }
-
-      // Setting defaults for menu link attributes.
-      // if ($form['link']['widget'][0]['options']['attributes']['data-sn-event-type']) {
-      //   $form['link']['widget'][0]['options']['attributes']['data-sn-event-type']['#access'] = FALSE;
-      // }
-      // if ($form['link']['widget'][0]['options']['attributes']['data-sn-event-component']) {
-      //   $form['link']['widget'][0]['options']['attributes']['data-sn-event-component']['#default_value'] = 'link';
-      //   $form['link']['widget'][0]['options']['attributes']['data-sn-event-component']['#access'] = FALSE;
-      // }
-      // $form['#validate'][] = 'artsci_core_menu_link_analytics_validate';
       break;
 
     case 'artsci_core_region_settings':
@@ -1108,98 +975,7 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
 
       break;
 
-
-    case 'workbench_email_template_add_form':
-      // Provide some defaults for hand-holding purposes.
-      $form['contents']['format']['#default_value'] = 'html';
-      $form['contents']['subject']['#default_value'] = '"[node:title]" on the [site:name] website has been updated';
-      $site_url = rtrim(\Drupal::request()->getSchemeAndHttpHost() . \Drupal::request()->getBasePath(), '/');
-      $form['contents']['body']['#default_value'] = "<p><em>[node:title]</em> has been updated.</p>
-<p>[node:revision_log]</p>
-<p>Login to view: {$site_url}/saml/login?destination=/node/[node:nid]</p>";
-      $form['contents']['body']['#format'] = 'minimal';
-      $form['enabled_recipient_types']['#default_value'] = [
-        'fixed_email' => 'fixed_email',
-      ];
-
-    case 'workbench_email_template_edit_form':
-
-      // Overwrite description for email type to hide linked module jargon.
-      $form['contents']['format']['#description'] = t('Email message format.');
-
-      // Remove filtered_html and minimal_plus formats
-      // by only allowing these others.
-      $form['contents']['body']['#allowed_formats'] = [
-        'plain_text',
-        'basic',
-        'minimal',
-      ];
-
-      // Folks don't know what a bundle is.
-      $form['bundles']['#title'] = t('Types');
-      $form['bundles']['#description'] = t('Limit to the following types. Select none to include all.');
-
-      // These options are not relevant or don't work properly
-      // for the initial use cases.
-      // Author, comma-separated list available.
-      $recipients = [
-        'email',
-        'entity_reference_user',
-        'last_revision_author',
-        'role',
-        'roles_with_access',
-      ];
-      foreach ($recipients as $recipient) {
-        unset($form['enabled_recipient_types']['#options'][$recipient]);
-        $form['recipient_types']['settings'][$recipient]['#access'] = FALSE;
-      }
-
-      // More help text to the transitions section about related bundles.
-      // @todo Remove if module issue is resolved:
-      // https://www.drupal.org/project/workbench_email/issues/3559113.
-      $form['transitions']['#description'] = t('Select which transitions an email should be sent for.');
-      $map = [];
-
-      /** @var \Drupal\workflows\Entity\Workflow[] $workflows */
-      $workflows = Workflow::loadMultiple();
-      $bundle_storage = \Drupal::entityTypeManager()->getStorage('node_type');
-
-      foreach ($workflows as $workflow) {
-        $type = $workflow->getTypePlugin();
-
-        if ($type instanceof ContentModeration) {
-          $entity_types = $type->getEntityTypes();
-          if (in_array('node', $entity_types)) {
-            $bundle_ids = $type->getBundlesForEntityType('node');
-            $labels = [];
-
-            foreach ($bundle_ids as $bundle_id) {
-              $labels[] = $bundle_storage->load($bundle_id)
-                ->label();
-            }
-
-            $map[$workflow->id()] = $labels;
-          }
-        }
-      }
-
-      if (isset($form['transitions']) && is_array($form['transitions'])) {
-        foreach ($form['transitions'] as $machine_name => &$transition_element) {
-          if (is_array($transition_element) && isset($transition_element['#type']) && $transition_element['#type'] === 'checkboxes') {
-            // Append help text.
-            if (isset($map[$machine_name])) {
-              $bundles = implode(', ', $map[$machine_name]);
-              $transition_element['#description'] = t('Applies to: @bundles', ['@bundles' => $bundles]);
-            }
-            else {
-              // Hide workflow if no bundles are mapped to it.
-              $transition_element['#access'] = FALSE;
-            }
-          }
-        }
-      }
-      break;
-  }
+    }
 
   // Adjust the body summary help text for all nodes that use it.
   if (str_starts_with($form_id, 'node_') && str_ends_with($form_id, '_form')) {
@@ -1214,17 +990,6 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
  */
 function artsci_core_menu_link_analytics_validate($form, FormStateInterface $form_state) {
   LinkAnalyticsHelper::sanitizeMenuLinkAnalyticsAttributes($form_state, 'link');
-}
-
-/**
- * Implements hook_menu_links_discovered_alter().
- */
-function artsci_core_menu_links_discovered_alter(array &$links) {
-  // Change the title and description of the workbench_email menu link.
-  if (isset($links['entity.content_moderation_email_template.collection'])) {
-    $links['entity.content_moderation_email_template.collection']['title'] = t('Content notifications');
-    $links['entity.content_moderation_email_template.collection']['description'] = t('Email templates for content notifications.');
-  }
 }
 
 /**

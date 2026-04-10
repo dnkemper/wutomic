@@ -7,24 +7,24 @@ dependencies:
     - field.field.media.video.field_tags
     - media.type.video
   module:
-    - file
+    - media_thumbnails_video
 id: media.video.default
 targetEntityType: media
 bundle: video
 mode: default
 content:
   field_media_video_file:
-    type: file_video
+    type: file_video_extended
     label: hidden
     settings:
-      controls: false
-      autoplay: true
-      loop: true
+      loop: '1'
       multiple_file_display_type: tags
-      muted: true
-      playsinline: false
-      width: 1300
-      height: 730
+      muted: '1'
+      width: '1300'
+      height: '730'
+      controls: 0
+      autoplay: 0
+      playsinline: 0
     third_party_settings: {  }
     weight: 0
     region: content

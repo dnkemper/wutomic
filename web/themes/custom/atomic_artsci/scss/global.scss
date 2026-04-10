@@ -141,41 +141,50 @@ h3 {
   &::before {
     display: none !important;
   }
+.media {
+  position: relative !important;
+  height: auto !important;
+  max-height: 500px;
 
-  .media {
-    position: relative !important;
-    height: auto !important;
+  img,
+  video,
+  iframe,
+  .media__video-wrapper {
     max-height: 500px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
 
-    img {
-      max-height: 500px;
-    }
-
-    &::after {
+  // For videos that need aspect ratio preservation
+  video {
+    display: block;
+  }
+      &::after {
       display: none !important;
     }
-  }
-
-.banner__content {
-  position: relative !important;
-  z-index: 2;
-  margin-top: -8rem;
-  margin-bottom: 2rem;
-  margin-inline: auto;
-  max-width: var(--container-max, 80rem);
-  width: calc(100% - var(--gutter, 2rem) * 2);
-  border-radius: 1rem;
-  padding: 3rem 4rem;
-  text-align: center;
-  top: auto !important;
-
-  // Only apply background when there's content
-  &--has-content {
-    background: var(--bg--teal);
-    --banner-text-color: #fff;
-    --link-color: #fff;
-  }
 }
+
+  .banner__content {
+    position: relative !important;
+    z-index: 2;
+    margin-top: -5%;
+    margin-bottom: 2rem;
+    margin-inline: auto;
+    max-width: var(--container-max, 80rem);
+    width: calc(100% - var(--gutter, 2rem) * 2);
+    border-radius: 1rem;
+    padding: 3rem 4rem;
+    text-align: center;
+    top: auto !important;
+
+    // Only apply background when there's content
+    &--has-content {
+      background: var(--bg--teal);
+      --banner-text-color: #fff;
+      --link-color: #fff;
+    }
+  }
 
   // Card background options
   &.card-bg--teal .banner__content {
@@ -249,6 +258,34 @@ h3 {
     &.section-overlap--next {
       padding-top: var(--section-padding-top, 3rem);
     }
+  }
+}
+.layout__container:has(.section-overlap--next) {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+
+  // Now the adjacent sibling selector works from the section level again
+  + .layout__container {
+    margin-top: -5%;
+    padding-top: calc(8rem + var(--section-padding-top, 3rem));
+  }
+}
+.layout__container:has(.banner--offset-content) {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+
+  .banner {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  
+  + .layout__container {
+    position: relative;
+    z-index: 1;
+    margin-top: -5%;
+    padding-top: calc(8rem + var(--section-padding-top, 3rem));
   }
 }
 :root {

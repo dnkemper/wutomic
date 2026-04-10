@@ -17,7 +17,8 @@
 #}
 {{ attach_library('atomic_artsci/video-cookie') }}
   <div class="video-controls video">
-    {% if attributes.storage.autoplay and attributes.storage.muted %}
+    {# {% if attributes.storage.autoplay and attributes.storage.muted %} #}
+    {% if 'autoplay' in attributes|keys and 'muted' in attributes|keys %}
     <button class="video-btn video-btn__pause" id="video-btn">
       <span class="element-invisible">Pause</span>
     </button>

@@ -1,0 +1,4 @@
+adding:
+  permissions:
+    - 'view article revisions'
+removing: {  }

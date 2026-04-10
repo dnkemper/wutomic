@@ -1,0 +1,30 @@
+adding:
+  dependencies:
+    config:
+      - node.type.article
+      - node.type.book
+      - node.type.event
+      - node.type.page
+      - node.type.person
+    module:
+      - node
+      - node_view_permissions
+  permissions:
+    - 'view all revisions'
+    - 'view any article content'
+    - 'view any book content'
+    - 'view any event content'
+    - 'view any page content'
+    - 'view any person content'
+    - 'view article revisions'
+    - 'view book revisions'
+    - 'view event revisions'
+    - 'view own article content'
+    - 'view own book content'
+    - 'view own event content'
+    - 'view own page content'
+    - 'view own person content'
+    - 'view own unpublished content'
+    - 'view page revisions'
+    - 'view person revisions'
+removing: {  }

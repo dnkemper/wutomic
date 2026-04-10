@@ -884,7 +884,7 @@ else {
 }
 
 
-$settings['file_temp_path'] = 'sites/default/files/private/tmp';
+// $settings['file_temp_path'] = 'sites/default/files/private/tmp';
 $conf['views_data_export_directory'] = 'public://';
 
 $config["system.performance"]["css"]["preprocess"] = FALSE;

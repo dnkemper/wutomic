@@ -1,0 +1,13 @@
+uuid: 0356aecc-4e3d-40db-9588-08e6a7cc321b
+langcode: en
+status: true
+dependencies: {  }
+id: overlap_next_section
+label: 'Overlap Next Section'
+classes: section-overlap--next
+type: component
+group: default
+block_restrictions:
+  - 'inline_block:artsci_banner'
+layout_restrictions: {  }
+weight: 0

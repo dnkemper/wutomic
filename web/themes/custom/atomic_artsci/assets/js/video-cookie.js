@@ -4,7 +4,7 @@
 
   const ARTSCI_VIDEO_COOKIE = 'artsci-video';
 
-  Drupal.behaviors.artsciVideoCookie = {
+  Drupal.behaviors.ArtsciVideoCookie = {
     attach: function (context) {
       $(once('media-video-attach', '.media--video', context)).each(function () {
         const video = this.querySelector('video');
@@ -24,7 +24,7 @@
             // Check cookie id entry to see if the video was paused previously.
             if (videoCookieCollection !== {} && videoCookieCollection[videoCookieId] === 'paused') {
               // If they did, pause the video.
-              video.removeAttribute('autoplay');
+              // video.removeAttribute('autoplay');
               video.pause();
               btn.innerHTML = '<span class="element-invisible">' + 'Play' + '</span>';
               btn.classList.remove('video-btn__pause');
