@@ -1249,6 +1249,7 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
   font-family: "ivystyle-sans", "Calibri", sans-serif;
   font-weight: 400;
   font-size: 0.9rem;
+  line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
   padding: 0.5rem 1rem;

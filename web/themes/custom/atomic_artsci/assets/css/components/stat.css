@@ -37,10 +37,10 @@
   margin: 0;
   text-transform: uppercase;
   line-height: 1;
-  font-family: "ivystyle-sans", "Calibri", sans-serif;
   font-weight: bold;
   font-size: 4rem;
-  border-bottom: 8px solid #BA0C2F;
+  color: #BA0C2F;
+  font-family: "ivypresto-headline", "Georgia", serif;
   padding: 1.875rem 0 0.625rem 0;
 }
 @media (min-width: 768px) {
@@ -51,15 +51,6 @@
 .element--flex-center .stat__title {
   padding: 1.05rem 1.875rem 0.625rem 1.875rem;
   display: block;
-}
-.bg-pattern--brain .stat__title, [class*=bg--white] .stat__title, [class*=bg--gray] .stat__title, [class*=bg--black] .stat__title {
-  border-bottom: 8px solid #BA0C2F;
-}
-.stat--horizontal.bg-pattern--brain-black .stat__title, .stat--horizontal[class*=bg--black] .stat__title, .bg-pattern--brain-black .stat__title, [class*=bg--black] .stat__title {
-  color: #BA0C2F;
-}
-.bg-pattern--brain-reversed .stat__title, [class*=bg--red] .stat__title {
-  border-bottom: 8px solid white;
 }
 @media (min-width: 768px) {
   .stat__title {
@@ -83,12 +74,6 @@
     overflow: hidden;
   }
 }
-[class*=bg--black] .stat__content, .bg-pattern--brain-black .stat__content {
-  color: #ccc;
-}
-.bg-pattern--brain-reversed .stat__content, [class*=bg--red] .stat__content {
-  color: #000000;
-}
 @media (min-width: 980px) {
   .element--flex-center .stat__content {
     margin: 0 10%;
@@ -97,16 +82,11 @@
 .stat__description {
   position: relative;
   display: inline-block;
-  font-family: "ivystyle-sans", "Calibri", sans-serif;
   font-weight: bold;
-  text-transform: uppercase;
   font-size: 1.3rem;
   line-height: 1.2;
   width: 85%;
   margin: 0.625rem 0;
-}
-.bg-pattern--brain-black .stat__description, [class*=bg--black] .stat__description {
-  color: white;
 }
 @media (min-width: 980px) {
   .stat__description {
@@ -139,11 +119,6 @@
   margin-left: -7px;
 }
 
-@media (min-width: 84.375em) {
-  .stat--horizontal:not(.element--flex-center).bg-pattern--brain-reversed .stat__content, .stat--horizontal:not(.element--flex-center)[class*=bg--red] .stat__content, .bg-pattern--brain-reversed .stat--horizontal:not(.element--flex-center) .stat__content, [class*=bg--red] .stat--horizontal:not(.element--flex-center) .stat__content {
-    border-top: 8px solid #000000;
-  }
-}
 .stat--horizontal:not(.element--flex-center) .stat__title {
   font-size: 3.1rem;
 }

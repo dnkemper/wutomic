@@ -20,10 +20,10 @@
     margin: 0;
     text-transform: uppercase;
     line-height: 1;
-    font-family: variables.$font-family-caps-bold;
     font-weight: bold;
     font-size: 4rem;
-    border-bottom: 8px solid variables.$primary;
+    color: variables.$primary;
+    font-family: variables.$font-family-serif;
     padding: variables.$lg 0 variables.$sm 0;
 
     @include utilities.breakpoint(sm) {
@@ -33,26 +33,6 @@
     .element--flex-center & {
       padding: variables.$md variables.$lg variables.$sm variables.$lg;
       display: block;
-    }
-
-    .bg-pattern--brain &,
-    [class*="bg--white"] &,
-    [class*="bg--gray"] &,
-    [class*="bg--black"] & {
-      border-bottom: 8px solid variables.$primary;
-    }
-
-    // @todo This should probably be resolved with https://sass-lang.com/documentation/values/maps#using-maps
-    .stat--horizontal.bg-pattern--brain-black &,
-    .stat--horizontal[class*="bg--black"] &,
-    .bg-pattern--brain-black &,
-    [class*="bg--black"] & {
-      color: variables.$primary;
-    }
-
-    .bg-pattern--brain-reversed &,
-    [class*="bg--red"] & {
-      border-bottom: 8px solid white;
     }
 
     @include utilities.breakpoint(sm) {
@@ -77,16 +57,6 @@
       overflow: hidden;
     }
 
-    [class*="bg--black"] &,
-    .bg-pattern--brain-black & {
-      color: #ccc;
-    }
-
-    .bg-pattern--brain-reversed &,
-    [class*="bg--red"] & {
-      color: variables.$secondary;
-    }
-
     .element--flex-center & {
       @include utilities.breakpoint(md) {
         margin: 0 10%;
@@ -97,18 +67,12 @@
   &__description {
     position: relative;
     display: inline-block;
-    font-family: variables.$font-family-caps-bold;
     font-weight: bold;
-    text-transform: uppercase;
     font-size: 1.3rem;
     line-height: 1.2;
     width: 85%;
     margin: variables.$sm 0;
 
-    .bg-pattern--brain-black &,
-    [class*="bg--black"] & {
-      color: white;
-    }
 
     @include utilities.breakpoint(md) {
       font-size: 1.5rem;
@@ -144,17 +108,6 @@
 }
 
 .stat--horizontal:not(.element--flex-center) {
-
-  &.bg-pattern--brain-reversed,
-  &[class*="bg--red"],
-  .bg-pattern--brain-reversed &,
-  [class*="bg--red"] & {
-    .stat__content {
-      @include utilities.breakpoint(page-container) {
-        border-top: 8px solid variables.$secondary;
-      }
-    }
-  }
 
 
   .stat__title {
