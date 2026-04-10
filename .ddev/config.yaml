@@ -8,10 +8,13 @@ additional_hostnames: []
 additional_fqdns: []
 database:
     type: mariadb
-    version: "10.11"
+    version: "10.6"
 use_dns_when_possible: true
 composer_version: "2"
-web_environment: []
+web_environment:
+    - TERMINUS_MACHINE_TOKEN=CeiHRV8oyMElbLmSTxtHnGSJSai7kfgl9i2LEPgx7IGSS
+    - PANTHEON_SITE=wustl-history
+    - PANTHEON_ENVIRONMENT=dev
 corepack_enable: true
 
 # Key features of DDEV's config.yaml:

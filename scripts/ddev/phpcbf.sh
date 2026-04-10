@@ -1,0 +1,2 @@
+./vendor/bin/phpcbf --standard=Drupal --extensions=php,module,theme,info,twig,yml,scss web/themes/custom/olympian9
+./vendor/bin/phpcbf --standard=Drupal --extensions=php,module,theme,info,twig,yml,scss web/modules/custom/
