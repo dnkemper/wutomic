@@ -1,0 +1,5 @@
+name: "UI Press Customizations"
+description: Customizations specific to the University of Iowa Press site.
+type: module
+core_version_requirement: ^10 || ^11
+package: Custom - artsci - Press

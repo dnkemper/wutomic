@@ -5090,7 +5090,7 @@ type@^2.7.2:
 
 "uids@github:uartsci/uids#d9f64e5":
   version "4.0.0-alpha1"
-  resolved "https://codeload.github.com/uartsci/uids/tar.gz/d9f64e570e701282c33f44c74fa4ba31fe8ed234"
+  resolved "https://codeload.github.com/uartsci/artsci/tar.gz/d9f64e570e701282c33f44c74fa4ba31fe8ed234"
   dependencies:
     vue "^3.2.31"
 

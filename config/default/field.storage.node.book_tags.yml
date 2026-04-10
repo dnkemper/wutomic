@@ -7,7 +7,7 @@ dependencies:
     - taxonomy
   enforced:
     module:
-      - uiowa_book
+      - artsci_book
 _core:
   default_config_hash: feOwY0J5CyJp27K1SPYUC363BObgjT5HCI1hFiFKYQ4
 id: node.book_tags

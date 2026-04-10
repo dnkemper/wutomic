@@ -1251,7 +1251,7 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
   color: #BA0C2F;
@@ -1269,7 +1269,7 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
 .node-preview-container .node-preview-backlink span[class*=fa-] {
   color: #BA0C2F;
 }
-.node-preview-container .node-preview-backlink:hover, .node-preview-container .node-preview-backlink:focus {
+.node-preview-container .node-preview-backlink:hover a, .node-preview-container .node-preview-backlink:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }

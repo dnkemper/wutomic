@@ -6,7 +6,7 @@ dependencies:
     - search_api_db
   enforced:
     module:
-      - uiowa_book
+      - artsci_book
 _core:
   default_config_hash: ol1pB9h5UeSuICzP7b3If3YOf6in1cxDIGsXmbMJNh0
 id: database_server

@@ -5,6 +5,6 @@ dependencies: {  }
 id: content_alignment
 label: 'Content Alignment'
 multiselect: single
-form_type: multiple-select
+form_type: select
 required: false
 weight: -12

@@ -11,8 +11,8 @@
     color: variables.$secondary;
   }
 
-  [class*="bg--black"] & {
-    border-color: rgba(255, 255, 255, .425);
+  [class*="bg--teal"] & {
+    border-color: white;
   }
 }
 // Options.
@@ -22,7 +22,6 @@
 
   & {
     border-color: variables.$primary;
-    color: variables.$white;
   }
 
   [class*="bg--"] [class*="bg--gray"] &,
@@ -58,6 +57,14 @@
   & {
     background: #fff;
   }
+    [class*="bg--teal"] &,
+  [class*="bg--"] [class*="bg--teal"] & {
+    color: var(--bg-teal);
+    border: white;
+    svg {
+      color: var(--bg-teal);
+    }
+  }
 }
 
 // Modifiers.
@@ -66,9 +73,8 @@
   @include utilities.bttn--focus;
 
   [class*="bg--teal"] &,
-  [class*="bg--"] [class*="bg--teal"] & {
+  [class*="bg--white"] [class*="bg--teal"] & {
     color: #fff;
-    border-color: rgba(255, 255, 255, 0.425);
   }
 
   i,
@@ -78,7 +84,10 @@
     [class*="bg--white"] [class*="bg--red"] & {
       color: #fff;
     }
-
+  [class*="bg--teal"] &,
+  [class*="bg--white"] [class*="bg--teal"] & {
+    color: #fff;
+  }
     [class*="bg--white"] &,
     [class*="bg--red"] [class*="bg--white"] &,
     [class*="bg--red"] [class*="bg--gray"] & {
@@ -168,11 +177,10 @@
 
 .bttn--light-font {
   font-family: variables.$font-family-sans-serif;
-  font-weight: variables.$font-weight-normal;
+  font-weight: variables.$font-weight-bold;
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 2rem 1rem;
 
   &:focus {
     text-decoration: underline;

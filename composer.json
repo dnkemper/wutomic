@@ -83,7 +83,7 @@
         "drupal/antibot": "^2.0",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/bigmenu": "^2.0@RC",
-        "drupal/book": "3.0.x-dev@dev",
+        "drupal/book": "^3.0",
         "drupal/captcha": "^2.0",
         "drupal/charts": "^5.1",
         "drupal/ckeditor_small_tag": "^1.0@RC",
@@ -273,9 +273,6 @@
             },
             "drupal/book": {
                 "Book module does not check access for unpublished content": "https://git.drupalcode.org/project/book/-/merge_requests/168.diff"
-            },
-            "drupal/ckeditor": {
-                "Changing an existing embedded media's alignment or alt data attributes does not get saved with CKEditor": "https://www.drupal.org/files/issues/2023-01-03/3330723-3.patch"
             },
             "drupal/core": {
                 "[2985199] Extensions in Multisite Directories Not Registered When Rebuilding Cache": "https://www.drupal.org/files/issues/2025-12-23/2985199-100.patch",

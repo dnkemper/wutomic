@@ -30,22 +30,32 @@ class Card extends BlockContent implements RendersAsCardInterface {
       '#content' => 'field_artsci_card_excerpt',
     ]);
 
-    if (!empty($build['field_artsci_card_link'][0])) {
-      // Capture the parts of the URL and title.
-      $url = $build['field_artsci_card_link'][0]['#url'] ?? NULL;
-      $title = $build['field_artsci_card_link'][0]['#title'] ?? NULL;
+    // Build links array from link field.
+    if (!empty($build['field_artsci_card_link'])) {
+      $links = [];
+      foreach (Element::children($build['field_artsci_card_link']) as $delta) {
+        $link_item = $build['field_artsci_card_link'][$delta];
+        $url = $link_item['#url'] ?? NULL;
+        $title = $link_item['#title'] ?? NULL;
 
-      if ($url) {
-        $link_attributes = $url->getOptions()['attributes'] ?? [];
-        $url = $url->toString();
-        if (LinkHelper::shouldClearTitle($title)) {
-          $title = NULL;
+        if ($url) {
+          $link_attributes = $url->getOptions()['attributes'] ?? [];
+          $link_url = $url->toString();
+
+          if (LinkHelper::shouldClearTitle($title)) {
+            $title = NULL;
+          }
+
+          $links[] = [
+            'link_url' => $link_url,
+            'link_text' => $title,
+            'link_attributes' => $link_attributes,
+          ];
         }
-        $build['#url'] = $url;
-        $build['#link_text'] = $title;
-        if (!empty($link_attributes)) {
-          $build['#link_attributes'] = $link_attributes;
-        }
+      }
+
+      if (!empty($links)) {
+        $build['#links'] = $links;
       }
 
       // Remove the original field to prevent further processing.

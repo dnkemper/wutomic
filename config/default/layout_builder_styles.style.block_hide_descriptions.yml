@@ -9,7 +9,9 @@ type: component
 group: default
 block_restrictions:
   - 'inline_block:featured_content'
-  - 'inline_block:artsci_events'
   - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
 layout_restrictions: {  }
 weight: -27

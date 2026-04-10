@@ -233,7 +233,7 @@
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
   font-family: "ivystyle-sans", "Calibri", sans-serif;
@@ -725,7 +725,7 @@ details.form__details--multi-select .details-wrapper .form-item {
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
   text-transform: uppercase;
@@ -816,37 +816,37 @@ details.form__details--multi-select .details-wrapper .form-item {
 .bg-yellow .block-webform input#edit-actions-submit span[class*=fa-] {
   color: #BA0C2F;
 }
-[class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover, [class*=bg--red] .block-webform input[id^=edit-actions-submit]:focus,
-[class*=bg--red] .block-webform input[id^=edit-actions]:hover,
-[class*=bg--red] .block-webform input[id^=edit-actions]:focus,
-[class*=bg--red] .block-webform input[id^=edit-submit]:hover,
-[class*=bg--red] .block-webform input[id^=edit-submit]:focus,
-[class*=bg--red] .block-webform input#edit-actions-submit:hover,
-[class*=bg--red] .block-webform input#edit-actions-submit:focus,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:hover,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:focus,
-.bg--brain-reversed .block-webform input[id^=edit-actions]:hover,
-.bg--brain-reversed .block-webform input[id^=edit-actions]:focus,
-.bg--brain-reversed .block-webform input[id^=edit-submit]:hover,
-.bg--brain-reversed .block-webform input[id^=edit-submit]:focus,
-.bg--brain-reversed .block-webform input#edit-actions-submit:hover,
-.bg--brain-reversed .block-webform input#edit-actions-submit:focus,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:hover,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:focus,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:hover,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:focus,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:hover,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:focus,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:hover,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:focus,
-.bg-yellow .block-webform input[id^=edit-actions-submit]:hover,
-.bg-yellow .block-webform input[id^=edit-actions-submit]:focus,
-.bg-yellow .block-webform input[id^=edit-actions]:hover,
-.bg-yellow .block-webform input[id^=edit-actions]:focus,
-.bg-yellow .block-webform input[id^=edit-submit]:hover,
-.bg-yellow .block-webform input[id^=edit-submit]:focus,
-.bg-yellow .block-webform input#edit-actions-submit:hover,
-.bg-yellow .block-webform input#edit-actions-submit:focus {
+[class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover a, [class*=bg--red] .block-webform input[id^=edit-actions-submit]:focus a,
+[class*=bg--red] .block-webform input[id^=edit-actions]:hover a,
+[class*=bg--red] .block-webform input[id^=edit-actions]:focus a,
+[class*=bg--red] .block-webform input[id^=edit-submit]:hover a,
+[class*=bg--red] .block-webform input[id^=edit-submit]:focus a,
+[class*=bg--red] .block-webform input#edit-actions-submit:hover a,
+[class*=bg--red] .block-webform input#edit-actions-submit:focus a,
+.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:hover a,
+.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:focus a,
+.bg--brain-reversed .block-webform input[id^=edit-actions]:hover a,
+.bg--brain-reversed .block-webform input[id^=edit-actions]:focus a,
+.bg--brain-reversed .block-webform input[id^=edit-submit]:hover a,
+.bg--brain-reversed .block-webform input[id^=edit-submit]:focus a,
+.bg--brain-reversed .block-webform input#edit-actions-submit:hover a,
+.bg--brain-reversed .block-webform input#edit-actions-submit:focus a,
+.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:hover a,
+.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:focus a,
+.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:hover a,
+.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:focus a,
+.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:hover a,
+.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:focus a,
+.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:hover a,
+.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:focus a,
+.bg-yellow .block-webform input[id^=edit-actions-submit]:hover a,
+.bg-yellow .block-webform input[id^=edit-actions-submit]:focus a,
+.bg-yellow .block-webform input[id^=edit-actions]:hover a,
+.bg-yellow .block-webform input[id^=edit-actions]:focus a,
+.bg-yellow .block-webform input[id^=edit-submit]:hover a,
+.bg-yellow .block-webform input[id^=edit-submit]:focus a,
+.bg-yellow .block-webform input#edit-actions-submit:hover a,
+.bg-yellow .block-webform input#edit-actions-submit:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
@@ -925,29 +925,29 @@ details.form__details--multi-select .details-wrapper .form-item {
 .bg-dark .block-webform input#edit-actions-submit span[class*=fa-] {
   color: #BA0C2F;
 }
-[class*=bg--black] .block-webform input[id^=edit-actions-submit]:hover, [class*=bg--black] .block-webform input[id^=edit-actions-submit]:focus,
-[class*=bg--black] .block-webform input[id^=edit-actions]:hover,
-[class*=bg--black] .block-webform input[id^=edit-actions]:focus,
-[class*=bg--black] .block-webform input[id^=edit-submit]:hover,
-[class*=bg--black] .block-webform input[id^=edit-submit]:focus,
-[class*=bg--black] .block-webform input#edit-actions-submit:hover,
-[class*=bg--black] .block-webform input#edit-actions-submit:focus,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:hover,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:focus,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions]:hover,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions]:focus,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit]:hover,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit]:focus,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit:hover,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit:focus,
-.bg-dark .block-webform input[id^=edit-actions-submit]:hover,
-.bg-dark .block-webform input[id^=edit-actions-submit]:focus,
-.bg-dark .block-webform input[id^=edit-actions]:hover,
-.bg-dark .block-webform input[id^=edit-actions]:focus,
-.bg-dark .block-webform input[id^=edit-submit]:hover,
-.bg-dark .block-webform input[id^=edit-submit]:focus,
-.bg-dark .block-webform input#edit-actions-submit:hover,
-.bg-dark .block-webform input#edit-actions-submit:focus {
+[class*=bg--black] .block-webform input[id^=edit-actions-submit]:hover a, [class*=bg--black] .block-webform input[id^=edit-actions-submit]:focus a,
+[class*=bg--black] .block-webform input[id^=edit-actions]:hover a,
+[class*=bg--black] .block-webform input[id^=edit-actions]:focus a,
+[class*=bg--black] .block-webform input[id^=edit-submit]:hover a,
+[class*=bg--black] .block-webform input[id^=edit-submit]:focus a,
+[class*=bg--black] .block-webform input#edit-actions-submit:hover a,
+[class*=bg--black] .block-webform input#edit-actions-submit:focus a,
+.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:hover a,
+.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:focus a,
+.bg-pattern--brain-black .block-webform input[id^=edit-actions]:hover a,
+.bg-pattern--brain-black .block-webform input[id^=edit-actions]:focus a,
+.bg-pattern--brain-black .block-webform input[id^=edit-submit]:hover a,
+.bg-pattern--brain-black .block-webform input[id^=edit-submit]:focus a,
+.bg-pattern--brain-black .block-webform input#edit-actions-submit:hover a,
+.bg-pattern--brain-black .block-webform input#edit-actions-submit:focus a,
+.bg-dark .block-webform input[id^=edit-actions-submit]:hover a,
+.bg-dark .block-webform input[id^=edit-actions-submit]:focus a,
+.bg-dark .block-webform input[id^=edit-actions]:hover a,
+.bg-dark .block-webform input[id^=edit-actions]:focus a,
+.bg-dark .block-webform input[id^=edit-submit]:hover a,
+.bg-dark .block-webform input[id^=edit-submit]:focus a,
+.bg-dark .block-webform input#edit-actions-submit:hover a,
+.bg-dark .block-webform input#edit-actions-submit:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }

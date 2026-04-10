@@ -30,11 +30,11 @@
     <testsuite name="layout_builder_custom">
       <directory>./docroot/modules/custom/layout_builder_custom/tests/</directory>
     </testsuite>
-    <testsuite name="sitenow">
-      <directory>./docroot/profiles/custom/sitenow/tests/</directory>
+    <testsuite name="artsci">
+      <directory>./docroot/profiles/custom/artsci/tests/</directory>
     </testsuite>
-    <testsuite name="sitenow_intranet">
-      <directory>./docroot/modules/custom/sitenow_intranet/tests/</directory>
+    <testsuite name="artsci_intranet">
+      <directory>./docroot/modules/custom/artsci_intranet/tests/</directory>
     </testsuite>
     <testsuite name="uartsci_alerts">
       <directory>./docroot/modules/custom/uartsci_alerts/tests/</directory>

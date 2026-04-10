@@ -31,11 +31,8 @@ class Card extends RenderElementBase {
       '#subtitle' => NULL,
       '#meta' => [],
       '#content' => NULL,
-      '#url' => NULL,
-      '#link_text' => NULL,
+      '#links' => [],
       '#link_indicator' => FALSE,
-      '#linked_element' => FALSE,
-      '#aria_describedby' => '',
     ];
   }
 
@@ -58,6 +55,7 @@ class Card extends RenderElementBase {
         'borderless',
         'hide',
         'headline',
+        'bttn',
       ] as $check) {
         if (str_starts_with($style, $check)) {
           $filtered_styles[$key] = $style;

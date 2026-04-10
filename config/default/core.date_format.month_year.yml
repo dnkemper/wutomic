@@ -4,7 +4,7 @@ status: true
 dependencies:
   enforced:
     module:
-      - uiowa_book
+      - artsci_book
 _core:
   default_config_hash: OnyK9VX947nFYWYiWi4p9B_HlDHSKIKpvdWQ_NRX3xE
 id: month_year

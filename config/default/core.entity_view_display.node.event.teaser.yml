@@ -1,0 +1,186 @@
+uuid: 97267359-5092-4c84-b790-b0a4d874ed58
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.event.body
+    - field.field.node.event.field_event_attendance
+    - field.field.node.event.field_event_attendance_mode
+    - field.field.node.event.field_event_category
+    - field.field.node.event.field_event_directions
+    - field.field.node.event.field_event_geolocation
+    - field.field.node.event.field_event_hide
+    - field.field.node.event.field_event_location
+    - field.field.node.event.field_event_parent
+    - field.field.node.event.field_event_performer
+    - field.field.node.event.rabbit_hole__settings
+    - field.field.node.event.field_event_series_link
+    - field.field.node.event.field_event_series_link_direct
+    - field.field.node.event.field_event_status
+    - field.field.node.event.field_event_virtual
+    - field.field.node.event.field_event_when
+    - field.field.node.event.field_image
+    - field.field.node.event.field_meta_tags
+    - field.field.node.event.field_tags
+    - field.field.node.event.field_teaser
+    - node.type.event
+  module:
+    - address
+    - field_delimiter
+    - link
+    - options
+    - smart_date
+    - smart_trim
+    - user
+_core:
+  default_config_hash: GE8vxA9J85JTlqiqDwrBsmkZq8HXuJ5QEESclO3u8N8
+id: node.event.teaser
+targetEntityType: node
+bundle: event
+mode: teaser
+content:
+  body:
+    type: smart_trim
+    label: visually_hidden
+    settings:
+      trim_length: 300
+      trim_type: chars
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+        token_browser: ''
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_event_attendance:
+    type: boolean
+    label: visually_hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_event_location:
+    type: address_default
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_event_performer:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: true
+    third_party_settings:
+      field_delimiter:
+        delimiter: ','
+    weight: 8
+    region: content
+  field_event_series_link:
+    type: link
+    label: visually_hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_event_series_link_direct:
+    type: boolean
+    label: above
+    settings:
+      format: boolean
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_event_status:
+    type: list_default
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_event_virtual:
+    type: link
+    label: visually_hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_event_when:
+    type: smartdate_default
+    label: visually_hidden
+    settings:
+      timezone_override: ''
+      format_type: medium
+      format: default
+      force_chronological: false
+      add_classes: false
+      time_wrapper: true
+      localize: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: large__square
+      link: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  private:
+    type: private
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_event_attendance_mode: true
+  field_event_category: true
+  field_event_directions: true
+  field_event_geolocation: true
+  field_event_hide: true
+  field_event_parent: true
+  field_meta_tags: true
+  field_tags: true
+  field_teaser: true
+  rabbit_hole__settings: true
+  search_api_excerpt: true

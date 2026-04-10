@@ -13,7 +13,7 @@ dependencies:
     - search_api
   enforced:
     module:
-      - uiowa_book
+      - artsci_book
 _core:
   default_config_hash: rF8hv2fcj4sVJCS_8I-RHDro8-U5zxE9DOfnlIMYOCU
 id: book_content_and_tags

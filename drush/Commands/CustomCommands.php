@@ -142,7 +142,7 @@ class CustomCommands extends DrushCommands implements SiteAliasManagerAwareInter
 
     $configs = [
       'migrate_plus.migration_group.olympian_migration',
-      'sitenow_dispatch.settings',
+      'artsci_dispatch.settings',
     ];
 
     foreach ($configs as $config) {

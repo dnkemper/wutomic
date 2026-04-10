@@ -10,5 +10,6 @@ group: button_style
 block_restrictions:
   - 'inline_block:artsci_banner'
   - 'inline_block:artsci_card'
+  - 'inline_block:artsci_cta'
 layout_restrictions: {  }
 weight: 18

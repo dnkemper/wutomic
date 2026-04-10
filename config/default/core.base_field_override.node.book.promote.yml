@@ -1,11 +1,9 @@
-uuid: 12414b8e-a4e0-4f8b-a48d-59ae0b770b12
+uuid: ccc72e30-c37b-48d6-b615-ebcc0827ba7f
 langcode: en
 status: true
 dependencies:
   config:
     - node.type.book
-_core:
-  default_config_hash: rYbAZX1eKDo7CVRnBnpYgdmk8HQo5IcKhzePCx9LCZY
 id: node.book.promote
 field_name: promote
 entity_type: node

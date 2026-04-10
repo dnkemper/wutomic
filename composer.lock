@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3e60ef7cc97accbd421de89a436d6b4",
+    "content-hash": "153d67003ad5031f7f734ae9cbe9c2bf",
     "packages": [
         {
             "name": "apvarun/toastify-js",
@@ -2206,11 +2206,17 @@
         },
         {
             "name": "drupal/book",
-            "version": "dev-3.0.x",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/book.git",
-                "reference": "dc19ee2d9379bf2130d5c99b760dc9c69258dded"
+                "reference": "3.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/book-3.0.1.zip",
+                "reference": "3.0.1",
+                "shasum": "df7a98cdc8114329337bbe6f3503358cef23786b"
             },
             "require": {
                 "drupal/core": "^11.2",
@@ -2222,15 +2228,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.0.x": "3.0.x-dev"
-                },
                 "drupal": {
-                    "version": "3.0.1+1-dev",
-                    "datestamp": "1774821482",
+                    "version": "3.0.1",
+                    "datestamp": "1774022170",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -18178,7 +18181,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/bigmenu": 5,
-        "drupal/book": 20,
         "drupal/ckeditor_small_tag": 5,
         "drupal/content_entity_clone": 20,
         "drupal/default_content": 15,

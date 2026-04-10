@@ -290,7 +290,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
         switch ($block->getPluginId()) {
           case 'inline_block:artsci_card':
             $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
             
             // Hide margin field - will default to block_margin_default_removed.
             if (isset($form['layout_builder_style_margin'])) {
@@ -389,7 +389,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
           case 'inline_block:artsci_card':
             $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://sitenow.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
             // Note: #states for media style fields removed because Media Library
             // widget selectors are not reliably targetable with Drupal States API.
             // These fields will always be visible. Consider adding JavaScript-based
@@ -960,7 +960,7 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
         }
         if (isset($element['field_artsci_card_button_display'])) {
           $element['field_artsci_card_button_display']['widget']['#options']['_none'] = 'Use site default';
-          $element['field_artsci_card_button_display']['widget']['#description'] .= t('&nbsp;If "Use site default" is selected, this setting can be changed on the <a href="@settings_url">SiteNow Pages settings</a>.', [
+          $element['field_artsci_card_button_display']['widget']['#description'] .= t('&nbsp;If "Use site default" is selected, this setting can be changed on the <a href="@settings_url">artsci Pages settings</a>.', [
             '@settings_url' => Url::fromRoute("artsci_pages.settings_form")
               ->toString(),
           ]);

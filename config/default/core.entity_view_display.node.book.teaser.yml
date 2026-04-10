@@ -64,14 +64,41 @@ hidden:
   entity_print_view_epub: true
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
+  field_book_afterword_author: true
+  field_book_art: true
   field_book_author: true
+  field_book_awards: true
+  field_book_contributors: true
+  field_book_description_summary: true
+  field_book_edition: true
+  field_book_editor: true
+  field_book_essay_by: true
+  field_book_excerpt: true
+  field_book_foreword_author: true
+  field_book_illustrator: true
+  field_book_interior_pages: true
+  field_book_introduction_author: true
   field_book_links: true
+  field_book_pages: true
+  field_book_photographer: true
+  field_book_preface_authors: true
   field_book_publication_date: true
+  field_book_related_reads: true
+  field_book_reviews_blurbs: true
+  field_book_season: true
+  field_book_series: true
+  field_book_subject: true
   field_book_subtitle: true
+  field_book_table_of_contents: true
+  field_book_translator: true
+  field_book_trim_size: true
+  field_book_type: true
   field_byline_names: true
   field_byline_options: true
   field_description: true
   field_image: true
   field_is_shared_content: true
+  field_meta_tags: true
+  field_pages_art_trim: true
   rabbit_hole__settings: true
   search_api_excerpt: true

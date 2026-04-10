@@ -34,10 +34,10 @@
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  border: 1px solid;
+  border: 2px solid;
   border-color: var(--transparent-border);
 }
 .bttn i,
@@ -52,8 +52,8 @@
   border-color: rgba(0, 0, 0, 0.425);
   color: #000000;
 }
-[class*=bg--black] .bttn {
-  border-color: rgba(255, 255, 255, 0.425);
+[class*=bg--teal] .bttn {
+  border-color: white;
 }
 
 .bttn--primary {
@@ -66,13 +66,12 @@
 .bttn--primary span[class*=fa-] {
   color: #BA0C2F;
 }
-.bttn--primary:hover, .bttn--primary:focus {
+.bttn--primary:hover a, .bttn--primary:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
 .bttn--primary {
   border-color: #BA0C2F;
-  color: #fff;
 }
 [class*=bg--] [class*=bg--gray] .bttn--primary, [class*=bg--gray] .bttn--primary, [class*=bg--] [class*=bg--white] .bttn--primary, [class*=bg--white] .bttn--primary {
   border-color: #BA0C2F;
@@ -88,7 +87,7 @@
 .bttn--secondary span[class*=fa-] {
   color: #BA0C2F;
 }
-.bttn--secondary:hover, .bttn--secondary:focus {
+.bttn--secondary:hover a, .bttn--secondary:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
@@ -109,12 +108,19 @@
 .bttn--tertiary span[class*=fa-] {
   color: #BA0C2F;
 }
-.bttn--tertiary:hover, .bttn--tertiary:focus {
+.bttn--tertiary:hover a, .bttn--tertiary:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
 .bttn--tertiary {
   background: #fff;
+}
+[class*=bg--teal] .bttn--tertiary, [class*=bg--] [class*=bg--teal] .bttn--tertiary {
+  color: var(--bg-teal);
+  border: white;
+}
+[class*=bg--teal] .bttn--tertiary svg, [class*=bg--] [class*=bg--teal] .bttn--tertiary svg {
+  color: var(--bg-teal);
 }
 
 .bttn--transparent {
@@ -127,19 +133,25 @@
 .bttn--transparent span[class*=fa-] {
   color: inherit;
 }
-.bttn--transparent:hover, .bttn--transparent:focus {
+.bttn--transparent:hover a, .bttn--transparent:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
-[class*=bg--teal] .bttn--transparent, [class*=bg--] [class*=bg--teal] .bttn--transparent {
+[class*=bg--teal] .bttn--transparent, [class*=bg--white] [class*=bg--teal] .bttn--transparent {
   color: #fff;
-  border-color: rgba(255, 255, 255, 0.425);
 }
 [class*=bg--red] .bttn--transparent i, [class*=bg--white] [class*=bg--red] .bttn--transparent i,
 [class*=bg--red] .bttn--transparent span[class*=fa-],
 [class*=bg--white] [class*=bg--red] .bttn--transparent span[class*=fa-],
 [class*=bg--red] .bttn--transparent svg,
 [class*=bg--white] [class*=bg--red] .bttn--transparent svg {
+  color: #fff;
+}
+[class*=bg--teal] .bttn--transparent i, [class*=bg--white] [class*=bg--teal] .bttn--transparent i,
+[class*=bg--teal] .bttn--transparent span[class*=fa-],
+[class*=bg--white] [class*=bg--teal] .bttn--transparent span[class*=fa-],
+[class*=bg--teal] .bttn--transparent svg,
+[class*=bg--white] [class*=bg--teal] .bttn--transparent svg {
   color: #fff;
 }
 [class*=bg--white] .bttn--transparent i, [class*=bg--red] [class*=bg--white] .bttn--transparent i, [class*=bg--red] [class*=bg--gray] .bttn--transparent i,
@@ -223,11 +235,10 @@
 
 .bttn--light-font {
   font-family: "ivystyle-sans", "Calibri", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 2rem 1rem;
 }
 .bttn--light-font:focus {
   text-decoration: underline;

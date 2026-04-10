@@ -2440,11 +2440,10 @@ ul[type="square"] {
 
 .bttn--light-font {
   font-family: variables.$font-family-sans-serif;
-  font-weight: variables.$font-weight-normal;
+  font-weight: variables.$font-weight-bold;
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 1rem 2rem 1rem;
 
   &:focus {
     text-decoration: underline;

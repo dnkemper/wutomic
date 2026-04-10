@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{{ attach_library('atomic_artsci/accordion') }}
+{% set id = "book-publication-details-accordion" %}
+
+<div class="collection--accordion">
+  <div class="accordion" role="tablist" aria-owns="book-details-0" aria-multiselectable="false" id="{{ id }}">
+    {% for row in rows %}
+      <div{{ row.attributes }}>
+        {% embed '@atomic_artsci/artsci/accordion-item.html.twig' with row.template_options only %}
+        {% endembed %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

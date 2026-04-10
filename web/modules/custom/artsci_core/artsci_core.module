@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Primary module hooks for Uiowa Core module.
+ * Primary module hooks for artsci Core module.
  */
 
 use Drupal\Component\Utility\Html;
@@ -397,10 +397,13 @@ function template_preprocess_card(&$variables) {
   }
 
   // Create a set of title headline classes in case its needed.
-  $headline_classes = ['headline'];
+  $headline_classes = ['headline', 'headline--serif', 'headline--medium'];
 
-  // Loop through all classes, add any media and headline classes
-  // to the array and remove them from the card classes.
+  // Create a set of button classes.
+  $button_classes = [];
+
+  // Loop through all classes, add any media, headline, and button classes
+  // to their respective arrays and remove them from the card classes.
   if (isset($element['#attributes']['class'])) {
     foreach ($element['#attributes']['class'] as $key => $style) {
       if (str_starts_with($style, 'media')) {
@@ -436,28 +439,66 @@ function template_preprocess_card(&$variables) {
         $headline_classes[] = $style;
         unset($element['#attributes']['class'][$key]);
       }
+            // if (str_starts_with($style, 'bttn')) {
+        // $media_formats = [
+        //   'bttn--primary' => 'button_primary',
+        //   'bttn--tertiary' => 'button_tertiary',
+        //   'bttn--transparent' => 'button_outline',
+        // ];
+
+      // Extract button styles from Layout Builder Styles.
+      if (str_starts_with($style, 'bttn')) {
+        $button_classes[] = $style;
+        unset($element['#attributes']['class'][$key]);
+      }
     }
   }
 
-  $linked_element = FALSE;
+  // Remove duplicate button classes.
+  $button_classes = array_unique($button_classes);
 
-  // If there is no URL, then it is not linked.
-  if (!empty($element['#url'])) {
-    if (!is_null($element['#title'])) {
-      $linked_element = 'title';
-    }
-    elseif (isset($element['#link_text'])) {
-      $linked_element = 'button';
-    }
-    elseif (!empty($element['#media'])) {
-      $linked_element = 'media';
-    }
-    else {
-      $linked_element = 'button';
+  // Store button classes for use in template.
+  $element['#button_classes'] = $button_classes;
+
+  // Initialize links array if not set.
+  if (!isset($element['#links'])) {
+    $element['#links'] = [];
+  }
+
+  // Determine linked element and button display based on links array.
+  $linked_element = FALSE;
+  $show_button = FALSE;
+  $link = NULL;
+
+  if (!empty($element['#links']) && count($element['#links']) === 1) {
+    $link = reset($element['#links']);
+
+    if (!empty($link['link_url'])) {
+      // Title is the default linking element, if it exists.
+      if (!empty($element['#title'])) {
+        $linked_element = 'title';
+      }
+      // If we have link text, determine behavior.
+      if (!empty($link['link_text'])) {
+        // Title is set, use it as the linking element with a pseudo-button.
+        if (!empty($element['#title'])) {
+          $show_button = TRUE;
+        }
+        else {
+          $linked_element = 'button';
+        }
+      }
+      elseif (empty($element['#title']) && !empty($element['#media'])) {
+        $linked_element = 'media';
+      }
+      elseif (empty($element['#title'])) {
+        $linked_element = 'button';
+      }
     }
   }
 
   $element['#linked_element'] = $linked_element;
+  $element['#show_button'] = $show_button;
 
   if (!empty($element['#title'])) {
     $element['#headline'] = [
@@ -467,9 +508,22 @@ function template_preprocess_card(&$variables) {
     ];
 
     // Set 'click-target' class on headline URL if title is the linked element.
-    if ($element['#linked_element'] === 'title') {
-      $element['#headline']['headline_url'] = $element['#url'];
+    if ($element['#linked_element'] === 'title' && $link) {
+      $element['#headline']['headline_url'] = $link['link_url'];
       $element['#headline']['headline_url_class'] = 'click-target';
+
+      // Apply link tracking attributes to headline.
+      if (!empty($link['link_attributes'])) {
+        $element['#headline']['headline_url_attributes'] = $link['link_attributes'];
+      }
+
+      // If title and link text are set, set a button id attribute for
+      // aria-describedby.
+      if (!empty($link['link_text'])) {
+        $aria_id = Html::getUniqueId($element['#title']);
+        $element['#headline']['headline_aria'] = $aria_id;
+        $element['#button_attributes']['id'] = $aria_id;
+      }
     }
   }
 
@@ -478,15 +532,7 @@ function template_preprocess_card(&$variables) {
     $element['#button_attributes']['aria-hidden'] = 'true';
   }
 
-  // If title and link text are set, set a button id attribute for
-  // aria-describedby.
-  if (is_string($element['#title']) && !empty($element['#link_text'])) {
-    $aria_id = Html::getUniqueId($element['#title']);
-    $element['#headline']['headline_aria'] = $aria_id;
-    $element['#button_attributes']['id'] = $aria_id;
-  }
-
-  if (!empty($element['#url'])) {
+  if (!empty($element['#links'])) {
     // Add click-container class if there is a link.
     $element['#attributes']['class'][] = 'click-container';
   }
@@ -498,30 +544,25 @@ function template_preprocess_card(&$variables) {
 
   $element['#attributes']['class'][] = 'block--word-break';
 
-  // Initialize a list of button classes we need to use.
-  $button_classes = [
-    'bttn',
-    'bttn--primary',
-    'bttn--transparent',
-    'bttn--light-font',
-  ];
-
   // Add the 'click-target' class to the button if it is linked.
   if ($element['#linked_element'] === 'button') {
     $button_classes[] = 'click-target';
   }
 
-  // Set appropriate button classes if there is a URL, no link text, and link
+  // Set appropriate button classes if there is a link, no link text, and link
   // indicator should be shown.
-  if (isset($element['#url']) && !isset($element['#link_text']) && $element['#link_indicator']) {
-    $button_classes = [
-      ...$button_classes,
-      'bttn--circle',
-      'bttn--no-text',
-    ];
+  if (!empty($element['#links']) && count($element['#links']) === 1) {
+    $single_link = reset($element['#links']);
+    if (empty($single_link['link_text']) && $element['#link_indicator']) {
+      $button_classes = [
+        ...$button_classes,
+        'bttn--circle',
+        'bttn--no-text',
+      ];
+    }
   }
 
-  // Add button classes.
+  // Add button classes to button attributes.
   if (!isset($element['#button_attributes']['class'])) {
     $element['#button_attributes']['class'] = [];
   }
@@ -531,23 +572,12 @@ function template_preprocess_card(&$variables) {
     ...$button_classes,
   ];
 
-  // Apply link tracking attributes to the appropriate link element.
-  if (!empty($element['#link_attributes'])) {
-    if ($element['#linked_element'] === 'title') {
-      $element['#headline']['headline_url_attributes'] = $element['#link_attributes'];
-    }
-    elseif ($element['#linked_element'] === 'button') {
-      foreach ($element['#link_attributes'] as $attr => $value) {
-        $element['#button_attributes'][$attr] = $value;
-      }
-    }
-  }
-
   // Transfer properties and slots from the render element to variables for
   // processing in the template.
   foreach ([
     'attributes',
     'button_attributes',
+    'button_classes',
     'media',
     'media_attributes',
     'headline',
@@ -555,10 +585,10 @@ function template_preprocess_card(&$variables) {
     'subtitle',
     'meta',
     'content',
-    'url',
-    'link_text',
+    'links',
     'link_indicator',
     'linked_element',
+    'show_button',
   ] as $prop) {
     if (isset($element["#$prop"])) {
       // If this is an attributes array, convert it to an Attribute first.

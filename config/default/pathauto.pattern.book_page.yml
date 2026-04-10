@@ -6,7 +6,7 @@ dependencies:
     - node
   enforced:
     module:
-      - uiowa_book
+      - artsci_book
 _core:
   default_config_hash: FyTpGfNu0nhAgo5opzpBcraOKDdiHauqjl-nk49KNqw
 id: book_page

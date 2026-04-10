@@ -4,7 +4,7 @@ status: true
 dependencies:
   enforced:
     module:
-      - uiowa_book
+      - artsci_book
 _core:
   default_config_hash: 3R7__2w111pcgfCpMM6ViDbXThxIaLWL4K-Ped5EupE
 name: 'Book Tags'

@@ -441,7 +441,7 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
       $form_state->setValue('layout_builder_style_headline_type', $heading_style);
     }
     // Force default values for hidden style fields.
-    $form_state->setValue('layout_builder_style_headline_size', 'headline_large');
+    $form_state->setValue('layout_builder_style_headline_size', 'headline_medium');
     $form_state->setValue('layout_builder_style_banner_height', 'banner_medium');
     $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
     // Gradient midpoint checkbox.

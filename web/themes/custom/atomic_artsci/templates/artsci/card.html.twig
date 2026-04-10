@@ -1,3 +1,8 @@
+{{ attach_library('atomic_artsci/card') }}
+{% set attributes = attributes ?: create_attribute() %}
+{% set button_attributes = button_attributes ?: create_attribute() %}
+{% set button_classes = button_classes ?: [] %}
+
 <div{{ attributes.addClass('card') }}>
   {{ title_prefix }}
   {{ title_suffix }}
@@ -5,10 +10,11 @@
     {% if media is not empty %}
       <div {{ media_attributes.addClass('media') }}>
         <div class="media__inner">
-          {% if linked_element == 'media' %}
-          <a href="{{ url }}">
-            {{ media }}
-          </a>
+          {% if linked_element == 'media' and links|length == 1 %}
+            {% set link = links|first %}
+            <a href="{{ link.link_url }}" class="click-target">
+              {{ media }}
+            </a>
           {% else %}
             {{ media }}
           {% endif %}
@@ -20,10 +26,11 @@
   {% block body %}
     <div class="card__body">
       {% if pre_title is not empty %}
-      <div class="card__pre-title">
-        {{ pre_title }}
-      </div>
+        <div class="card__pre-title">
+          {{ pre_title }}
+        </div>
       {% endif %}
+
       {% block heading %}
         {% if headline %}
           <header>
@@ -54,24 +61,44 @@
       {% endblock %}
 
       {% block content %}
-          {{ content }}
+        {{ content }}
       {% endblock %}
 
       {% block button %}
-        {% if url is not empty and (link_text is not empty or link_indicator) %}
-          <footer>
-            {% if linked_element == 'button' %}
-              {# Display as a link. #}
-              <a {{ button_attributes }} href="{{ url }}">
-                {{ link_text }}
-                <i role="presentation" class="fas fa-arrow-right"></i>
-              </a>
-            {% else %}
-              {# Display as a pseudo-link. #}
-              <div {{ button_attributes }}>
-                {{ link_text }}
-                <i role="presentation" class="fas fa-arrow-right"></i>
+        {% if links is not empty %}
+          <footer class="banner__action">
+            {% if links|length > 1 %}
+              <div class="bttn--row">
+                {% for link in links %}
+                  {% set link_button_attributes = create_attribute(link.link_attributes|default({})) %}
+                  <a {{ link_button_attributes.addClass(button_classes) }}
+                    href="{{ link.link_url }}">
+                    {{ link.link_text }}
+                    <span role="presentation" class="fas fa-arrow-right"></span>
+                  </a>
+                {% endfor %}
               </div>
+            {% elseif links|length == 1 %}
+              {% set link = links|first %}
+              {% if linked_element == 'button' %}
+                {# Display as a link. #}
+                <a {{ button_attributes }}
+                  href="{{ link.link_url }}">
+                  {{ link.link_text }}
+                  <i role="presentation" class="fas fa-arrow-right"></i>
+                </a>
+              {% elseif show_button %}
+                {# Display as a pseudo-link. #}
+                <div {{ button_attributes }}>
+                  {{ link.link_text }}
+                  <i role="presentation" class="fas fa-arrow-right"></i>
+                </div>
+              {% elseif link_indicator %}
+                {# Show arrow indicator only, no text. #}
+                <div {{ button_attributes }}>
+                  <i role="presentation" class="fas fa-arrow-right"></i>
+                </div>
+              {% endif %}
             {% endif %}
           </footer>
         {% endif %}

@@ -27,6 +27,7 @@
 .card {
   position: relative;
   padding: 2rem;
+  text-align: left;
   text-decoration: none;
   display: flex;
   flex: 1 1 0%;
@@ -80,9 +81,13 @@
     }
 
     .headline {
-      font-size: 1.5rem;
+      // font-size: 1.5rem;
+      font-size: clamp(1.5rem, calc(2vw + 1rem), 2.2rem);
       font-family: variables.$font-family-serif;
       line-height: 120%;
+      @include utilities.container-query() {
+        font-size: clamp(2.2rem, calc(3.3803vw + 0.9324rem), 3.7rem);
+      }
     }
 
     &:focus-within ~ .bttn {
@@ -263,7 +268,8 @@
     margin-right: .2rem;
   }
 }
-.bg--red {
+.bg--red,
+.bg--teal {
   .card__pre-title {
     color: white !important;
   }
