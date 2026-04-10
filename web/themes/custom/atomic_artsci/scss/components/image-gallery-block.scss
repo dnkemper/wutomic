@@ -39,6 +39,58 @@
   display: grid;
   grid-gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  .video-controls {
+    position: absolute;
+    z-index: 2;
+    right: var(--gutter, 2rem);
+    bottom: var(--gutter, 2rem);
+
+    @include utilities.container-query {
+      right: var(--mobile-height-gutter, 1rem);
+      bottom: var(--mobile-height-gutter, 1rem);
+    }
+  }
+
+  .video-btn {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: var(--color-secondary, #1d1d1b);
+    border: 2px solid white;
+    border-radius: 50%;
+    background: white;
+    font-size: 1rem;
+    padding: 0;
+
+    @include utilities.container-query() {
+      display: block;
+    }
+
+    &::after {
+      content: "\f04b"; // play icon
+      @include utilities.fas();
+      font-size: 1rem;
+    }
+
+    &.video-btn__play::after {
+      margin-left: 3px; // optical centering for play triangle
+    }
+
+    &.video-btn__pause::after {
+      content: "\f04c"; // pause icon
+    }
+  }
+
+  // Video element styling
+  video {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    top: 0;
+    overflow: visible;
+  }
 }
 
 .artsci-image-gallery img {

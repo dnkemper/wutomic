@@ -65,7 +65,7 @@
   }
 
   header {
-    margin: 0 0 0.525rem;
+    margin: 0 0 1rem;
     padding: 0;
     font-size: 1.5rem;
     font-weight: variables.$font-weight-medium;
@@ -82,11 +82,11 @@
 
     .headline {
       // font-size: 1.5rem;
-      font-size: clamp(1.5rem, calc(2vw + 1rem), 2.2rem);
+      font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
       font-family: variables.$font-family-serif;
       line-height: 120%;
       @include utilities.container-query() {
-        font-size: clamp(2.2rem, calc(3.3803vw + 0.9324rem), 3.7rem);
+        font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
       }
     }
 
@@ -116,7 +116,67 @@
 // === Elements === //
 // === Media === //
 .card {
-  // Overrides for shared media classes.
+// === Video Controls === //
+// Extract this to a partial like _video-controls.scss for reuse
+
+.video-controls {
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter, 2rem);
+  bottom: var(--gutter, 2rem);
+
+  @include utilities.container-query {
+    right: var(--mobile-height-gutter, 1rem);
+    bottom: var(--mobile-height-gutter, 1rem);
+  }
+}
+
+.video-btn {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: var(--color-secondary, #1d1d1b);
+  border: 2px solid white;
+  border-radius: 50%;
+  background: white;
+  font-size: 1rem;
+  padding: 0;
+
+  @include utilities.container-query() {
+    display: block;
+  }
+
+  &::after {
+    content: "\f04b"; // play icon
+    @include utilities.fas();
+    font-size: 1rem;
+  }
+
+  &.video-btn__play::after {
+    margin-left: 3px; // optical centering for play triangle
+  }
+
+  &.video-btn__pause::after {
+    content: "\f04c"; // pause icon
+  }
+}
+
+// Light overlay variant (dark button)
+.banner--overlay-light:not([class*="bg--"]) {
+  .video-btn {
+    border: 2px solid var(--color-secondary, #1d1d1b);
+  }
+}
+
+// Video element styling
+video {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  top: 0;
+  overflow: visible;
+}
 
   > .media {
     margin-top: 0;

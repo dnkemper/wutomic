@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - block_content.type.artsci_card
+    - field.field.block_content.artsci_card.field_artsci_banner_autoplay
     - field.field.block_content.artsci_card.field_artsci_card_author
     - field.field.block_content.artsci_card.field_artsci_card_button_display
     - field.field.block_content.artsci_card.field_artsci_card_excerpt
@@ -24,9 +25,16 @@ targetEntityType: block_content
 bundle: artsci_card
 mode: default
 content:
+  field_artsci_banner_autoplay:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_artsci_card_excerpt:
     type: text_textarea
-    weight: 4
+    weight: 5
     region: content
     settings:
       rows: 2
@@ -47,7 +55,7 @@ content:
     third_party_settings: {  }
   field_artsci_card_link:
     type: link_default
-    weight: 5
+    weight: 6
     region: content
     settings:
       placeholder_url: ''

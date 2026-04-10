@@ -4,13 +4,11 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - field.storage.node.book_owner
     - field.storage.node.book_tags
     - search_api.server.database_server
   module:
-    - taxonomy
     - node
-    - search_api
+    - taxonomy
   enforced:
     module:
       - artsci_book
@@ -29,14 +27,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  book_owner:
-    label: Owner
-    datasource_id: 'entity:node'
-    property_path: book_owner
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.book_owner
   book_tags:
     label: 'Tags » Taxonomy term » Name'
     datasource_id: 'entity:node'
@@ -126,7 +116,6 @@ processor_settings:
     all_fields: true
     fields:
       - body
-      - book_owner
       - book_tags
       - title
   language_with_fallback: {  }
@@ -136,6 +125,7 @@ tracker_settings:
     indexing_order: fifo
 options:
   cron_limit: 50
+  delete_on_fail: true
   index_directly: true
   track_changes_in_references: false
 server: database_server

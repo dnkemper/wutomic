@@ -29,6 +29,81 @@
 .block-inline-blockartsci-image a:hover img {
   opacity: 0.6;
 }
+.block-inline-blockartsci-image .video-controls {
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter, 2rem);
+  bottom: var(--gutter, 2rem);
+}
+@supports (contain: inline-size) {
+  @container column (min-width: 768px) {
+    .block-inline-blockartsci-image .video-controls {
+      right: var(--mobile-height-gutter, 1rem);
+      bottom: var(--mobile-height-gutter, 1rem);
+    }
+  }
+}
+@supports not (contain: inline-size) {
+  @media (min-width: 768px) {
+    .block-inline-blockartsci-image .video-controls {
+      right: var(--mobile-height-gutter, 1rem);
+      bottom: var(--mobile-height-gutter, 1rem);
+    }
+  }
+}
+.block-inline-blockartsci-image .video-btn {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: var(--color-secondary, #1d1d1b);
+  border: 2px solid white;
+  border-radius: 50%;
+  background: white;
+  font-size: 1rem;
+  padding: 0;
+}
+@supports (contain: inline-size) {
+  @container column (min-width: 768px) {
+    .block-inline-blockartsci-image .video-btn {
+      display: block;
+    }
+  }
+}
+@supports not (contain: inline-size) {
+  @media (min-width: 768px) {
+    .block-inline-blockartsci-image .video-btn {
+      display: block;
+    }
+  }
+}
+.block-inline-blockartsci-image .video-btn::after {
+  content: "\f04b";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 1rem;
+}
+.block-inline-blockartsci-image .video-btn.video-btn__play::after {
+  margin-left: 3px;
+}
+.block-inline-blockartsci-image .video-btn.video-btn__pause::after {
+  content: "\f04c";
+}
+.block-inline-blockartsci-image video {
+  display: block;
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  top: 0;
+  overflow: visible;
+}
 
 @media (min-width: 768px) {
   figure.block-inline-blockartsci-image.caption {

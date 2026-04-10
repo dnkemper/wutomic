@@ -1,0 +1,23 @@
+uuid: e8ab12bc-5bba-4100-9eaf-b7deae648455
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_image
+    - field.storage.block_content.field_artsci_banner_autoplay
+id: block_content.artsci_image.field_artsci_banner_autoplay
+field_name: field_artsci_banner_autoplay
+entity_type: block_content
+bundle: artsci_image
+label: 'Enable autoplay for video'
+description: 'Warning: enabling autoplay can trigger <a target="_blank" href="https://webaim.org/articles/seizure/#vestibular">vestibular disorders</a>. '
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

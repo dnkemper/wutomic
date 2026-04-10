@@ -271,7 +271,7 @@ h3 {
 .section-overlap--next + .layout__container {
   position: relative;
   z-index: 1;
-  margin-top: -8rem;
+  margin-top: -10rem;
   padding-top: calc(8rem + var(--section-padding-top, 3rem));
 }
 .section-overlap--next + .layout__container.section-overlap--next {
@@ -284,7 +284,7 @@ h3 {
   background: transparent;
 }
 .layout__container:has(.section-overlap--next) + .layout__container {
-  margin-top: -5%;
+  margin-top: -10rem;
   padding-top: calc(8rem + var(--section-padding-top, 3rem));
 }
 

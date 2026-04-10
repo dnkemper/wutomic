@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - block_content.type.artsci_card
+    - field.field.block_content.artsci_card.field_artsci_banner_autoplay
     - field.field.block_content.artsci_card.field_artsci_card_author
     - field.field.block_content.artsci_card.field_artsci_card_button_display
     - field.field.block_content.artsci_card.field_artsci_card_excerpt
@@ -22,6 +23,16 @@ targetEntityType: block_content
 bundle: artsci_card
 mode: default
 content:
+  field_artsci_banner_autoplay:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
   field_artsci_card_author:
     type: string
     label: hidden

@@ -21,6 +21,9 @@
 .node--type-book .field--name-book-tags a {
   text-decoration: none;
 }
+.layout.layout--twocol.layout--twocol--67-33.bg--red.page__container--normal.layout__container h2.book-authors__title {
+    display: none;
+}
 
 /* ==========================================================================
    Book Subtitle
@@ -65,7 +68,6 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--washu-red, #a51417);
   margin-bottom: 0.5rem;
 }
 

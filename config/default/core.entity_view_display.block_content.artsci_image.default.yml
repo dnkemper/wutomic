@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - block_content.type.artsci_image
+    - field.field.block_content.artsci_image.field_artsci_banner_autoplay
     - field.field.block_content.artsci_image.field_artsci_image_caption
     - field.field.block_content.artsci_image.field_artsci_image_image
     - field.field.block_content.artsci_image.field_artsci_image_link
@@ -15,6 +16,16 @@ targetEntityType: block_content
 bundle: artsci_image
 mode: default
 content:
+  field_artsci_banner_autoplay:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
   field_artsci_image_caption:
     type: text_default
     label: hidden

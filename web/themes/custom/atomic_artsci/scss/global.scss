@@ -251,7 +251,7 @@ h3 {
   + .layout__container {
     position: relative;
     z-index: 1;
-    margin-top: -8rem;
+    margin-top: -10rem;
     padding-top: calc(8rem + var(--section-padding-top, 3rem));
     
     // Reset if this section is also an overlap trigger
@@ -267,7 +267,7 @@ h3 {
 
   // Now the adjacent sibling selector works from the section level again
   + .layout__container {
-    margin-top: -5%;
+    margin-top: -10rem;
     padding-top: calc(8rem + var(--section-padding-top, 3rem));
   }
 }

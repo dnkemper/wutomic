@@ -4,24 +4,24 @@ status: true
 dependencies:
   config:
     - field.field.node.book.body
-    - field.field.node.book.book_amended_date
-    - field.field.node.book.book_owner
     - field.field.node.book.book_tags
     - field.field.node.book.field_book_author
     - field.field.node.book.field_book_links
     - field.field.node.book.field_book_publication_date
+    - field.field.node.book.field_book_related_reads
     - field.field.node.book.field_book_subtitle
     - field.field.node.book.field_byline_names
     - field.field.node.book.field_byline_options
     - field.field.node.book.field_description
     - field.field.node.book.field_image
     - field.field.node.book.field_is_shared_content
+    - field.field.node.book.field_meta_tags
     - field.field.node.book.rabbit_hole__settings
     - node.type.book
   module:
     - content_moderation
     - datetime
-    - link
+    - linkit
     - media_library
     - path
     - private_content
@@ -41,14 +41,6 @@ content:
       summary_rows: 3
       placeholder: ''
       show_summary: false
-    third_party_settings: {  }
-  book_owner:
-    type: string_textfield
-    weight: 20
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   book_tags:
     type: entity_reference_autocomplete_tags
@@ -77,12 +69,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_book_links:
-    type: link_default
+    type: linkit
     weight: 14
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
+      linkit_profile: default
+      linkit_auto_link_text: false
     third_party_settings: {  }
   field_book_publication_date:
     type: datetime_default
@@ -209,34 +203,9 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  book_amended_date: true
   field_book_afterword_author: true
-  field_book_art: true
-  field_book_awards: true
-  field_book_contributors: true
-  field_book_description_summary: true
-  field_book_edition: true
-  field_book_editor: true
-  field_book_essay_by: true
-  field_book_excerpt: true
-  field_book_foreword_author: true
-  field_book_illustrator: true
-  field_book_interior_pages: true
-  field_book_introduction_author: true
-  field_book_pages: true
-  field_book_photographer: true
-  field_book_preface_authors: true
   field_book_related_reads: true
-  field_book_reviews_blurbs: true
-  field_book_season: true
-  field_book_series: true
-  field_book_subject: true
-  field_book_table_of_contents: true
-  field_book_translator: true
-  field_book_trim_size: true
-  field_book_type: true
   field_meta_tags: true
-  field_pages_art_trim: true
   publish_on: true
   publish_state: true
   unpublish_on: true
