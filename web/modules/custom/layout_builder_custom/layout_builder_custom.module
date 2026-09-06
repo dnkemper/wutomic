@@ -1843,14 +1843,13 @@ function layout_builder_custom_preprocess_paragraph__artsci_slide(array &$variab
   $media_classes = [];
 
   // Position -> on the .card element (via the embed's `attributes`).
-  // The 2.5 "two" peek style is built around overlay cards (full-bleed image
-  // with the text over a panel); that overlay layout is what hosts the
-  // active-slide teal panel in slider-carousel.scss. Force it for that size
-  // regardless of the media position style the editor picked, so the teal
-  // always has a host to attach to and follows the active slide on paginate.
-  $position = ($ctx['carousel_size'] ?? NULL) === 'two'
-    ? 'overlay'
-    : ($ctx['media_position'] ?? NULL);
+  // The 2.5 "two" peek style is designed around overlay cards, so overlay is
+  // the default for that size, but an explicit Media position choice wins.
+  // Overlay used to be forced here so the active-slide teal panel always had a
+  // host; that panel is the `::after` block in slider-carousel.scss, which is
+  // currently commented out, so nothing depends on the override any more.
+  $position = $ctx['media_position']
+    ?? ((($ctx['carousel_size'] ?? NULL) === 'two') ? 'overlay' : NULL);
   if (!empty($position)) {
     // 'stacked' uses class 'card--stacked'; others use 'card--layout-X'.
     $card_classes[] = $position === 'stacked'

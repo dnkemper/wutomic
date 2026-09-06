@@ -206,12 +206,14 @@ $_slide-width: 100%;
     margin: 0;
     border: none;
     width: 100%;
-    height: 100%;
   }
 
-  // Let the JS-set slide height govern the overlay card instead of the card
-  // component's default min-height (which would otherwise fight the fan).
+  // Only the overlay card fills the box the fan assigns, because there the
+  // media is the whole card. A stacked or side-by-side card is sized by its
+  // own content; forcing height on it left a tall white void under the text.
+  // The JS measures those slides instead of pinning them.
   .paragraph--carousel-slide > .card.card--layout-overlay {
+    height: 100%;
     min-height: 0;
   }
 

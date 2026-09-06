@@ -143,11 +143,10 @@
 // dark gradient for a solid teal panel behind the text. The teal follows the
 // active slide as you paginate.
 //
-// NOTE: this engages when slides carry .card--layout-overlay, which comes from
-// the slider block's media position style being set to "Overlay". To make the
-// two/2.5 size force overlay regardless of the position style, add
-// 'card--layout-overlay' for carousel_size === 'two' in
-// atomic_artsci_preprocess_paragraph__artsci_slide().
+// NOTE: this engages when slides carry .card--layout-overlay. Overlay is the
+// DEFAULT for the two size, applied in
+// layout_builder_custom_preprocess_paragraph__artsci_slide(), but an explicit
+// Media position choice on the block overrides it.
 // --------------------------------------------------------------------------
 .artsci-slider.artsci-carousel--two {
   // Format sets the card's shape, size scales it inside the slide slot. The
@@ -182,19 +181,33 @@
 
   // The slide's chrome moves to the card so the shadow and rounded corners
   // follow the card edge rather than framing the empty space a smaller size
-  // leaves behind.
+  // leaves behind. This has to sit on .card, not on the overlay layout alone,
+  // or a stacked or side-by-side card loses its panel entirely.
   [data-carousel-slide] {
     background: none;
     box-shadow: none;
   }
 
-  // Shape when no media format is selected.
-  .card--layout-overlay {
-    aspect-ratio: 3 / 4;
-    min-height: 0;
+  .card {
     margin-inline: auto;
     border-radius: 0.75rem;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    background: #fff;
+  }
+
+  // Size scales the card in its slide slot whatever the media position is.
+  @each $size, $scale in $size-scale {
+    .card:has(.media--#{$size}) {
+      width: $scale;
+    }
+  }
+
+  // Shape when no media format is selected. The ratio ladder below is scoped
+  // to the overlay layout because that is the only one where the media is the
+  // whole card; a stacked or side-by-side card is sized by its content.
+  .card--layout-overlay {
+    aspect-ratio: 3 / 4;
+    min-height: 0;
   }
 
   @each $format, $w in $shape-width {
@@ -207,7 +220,6 @@
     $nudge: map.get($size-nudge, $size);
 
     .card--layout-overlay:has(.media--#{$size}) {
-      width: $scale;
       aspect-ratio: 3 / #{4 * $nudge};
     }
 

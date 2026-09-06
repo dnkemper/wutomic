@@ -1,0 +1,55 @@
+https://www.drupal.org/project/menu_link_weight/issues/3520705
+"Undefined array key 1 in menu_link_weight_node_form_validate()" — also fixes
+the fatal "Cannot unset string offsets" reported in comment #4.
+
+This patch mirrors merge request !17 plus an additional is_array() guard on
+$weights that handles the empty-submission case joshf reported in comment #4.
+Apply until the upstream fix is committed and released.
+
+diff --git a/menu_link_weight.node.inc b/menu_link_weight.node.inc
+--- a/menu_link_weight.node.inc
++++ b/menu_link_weight.node.inc
+@@ -207,23 +207,34 @@ function menu_link_weight_node_form_validate($form, FormStateInterface $form_sta
+   $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+ 
+   $parent_element = $form['menu']['link']['menu_parent'];
+   $parent_value = _menu_link_weight_get_parent_value_from_element($parent_element, $form_state);
+-  if ($form_state->hasValue(['menu', 'menu_link_weight'])) {
++  // Guard with the same colon check that menu_link_weight_node_element_process()
++  // already uses. Other modules (e.g. Client-side Hierarchical Select) may
++  // replace the standard menu_parent select with a widget whose submitted
++  // value isn't in the expected "$menu_name:$plugin_id" form, in which case
++  // exploding on ":" yields a single-element array and the rest of this
++  // block falls apart. See drupal.org/project/menu_link_weight/issues/3520705.
++  if ($form_state->hasValue(['menu', 'menu_link_weight']) && strstr($parent_value, ':')) {
+     list($menu_name, $parent_id) = explode(':', $parent_value, 2);
+     // Loop through submitted weights and confirm that the parent link/menu
+     // are still the same.
+     $weights = $form_state->getValue(['menu', 'menu_link_weight']);
+-    unset($weights['link_current']);
+-    foreach ($weights as $link_id => $weight) {
+-      /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
+-      $link = $menu_link_manager->createInstance($link_id);
+-      if ($link->getParent() != $parent_id) {
+-        $form_state->setErrorByName('menu][menu_link_weight', t('The parent for one of the menu links have been changed by another user, please try again.'));
++    // Defensive: if $weights isn't an array (it can be an empty string when
++    // the menu_link_weight fieldset rendered without any sibling links to
++    // weight), bail out rather than fatalling on unset of a string offset.
++    if (is_array($weights)) {
++      unset($weights['link_current']);
++      foreach ($weights as $link_id => $weight) {
++        /** @var \Drupal\Core\Menu\MenuLinkInterface $link */
++        $link = $menu_link_manager->createInstance($link_id);
++        if ($link->getParent() != $parent_id) {
++          $form_state->setErrorByName('menu][menu_link_weight', t('The parent for one of the menu links have been changed by another user, please try again.'));
++        }
++        if ($link->getMenuName() != $menu_name) {
++          $form_state->setErrorByName('menu][menu_link_weight', t('The menu for one of the menu links have been changed by another user, please try again.'));
++        }
+       }
+-      if ($link->getMenuName() != $menu_name) {
+-        $form_state->setErrorByName('menu][menu_link_weight', t('The menu for one of the menu links have been changed by another user, please try again.'));
+-      }
+     }
+   }
+ 
