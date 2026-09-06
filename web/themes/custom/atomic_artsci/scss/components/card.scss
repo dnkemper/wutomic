@@ -24,7 +24,7 @@
 
 .card {
   position: relative;
-  padding: 2rem;
+  padding: 1rem;
   text-align: left;
   text-decoration: none;
   display: flex;
@@ -102,9 +102,9 @@
         font-size: clamp(1.25rem, calc(0.563vw + 1.039rem), 1.5rem);
       }
     }
-    .headline a {
-      color: #ffffff;
-    }
+    // .headline a {
+    //   color: #ffffff;
+    // }
 
     &:focus-within ~ .bttn {
       background-position: 0;
@@ -220,6 +220,38 @@
     // }
   }
 
+  // global.scss sets `.media--video video { aspect-ratio: 16 / 9 }` at the same
+  // specificity as the format rules above, so which one wins comes down to
+  // stylesheet order alone. Re-assert each format through the media entity
+  // wrapper that media.html.twig renders, which outranks it.
+  .media--landscape .media--video {
+    video,
+    iframe {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .media--widescreen .media--video {
+    video,
+    iframe {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .media--square .media--video {
+    video,
+    iframe {
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  .media--portrait .media--video {
+    video,
+    iframe {
+      aspect-ratio: 2 / 3;
+    }
+  }
+
   .video-controls {
     position: absolute;
     z-index: 20;
@@ -319,10 +351,10 @@
 
   // Allows the media to run edge to edge for stacked cards.
   .media__inner {
-    margin-left: -2rem;
-    margin-right: -2rem;
-    margin-top: -2rem;
-    margin-bottom: 2rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
     overflow: hidden;
   }
 
@@ -362,7 +394,7 @@
     height: 6rem;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 2rem;
+    margin-top: 1rem;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
 
@@ -479,7 +511,7 @@
     &.card--layout-left {
       .media__inner {
         @include container-query() {
-          margin-right: 2rem;
+          margin-right: 1rem;
         }
       }
     }
@@ -487,7 +519,7 @@
     &.card--layout-right {
       .media__inner {
         @include container-query() {
-          margin-left: 2rem;
+          margin-left: 1rem;
         }
       }
     }
@@ -577,6 +609,16 @@
     }
   }
 
+  // Small has to be proportional like medium and large, not a rem cap alone.
+  // An 11.375rem cap is wider than medium's 35% in any column under about
+  // 520px, which is why medium rendered SMALLER than small inside a carousel
+  // slide. The rem values below stay on as caps for wide columns.
+  .media--small {
+    @include container-query() {
+      flex: 0 0 25%;
+    }
+  }
+
   .media--small.media--circle {
     max-width: 11.375rem;
   }
@@ -630,7 +672,7 @@
     .media__inner,
     // Add margin back in for media--circle since we removed it before.
     .media--circle .media__inner {
-      margin-right: 2rem;
+      margin-right: 1rem;
     }
   }
 }
@@ -641,10 +683,127 @@
     .media__inner,
     // Add margin back in for media--circle since we removed it before.
     .media--circle .media__inner {
-      margin-left: 2rem;
+      margin-left: 1rem;
     }
   }
 }
+
+// === Stacked media sizes === //
+// On a stacked card the media ran the full card width whatever size the editor
+// picked, so the control was inert for every format except portrait and circle,
+// which carry their own Figma tiers higher up. Cap and centre the inner for the
+// small and medium tiers so the choice is visible.
+//
+// Large is deliberately left alone: it keeps the existing edge to edge bleed,
+// so a card with no size set, or set to large, renders exactly as it does now.
+// The left and right layouts have their own ladder and are excluded here.
+.card--stacked,
+.card:not([class*='card--layout-']) {
+  .media--small.media--landscape,
+  .media--small.media--no-crop,
+  .media--small.media--square,
+  .media--small.media--widescreen {
+    .media__inner {
+      max-width: 85%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .media--medium.media--landscape,
+  .media--medium.media--no-crop,
+  .media--medium.media--square,
+  .media--medium.media--widescreen {
+    .media__inner {
+      max-width: 95%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  // Portrait caps its width on the .media itself (the Figma tiers higher up)
+  // rather than on the inner, and a capped flex item sits at the start of the
+  // card's content box, so the image looked flush left with a gap on the
+  // right. Centre it, and drop the edge to edge bleed so the rendered width is
+  // the width the size tier actually asks for. This is the same treatment
+  // media--circle already gets.
+  > .media.media--portrait.media--small,
+  > .media.media--portrait.media--medium {
+    margin-left: auto;
+    margin-right: auto;
+
+    .media__inner {
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+    }
+  }
+}
+// === End: Stacked media sizes === //
+
+// === Stacked media box === //
+// The format ratios higher up sit on the img/iframe/video itself, so the box
+// ends up whatever the bundle makes it: an <img> has an intrinsic ratio, a
+// <video> carries the formatter's width and height attributes, and
+// media.html.twig wraps every bundle in a div of its own in between. That is
+// why an image slide, a local video slide and a remote video slide in the same
+// slider come out different heights.
+//
+// Put the ratio on the box and make everything inside fill it, so the height is
+// the same whatever the media is. no-crop is deliberately absent: it has no
+// ratio by definition.
+.card--stacked,
+.card:not([class*='card--layout-']) {
+  .media--landscape .media__inner {
+    aspect-ratio: 4 / 3;
+  }
+
+  .media--square .media__inner {
+    aspect-ratio: 1 / 1;
+  }
+
+  .media--widescreen .media__inner {
+    aspect-ratio: 16 / 9;
+  }
+
+  .media--portrait .media__inner {
+    aspect-ratio: 2 / 3;
+  }
+
+  // Portrait small and medium carry their own Figma ratios.
+  .media--portrait.media--small .media__inner {
+    aspect-ratio: 14.1875 / 19;
+  }
+
+  .media--portrait.media--medium .media__inner {
+    aspect-ratio: 3 / 4;
+  }
+
+  .media--landscape,
+  .media--portrait,
+  .media--square,
+  .media--widescreen {
+    .media__inner {
+      // The media entity wrapper has to stretch too, or the percentage heights
+      // below have an auto-height parent to resolve against and a <video>
+      // falls back to its width and height attributes instead.
+      > a,
+      .media {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+
+      img,
+      iframe,
+      video {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+// === End: Stacked media box === //
 
 // Remove padding if container background matches card background with borderless.
 $bg-colors: 'white', 'gray', 'black', 'gold';
@@ -662,7 +821,7 @@ $bg-colors: 'white', 'gray', 'black', 'gold';
         @include container-query() {
           .media__inner,
           .media--circle .media__inner {
-            margin-right: 2rem;
+            margin-right: 1rem;
           }
         }
       }
@@ -670,7 +829,7 @@ $bg-colors: 'white', 'gray', 'black', 'gold';
         @include container-query() {
           .media__inner,
           .media--circle .media__inner {
-            margin-left: 2rem;
+            margin-left: 1rem;
           }
         }
       }
@@ -900,12 +1059,12 @@ $bg-colors: 'white', 'gray', 'black', 'gold';
     }
     &.card--layout-left .media__inner {
       @include container-query() {
-        margin-right: 2rem;
+        margin-right: 1rem;
       }
     }
     &.card--layout-right .media__inner {
       @include container-query() {
-        margin-left: 2rem;
+        margin-left: 1rem;
       }
     }
   }
@@ -968,7 +1127,7 @@ $bg-colors: 'white', 'gray', 'black', 'gold';
 .view-counselors .card__pre-title {
   @include utilities.element-invisible;
 }
-
+// --card-text-color: #000;
 // === Layout Overlay (text over media) === //
 // Displays text content overlaid on top of the media (image or video).
 // Similar to banner styling but for card components.
@@ -1060,7 +1219,7 @@ $bg-colors: 'white', 'gray', 'black', 'gold';
   .card__body {
     position: relative;
     z-index: 2;
-    padding: 2rem;
+    padding: 1rem;
     color: var(--card-text-color);
     display: flex;
     flex-direction: column;

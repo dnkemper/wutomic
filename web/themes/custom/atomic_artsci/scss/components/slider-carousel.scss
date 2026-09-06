@@ -195,9 +195,13 @@
     background: #fff;
   }
 
-  // Size scales the card in its slide slot whatever the media position is.
+  // Size scales the card in its slide slot for the OVERLAY layout only, where
+  // the media is the whole card and the card box is the only thing size can
+  // change. On a stacked or side-by-side card size already means the media's
+  // own width (card.scss), so scaling the card as well applied the tier twice
+  // and starved the text column.
   @each $size, $scale in $size-scale {
-    .card:has(.media--#{$size}) {
+    .card--layout-overlay:has(.media--#{$size}) {
       width: $scale;
     }
   }
@@ -205,9 +209,19 @@
   // Shape when no media format is selected. The ratio ladder below is scoped
   // to the overlay layout because that is the only one where the media is the
   // whole card; a stacked or side-by-side card is sized by its content.
+  //
+  // min-height is a floor, not a size: a short shape at a small width (a
+  // widescreen small card is only about 150px tall) cannot fit the headline,
+  // so the box grows past its ratio rather than clipping the text.
   .card--layout-overlay {
     aspect-ratio: 3 / 4;
-    min-height: 0;
+    min-height: 13rem;
+  }
+
+  // The 2rem body padding eats most of a small card. Pull it in so the text
+  // has somewhere to go.
+  .card--layout-overlay:has(.media--small) .card__body {
+    padding: 1.25rem;
   }
 
   @each $format, $w in $shape-width {

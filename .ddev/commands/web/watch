@@ -1,5 +1,5 @@
 #!/bin/bash
-## Description: Run build and watch script on custom theme olympian9
+## Description: Run build and watch script on custom theme atomic_artsci
 ## Usage: watch
 
 # Show info about this script, and setup PS4 for prefix of each trace line from "set -x"
@@ -10,11 +10,11 @@ set -x
 # Show node version
 node -v
 
-# Reinstall all node packages
-cd /var/www/html/web/themes/custom/olympian9 && rm -rf node_modules
+# Make sure node packages are installed
+# (no need to cd to specific folder; workspaces setting in root package.json tells yarn what it needs)
 yarn
 
 # set the SHELL variable before running watch, to avoid chokidar-cli errors
 # (chokidar is used for watching file changes in package.json scripts)
 # (see https://github.com/open-cli-tools/chokidar-cli/issues/62)
-SHELL=/bin/bash yarn run watch
+SHELL=/bin/bash yarn workspaces foreach -Api run watch

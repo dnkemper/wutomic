@@ -174,6 +174,14 @@
       var sizeScale = { small: 0.65, medium: 0.82, large: 1 };
       var sizeNudge = { small: 0.9, medium: 1, large: 1.15 };
 
+      // Overlay cards fill the box the fan assigns, because there the media IS
+      // the card. Any other position is sized by its own content, so its box is
+      // measured after layout instead of pinned, and the size tier is left to
+      // the media width rules in card.scss rather than scaling the card too.
+      var firstCard = slides.length ? slides[0].querySelector('.card') : null;
+      var isOverlay =
+        !!firstCard && firstCard.classList.contains('card--layout-overlay');
+
       var media = slides.length ? slides[0].querySelector('.media') : null;
       var heightRatio = 0.7;
       var widthScale = 1;
@@ -193,15 +201,12 @@
 
       var centerWidth = Math.max(
         200,
-        Math.min(640, trackWidth * 0.55) * widthScale
+        Math.min(640, trackWidth * 0.55) * (isOverlay ? widthScale : 1)
       );
-      var cardHeight = Math.round(centerWidth * heightRatio);
+      var cardHeight = isOverlay ? Math.round(centerWidth * heightRatio) : 0;
       var sideOffset = centerWidth * 0.56;
       var sideScale = 0.82;
       var leftPos = trackWidth / 2 - centerWidth / 2;
-
-      // Size the track to the full-scale center card.
-      track.style.height = cardHeight + 'px';
 
       slides.forEach(function (slide, i) {
         var pos = 'hidden';
@@ -216,7 +221,7 @@
         slide.style.right = 'auto';
         slide.style.marginLeft = '0';
         slide.style.width = centerWidth + 'px';
-        slide.style.height = cardHeight + 'px';
+        slide.style.height = isOverlay ? cardHeight + 'px' : '';
         slide.style.transition = prefersReduced ? 'none' : 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
 
         switch (pos) {
@@ -251,6 +256,17 @@
             break;
         }
       });
+
+      // Size the track to the full-scale center card. For content-sized cards
+      // the height is only known once the widths above have laid out, so read
+      // the tallest slide rather than computing it.
+      if (!isOverlay) {
+        cardHeight = 0;
+        slides.forEach(function (slide) {
+          cardHeight = Math.max(cardHeight, slide.offsetHeight);
+        });
+      }
+      track.style.height = cardHeight + 'px';
     }
 
     function goNext() {

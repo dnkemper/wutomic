@@ -10,10 +10,8 @@ set -x
 yarn
 
 # Build css and js assests on the theme workspace.
-# Note: Workspace name is from workspace-level package.json: olympian (not olympian9).
-yarn workspace olympian run build
-# Also build assets on module olympian_core workspace.
-yarn workspace olympian_core run build
+# (Workspace name is from workspace-level package.json.)
+yarn workspace atomic_artsci run build
 
 set +x
 echo -e "\n\n$(tput setaf 3)$(tput bold)>>>>> $(tput setaf 5)$(TZ=America/Chicago date +"%Y-%m-%d-%T") $(tput setaf 2)Finished ${BASH_SOURCE} $(tput setaf 3)<<<<<$(tput sgr0)\n"

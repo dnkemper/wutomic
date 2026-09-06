@@ -163,12 +163,27 @@
   background: none;
   box-shadow: none;
 }
-.artsci-slider.artsci-carousel--two .card--layout-overlay {
-  aspect-ratio: 3/4;
-  min-height: 0;
+.artsci-slider.artsci-carousel--two .card {
   margin-inline: auto;
   border-radius: 0.75rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+.artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--small) {
+  width: 65%;
+}
+.artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--medium) {
+  width: 82%;
+}
+.artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--large) {
+  width: 100%;
+}
+.artsci-slider.artsci-carousel--two .card--layout-overlay {
+  aspect-ratio: 3/4;
+  min-height: 13rem;
+}
+.artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--small) .card__body {
+  padding: 1.25rem;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--portrait) {
   aspect-ratio: 2/3;
@@ -183,7 +198,6 @@
   aspect-ratio: 16/9;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--small) {
-  width: 65%;
   aspect-ratio: 3/3.6;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--portrait):has(.media--small) {
@@ -199,7 +213,6 @@
   aspect-ratio: 16/8.1;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--medium) {
-  width: 82%;
   aspect-ratio: 3/4;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--portrait):has(.media--medium) {
@@ -215,7 +228,6 @@
   aspect-ratio: 16/9;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--large) {
-  width: 100%;
   aspect-ratio: 3/4.6;
 }
 .artsci-slider.artsci-carousel--two .card--layout-overlay:has(.media--portrait):has(.media--large) {
