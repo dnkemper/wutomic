@@ -122,19 +122,19 @@ function artsci_people_form_alter(&$form, FormStateInterface $form_state, $form_
           ],
         ];
 
-        if (isset($form['field_person_website_link_direct'])) {
-          // Show 'Link directly to website' checkbox only if a site is added.
-          $form['field_person_website_link_direct']['#states'] = [
-            'visible' => [
-              ':input[name="field_person_website[0][uri]"]' => ['filled' => TRUE],
-            ],
-          ];
-          // Only visible to admins, but disable.
-          if (isset($form['rabbit_hole__settings'])) {
-            $form['rabbit_hole__settings']['widget'][0]['#description'] = t('These rabbit hole settings are being set on presave based on first website link and the link directly to website checkbox.');
-            $form['rabbit_hole__settings']['#disabled'] = TRUE;
-          }
-        }
+        // if (isset($form['field_person_website_link_direct'])) {
+        //   // Show 'Link directly to website' checkbox only if a site is added.
+        //   $form['field_person_website_link_direct']['#states'] = [
+        //     'visible' => [
+        //       ':input[name="field_external_link[0][uri]"]' => ['filled' => TRUE],
+        //     ],
+        //   ];
+        //   // Only visible to admins, but disable.
+        //   if (isset($form['rabbit_hole__settings'])) {
+        //     $form['rabbit_hole__settings']['widget'][0]['#description'] = t('These rabbit hole settings are being set on presave based on first website link and the link directly to website checkbox.');
+        //     $form['rabbit_hole__settings']['#disabled'] = TRUE;
+        //   }
+        // }
 
         $type_selections = [];
 
@@ -374,32 +374,27 @@ function artsci_people_entity_presave(EntityInterface $entity) {
       $output = $entity->get('field_person_first_name')->value . " " . $entity->get('field_person_last_name')->value;
       $entity->setTitle($output);
 
-      // Check for rabbit_hole functionality.
+      // Mirror the external link into Rabbit Hole so the node page redirects
+      // whenever a source link is present.
       if (\Drupal::moduleHandler()->moduleExists('rabbit_hole') && $entity->hasField('rabbit_hole__settings')) {
-        $link_direct = (int) $entity->get('field_person_website_link_direct')->value;
-        $source_link = $entity->get('field_person_website')->uri;
-        // If source link and direct to source are set,
-        // change the rabbit hole setting to redirect
-        // and set the url to the source link token.
-        if ($link_direct === 1 && isset($source_link) && !empty($source_link)) {
+        $source_link = $entity->get('field_external_link')->uri;
+
+        // When a source link is present, redirect the node page to it.
+        // Otherwise defer to the bundle's default Rabbit Hole behavior.
+        if (!empty($source_link)) {
           $entity->set('rabbit_hole__settings', [
-            'action' => 'page_redirect',
-            'settings' => [
-              'redirect' => '[node:field_person_website:0:uri]',
-              'redirect_code' => 301,
-              'redirect_fallback_action' => 'display_page',
-            ],
+            'rh_action' => 'page_redirect',
+            'rh_redirect' => $source_link,
+            'rh_redirect_response' => 301,
+            'rh_redirect_fallback_action' => 'display_page',
           ]);
         }
         else {
-          // Match content type settings.
           $entity->set('rabbit_hole__settings', [
-            'action' => 'display_page',
-            'settings' => [
-              'redirect' => NULL,
-              'redirect_code' => 301,
-              'redirect_fallback_action' => 'bundle_default',
-            ],
+            'rh_action' => 'bundle_default',
+            'rh_redirect' => NULL,
+            'rh_redirect_response' => 301,
+            'rh_redirect_fallback_action' => 'bundle_default',
           ]);
         }
       }
@@ -482,8 +477,7 @@ function artsci_people_preprocess_block(&$variables) {
 
     case 'field_block:node:person:field_person_phone':
     case 'field_block:node:person:field_person_education':
-    case 'field_block:node:person:field_person_hometown':
-    case 'field_block:node:person:field_person_website':
+    case 'field_block:node:person:field_external_link':
     case 'field_block:node:person:field_person_contact_information':
       artsci_core_set_attributes($variables, [
         'block-margin__top',
@@ -502,21 +496,9 @@ function artsci_people_preprocess_field(&$variables) {
       artsci_core_set_attributes($variables, 'fa-field-item');
       break;
 
-    case 'field_person_education':
-      artsci_core_set_field_icon($variables, 'fa-university');
-      artsci_core_set_attributes($variables, 'fa-field-item');
-      break;
-
     case 'field_person_email':
       artsci_core_set_field_icon($variables, 'fa-envelope');
       artsci_core_set_attributes($variables, 'fa-field-item');
-      break;
-
-    case 'field_person_hometown':
-      if ($variables['element']['#entity_type'] == 'node' && $variables['element']['#bundle'] == 'person') {
-        artsci_core_set_field_icon($variables, 'fa-globe-americas');
-        artsci_core_set_attributes($variables, 'fa-field-item');
-      }
       break;
 
     case 'field_person_phone':
@@ -531,6 +513,39 @@ function artsci_people_preprocess_field(&$variables) {
 
     case 'field_person_research_areas':
       $variables['label'] = artsci_people_get_research_title();
+      break;
+
+    case 'field_person_interests':
+      // The field is a single string_long value holding interests separated
+      // by <br /> (joined by the shared content import). Split it and render
+      // each interest as its own list item.
+      $entity = $variables['element']['#object'] ?? NULL;
+      if ($entity instanceof \Drupal\Core\Entity\FieldableEntityInterface
+        && $entity->hasField('field_person_interests')
+        && !$entity->get('field_person_interests')->isEmpty()) {
+        $raw = (string) $entity->get('field_person_interests')->value;
+        // Split on <br>, <br/>, <br /> or any newline.
+        $parts = preg_split('#\s*<br\s*/?>\s*|\R#i', $raw);
+        $interests = [];
+        foreach ($parts as $part) {
+          $part = trim(html_entity_decode(strip_tags($part), ENT_QUOTES | ENT_HTML5));
+          if ($part !== '') {
+            $interests[] = $part;
+          }
+        }
+        if ($interests) {
+          $variables['items'] = [
+            [
+              'content' => [
+                '#theme' => 'item_list',
+                '#items' => $interests,
+                '#attributes' => ['class' => ['person-interests']],
+              ],
+              'attributes' => new \Drupal\Core\Template\Attribute(),
+            ],
+          ];
+        }
+      }
       break;
   }
 }
@@ -576,9 +591,9 @@ function artsci_people_preprocess_page(&$variables) {
         case 'person':
           // Display message if content is being redirected with Rabbit Hole.
           // Using preprocess_page to avoid caching issue.
-          if ($node->hasField('field_person_website_link_direct')
-            && (int) $node->get('field_person_website_link_direct')->value === 1) {
-            if ($node->hasField('field_person_website') && !$node->get('field_person_website')->isEmpty()) {
+          if ($node->hasField('field_external_link')
+            && (int) $node->get('field_external_link')->value === 1) {
+            if ($node->hasField('field_external_link') && !$node->get('field_external_link')->isEmpty()) {
               if (\Drupal::currentUser()
                 ->hasPermission('rabbit hole bypass node') === TRUE) {
                 \Drupal::messenger()
@@ -635,7 +650,114 @@ function artsci_people_views_pre_render(ViewExecutable $view) {
   // Add replacement token for people page path.
   $view->build_info['substitutions']['{{ artsci_people.path }}'] = _artsci_people_path_token_value();
 }
+/**
+ * Implements hook_ENTITY_TYPE_view_alter() for paragraph entities.
+ *
+ * For social paragraphs, derives a FontAwesome icon class from the link's
+ * host and injects it into the URL options so artsci_link_alter() wraps
+ * the rendered link with the icon markup.
+ */
+function artsci_people_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if ($entity->bundle() !== 'social_media_links') {
+    return;
+  }
 
+  $field_icon_map = [
+    'field_facebook_url'  => ['icon' => 'fa-brands fa-facebook-f',  'label' => 'Facebook'],
+    'field_twitter_url'   => ['icon' => 'fa-brands fa-x-twitter',   'label' => 'X (Twitter)'],
+    'field_linkedin_url'  => ['icon' => 'fa-brands fa-linkedin-in', 'label' => 'LinkedIn'],
+    'field_instagram_url' => ['icon' => 'fa-brands fa-instagram',   'label' => 'Instagram'],
+    'field_youtube_url'   => ['icon' => 'fa-brands fa-youtube',     'label' => 'YouTube'],
+    'field_tiktok_url'    => ['icon' => 'fa-brands fa-tiktok',      'label' => 'TikTok'],
+    'field_google_scholar_url' => ['icon' => 'fa-brands fa-google-scholar',      'label' => 'Google Scholar'],
+    'field_threads_url'   => ['icon' => 'fa-brands fa-threads',     'label' => 'Threads'],
+    'field_bluesky_url'   => ['icon' => 'fa-brands fa-bluesky',     'label' => 'Bluesky'],
+  ];
+
+  foreach ($field_icon_map as $field_name => $info) {
+    if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+      continue;
+    }
+    if (empty($build[$field_name])) {
+      continue;
+    }
+
+    $url_string = trim((string) $entity->get($field_name)->value);
+    if ($url_string === '') {
+      continue;
+    }
+
+    try {
+      $url = Url::fromUri($url_string, [
+        'fa_icon' => $info['icon'],
+        'attributes' => [
+          'rel' => 'noopener noreferrer',
+          'target' => '_blank',
+          'aria-label' => $info['label'],
+        ],
+      ]);
+    }
+    catch (\Exception $e) {
+      // Bad URL value, just skip rendering this one.
+      continue;
+    }
+
+    // Hide the field label (LinkedIn URL, Twitter URL, etc.).
+    $build[$field_name]['#label_display'] = 'hidden';
+
+    // Replace each string item with a link render element.
+    foreach (Element::children($build[$field_name]) as $delta) {
+      $build[$field_name][$delta] = [
+        '#type' => 'link',
+        '#title' => $info['label'],
+        '#url' => $url,
+      ];
+    }
+  }
+}
+
+
+/**
+ * Maps a social URL to a FontAwesome brand icon class.
+ *
+ * Returns NULL when the host doesn't match a known platform, in which
+ * case the link renders normally without an icon.
+ */
+function _artsci_social_icon_for_url(string $uri): ?string {
+  $host = parse_url($uri, PHP_URL_HOST);
+  if (!$host) {
+    return NULL;
+  }
+  $host = preg_replace('/^www\./', '', strtolower($host));
+
+  $map = [
+    'facebook.com'  => 'fas-icon fa-facebook-f',
+    'fb.com'        => 'fas-icon fa-facebook-f',
+    'x.com'         => 'fas-icon fa-x-twitter',
+    'twitter.com'   => 'fas-icon fa-x-twitter',
+    'linkedin.com'  => 'fas-icon fa-linkedin-in',
+    'instagram.com' => 'fas-icon fa-instagram',
+    'youtube.com'   => 'fas-icon fa-youtube',
+    'youtu.be'      => 'fas-icon fa-youtube',
+    'tiktok.com'    => 'fas-icon fa-tiktok',
+    'threads.net'   => 'fas-icon fa-threads',
+    'bsky.app'      => 'fas-icon fa-bluesky',
+    'github.com'    => 'fas-icon fa-github',
+  ];
+
+  if (isset($map[$host])) {
+    return $map[$host];
+  }
+
+  // Subdomain match (m.facebook.com, business.facebook.com, etc.).
+  foreach ($map as $domain => $icon) {
+    if (str_ends_with($host, '.' . $domain)) {
+      return $icon;
+    }
+  }
+
+  return NULL;
+}
 /**
  * Implements hook_preprocess_HOOK().
  */

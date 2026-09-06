@@ -1,0 +1,21 @@
+uuid: 0b069b4c-23dc-4f5b-afd8-d1f6ea556e07
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_semester_year
+    - node.type.academic_calendar_event
+  module:
+    - options
+id: node.academic_calendar_event.field_semester_year
+field_name: field_semester_year
+entity_type: node
+bundle: academic_calendar_event
+label: 'Semester Year'
+description: "This will usually be the same year as in the date. Change to a different year if your event falls on a date outside the semester's calendar year."
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

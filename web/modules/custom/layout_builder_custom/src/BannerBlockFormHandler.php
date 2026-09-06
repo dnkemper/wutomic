@@ -305,9 +305,9 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
       '#open' => TRUE,
       '#suffix' => '</div>',
     ];
-    if (isset($form['layout_builder_style_banner_height'])) {
-      $form['layout_builder_style_banner_height']['#access'] = FALSE;
-    }
+    // if (isset($form['layout_builder_style_banner_height'])) {
+    //   $form['layout_builder_style_banner_height']['#access'] = FALSE;
+    // }
 
     // Duplicate style fields into style options container.
     // // self::createDuplicateField($form, 'layout_builder_style_banner_height', 'style_options');
@@ -441,9 +441,9 @@ $form['settings']['block_form']['field_artsci_banner_title'][0]['container']['si
       $form_state->setValue('layout_builder_style_headline_type', $heading_style);
     }
     // Force default values for hidden style fields.
-    $form_state->setValue('layout_builder_style_headline_size', 'headline_medium');
-    $form_state->setValue('layout_builder_style_banner_height', 'banner_medium');
-    $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
+    // $form_state->setValue('layout_builder_style_headline_size', 'headline_medium');
+    // $form_state->setValue('layout_builder_style_banner_height', 'banner_medium');
+    // $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
     // Gradient midpoint checkbox.
     $adjust_gradient = $form_state->getValue(['gradient_options', 'adjust_gradient_midpoint']);
 
@@ -708,7 +708,7 @@ if (isset($element['field_artsci_banner_title']['widget'][0]['container']['size'
       // Hide the original field.
       $complete_form['layout_builder_style_background']['#access'] = FALSE;
     }
-    
+
 
     if (isset($complete_form['style_options']['layout_builder_style_banner_card_background_duplicate'])) {
       $complete_form['style_options']['layout_builder_style_banner_card_background_duplicate']['#states'] = [

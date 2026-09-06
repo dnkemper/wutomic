@@ -1,7 +1,7 @@
 @use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
-[class*="inline--"] {
+[class*='inline--'] {
   --inline-margin-xs: 0.5rem;
   --inline-margin-sm: var(--space-sm-width-gutter);
   --inline-margin-md: var(--space-md-width-gutter);
@@ -9,7 +9,7 @@
 }
 
 // === Element media sizes === //
-[class*="inline--size-"] {
+[class*='inline--size-'] {
   width: 100%;
   margin-inline-start: 0;
   margin-inline-end: 0;
@@ -25,7 +25,7 @@
   }
 }
 
-figure[class*="inline--size-"] {
+figure[class*='inline--size-'] {
   img {
     width: 100%;
   }
@@ -71,7 +71,7 @@ figure[class*="inline--size-"] {
   // Adding this to cover the smallest column size.
   // In most cases, we want to avoid targeting the smallest breakpoint through max-width.
   @container column (max-width: #{variables.$break-xxsm}) {
-    [class*="inline--size-"] {
+    [class*='inline--size-'] {
       width: 100%;
     }
   }
@@ -118,7 +118,7 @@ figure[class*="inline--size-"] {
   float: left;
   clear: left;
 
-  &:after {
+  &::after {
     content: '';
   }
 }
@@ -133,4 +133,3 @@ figure[class*="inline--size-"] {
   clear: right;
 }
 // === End: element alignment classes === //
-

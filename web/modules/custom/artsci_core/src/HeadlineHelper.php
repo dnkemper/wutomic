@@ -44,8 +44,9 @@ class HeadlineHelper {
    */
   public static function getStyles() {
     return [
-      'default' => 'headline block__headline',
+      'default' => 'headline headline--serif block__headline',
       'headline_bold_serif' => 'headline headline--serif block__headline',
+      'headline_bold_serif_red' => 'text-color--red headline headline--serif block__headline',
       'headline_bold_serif_underline' => 'headline headline--serif headline--underline block__headline',
     ];
   }
@@ -83,7 +84,16 @@ class HeadlineHelper {
         'class' => 'artsci-headline--container',
       ],
     ];
-
+    $element['container']['pre_headline'] = [
+      '#type' => 'textfield',
+      '#title' => t('Pre-headline'),
+      '#description' => $defaults['description'] ?? '',
+      '#size' => 80,
+      '#default_value' => $defaults['pre_headline'],
+      '#attributes' => [
+        'id' => 'artsci-pre-headline-field',
+      ],
+    ];
     $element['container']['headline'] = [
       '#type' => 'textfield',
       '#title' => t('Headline'),
@@ -131,8 +141,8 @@ class HeadlineHelper {
       '#title' => t('Headline style'),
       '#options' => [
         'default' => t('Default'),
-        'headline_bold_serif' => t('Bold serif'),
         'headline_bold_serif_underline' => t('Bold serif, underlined'),
+        'headline_bold_serif_red' => t('Bold serif, red text'),
       ],
       '#default_value' => $defaults['headline_style'],
       '#states' => [

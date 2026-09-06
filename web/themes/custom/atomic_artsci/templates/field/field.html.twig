@@ -3,7 +3,12 @@
  * @file
  * Theme override for a field.
  *
- * Available variables:
+ * Suppresses the entire field output (label + wrappers + items) when the
+ * rendered items produce no visible content. Void/media tags like <img>
+ * and <iframe> still count as content so headshot-only or embed-only
+ * fields continue to render.
+ *
+ * Available variables (from template_preprocess_field):
  * - attributes: HTML attributes for the containing element.
  * - label_hidden: Whether to show the field label or not.
  * - title_attributes: HTML attributes for the title.
@@ -17,6 +22,20 @@
  * - field_type: The type of the field.
  * - label_display: The display settings for the label.
  *
+ * Variables expected from custom preprocess (all optional):
+ * - item_tag: Tag name for item wrappers. Defaults to 'div'.
+ * - label_tag: Tag name for the label wrapper. Defaults to 'div'.
+ * - remove_classes: Classes to strip from title_attributes.
+ * - field_container_classes: Extra classes for the items container.
+ * - field_icon: Font Awesome class for the items-area icon (e.g. 'fa-star').
+ * - field_icon_bg: Background icon class for stacked items-area icon.
+ * - field_label_icon: Font Awesome class for the label icon.
+ * - field_label_icon_bg: Background icon class for stacked label icon.
+ *
+ * Note: The 'fas' style prefix is hardcoded on non-stacked icons. To use
+ * other prefixes (far, fab, fa-regular), pass the full class string in
+ * field_icon / field_label_icon and adjust the markup, or override this
+ * template.
  *
  * @see template_preprocess_field()
  */
@@ -32,8 +51,8 @@
   label_display == 'visually_hidden' ? 'visually-hidden',
 ] %}
 
+{# Optional per-field override for item wrappers; defaults to div. #}
 {% if item_tag is empty %}
-  {# Optional per-field override for item wrappers; defaults to div. #}
   {% set item_tag = 'div' %}
 {% endif %}
 
@@ -50,69 +69,89 @@
 
 {% else %}
 
-  {% if label_hidden %}
+  {# Render items to a scratch variable so we can test for real content
+     before committing to the label + wrapper divs. A bare `{% if items %}`
+     would miss three cases this catches: values that render to pure
+     whitespace, values that render to empty tags like <p></p>, and values
+     where items is non-empty but every item's content is blank. #}
+  {% set rendered_items %}
+    {% for item in items %}{{ item.content }}{% endfor %}
+  {% endset %}
 
-    {% if multiple %}
+  {# striptags with an allow-list preserves fields that contain only media
+     (headshot-only field_image, an embedded video, an inline svg) as
+     "has content." Bare striptags would wrongly suppress those. #}
+  {% set has_content = rendered_items|striptags('<img><iframe><video><audio><svg><picture><source><embed>')|trim is not empty %}
 
-    <div{{ attributes.addClass(classes, field_container_classes, 'field__items') }}>
-      {{ block('field_icon') }}
-      {% for item in items %}
-        <{{ item_tag }}{{ item.attributes.addClass('field__item') }}>{{ item.content }}</{{ item_tag }}>
-      {% endfor %}
-      </div>
+  {% if has_content %}
+
+    {% if label_hidden %}
+
+      {% if multiple %}
+
+        <div{{ attributes.addClass(classes, field_container_classes, 'field__items') }}>
+          {{ block('field_icon') }}
+          {% for item in items %}
+            <{{ item_tag }}{{ item.attributes.addClass('field__item') }}>{{ item.content }}</{{ item_tag }}>
+          {% endfor %}
+        </div>
+
+      {% else %}
+
+        {% for item in items %}
+          <{{ item_tag }}{{ attributes.addClass(classes, 'field__item') }}>{{ block('field_icon') }}{{ item.content }}</{{ item_tag }}>
+        {% endfor %}
+
+      {% endif %}
 
     {% else %}
 
-      {% for item in items %}
-        <{{ item_tag }}{{ attributes.addClass(classes, 'field__item') }}>{{ block('field_icon') }}{{ item.content }}</{{ item_tag }}>
-      {% endfor %}
+      <div{{ attributes.addClass(classes) }}>
+        <{{ label_tag }}{{ title_attributes.addClass(title_classes).removeClass(remove_classes) }}>
+          {% block field_label_icon %}
+            {% if field_label_icon %}
+              {% if field_label_icon_bg %}
+                <span role="presentation" class="fa-stack {% if 'fa-ul' in attributes.class %}fa-li{% endif %} fa-1x">
+                  <span role="presentation" class="{{ field_label_icon_bg }} fa-stack-2x"></span>
+                  <span role="presentation" class="{{ field_label_icon }} fa-stack-1x"></span>
+                </span>
+              {% else %}
+                <span role="presentation" class="field__label--icon fas {{ field_label_icon }}"></span>
+              {% endif %}
+            {% endif %}
+          {% endblock %}
+          {{ label }}
+        </{{ label_tag }}>
 
-    {% endif %}
-
-  {% else %}
-
-  <div{{ attributes.addClass(classes) }}>
-    <{{ label_tag }}{{ title_attributes.addclass(title_classes).removeclass(remove_classes) }}>
-      {% block field_label_icon %}
-        {% if field_label_icon %}
-          {% if field_label_icon_bg %}
-            <span role="presentation" class="fa-stack {% if 'fa-ul' in attributes.class %}fa-li{% endif %} fa-1x">
-              <span role="presentation" class="{{ field_icon_bg }} fa-stack-2x"></span>
-              <span role="presentation" class="{{ field_icon }} fa-stack-1x"></span>
-            </span>
-          {% else %}
-            <span role="presentation" class="field__label--icon fas {{ field_label_icon }}"></span>
-          {% endif %}
+        {% if multiple %}
+          <div class="field__items {{ field_container_classes }}">
         {% endif %}
-      {% endblock %}
-      {{ label }}</{{ label_tag }}>
 
-    {% if multiple %}
-    <div class="field__items {{ field_container_classes }}">
-  {% endif %}
+        {% block field_items %}
+          {% block field_icon %}
+            {% if field_icon %}
+              {% if field_icon_bg %}
+                <span role="presentation" class="fa-stack {% if 'fa-ul' in attributes.class %}fa-li{% endif %} fa-1x">
+                  <span role="presentation" class="{{ field_icon_bg }} fa-stack-2x"></span>
+                  <span role="presentation" class="{{ field_icon }} fa-stack-1x"></span>
+                </span>
+              {% else %}
+                <span role="presentation" class="field__icon fas {{ field_icon }}"></span>
+              {% endif %}
+            {% endif %}
+          {% endblock %}
+          {% for item in items %}
+            <{{ item_tag }}{{ item.attributes.addClass('field__item') }}>{{ item.content }}</{{ item_tag }}>
+          {% endfor %}
+        {% endblock %}
 
-    {% block field_items %}
-    {% block field_icon %}
-      {% if field_icon %}
-        {% if field_icon_bg %}
-          <span role="presentation" class="fa-stack {% if 'fa-ul' in attributes.class %}fa-li{% endif %} fa-1x">
-            <span role="presentation" class="{{ field_icon_bg }} fa-stack-2x"></span>
-            <span role="presentation" class="{{ field_icon }} fa-stack-1x"></span>
-          </span>
-        {% else %}
-          <span role="presentation" class="field__icon fas {{ field_icon }}"></span>
+        {% if multiple %}
+          </div>
         {% endif %}
-      {% endif %}
-    {% endblock %}
-    {% for item in items %}
-    <{{ item_tag }}{{ item.attributes.addClass('field__item') }}>{{ item.content }}</{{ item_tag }}>
-  {% endfor %}
-    {% endblock %}
-
-    {% if multiple %}
       </div>
+
     {% endif %}
 
-    </div>
   {% endif %}
+
 {% endif %}

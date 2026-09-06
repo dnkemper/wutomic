@@ -6,9 +6,12 @@ dependencies:
     - core.entity_form_mode.media.media_browsers
     - field.field.media.remote_video.field_media_oembed_video
     - field.field.media.remote_video.field_tags
+    - field.field.media.remote_video.field_video_thumbnail
     - media.type.remote_video
   module:
     - media
+    - media_library
+    - media_library_edit
 id: media.remote_video.media_browsers
 targetEntityType: media
 bundle: remote_video
@@ -24,7 +27,7 @@ content:
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete_tags
-    weight: 1
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -32,6 +35,16 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_video_thumbnail:
+    type: media_library_widget
+    weight: 1
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
 hidden:
   created: true
   name: true
@@ -39,6 +52,7 @@ hidden:
   publish_on: true
   publish_state: true
   status: true
+  thumbnail: true
   uid: true
   unpublish_on: true
   unpublish_state: true

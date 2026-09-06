@@ -1,0 +1,13 @@
+uuid: 1b7a96ec-1a77-4852-86f6-39145ae0b498
+langcode: en
+status: true
+dependencies: {  }
+id: media_size_full
+label: Full
+classes: media--full
+type: component
+group: media_size
+block_restrictions:
+  - 'inline_block:artsci_image'
+layout_restrictions: {  }
+weight: -46

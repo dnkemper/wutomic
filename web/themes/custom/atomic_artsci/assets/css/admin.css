@@ -1,19 +1,34 @@
 @import '../../../../../core/themes/claro/css/components/dropbutton.css';
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -39,7 +54,7 @@
   #drupal-off-canvas-wrapper .media-library-selection {
     display: grid;
     grid-template-rows: auto;
-    grid-gap: 3rem;
+    gap: 3rem;
     grid-template-columns: 1fr;
   }
 }
@@ -158,7 +173,7 @@
 #drupal-off-canvas-wrapper [id*=edit-settings-block-form-group-artsci-statistic-title--] .fieldset-wrapper {
   display: grid;
   grid-template-columns: 19% 56% 19%;
-  grid-gap: 3%;
+  gap: 3%;
 }
 
 #drupal-off-canvas:not(.drupal-off-canvas-reset) details,
@@ -246,13 +261,13 @@
   display: inline-block;
   border-bottom: none;
 }
-#drupal-off-canvas-wrapper .alert ul.item-list__comma-list li + li:before {
+#drupal-off-canvas-wrapper .alert ul.item-list__comma-list li + li::before {
   content: ",";
   padding: 0 0.2rem 0 0.1rem;
 }
 
 #drupal-off-canvas .form .form-item--error-message * {
-  color: #E8A392 !important;
+  color: #e8a392 !important;
 }
 
 #drupal-off-canvas-wrapper .paragraphs-tabs-wrapper .field-multiple-drag {
@@ -282,7 +297,7 @@
   width: 26px;
   height: 26px;
   border: none;
-  background: url(/modules/contrib/paragraphs/icons/icon-actions.svg) no-repeat center !important;
+  background: url("/modules/contrib/paragraphs/icons/icon-actions.svg") no-repeat center !important;
 }
 #drupal-off-canvas-wrapper .paragraphs-tabs-wrapper .paragraphs-dropdown {
   position: relative;
@@ -345,14 +360,6 @@
   background: #fff4f4 !important;
 }
 
-#drupal-off-canvas-wrapper {
-  /* @group Single Chosen */
-  /* @group Results */
-  /* @group Multi Chosen */
-  /* @group Active  */
-  /* @group Disabled Support */
-  /* @group Right to Left */
-}
 #drupal-off-canvas-wrapper .chosen-container {
   position: relative !important;
   display: inline-block !important;
@@ -374,10 +381,12 @@
   border-top: 0 !important;
   background: #fff !important;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15) !important;
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: rect(0, 0, 0, 0) !important;
-  clip-path: inset(100% 100%) !important;
+  clip-path: inset(50%) !important;
 }
 #drupal-off-canvas-wrapper .chosen-container.chosen-with-drop .chosen-drop {
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: auto !important;
   clip-path: none !important;
 }
@@ -393,11 +402,14 @@
   font-weight: normal !important;
   color: #999999 !important;
 }
-#drupal-off-canvas-wrapper .chosen-container .search-choice .group-name:after,
-#drupal-off-canvas-wrapper .chosen-container .chosen-single .group-name:after {
+#drupal-off-canvas-wrapper .chosen-container .search-choice .group-name::after,
+#drupal-off-canvas-wrapper .chosen-container .chosen-single .group-name::after {
   content: ":" !important;
   padding-left: 2px !important;
   vertical-align: top !important;
+}
+#drupal-off-canvas-wrapper {
+  /* @group Single Chosen */
 }
 #drupal-off-canvas-wrapper .chosen-container-single .chosen-single {
   position: relative !important;
@@ -408,7 +420,7 @@
   border: 1px solid #aaa !important;
   border-radius: 5px !important;
   background-color: #fff !important;
-  background: linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%) !important;
+  background-image: linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%) !important;
   background-clip: padding-box !important;
   box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1) !important;
   color: #444 !important;
@@ -486,8 +498,12 @@
 }
 #drupal-off-canvas-wrapper .chosen-container-single.chosen-container-single-nosearch .chosen-search {
   position: absolute !important;
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: rect(0, 0, 0, 0) !important;
-  clip-path: inset(100% 100%) !important;
+  clip-path: inset(50%) !important;
+}
+#drupal-off-canvas-wrapper {
+  /* @group Results */
 }
 #drupal-off-canvas-wrapper .chosen-container .chosen-results {
   color: #444 !important;
@@ -505,7 +521,7 @@
   padding: 5px 6px !important;
   list-style: none !important;
   line-height: 15px !important;
-  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
   -webkit-touch-callout: none !important;
 }
 #drupal-off-canvas-wrapper .chosen-container .chosen-results li.active-result {
@@ -538,6 +554,9 @@
 #drupal-off-canvas-wrapper .chosen-container .chosen-results li em {
   font-style: normal !important;
   text-decoration: underline !important;
+}
+#drupal-off-canvas-wrapper {
+  /* @group Multi Chosen */
 }
 #drupal-off-canvas-wrapper .chosen-container-multi .chosen-choices {
   position: relative !important;
@@ -591,7 +610,7 @@
   cursor: default !important;
 }
 #drupal-off-canvas-wrapper .chosen-container-multi .chosen-choices li.search-choice span {
-  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 #drupal-off-canvas-wrapper .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
   position: absolute !important;
@@ -628,6 +647,9 @@
   color: #ccc !important;
   cursor: default !important;
 }
+#drupal-off-canvas-wrapper {
+  /* @group Active  */
+}
 #drupal-off-canvas-wrapper .chosen-container-active .chosen-single {
   border: 1px solid #5897fb !important;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) !important;
@@ -653,6 +675,9 @@
 #drupal-off-canvas-wrapper .chosen-container-active .chosen-choices li.search-field input[type=text] {
   color: #222 !important !important;
 }
+#drupal-off-canvas-wrapper {
+  /* @group Disabled Support */
+}
 #drupal-off-canvas-wrapper .chosen-disabled {
   opacity: 0.5 !important !important;
   cursor: default !important;
@@ -662,6 +687,9 @@
 }
 #drupal-off-canvas-wrapper .chosen-disabled .chosen-choices .search-choice .search-choice-close {
   cursor: default !important;
+}
+#drupal-off-canvas-wrapper {
+  /* @group Right to Left */
 }
 #drupal-off-canvas-wrapper .chosen-rtl {
   text-align: right !important;
@@ -726,7 +754,7 @@
 #drupal-off-canvas-wrapper {
   /* @group Retina compatibility */
 }
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi), only screen and (min-resolution: 1.5dppx) {
+@media only screen and (min-resolution: 1.5dppx), only screen and (min-resolution: 144dpi) {
   #drupal-off-canvas-wrapper .chosen-rtl .chosen-search input[type=text],
   #drupal-off-canvas-wrapper .chosen-container-single .chosen-single abbr,
   #drupal-off-canvas-wrapper .chosen-container-single .chosen-single div b,
@@ -747,7 +775,7 @@
   padding: 1rem;
   text-decoration: underline;
   color: #545454;
-  font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen-Sans", "Ubuntu", "Cantarell", "Helvetica Neue", sans-serif;
   font-weight: 700;
   font-size: 1rem;
 }
@@ -761,26 +789,26 @@
   font-size: 16px;
   color: #000 !important;
   font-weight: 500;
-  font-family: BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen-Sans", "Ubuntu", "Cantarell", "Helvetica Neue", sans-serif;
 }
 .layout-builder__direct-add__list li a:hover, .layout-builder__direct-add__list li a:focus {
   border-color: #aaa;
   text-decoration: underline;
 }
 
-.layout-builder__direct-add__list:after {
+.layout-builder__direct-add__list::after {
   border-bottom-color: #fff !important;
 }
 
-.layout-builder__direct-add__list:before {
+.layout-builder__direct-add__list::before {
   border-color: rgba(153, 153, 153, 0) !important;
   border-bottom-color: #e2e4e7 !important;
 }
 
-[class*=bg--] .layout-builder__direct-add__list:before,
-[class*=bg--] .layout-builder__direct-add__list:after,
-[class*=bg--] [class*=bg--] .layout-builder__direct-add__list:before,
-[class*=bg--] [class*=bg--] .layout-builder__direct-add__list:after {
+[class*=bg--] .layout-builder__direct-add__list::before,
+[class*=bg--] .layout-builder__direct-add__list::after,
+[class*=bg--] [class*=bg--] .layout-builder__direct-add__list::before,
+[class*=bg--] [class*=bg--] .layout-builder__direct-add__list::after {
   border-color: transparent;
 }
 
@@ -923,7 +951,7 @@
   border-bottom-color: transparent !important;
   border-left-color: transparent !important;
 }
-[class*=bg--black] .dropbutton-arrow, .bg--black--pattern--brain .dropbutton-arrow, .bg-pattern--brain-black .dropbutton-arrow {
+.dropbutton-arrow [class*=bg--teal] {
   color: #000000;
 }
 
@@ -934,7 +962,7 @@
 .dropbutton-multiple .dropbutton .dropbutton-action > * {
   margin-right: 0;
   color: #545454;
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen-Sans", "Ubuntu", "Cantarell", "Helvetica Neue", sans-serif;
   font-weight: bold;
   font-size: 1rem;
 }
@@ -956,8 +984,7 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
 }
 
 .media-library-widget-modal .media-library-wrapper {
-  -webkit-hyphens: auto;
-          hyphens: auto;
+  hyphens: auto;
 }
 .media-library-widget-modal.ui-dialog .ui-dialog-titlebar {
   position: relative;
@@ -1024,7 +1051,7 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
   color: #fff !important;
   background-color: #0737a5 !important;
   border-radius: 2px;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "Arial", "Helvetica", sans-serif !important;
   font-weight: bold;
 }
 .media-library-widget-modal .views-exposed-form .button,
@@ -1184,38 +1211,6 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
   flex: none;
 }
 
-.icon-picker-modal__content .icon-preview {
-  width: 100%;
-}
-.icon-picker-modal__content > div {
-  grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr)) !important;
-}
-@media (min-width: 768px) {
-  .icon-picker-modal__content > div {
-    grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)) !important;
-  }
-}
-.icon-picker-modal__content .form-item, .icon-picker-modal__content .form-item-icon-full-id {
-  width: 5rem !important;
-  height: 5rem !important;
-}
-@media (min-width: 768px) {
-  .icon-picker-modal__content .form-item, .icon-picker-modal__content .form-item-icon-full-id {
-    width: 7rem !important;
-    height: 7rem !important;
-  }
-}
-
-.form .icon-picker-modal__content [type=radio] + label[for] {
-  text-align: center;
-}
-
-.form .icon-picker-modal__content [type=checkbox] + label,
-.form .icon-picker-modal__content [type=radio] + label {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .artsci-headline--container {
   border: 1px solid #999;
   padding: 0 10px;
@@ -1225,7 +1220,7 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
   position: relative;
   margin-bottom: 1em;
   padding: 1.05rem 0;
-  border-bottom: 2px solid #FFCD00;
+  border-bottom: 2px solid #ffcd00;
   background: rgb(255, 247.5, 216.75);
 }
 .node-preview-container form {
@@ -1238,7 +1233,6 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
 }
 .node-preview-container .node-preview-backlink {
   border: none;
-  display: inline-block;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -1252,30 +1246,33 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
   line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  color: #BA0C2F;
-  background: #fff;
-  transition: filter 0.2s ease-in-out;
-  font-family: "ivystyle-sans", "Calibri", sans-serif;
 }
 .node-preview-container .node-preview-backlink i,
 .node-preview-container .node-preview-backlink span[class*=fa-],
 .node-preview-container .node-preview-backlink svg {
   margin-left: 0.625rem;
 }
+.node-preview-container .node-preview-backlink {
+  color: black;
+}
 .node-preview-container .node-preview-backlink i,
 .node-preview-container .node-preview-backlink svg,
 .node-preview-container .node-preview-backlink span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 .node-preview-container .node-preview-backlink:hover a, .node-preview-container .node-preview-backlink:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
+.node-preview-container .node-preview-backlink {
+  font-family: "ivystyle-sans", "Calibri", sans-serif;
+}
 
-.headline.h2:not(:first-child), h2.headline:not(:first-child) {
+.headline.h2:not(:first-child),
+h2.headline:not(:first-child) {
   margin-top: 0;
 }
 
@@ -1361,4 +1358,49 @@ ul.dropbutton li a:hover, ul.dropbutton li a:focus {
       background: none;
     }
   }
-}/*# sourceMappingURL=admin.css.map */
+}
+
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-sharing::before,
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-logout::before,
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-media-wysiwyg::before,
+a#toolbar-item-artsci-help::before {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 15px;
+  color: rgba(255, 255, 255, 0.75);
+  background-color: unset !important;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-mask-image: unset !important;
+          mask-image: unset !important;
+}
+
+a#toolbar-item-artsci-help {
+  display: flex;
+}
+a#toolbar-item-artsci-help::before {
+  content: "\f08e";
+}
+
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-sharing::before {
+  content: "\f362";
+}
+
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-logout::before {
+  content: "\f08b";
+}
+
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-media-wysiwyg::before {
+  content: "\f015";
+}
+
+/*# sourceMappingURL=admin.css.map */

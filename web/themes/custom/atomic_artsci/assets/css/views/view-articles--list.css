@@ -1,28 +1,45 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
   --space-sm-width-gutter: 1.25rem;
 }
 
-.field--name-field-article-author + .field--name-field-article-source-link:before,
-.field--name-field-article-author + .views-field-article-source-link:before,
-.views-field-article-source-link + .views-field-article-source-link:before {
+.field--name-field-article-author + .field--name-field-article-source-link::before,
+.field--name-field-article-author + .views-field-article-source-link::before,
+.views-field-article-source-link + .views-field-article-source-link::before {
   content: "- ";
-  color: #737373;
+  color: #f4f2ed;
   margin: 0 0.325rem;
-}/*# sourceMappingURL=view-articles--list.css.map */
+}
+
+/*# sourceMappingURL=view-articles--list.css.map */

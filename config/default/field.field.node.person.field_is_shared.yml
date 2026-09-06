@@ -1,0 +1,23 @@
+uuid: 1664c8d8-3515-437c-9892-91b02a0592e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_is_shared
+    - node.type.person
+id: node.person.field_is_shared
+field_name: field_is_shared
+entity_type: node
+bundle: person
+label: 'Is Shared Content'
+description: 'Do not change this.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

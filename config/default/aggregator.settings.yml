@@ -5,7 +5,7 @@ parser: aggregator
 processors:
   - aggregator
 items:
-  expire: 31557600
+  expire: 315576000
 source:
-  list_max: 10
+  list_max: 25
 normalize_post_dates: false

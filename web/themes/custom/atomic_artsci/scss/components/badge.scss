@@ -3,7 +3,7 @@
 
 .badge {
   display: inline-block;
-  padding: 0 .75em;
+  padding: 0 0.75em;
   line-height: 1.67;
   font-size: 75%;
   font-weight: variables.$font-weight-medium;
@@ -14,7 +14,7 @@
 
 .badge--primary {
   background: variables.$primary;
-  color: variables.$blk;
+  color: variables.$artsci-black;
 }
 
 .badge--secondary {
@@ -22,7 +22,7 @@
 }
 
 .badge--cool-gray {
-  background: variables.$brand-cool-gray;
+  background: variables.$gray-dark;
 }
 
 .badge--blue {
@@ -37,7 +37,6 @@
   background: variables.$danger;
 }
 
-
 .badge--light {
   background: variables.$light;
   color: variables.$secondary;
@@ -46,7 +45,7 @@
 .badge {
   display: inline-flex;
   .svg-inline--fa {
-    margin-right: .4rem;
+    margin-right: 0.4rem;
     align-self: center;
   }
 }

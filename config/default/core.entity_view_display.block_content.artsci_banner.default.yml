@@ -10,6 +10,7 @@ dependencies:
     - field.field.block_content.artsci_banner.field_artsci_banner_link
     - field.field.block_content.artsci_banner.field_artsci_banner_pre_title
     - field.field.block_content.artsci_banner.field_artsci_banner_title
+    - field.field.block_content.artsci_banner.field_options_list_title
     - field.field.block_content.artsci_banner.field_styles_gradient_midpoint
   module:
     - field_delimiter
@@ -79,6 +80,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_options_list_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
     region: content
   field_styles_gradient_midpoint:
     type: list_default

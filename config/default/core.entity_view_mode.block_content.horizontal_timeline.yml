@@ -1,0 +1,11 @@
+uuid: b4f9c0d3-8f2e-4a6b-9c4d-2e3f4a5b6c7d
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+id: block_content.horizontal_timeline
+label: 'Horizontal Timeline'
+description: ''
+targetEntityType: block_content
+cache: true

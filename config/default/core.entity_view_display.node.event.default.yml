@@ -4,38 +4,40 @@ status: true
 dependencies:
   config:
     - field.field.node.event.body
-    - field.field.node.event.field_event_attendance
-    - field.field.node.event.field_event_attendance_mode
+    - field.field.node.event.field_content_hash
     - field.field.node.event.field_event_category
+    - field.field.node.event.field_event_contact
     - field.field.node.event.field_event_directions
     - field.field.node.event.field_event_geolocation
     - field.field.node.event.field_event_hide
     - field.field.node.event.field_event_location
     - field.field.node.event.field_event_parent
-    - field.field.node.event.field_event_performer
-    - field.field.node.event.rabbit_hole__settings
     - field.field.node.event.field_event_series_link
     - field.field.node.event.field_event_series_link_direct
-    - field.field.node.event.field_event_status
     - field.field.node.event.field_event_virtual
     - field.field.node.event.field_event_when
     - field.field.node.event.field_image
+    - field.field.node.event.field_is_shared
+    - field.field.node.event.field_last_fetch
     - field.field.node.event.field_meta_tags
+    - field.field.node.event.field_rsvp_form
+    - field.field.node.event.field_rsvp_form_link
+    - field.field.node.event.field_shared_content
+    - field.field.node.event.field_shared_content_xml
     - field.field.node.event.field_tags
     - field.field.node.event.field_teaser
+    - field.field.node.event.rabbit_hole__settings
     - node.type.event
-    - views.view.events
   module:
     - address
-    - geofield
+    - artsci_core
     - layout_builder
     - layout_builder_restrictions
     - link
+    - private_content
     - smart_date
-    - system
     - text
     - user
-    - views
   theme:
     - atomic_artsci
 third_party_settings:
@@ -44,26 +46,19 @@ third_party_settings:
     allow_custom: false
     sections:
       -
-        layout_id: layout_onecol
+        layout_id: layout_twocol
         layout_settings:
           label: ''
-          layout_builder_styles_style: {  }
+          context_mapping: {  }
+          column_widths: 67-33
+          layout_builder_styles_style:
+            0: section_background_style_red
+            1: section_margin_fixed_width_container
+            section_padding_top_extra: section_padding_top_extra
         components:
           -
-            uuid: 164271cd-c7b5-4b1f-8709-af87ec89589b
-            region: content
-            configuration:
-              id: system_breadcrumb_block
-              label: null
-              label_display: null
-              provider: system
-              context_mapping: {  }
-            weight: 1
-            additional: {  }
-            third_party_settings: {  }
-          -
             uuid: a7192d3a-b76b-4e95-9c75-2ccd6335f9e5
-            region: content
+            region: first
             configuration:
               id: 'field_block:node:event:title'
               label: Title
@@ -78,28 +73,44 @@ third_party_settings:
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
-            weight: 2
+            weight: 1
             additional: {  }
             third_party_settings: {  }
           -
-            uuid: fc102dbc-7247-4089-988b-352d440620c7
-            region: content
+            uuid: c80d89d9-26a1-406c-ba02-f5608627d76f
+            region: second
             configuration:
-              id: 'field_block:node:event:private'
-              label_display: '0'
+              id: 'field_block:node:event:field_image'
+              label: null
+              label_display: null
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                type: private
-                label: above
-                settings: {  }
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: medium__square
                 third_party_settings: {  }
-            weight: 3
+            weight: 0
             additional: {  }
             third_party_settings: {  }
-        third_party_settings:
-          layout_builder_lock:
-            lock: {  }
+          -
+            uuid: 057c2360-7ec2-487c-8aae-e606acc96787
+            region: first
+            configuration:
+              id: artsci_core_backtolink
+              label: null
+              label_display: null
+              provider: artsci_core
+              context_mapping: {  }
+              link_text: 'Back to Events'
+              link_path: /events
+            weight: 0
+            additional: {  }
+            third_party_settings: {  }
+        third_party_settings: {  }
       -
         layout_id: layout_twocol_card_sidebar
         layout_settings:
@@ -129,46 +140,6 @@ third_party_settings:
                 label: visually_hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 3
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: 5a189b36-c0b6-44a4-9930-af4df76e56bd
-            region: main
-            configuration:
-              id: 'field_block:node:event:field_event_parent'
-              label: null
-              label_display: null
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: inline
-                settings:
-                  link: true
-                third_party_settings: {  }
-            weight: 5
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: c80d89d9-26a1-406c-ba02-f5608627d76f
-            region: card_media
-            configuration:
-              id: 'field_block:node:event:field_image'
-              label: null
-              label_display: null
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_entity_view
-                label: hidden
-                settings:
-                  view_mode: medium__widescreen
-                third_party_settings: {  }
             weight: 0
             additional: {  }
             third_party_settings: {  }
@@ -184,16 +155,16 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: link
+                type: shared_content_link_button
                 label: visually_hidden
                 settings:
-                  trim_length: 80
-                  url_only: false
-                  url_plain: false
-                  rel: '0'
-                  target: '0'
+                  button_style: tertiary
+                  fallback_to_url: 0
+                  trim_length: 0
+                  rel: ''
+                  target: ''
                 third_party_settings: {  }
-            weight: 6
+            weight: 5
             additional: {  }
             third_party_settings: {  }
           -
@@ -212,127 +183,27 @@ third_party_settings:
                 label: visually_hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 3
+            weight: 4
             additional: {  }
             third_party_settings: {  }
           -
-            uuid: d737a5ac-d189-4020-a696-0f4cfeb93699
+            uuid: 2c882a2c-ff8b-4815-bd80-40493334fe21
             region: card_meta
             configuration:
-              id: 'field_block:node:event:field_event_series_link'
+              id: addtocal_block
               label: null
               label_display: null
-              provider: layout_builder
+              provider: artsci_core
               context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: link
-                label: visually_hidden
-                settings:
-                  trim_length: 80
-                  url_only: false
-                  url_plain: false
-                  rel: '0'
-                  target: '0'
-                third_party_settings: {  }
-            weight: 7
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: ecb379fa-76c3-4fbd-a8a5-217f52a97d55
-            region: main
-            configuration:
-              id: 'views_block:events-card_list'
-              label: null
-              label_display: null
-              provider: views
-              context_mapping: {  }
-              views_label: ''
-              items_per_page: 0
-              pager: some
-              headline:
-                headline: Schedule
-                hide_headline: 0
-                heading_size: h2
-                headline_style: headline_bold_serif
-                headline_alignment: default
-                child_heading_size: h3
-              exposed_filter_values: null
-              layout_builder_styles: {  }
-            weight: 6
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: 2f4f6caf-bf44-479f-a188-7f7e0a8d06ba
-            region: main
-            configuration:
-              id: 'field_block:node:event:field_event_performer'
-              label: null
-              label_display: null
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: inline
-                settings:
-                  link: true
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ','
-            weight: 2
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: af06cabb-465a-4fbc-903a-be4ae2f2e0b9
-            region: card_meta
-            configuration:
-              id: 'field_block:node:event:field_event_when'
-              label: null
-              label_display: null
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: smartdate_default
-                label: visually_hidden
-                settings:
-                  timezone_override: ''
-                  format: default
-                  force_chronological: false
-                  add_classes: false
-                  time_wrapper: true
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: 1e82cdcb-9f8f-4909-89d8-63c8243b1096
-            region: card_meta
-            configuration:
-              id: 'field_block:node:event:field_event_status'
-              label: null
-              label_display: null
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: list_default
-                label: visually_hidden
-                settings: {  }
-                third_party_settings: {  }
+                node: layout_builder.entity
             weight: 8
             additional: {  }
             third_party_settings: {  }
           -
-            uuid: 335d4b54-664d-493c-bc76-dcc2d0261c43
+            uuid: aec1c48b-10cf-41b3-a201-3ca152aed57b
             region: card_meta
             configuration:
-              id: 'field_block:node:event:field_event_attendance'
+              id: 'field_block:node:event:field_rsvp_form'
               label: null
               label_display: null
               provider: layout_builder
@@ -340,40 +211,32 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: boolean
+                type: layout_builder_custom_webform_entity_reference_absolute_url
                 label: hidden
-                settings:
-                  format: default
-                  format_custom_false: ''
-                  format_custom_true: ''
-                third_party_settings: {  }
-            weight: 9
-            additional: {  }
-            third_party_settings: {  }
-          -
-            uuid: 4af637aa-7d06-479c-9f2d-5a3a55e6d91d
-            region: card_meta
-            configuration:
-              id: 'field_block:node:event:field_event_directions'
-              label: null
-              label_display: null
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: visually_hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 5
+            weight: 3
             additional: {  }
             third_party_settings: {  }
           -
-            uuid: 967dfcb2-deab-40ad-9084-dbc3700f8b72
+            uuid: 78a1665c-04f2-4720-9ded-b81986dbbc13
             region: card_meta
             configuration:
-              id: 'field_block:node:event:field_event_geolocation'
+              id: artsci_social_share
+              label: null
+              label_display: null
+              provider: artsci_core
+              context_mapping: {  }
+            weight: 10
+            additional:
+              layout_builder_styles_style:
+                block_margin_top_extra: block_margin_top_extra
+            third_party_settings: {  }
+          -
+            uuid: fd52e821-5694-4630-84c6-2da97ff20d49
+            region: card_title
+            configuration:
+              id: 'field_block:node:event:field_rsvp_form_link'
               label: null
               label_display: null
               provider: layout_builder
@@ -381,77 +244,36 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: leaflet_formatter_default
-                label: visually_hidden
+                type: shared_content_link_button
+                label: hidden
                 settings:
-                  multiple_map: false
-                  leaflet_map: 'OSM Mapnik'
-                  height: 400
-                  height_unit: px
-                  hide_empty_map: true
-                  disable_wheel: false
-                  gesture_handling: false
-                  fitbounds_options: '{"padding":[0,0]}'
-                  reset_map:
-                    control: false
-                    options: '{"position":"topleft","title":"Reset View"}'
-                  map_scale:
-                    control: false
-                    options: '{"position":"bottomright","maxWidth":100,"metric":true,"imperial":false,"updateWhenIdle":false}'
-                  locate:
-                    control: false
-                    options: '{"position":"topright","setView":"untilPanOrZoom","returnToPrevBounds":true,"keepCurrentZoomLevel":true,"strings":{"title":"Locate my position"}}'
-                    automatic: false
-                  leaflet_tooltip:
-                    value: ''
-                    options: '{"permanent":false,"direction":"center"}'
-                  leaflet_popup:
-                    control: '0'
-                    content: ''
-                    options: '{"maxWidth":"300","minWidth":"50","autoPan":true}'
-                  map_position:
-                    force: false
-                    center:
-                      lat: 0.0
-                      lon: 0.0
-                    zoomControlPosition: topleft
-                    zoom: 17
-                    minZoom: 1
-                    maxZoom: 19
-                    zoomFiner: 0
-                  icon:
-                    iconType: marker
-                    iconUrl: ''
-                    shadowUrl: ''
-                    className: ''
-                    iconSize:
-                      x: ''
-                      'y': ''
-                    iconAnchor:
-                      x: ''
-                      'y': ''
-                    shadowSize:
-                      x: ''
-                      'y': ''
-                    shadowAnchor:
-                      x: ''
-                      'y': ''
-                    popupAnchor:
-                      x: ''
-                      'y': ''
-                    html: '<div></div>'
-                    html_class: leaflet-map-divicon
-                    circle_marker_options: '{"radius":100,"color":"red","fillColor":"#f03","fillOpacity":0.5}'
-                  fullscreen:
-                    control: false
-                    options: '{"position":"topleft","pseudoFullscreen":false}'
-                  path: '{"color":"#3388ff","opacity":"1.0","stroke":true,"weight":3,"fill":"depends","fillColor":"*","fillOpacity":"0.2","radius":"6"}'
-                  feature_properties:
-                    values: ''
-                  map_lazy_load:
-                    lazy_load: true
+                  button_style: primary
+                  fallback_to_url: 0
+                  trim_length: 0
+                  rel: ''
+                  target: ''
                 third_party_settings: {  }
-            weight: 4
+            weight: 0
+            additional: {  }
+            third_party_settings: {  }
+          -
+            uuid: 4a6ee934-16b6-48a7-91aa-f913461a2dae
+            region: main
+            configuration:
+              id: 'field_block:node:event:body'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_summary_only
+                label: hidden
+                settings:
+                  wrapper_class: artsci-component--bold-intro
+                third_party_settings: {  }
+            weight: -1
             additional: {  }
             third_party_settings: {  }
         third_party_settings:
@@ -529,28 +351,19 @@ content:
     weight: 103
     region: content
   field_event_geolocation:
-    type: geofield_default
+    type: string
     label: above
     settings:
-      output_format: wkt
-      output_escape: true
+      link_to_entity: false
     third_party_settings: {  }
-    weight: 105
-    region: content
+    weight: 104
+    region: first
   field_event_location:
     type: address_default
     label: above
     settings: {  }
     third_party_settings: {  }
     weight: 2
-    region: content
-  field_event_parent:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 102
     region: content
   field_event_performer:
     type: entity_reference_label
@@ -623,13 +436,20 @@ hidden:
   entity_print_view_epub: true
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
-  field_event_attendance_mode: true
+  field_content_hash: true
   field_event_category: true
+  field_event_contact: true
   field_event_directions: true
   field_event_hide: true
+  field_event_parent: true
   field_event_series_link_direct: true
-  field_event_status: true
+  field_is_shared: true
+  field_last_fetch: true
   field_meta_tags: true
+  field_rsvp_form: true
+  field_rsvp_form_link: true
+  field_shared_content: true
+  field_shared_content_xml: true
   field_tags: true
   field_teaser: true
   rabbit_hole__settings: true

@@ -1,0 +1,24 @@
+uuid: 07dd80e3-ae34-4383-9894-c1cb58ece57e
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: ultrawide__1920_x_864
+label: 'Ultrawide (1920 x 864)'
+effects:
+  facffd4e-2c17-4ec0-bcd3-6b6b70c1c9e8:
+    uuid: facffd4e-2c17-4ec0-bcd3-6b6b70c1c9e8
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1920
+      height: 864
+      crop_type: focal_point
+  b3a5f49d-7271-43e3-8312-822fd1033dd7:
+    uuid: b3a5f49d-7271-43e3-8312-822fd1033dd7
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

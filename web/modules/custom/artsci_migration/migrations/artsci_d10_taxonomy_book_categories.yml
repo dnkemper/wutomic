@@ -1,0 +1,113 @@
+id: artsci_d10_taxonomy_book_categories
+label: 'D10 book_categories terms imported into D11 tags vocabulary'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# IMPORTANT: This migration consolidates two differently-named vocabularies.
+# Source on D10 is `book_categories`; destination on D11 is `tags`.
+# That's why the migration ID still references the SOURCE name (matches the
+# JSON:API endpoint) while every `vid` / `default_bundle` references the
+# DESTINATION name. Resulting D11 term IDs are tracked in this migration's
+# map table, so the book node migration resolves field_book_categories ->
+# book_tags through a migration_lookup against this migration ID.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/taxonomy_term/book_categories?page[limit]=500'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+
+  ids:
+    tid:
+      type: integer
+
+  fields:
+    - name: tid
+      label: 'Original TID (in D10 book_categories)'
+      selector: 'attributes/drupal_internal__tid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: name
+      label: Name
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: weight
+      label: Weight
+      selector: 'attributes/weight'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: desc_value
+      label: 'Description value'
+      selector: 'attributes/description/value'
+    - name: desc_format
+      label: 'Description format'
+      selector: 'attributes/description/format'
+    - name: source_parent
+      label: 'Parent term reference (in D10 book_categories)'
+      selector: 'relationships/parent/data'
+
+process:
+  # Look up existing term by UUID to avoid duplicate-key inserts when a
+  # matching term already exists on D11. NOTE: entity_lookup is not bundle-
+  # restricted; if the same UUID exists in a different D11 vocab, that term
+  # will be matched. Unlikely in practice but worth knowing.
+  tid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: taxonomy_term
+    value_key: uuid
+
+  uuid: uuid
+
+  # Hardcoded to tags — the D11 destination vocab.
+  vid:
+    plugin: default_value
+    default_value: tags
+
+  langcode: langcode
+  name: name
+  weight:
+    plugin: default_value
+    default_value: 0
+    source: weight
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  'description/value': desc_value
+  'description/format':
+    plugin: default_value
+    default_value: full_html
+    source: desc_format
+
+  # Parent hierarchy. D10 parents reference other D10 book_categories terms.
+  # We resolve via migration_lookup against this same migration so the
+  # parent ref ends up pointing at the migrated D11 tags tid. Stubs get
+  # created automatically for parents not yet migrated; they get filled in
+  # when the actual parent comes through later in the run.
+  parent:
+    plugin: sub_process
+    source: source_parent
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: artsci_d10_taxonomy_book_categories
+        source: meta/drupal_internal__target_id
+
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: tags
+
+migration_dependencies:
+  required: []
+  optional: []

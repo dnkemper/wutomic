@@ -9,11 +9,11 @@ id: node.article.field_article_subhead
 field_name: field_article_subhead
 entity_type: node
 bundle: article
-label: 'Article Subhead'
-description: 'The subhead appears directly below the article title, and can support it or add clarity.'
+label: Subtitle
+description: 'The intro text appears directly below the article title, and can support it or add clarity.'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string
+field_type: string_long

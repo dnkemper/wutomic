@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * Default theme implementation for oEmbed thumbnail with play button overlay.
+ *
+ * Available variables:
+ * - thumbnail_url: URL to the thumbnail image.
+ * - thumbnail_fallback_url: Optional URL used by the img onerror handler when
+ *   the primary thumbnail fails to load (e.g. a missing YouTube maxresdefault).
+ * - video_url: Original oEmbed URL (YouTube/Vimeo link).
+ * - iframe_url: The direct embed URL for the video (with autoplay if enabled).
+ * - max_width: Maximum width setting.
+ * - max_height: Maximum height setting.
+ * - autoplay: Whether to autoplay when clicked.
+ * - media_entity: The media entity.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('atomic_artsci/video') }}
+{% set video_name = media_entity.name.value|default('Video') %}
+<div class="oembed-thumbnail-wrapper" data-oembed-thumbnail>
+  <div class="video-controls video">
+    <button class="oembed-thumbnail__cta" data-oembed-play-btn aria-label="{{ 'Play video: @name'|t({'@name': video_name}) }}">
+      <span class="oembed-thumbnail__cta-label">{{ 'Watch the video'|t }}</span>
+      <span class="oembed-thumbnail__cta-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"></path></svg>
+      </span>
+    </button>
+  </div>
+  <div class="oembed-thumbnail__poster" data-oembed-poster>
+    <img 
+      src="{{ thumbnail_url }}" 
+      alt="{{ video_name }}" 
+      class="oembed-thumbnail__image" 
+      loading="lazy"
+      {% if thumbnail_fallback_url %}data-fallback-src="{{ thumbnail_fallback_url }}" onerror="if(this.dataset.fallbackSrc){this.src=this.dataset.fallbackSrc;this.removeAttribute('data-fallback-src');}"{% endif %}
+    />
+  </div>
+  <div class="oembed-thumbnail__video" data-oembed-video>
+    {# The iframe will be injected here by JavaScript #}
+  </div>
+  <template data-oembed-iframe-template>
+    <iframe
+      src="{{ iframe_url }}"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+      title="{{ video_name }}"
+    ></iframe>
+  </template>
+</div>

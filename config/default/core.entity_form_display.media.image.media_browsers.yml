@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_browsers
+    - field.field.media.image.field_lightbox_title
     - field.field.media.image.field_media_caption
     - field.field.media.image.field_media_image
     - field.field.media.image.field_tags
@@ -11,8 +12,30 @@ dependencies:
     - media.type.image
   module:
     - decorative_image_widget
+    - field_group
     - focal_point
+    - path
     - text
+third_party_settings:
+  field_group:
+    group_tags:
+      children:
+        - field_tags
+        - path
+      label: Tags
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: details_sidebar
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+        weight: 0
 _core:
   default_config_hash: l-dF50iDS2Ja-TjmAcoiUxNVWrRf4fm84B3xPakAavo
 id: media.image.media_browsers
@@ -20,6 +43,14 @@ targetEntityType: media
 bundle: image
 mode: media_browsers
 content:
+  field_lightbox_title:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_media_caption:
     type: text_textarea
     weight: 2
@@ -41,8 +72,8 @@ content:
       decorative_image_widget:
         use_decorative_checkbox: true
   field_tags:
-    type: entity_reference_autocomplete_tags
-    weight: 3
+    type: entity_reference_autocomplete
+    weight: 0
     region: content
     settings:
       match_operator: CONTAINS
@@ -58,13 +89,19 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  path:
+    type: path
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
-  path: true
   publish_on: true
   publish_state: true
   replace_file: true
   status: true
+  thumbnail: true
   uid: true
   unpublish_on: true
   unpublish_state: true

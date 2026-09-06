@@ -1,0 +1,10 @@
+uuid: 20efe9a0-eeed-401b-81e3-1778279aa73e
+langcode: en
+status: true
+dependencies: {  }
+id: social_media_links
+label: 'Social Media Links'
+icon_uuid: null
+icon_default: null
+description: 'Migrated from paragraph bundle Social Media Links'
+behavior_plugins: {  }

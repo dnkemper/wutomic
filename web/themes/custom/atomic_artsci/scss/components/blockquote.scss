@@ -1,0 +1,51 @@
+// ============================================================
+// Pull quote
+// Editorial blockquote with red accent rule and large serif.
+// ============================================================
+
+blockquote {
+  position: relative;
+  margin: 3rem 0;
+  padding: 1.75rem 0 0;
+  border: 0; // reset any inherited left border
+
+  // Red accent rule
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3.5rem;
+    height: 3px;
+    background-color: #a51417; // swap for your WashU red token
+  }
+
+  // Quotation body
+  p {
+    font-family: var(--font-family-serif);
+    font-size: clamp(1.5rem, 3.2vw, 2.5rem);
+    font-weight: 400;
+    line-height: 120%;
+    color: #000;
+    margin: 0 0 1.75rem;
+
+    // Tighten the gap if multiple paragraphs sit inside the quote
+    & + p {
+      margin-top: 1rem;
+    }
+  }
+
+  // Attribution. Works with <cite>, <footer>, or a trailing <p> the editor types.
+  cite,
+  footer,
+  > p:last-child:not(:only-child) {
+    display: block;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: #000;
+    margin: 0;
+  }
+}

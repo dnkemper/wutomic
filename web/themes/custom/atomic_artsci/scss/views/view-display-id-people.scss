@@ -29,7 +29,6 @@
   }
 }
 
-
 .view-display-id-page_people_table {
   table {
     tbody tr:not(.is-selected):nth-child(2n),
@@ -85,7 +84,7 @@
       }
     }
 
-    &+td {
+    & + td {
       padding-left: 0rem;
 
       fieldset {
@@ -98,7 +97,9 @@
     }
 
     &.drag {
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+      box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.16),
+        0 3px 6px rgba(0, 0, 0, 0.23);
     }
   }
 }

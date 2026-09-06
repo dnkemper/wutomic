@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -21,7 +36,6 @@
 
 .ck.ck-content .element--center,
 .ck-content .element--center {
-  display: flex;
   align-items: center;
   justify-content: center;
   display: block;
@@ -39,167 +53,11 @@
 .ck.ck-content,
 .ck-content {
   font-family: "ivystyle-sans", "Calibri", sans-serif;
-  --brand-primary: #FFCD00;
+  --brand-primary: #ba0c2f;
   --brand-secondary: #000000;
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
   --space-sm-width-gutter: 1.25rem;
-  /* Sections
-     ========================================================================== */
-  /**
-   * Remove the margin in all browsers (opinionated).
-   */
-  /**
-   * Add the correct display in IE 9-.
-   */
-  /* Grouping content
-     ========================================================================== */
-  /**
-   * Add the correct display in IE 9-.
-   * 1. Add the correct display in IE.
-   */
-  /**
-   * 1. Add the correct box sizing in Firefox.
-   * 2. Show the overflow in Edge and IE.
-   */
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
-   */
-  /* Text-level semantics
-     ========================================================================== */
-  /**
-   * 1. Remove the gray background on active links in IE 10.
-   * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
-   */
-  /**
-   * 1. Remove the bottom border in Firefox 39-.
-   * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
-   */
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
-   */
-  /**
-   * Add the correct font style in Android 4.3-.
-   */
-  /**
-   * Add the correct background and color in IE 9-.
-   */
-  /**
-   * Add the correct font size in all browsers.
-   */
-  /**
-   * Prevent `sub` and `sup` elements from affecting the line height in
-   * all browsers.
-   */
-  /* Embedded content
-     ========================================================================== */
-  /**
-   * Add the correct display in IE 9-.
-   */
-  /**
-   * Add the correct display in iOS 4-7.
-   */
-  /**
-   * Remove the border on images inside links in IE 10-.
-   */
-  /**
-   * Hide the overflow in IE.
-   */
-  /* Forms
-     ========================================================================== */
-  /**
-   * 1. Change the font styles in all browsers (opinionated).
-   * 2. Remove the margin in Firefox and Safari.
-   */
-  /**
-   * Show the overflow in IE.
-   * 1. Show the overflow in Edge.
-   */
-  /**
-   * Remove the inheritance of text transform in Edge, Firefox, and IE.
-   * 1. Remove the inheritance of text transform in Firefox.
-   */
-  /**
-   * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
-   *    controls in Android 4.
-   * 2. Correct the inability to style clickable types in iOS and Safari.
-   */
-  /**
-   * Remove the inner border and padding in Firefox.
-   */
-  /**
-   * Restore the focus styles unset by the previous rule.
-   */
-  /**
-   * Change the border, margin, and padding in all browsers (opinionated).
-   */
-  /**
-   * 1. Correct the text wrapping in Edge and IE.
-   * 2. Correct the color inheritance from `fieldset` elements in IE.
-   * 3. Remove the padding so developers are not caught out when they zero out
-   *    `fieldset` elements in all browsers.
-   */
-  /**
-   * 1. Add the correct display in IE 9-.
-   * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
-   */
-  /**
-   * Remove the default vertical scrollbar in IE.
-   */
-  /**
-   * 1. Add the correct box sizing in IE 10-.
-   * 2. Remove the padding in IE 10-.
-   */
-  /**
-   * Correct the cursor style of increment and decrement buttons in Chrome.
-   */
-  /**
-   * 1. Correct the odd appearance in Chrome and Safari.
-   * 2. Correct the outline style in Safari.
-   */
-  /**
-   * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
-   */
-  /**
-   * 1. Correct the inability to style clickable types in iOS and Safari.
-   * 2. Change font properties to `inherit` in Safari.
-   */
-  /* Interactive
-     ========================================================================== */
-  /*
-   * Add the correct display in IE 9-.
-   * 1. Add the correct display in Edge, IE, and Firefox.
-   */
-  /*
-   * Add the correct display in all browsers.
-   */
-  /* Scripting
-     ========================================================================== */
-  /**
-   * Add the correct display in IE 9-.
-   */
-  /**
-   * Add the correct display in IE.
-   */
-  /* Hidden
-     ========================================================================== */
-  /**
-   * Add the correct display in IE 10-.
-   */
-  /* Lists
-     ========================================================================== */
-  /**
-   * Unset default list margin and padding because if not
-   * we'll have to unset it every. single. time.
-   */
-  /* Remove all animations and transitions for people that prefer not to see them */
-  /**
-  * Temporary workaround for https://www.drupal.org/project/drupal/issues/3398223.
-  * 1. Add the correct box sizing in Firefox.
-  * 2. Show the overflow in Edge and IE.
-  */
 }
 .ck.ck-content :root,
 .ck-content :root {
@@ -227,6 +85,14 @@
 .ck-content *::after {
   box-sizing: inherit;
 }
+.ck.ck-content,
+.ck-content {
+  /* Sections
+   ========================================================================== */
+  /**
+  * Remove the margin in all browsers (opinionated).
+  */
+}
 .ck.ck-content body,
 .ck-content body {
   margin: 0;
@@ -235,6 +101,12 @@
   color: #000;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * Add the correct display in IE 9-.
+  */
 }
 .ck.ck-content article,
 .ck.ck-content aside,
@@ -250,6 +122,15 @@
 .ck-content section {
   display: block;
 }
+.ck.ck-content,
+.ck-content {
+  /* Grouping content
+   ========================================================================== */
+  /**
+  * Add the correct display in IE 9-.
+  * 1. Add the correct display in IE.
+  */
+}
 .ck.ck-content figcaption,
 .ck.ck-content figure,
 .ck.ck-content main,
@@ -258,6 +139,13 @@
 .ck-content main {
   /* 1 */
   display: block;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Add the correct box sizing in Firefox.
+  * 2. Show the overflow in Edge and IE.
+  */
 }
 .ck.ck-content hr,
 .ck-content hr {
@@ -268,12 +156,28 @@
   overflow: visible;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Correct the inheritance and scaling of font size in all browsers.
+  * 2. Correct the odd `em` font sizing in all browsers.
+  */
+}
 .ck.ck-content pre,
 .ck-content pre {
   font-family: monospace, monospace;
   /* 1 */
   font-size: 1rem;
   /* 2 */
+}
+.ck.ck-content,
+.ck-content {
+  /* Text-level semantics
+   ========================================================================== */
+  /**
+  * 1. Remove the gray background on active links in IE 10.
+  * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+  */
 }
 .ck.ck-content a,
 .ck-content a {
@@ -282,14 +186,21 @@
   -webkit-text-decoration-skip: objects;
   /* 2 */
   /**
-   * Remove the outline on focused links when they are also active or hovered
-   * in all browsers (opinionated).
-   */
+  * Remove the outline on focused links when they are also active or hovered
+  * in all browsers (opinionated).
+  */
 }
 .ck.ck-content a:active, .ck.ck-content a:hover,
 .ck-content a:active,
 .ck-content a:hover {
   outline-width: 0;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Remove the bottom border in Firefox 39-.
+  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+  */
 }
 .ck.ck-content abbr[title],
 .ck-content abbr[title] {
@@ -300,6 +211,13 @@
   -webkit-text-decoration: underline dotted;
           text-decoration: underline dotted;
   /* 2 */
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Correct the inheritance and scaling of font size in all browsers.
+  * 2. Correct the odd `em` font sizing in all browsers.
+  */
 }
 .ck.ck-content code,
 .ck.ck-content kbd,
@@ -312,18 +230,43 @@
   font-size: 1em;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Add the correct font style in Android 4.3-.
+  */
+}
 .ck.ck-content dfn,
 .ck-content dfn {
   font-style: italic;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * Add the correct background and color in IE 9-.
+  */
 }
 .ck.ck-content mark,
 .ck-content mark {
   background-color: #ff0;
   color: #000;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Add the correct font size in all browsers.
+  */
+}
 .ck.ck-content small,
 .ck-content small {
   font-size: 80%;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * Prevent `sub` and `sup` elements from affecting the line height in
+  * all browsers.
+  */
 }
 .ck.ck-content sub,
 .ck.ck-content sup,
@@ -342,16 +285,36 @@
 .ck-content sup {
   top: -0.5em;
 }
+.ck.ck-content,
+.ck-content {
+  /* Embedded content
+   ========================================================================== */
+  /**
+  * Add the correct display in IE 9-.
+  */
+}
 .ck.ck-content audio,
 .ck.ck-content video,
 .ck-content audio,
 .ck-content video {
   display: inline-block;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Add the correct display in iOS 4-7.
+  */
+}
 .ck.ck-content audio:not([controls]),
 .ck-content audio:not([controls]) {
   display: none;
   height: 0;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * Remove the border on images inside links in IE 10-.
+  */
 }
 .ck.ck-content img,
 .ck-content img {
@@ -361,9 +324,24 @@
   /* Remove small gap at the bottom of an image when inside a container. */
   vertical-align: top;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Hide the overflow in IE.
+  */
+}
 .ck.ck-content svg:not(:root),
 .ck-content svg:not(:root) {
   overflow: hidden;
+}
+.ck.ck-content,
+.ck-content {
+  /* Forms
+   ========================================================================== */
+  /**
+  * 1. Change the font styles in all browsers (opinionated).
+  * 2. Remove the margin in Firefox and Safari.
+  */
 }
 .ck.ck-content button,
 .ck.ck-content input,
@@ -380,6 +358,13 @@
   margin: 0;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Show the overflow in IE.
+  * 1. Show the overflow in Edge.
+  */
+}
 .ck.ck-content button,
 .ck.ck-content input,
 .ck-content button,
@@ -387,12 +372,27 @@
   /* 1 */
   overflow: visible;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Remove the inheritance of text transform in Edge, Firefox, and IE.
+  * 1. Remove the inheritance of text transform in Firefox.
+  */
+}
 .ck.ck-content button,
 .ck.ck-content select,
 .ck-content button,
 .ck-content select {
   /* 1 */
   text-transform: none;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+  *    controls in Android 4.
+  * 2. Correct the inability to style clickable types in iOS and Safari.
+  */
 }
 .ck.ck-content button,
 .ck.ck-content html [type=button],
@@ -405,6 +405,12 @@
   -webkit-appearance: button;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Remove the inner border and padding in Firefox.
+  */
+}
 .ck.ck-content button::-moz-focus-inner,
 .ck.ck-content [type=button]::-moz-focus-inner,
 .ck.ck-content [type=reset]::-moz-focus-inner,
@@ -416,6 +422,12 @@
   border-style: none;
   padding: 0;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Restore the focus styles unset by the previous rule.
+  */
+}
 .ck.ck-content button:-moz-focusring,
 .ck.ck-content [type=button]:-moz-focusring,
 .ck.ck-content [type=reset]:-moz-focusring,
@@ -426,11 +438,26 @@
 .ck-content [type=submit]:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Change the border, margin, and padding in all browsers (opinionated).
+  */
+}
 .ck.ck-content fieldset,
 .ck-content fieldset {
   border: 1px solid #c0c0c0;
   margin: 0 2px;
   padding: 0.35em 0.625em 0.75em;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Correct the text wrapping in Edge and IE.
+  * 2. Correct the color inheritance from `fieldset` elements in IE.
+  * 3. Remove the padding so developers are not caught out when they zero out
+  *    `fieldset` elements in all browsers.
+  */
 }
 .ck.ck-content legend,
 .ck-content legend {
@@ -447,6 +474,13 @@
   white-space: normal;
   /* 1 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Add the correct display in IE 9-.
+  * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+  */
+}
 .ck.ck-content progress,
 .ck-content progress {
   display: inline-block;
@@ -454,9 +488,22 @@
   vertical-align: baseline;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Remove the default vertical scrollbar in IE.
+  */
+}
 .ck.ck-content textarea,
 .ck-content textarea {
   overflow: auto;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Add the correct box sizing in IE 10-.
+  * 2. Remove the padding in IE 10-.
+  */
 }
 .ck.ck-content [type=checkbox],
 .ck.ck-content [type=radio],
@@ -467,11 +514,24 @@
   padding: 0;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Correct the cursor style of increment and decrement buttons in Chrome.
+  */
+}
 .ck.ck-content [type=number]::-webkit-inner-spin-button,
 .ck.ck-content [type=number]::-webkit-outer-spin-button,
 .ck-content [type=number]::-webkit-inner-spin-button,
 .ck-content [type=number]::-webkit-outer-spin-button {
   height: auto;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Correct the odd appearance in Chrome and Safari.
+  * 2. Correct the outline style in Safari.
+  */
 }
 .ck.ck-content [type=search],
 .ck-content [type=search] {
@@ -480,11 +540,24 @@
   outline-offset: -2px;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+  */
+}
 .ck.ck-content [type=search]::-webkit-search-cancel-button,
 .ck.ck-content [type=search]::-webkit-search-decoration,
 .ck-content [type=search]::-webkit-search-cancel-button,
 .ck-content [type=search]::-webkit-search-decoration {
   -webkit-appearance: none;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * 1. Correct the inability to style clickable types in iOS and Safari.
+  * 2. Change font properties to `inherit` in Safari.
+  */
 }
 .ck.ck-content ::-webkit-file-upload-button,
 .ck-content ::-webkit-file-upload-button {
@@ -493,27 +566,73 @@
   font: inherit;
   /* 2 */
 }
+.ck.ck-content,
+.ck-content {
+  /* Interactive
+   ========================================================================== */
+  /*
+  * Add the correct display in IE 9-.
+  * 1. Add the correct display in Edge, IE, and Firefox.
+  */
+}
 .ck.ck-content details,
 .ck.ck-content menu,
 .ck-content details,
 .ck-content menu {
   display: block;
 }
+.ck.ck-content,
+.ck-content {
+  /*
+  * Add the correct display in all browsers.
+  */
+}
 .ck.ck-content summary,
 .ck-content summary {
   display: list-item;
+}
+.ck.ck-content,
+.ck-content {
+  /* Scripting
+   ========================================================================== */
+  /**
+  * Add the correct display in IE 9-.
+  */
 }
 .ck.ck-content canvas,
 .ck-content canvas {
   display: inline-block;
 }
+.ck.ck-content,
+.ck-content {
+  /**
+  * Add the correct display in IE.
+  */
+}
 .ck.ck-content template,
 .ck-content template {
   display: none;
 }
+.ck.ck-content,
+.ck-content {
+  /* Hidden
+   ========================================================================== */
+  /**
+  * Add the correct display in IE 10-.
+  */
+}
 .ck.ck-content [hidden],
 .ck-content [hidden] {
   display: none;
+}
+.ck.ck-content,
+.ck-content {
+  /* Lists
+   ========================================================================== */
+  /**
+  * Unset default list margin and padding because if not
+  * we'll have to unset it every. single. time.
+  */
 }
 .ck.ck-content ul,
 .ck.ck-content ol,
@@ -593,7 +712,10 @@
   height: 1px;
   width: 1px;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 @media (min-width: 0em) and (max-width: 768px) {
   .ck.ck-content .mobile-hidden,
@@ -789,7 +911,8 @@
   line-height: 1.125;
   letter-spacing: 0;
 }
-.ck.ck-content h1, .ck.ck-content .h1,
+.ck.ck-content h1,
+.ck.ck-content .h1,
 .ck-content h1,
 .ck-content .h1 {
   line-height: unset;
@@ -797,7 +920,7 @@
   margin-bottom: 0.625rem;
   font-family: "ivypresto-headline", "Georgia", serif;
   font-weight: 600;
-  font-size: clamp(2.3rem, 2.3662vw + 1.4127rem, 3.35rem);
+  font-size: clamp(2.25rem, 4vw + 1rem, 4.5rem);
 }
 .ck.ck-content .h1.bold-headline--serif, .ck.ck-content .h1.headline--serif,
 .ck-content .h1.bold-headline--serif,
@@ -807,51 +930,60 @@
   margin-bottom: 0.625rem;
   font-family: "ivypresto-headline", "Georgia", serif;
   font-weight: 600;
-  font-size: clamp(2.3rem, 2.3662vw + 1.4127rem, 3.35rem);
+  font-size: clamp(2.25rem, 4vw + 1rem, 4.5rem);
   font-weight: 500;
 }
-.ck.ck-content h2, .ck.ck-content .h2,
+.ck.ck-content h2,
+.ck.ck-content .h2,
 .ck-content h2,
 .ck-content .h2 {
   line-height: 1.25;
   font-weight: 500;
-  font-size: clamp(1.95rem, 0.7887vw + 1.6542rem, 2.3rem);
+  font-size: clamp(1.75rem, 2.5vw + 1rem, 3rem);
   margin-top: 0;
   margin-bottom: 0.325rem;
 }
-.ck.ck-content h2:not(:first-child), .ck.ck-content .h2:not(:first-child),
+.ck.ck-content h2:not(:first-child),
+.ck.ck-content .h2:not(:first-child),
 .ck-content h2:not(:first-child),
 .ck-content .h2:not(:first-child) {
   margin-top: 1.875rem;
 }
-.ck.ck-content h2.bold-headline--serif, .ck.ck-content h2.headline--serif, .ck.ck-content .h2.bold-headline--serif, .ck.ck-content .h2.headline--serif,
+.ck.ck-content h2.bold-headline--serif, .ck.ck-content h2.headline--serif,
+.ck.ck-content .h2.bold-headline--serif,
+.ck.ck-content .h2.headline--serif,
 .ck-content h2.bold-headline--serif,
 .ck-content h2.headline--serif,
 .ck-content .h2.bold-headline--serif,
 .ck-content .h2.headline--serif {
   font-size: clamp(1.75rem, 1.7465vw + 1.0951rem, 2.525rem);
 }
-.ck.ck-content h3, .ck.ck-content .h3,
+.ck.ck-content h3,
+.ck.ck-content .h3,
 .ck-content h3,
 .ck-content .h3 {
   line-height: 1.25;
-  font-size: clamp(1.65rem, 0.5915vw + 1.4282rem, 1.9125rem);
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
   margin-top: 0;
   margin-bottom: 0.325rem;
 }
-.ck.ck-content h3:not(:first-child), .ck.ck-content .h3:not(:first-child),
+.ck.ck-content h3:not(:first-child),
+.ck.ck-content .h3:not(:first-child),
 .ck-content h3:not(:first-child),
 .ck-content .h3:not(:first-child) {
   margin-top: 1.875rem;
 }
-.ck.ck-content h3.bold-headline--serif, .ck.ck-content h3.headline--serif, .ck.ck-content .h3.bold-headline--serif, .ck.ck-content .h3.headline--serif,
+.ck.ck-content h3.bold-headline--serif, .ck.ck-content h3.headline--serif,
+.ck.ck-content .h3.bold-headline--serif,
+.ck.ck-content .h3.headline--serif,
 .ck-content h3.bold-headline--serif,
 .ck-content h3.headline--serif,
 .ck-content .h3.bold-headline--serif,
 .ck-content .h3.headline--serif {
   font-size: clamp(1.65rem, 1.0986vw + 1.238rem, 2.1375rem);
 }
-.ck.ck-content h4, .ck.ck-content .h4,
+.ck.ck-content h4,
+.ck.ck-content .h4,
 .ck-content h4,
 .ck-content .h4 {
   line-height: 1.25;
@@ -860,19 +992,23 @@
   margin-top: 0;
   margin-bottom: 0.325rem;
 }
-.ck.ck-content h4:not(:first-child), .ck.ck-content .h4:not(:first-child),
+.ck.ck-content h4:not(:first-child),
+.ck.ck-content .h4:not(:first-child),
 .ck-content h4:not(:first-child),
 .ck-content .h4:not(:first-child) {
   margin-top: 1.875rem;
 }
-.ck.ck-content h4.bold-headline--serif, .ck.ck-content h4.headline--serif, .ck.ck-content .h4.bold-headline--serif, .ck.ck-content .h4.headline--serif,
+.ck.ck-content h4.bold-headline--serif, .ck.ck-content h4.headline--serif,
+.ck.ck-content .h4.bold-headline--serif,
+.ck.ck-content .h4.headline--serif,
 .ck-content h4.bold-headline--serif,
 .ck-content h4.headline--serif,
 .ck-content .h4.bold-headline--serif,
 .ck-content .h4.headline--serif {
   font-size: clamp(1.45rem, 0.8451vw + 1.1331rem, 1.825rem);
 }
-.ck.ck-content h5, .ck.ck-content .h5,
+.ck.ck-content h5,
+.ck.ck-content .h5,
 .ck-content h5,
 .ck-content .h5 {
   line-height: 1.25;
@@ -881,19 +1017,23 @@
   margin-top: 0;
   margin-bottom: 0.325rem;
 }
-.ck.ck-content h5:not(:first-child), .ck.ck-content .h5:not(:first-child),
+.ck.ck-content h5:not(:first-child),
+.ck.ck-content .h5:not(:first-child),
 .ck-content h5:not(:first-child),
 .ck-content .h5:not(:first-child) {
   margin-top: 1.875rem;
 }
-.ck.ck-content h5.bold-headline--serif, .ck.ck-content h5.headline--serif, .ck.ck-content .h5.bold-headline--serif, .ck.ck-content .h5.headline--serif,
+.ck.ck-content h5.bold-headline--serif, .ck.ck-content h5.headline--serif,
+.ck.ck-content .h5.bold-headline--serif,
+.ck.ck-content .h5.headline--serif,
 .ck-content h5.bold-headline--serif,
 .ck-content h5.headline--serif,
 .ck-content .h5.bold-headline--serif,
 .ck-content .h5.headline--serif {
   font-size: clamp(1.3rem, 0.7324vw + 1.0254rem, 1.625rem);
 }
-.ck.ck-content h6, .ck.ck-content .h6,
+.ck.ck-content h6,
+.ck.ck-content .h6,
 .ck-content h6,
 .ck-content .h6 {
   font-size: 1.2rem;
@@ -902,12 +1042,15 @@
   margin-top: 0;
   margin-bottom: 0.325rem;
 }
-.ck.ck-content h6:not(:first-child), .ck.ck-content .h6:not(:first-child),
+.ck.ck-content h6:not(:first-child),
+.ck.ck-content .h6:not(:first-child),
 .ck-content h6:not(:first-child),
 .ck-content .h6:not(:first-child) {
   margin-top: 1.875rem;
 }
-.ck.ck-content h6.bold-headline--serif, .ck.ck-content h6.headline--serif, .ck.ck-content .h6.bold-headline--serif, .ck.ck-content .h6.headline--serif,
+.ck.ck-content h6.bold-headline--serif, .ck.ck-content h6.headline--serif,
+.ck.ck-content .h6.bold-headline--serif,
+.ck.ck-content .h6.headline--serif,
 .ck-content h6.bold-headline--serif,
 .ck-content h6.headline--serif,
 .ck-content .h6.bold-headline--serif,
@@ -917,7 +1060,7 @@
 .ck.ck-content ol,
 .ck-content ol {
   list-style-position: outside;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 1.05rem;
   margin-bottom: 1.05rem;
   margin-left: 1.875rem;
@@ -945,7 +1088,7 @@
 .ck.ck-content ul,
 .ck-content ul {
   list-style: disc outside;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 1.05rem;
   margin-bottom: 1.05rem;
   margin-left: 1.875rem;
@@ -965,7 +1108,10 @@
 .ck-content ul ul ul {
   list-style-type: square;
 }
-.ck.ck-content ol ol, .ck.ck-content ol ul, .ck.ck-content ul ol, .ck.ck-content ul ul,
+.ck.ck-content ol ol,
+.ck.ck-content ol ul,
+.ck.ck-content ul ol,
+.ck.ck-content ul ul,
 .ck-content ol ol,
 .ck-content ol ul,
 .ck-content ul ol,
@@ -1024,10 +1170,10 @@
     margin-left: 115px;
   }
 }
-.ck.ck-content .artsci-component--circle-list > li:before,
-.ck.ck-content .element--circle-list > li:before,
-.ck-content .artsci-component--circle-list > li:before,
-.ck-content .element--circle-list > li:before {
+.ck.ck-content .artsci-component--circle-list > li::before,
+.ck.ck-content .element--circle-list > li::before,
+.ck-content .artsci-component--circle-list > li::before,
+.ck-content .element--circle-list > li::before {
   display: block;
   margin: 0 auto;
   top: 0px;
@@ -1037,11 +1183,10 @@
   padding-top: 35px;
   content: counter(circle-counter);
   text-align: center;
-  text-transform: uppercase;
   color: black;
-  border: 1px solid #BA0C2F;
+  border: 1px solid #ba0c2f;
   border-radius: 50%;
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   box-shadow: inset 0px 0px 0px 10px white;
   text-transform: uppercase;
   font-family: "ivystyle-sans", "Calibri", sans-serif;
@@ -1053,23 +1198,23 @@
   box-sizing: border-box;
 }
 @media (min-width: 768px) {
-  .ck.ck-content .artsci-component--circle-list > li:before,
-  .ck.ck-content .element--circle-list > li:before,
-  .ck-content .artsci-component--circle-list > li:before,
-  .ck-content .element--circle-list > li:before {
+  .ck.ck-content .artsci-component--circle-list > li::before,
+  .ck.ck-content .element--circle-list > li::before,
+  .ck-content .artsci-component--circle-list > li::before,
+  .ck-content .element--circle-list > li::before {
     position: absolute;
     display: inline-block;
     margin: 0 0.5rem 0;
   }
 }
-.artsci-component--gray .ck.ck-content .artsci-component--circle-list > li:before, .bg--gray .ck.ck-content .artsci-component--circle-list > li:before,
-.artsci-component--gray .ck.ck-content .element--circle-list > li:before,
-.bg--gray .ck.ck-content .element--circle-list > li:before,
-.artsci-component--gray .ck-content .artsci-component--circle-list > li:before,
-.bg--gray .ck-content .artsci-component--circle-list > li:before,
-.artsci-component--gray .ck-content .element--circle-list > li:before,
-.bg--gray .ck-content .element--circle-list > li:before {
-  box-shadow: inset 0px 0px 0px 10px #F3F3F3;
+.artsci-component--gray .ck.ck-content .artsci-component--circle-list > li::before, .bg--gray .ck.ck-content .artsci-component--circle-list > li::before,
+.artsci-component--gray .ck.ck-content .element--circle-list > li::before,
+.bg--gray .ck.ck-content .element--circle-list > li::before,
+.artsci-component--gray .ck-content .artsci-component--circle-list > li::before,
+.bg--gray .ck-content .artsci-component--circle-list > li::before,
+.artsci-component--gray .ck-content .element--circle-list > li::before,
+.bg--gray .ck-content .element--circle-list > li::before {
+  box-shadow: inset 0px 0px 0px 10px #edeae1;
 }
 .ck.ck-content .element--circle-list > li,
 .ck.ck-content .artsci-component--circle-list > li,
@@ -1126,7 +1271,7 @@
 .ck.ck-content p,
 .ck-content p {
   line-height: 1.7;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 0;
   margin-bottom: 1.05rem;
 }
@@ -1151,7 +1296,7 @@
   -webkit-overflow-scrolling: touch;
   padding: 1.05rem;
   white-space: pre;
-  word-wrap: normal;
+  overflow-wrap: normal;
 }
 .ck.ck-content small,
 .ck-content small {
@@ -1171,7 +1316,7 @@
 }
 .ck.ck-content mark,
 .ck-content mark {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
 }
 .ck.ck-content pre,
 .ck-content pre {
@@ -1261,27 +1406,25 @@
   border: 1px solid transparent;
   margin: 1.25rem 0;
 }
-.ck.ck-content .element--spacer-gold:after,
-.ck-content .element--spacer-gold:after {
+.ck.ck-content .element--spacer-gold::after,
+.ck-content .element--spacer-gold::after {
   content: "";
   display: block;
   width: 33%;
   height: 6px;
   margin: 0;
-  background: #BA0C2F;
+  background: #ba0c2f;
 }
-.ck.ck-content .element--spacer-gold--centered:after,
-.ck-content .element--spacer-gold--centered:after {
+.ck.ck-content .element--spacer-gold--centered::after,
+.ck-content .element--spacer-gold--centered::after {
   margin: 0 auto;
 }
 [class*=bg-] .ck.ck-content .element--spacer-gold,
 [class*=bg-] .ck-content .element--spacer-gold {
   border: none;
 }
-.bg-pattern--brain-reversed .ck.ck-content .element--spacer-gold:after, .bg--red--pattern--brain .ck.ck-content .element--spacer-gold:after, .bg--red .ck.ck-content .element--spacer-gold:after,
-.bg-pattern--brain-reversed .ck-content .element--spacer-gold:after,
-.bg--red--pattern--brain .ck-content .element--spacer-gold:after,
-.bg--red .ck-content .element--spacer-gold:after {
+.bg--red .ck.ck-content .element--spacer-gold::after,
+.bg--red .ck-content .element--spacer-gold::after {
   background: #fff;
 }
 .ck.ck-content .artsci-component--bold-intro,
@@ -1307,7 +1450,7 @@
 }
 .ck.ck-content mark,
 .ck-content mark {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   padding: 0.1em;
 }
 .ck.ck-content mark.deletion,
@@ -1340,7 +1483,7 @@
 .bg--red .ck.ck-content mark.deletion,
 .bg--red .ck-content mark.deletion {
   background-color: #000000;
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 .ck.ck-content .grid--onecol .list-container__inner,
 .ck-content .grid--onecol .list-container__inner {
@@ -1368,7 +1511,7 @@
   .ck-content .grid--twocol--50-50 .list-container__inner {
     display: grid;
     grid-template-rows: auto;
-    grid-gap: 3rem;
+    gap: 3rem;
     grid-template-columns: 1fr;
   }
 }
@@ -1390,7 +1533,7 @@
   .ck-content .grid--threecol--33-34-33 .list-container__inner {
     display: grid;
     grid-template-rows: auto;
-    grid-gap: 3rem;
+    gap: 3rem;
     grid-template-columns: 1fr;
   }
 }
@@ -1410,7 +1553,7 @@
   .ck-content .grid--twocol--67-33 .list-container__inner {
     display: grid;
     grid-template-rows: auto;
-    grid-gap: 3rem;
+    gap: 3rem;
     grid-template-columns: 1fr;
   }
 }
@@ -1441,7 +1584,7 @@
   .ck-content .grid--fourcol--25 .list-container__inner {
     display: grid;
     grid-template-rows: auto;
-    grid-gap: 3rem;
+    gap: 3rem;
     grid-template-columns: 1fr;
   }
 }
@@ -1470,7 +1613,7 @@
   flex-flow: column nowrap;
   text-align: left;
   width: 100%;
-  padding: 1.5rem 0;
+  padding: 1.5rem;
 }
 .ck.ck-content .element--flex-center,
 .ck.ck-content .flex--center,
@@ -1568,17 +1711,17 @@
 }
 .ck.ck-content :root,
 .ck-content :root {
-  --artsci-gold: #FFCD00;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #00558C;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #63666a;
+  --link-color: #00558c;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
-  --transparent-border: rgb(0, 0, 0, .125);
+  --artsci-gray-light: #cacaca;
+  --transparent-border: rgb(0, 0, 0, 0.125);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
   --space-sm-width-gutter: 1.25rem;
@@ -1591,10 +1734,15 @@
 .ck-content :focus:not(:focus-visible) {
   outline: none;
 }
+.ck.ck-content,
+.ck-content {
+  /* Remove all animations and transitions for people that prefer not to see them */
+}
 @media (prefers-reduced-motion: reduce) {
-  .ck.ck-content :after, .ck.ck-content :before,
-  .ck-content :after,
-  .ck-content :before {
+  .ck.ck-content ::after,
+  .ck.ck-content ::before,
+  .ck-content ::after,
+  .ck-content ::before {
     transition-duration: 0.01ms !important;
   }
   .ck.ck-content *,
@@ -1623,23 +1771,17 @@
   border-spacing: 0;
   color: #000000;
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.15;
   max-width: 100%;
   overflow-x: auto;
   width: 100%;
 }
-[class*=bg--gray] .ck.ck-content table tbody a, [class*=bg--white] .ck.ck-content table tbody a, [class*=bg--black] .ck.ck-content table tbody a, [class*=bg--red] .ck.ck-content table tbody a, .bg-pattern--brain-reversed .ck.ck-content table tbody a, .bg--red--pattern--brain .ck.ck-content table tbody a, .bg-pattern--brain .ck.ck-content table tbody a, .bg--white--pattern--brain .ck.ck-content table tbody a, .bg--black--pattern--brain .ck.ck-content table tbody a, .bg-pattern--brain-black .ck.ck-content table tbody a,
+[class*=bg--gray] .ck.ck-content table tbody a, [class*=bg--white] .ck.ck-content table tbody a, [class*=bg--black] .ck.ck-content table tbody a, [class*=bg--red] .ck.ck-content table tbody a,
 [class*=bg--gray] .ck-content table tbody a,
 [class*=bg--white] .ck-content table tbody a,
 [class*=bg--black] .ck-content table tbody a,
-[class*=bg--red] .ck-content table tbody a,
-.bg-pattern--brain-reversed .ck-content table tbody a,
-.bg--red--pattern--brain .ck-content table tbody a,
-.bg-pattern--brain .ck-content table tbody a,
-.bg--white--pattern--brain .ck-content table tbody a,
-.bg--black--pattern--brain .ck-content table tbody a,
-.bg-pattern--brain-black .ck-content table tbody a {
+[class*=bg--red] .ck-content table tbody a {
   color: var(--link-color);
 }
 @media (min-width: 768px) {
@@ -1648,14 +1790,17 @@
     display: table;
   }
 }
-.ck.ck-content table p, .ck.ck-content table ul, .ck.ck-content table ol,
+.ck.ck-content table p,
+.ck.ck-content table ul,
+.ck.ck-content table ol,
 .ck-content table p,
 .ck-content table ul,
 .ck-content table ol {
   font-size: 1rem;
   line-height: 1.6;
 }
-.ck.ck-content table ul p, .ck.ck-content table ol p,
+.ck.ck-content table ul p,
+.ck.ck-content table ol p,
 .ck-content table ul p,
 .ck-content table ol p {
   margin-bottom: 0;
@@ -1678,7 +1823,7 @@
 }
 .ck.ck-content table thead th,
 .ck-content table thead th {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   border: none;
 }
 .ck.ck-content table thead th a,
@@ -1701,16 +1846,16 @@
 .ck.ck-content table tbody tr:not(.is-selected):nth-child(even) th,
 .ck-content table tbody tr:not(.is-selected):nth-child(even),
 .ck-content table tbody tr:not(.is-selected):nth-child(even) th {
-  background-color: #F3F3F3;
-}
-.ck.ck-content table.table--hover-highlight tbody tr:not(.is-selected):hover, .ck.ck-content table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover,
-.ck-content table.table--hover-highlight tbody tr:not(.is-selected):hover,
-.ck-content table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover {
-  background-color: #fff3c3;
+  background-color: #edeae1;
 }
 .ck.ck-content table.table--hover-highlight tbody tr:not(.is-selected):hover th, .ck.ck-content table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover th,
 .ck-content table.table--hover-highlight tbody tr:not(.is-selected):hover th,
 .ck-content table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover th {
+  background-color: #fff3c3;
+}
+.ck.ck-content table.table--hover-highlight tbody tr:not(.is-selected):hover, .ck.ck-content table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover,
+.ck-content table.table--hover-highlight tbody tr:not(.is-selected):hover,
+.ck-content table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover {
   background-color: #fff3c3;
 }
 .ck.ck-content table caption,
@@ -1727,7 +1872,7 @@
 .ck.ck-content table caption :where(p) a:not(.bttn),
 .ck-content table caption a,
 .ck-content table caption :where(p) a:not(.bttn) {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 [class*=bg--] .ck.ck-content table caption a, [class*=bg--] [class*=bg--] .ck.ck-content table caption a,
 [class*=bg--] .ck.ck-content table caption :where(p) a:not(.bttn),
@@ -1736,7 +1881,7 @@
 [class*=bg--] [class*=bg--] .ck-content table caption a,
 [class*=bg--] .ck-content table caption :where(p) a:not(.bttn),
 [class*=bg--] [class*=bg--] .ck-content table caption :where(p) a:not(.bttn) {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 .ck.ck-content table tbody tr:last-child td,
 .ck.ck-content table tbody tr:last-child th,
@@ -1797,8 +1942,8 @@
   border-left: #7c7c7c 1px solid;
   border-bottom: #ddd 1px solid;
 }
-.ck.ck-content .table-responsive.table-sticky .table--gray-borders thead th:first-child:before,
-.ck-content .table-responsive.table-sticky .table--gray-borders thead th:first-child:before {
+.ck.ck-content .table-responsive.table-sticky .table--gray-borders thead th:first-child::before,
+.ck-content .table-responsive.table-sticky .table--gray-borders thead th:first-child::before {
   border-left: none;
 }
 .ck.ck-content .table-responsive table,
@@ -1845,7 +1990,8 @@
 .ck-content table th a[href]::after {
   content: none !important;
 }
-.ck.ck-content .table--align-top thead, .ck.ck-content .table--align-top tbody,
+.ck.ck-content .table--align-top thead,
+.ck.ck-content .table--align-top tbody,
 .ck-content .table--align-top thead,
 .ck-content .table--align-top tbody {
   vertical-align: top;
@@ -1879,7 +2025,7 @@
 .ck.ck-content p,
 .ck-content p {
   line-height: 1.7;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 0;
   margin-bottom: 1.05rem;
 }
@@ -1904,7 +2050,7 @@
   -webkit-overflow-scrolling: touch;
   padding: 1.05rem;
   white-space: pre;
-  word-wrap: normal;
+  overflow-wrap: normal;
 }
 .ck.ck-content small,
 .ck-content small {
@@ -1924,7 +2070,7 @@
 }
 .ck.ck-content mark,
 .ck-content mark {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
 }
 .ck.ck-content pre,
 .ck-content pre {
@@ -2014,27 +2160,25 @@
   border: 1px solid transparent;
   margin: 1.25rem 0;
 }
-.ck.ck-content .element--spacer-gold:after,
-.ck-content .element--spacer-gold:after {
+.ck.ck-content .element--spacer-gold::after,
+.ck-content .element--spacer-gold::after {
   content: "";
   display: block;
   width: 33%;
   height: 6px;
   margin: 0;
-  background: #BA0C2F;
+  background: #ba0c2f;
 }
-.ck.ck-content .element--spacer-gold--centered:after,
-.ck-content .element--spacer-gold--centered:after {
+.ck.ck-content .element--spacer-gold--centered::after,
+.ck-content .element--spacer-gold--centered::after {
   margin: 0 auto;
 }
 [class*=bg-] .ck.ck-content .element--spacer-gold,
 [class*=bg-] .ck-content .element--spacer-gold {
   border: none;
 }
-.bg-pattern--brain-reversed .ck.ck-content .element--spacer-gold:after, .bg--red--pattern--brain .ck.ck-content .element--spacer-gold:after, .bg--red .ck.ck-content .element--spacer-gold:after,
-.bg-pattern--brain-reversed .ck-content .element--spacer-gold:after,
-.bg--red--pattern--brain .ck-content .element--spacer-gold:after,
-.bg--red .ck-content .element--spacer-gold:after {
+.bg--red .ck.ck-content .element--spacer-gold::after,
+.bg--red .ck-content .element--spacer-gold::after {
   background: #fff;
 }
 .ck.ck-content .artsci-component--bold-intro,
@@ -2060,7 +2204,7 @@
 }
 .ck.ck-content mark,
 .ck-content mark {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   padding: 0.1em;
 }
 .ck.ck-content mark.deletion,
@@ -2093,7 +2237,7 @@
 .bg--red .ck.ck-content mark.deletion,
 .bg--red .ck-content mark.deletion {
   background-color: #000000;
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 .ck.ck-content figure img,
 .ck-content figure img {
@@ -2135,6 +2279,10 @@
   font-size: 1.2rem;
   margin-bottom: 1.05rem;
 }
+.ck.ck-content .wysiwyg img,
+.ck-content .wysiwyg img {
+  margin-bottom: 30px;
+}
 .ck.ck-content .block-content--type-artsci-text-area div,
 .ck-content .block-content--type-artsci-text-area div {
   line-height: 1.7;
@@ -2155,6 +2303,14 @@
 .ck.ck-content div.element--light-intro,
 .ck-content div.element--light-intro {
   margin-bottom: 1.05rem;
+}
+.ck.ck-content,
+.ck-content {
+  /**
+  * Temporary workaround for https://www.drupal.org/project/drupal/issues/3398223.
+  * 1. Add the correct box sizing in Firefox.
+  * 2. Show the overflow in Edge and IE.
+  */
 }
 .ck.ck-content div.hr,
 .ck-content div.hr {
@@ -2208,7 +2364,7 @@
   border-radius: 2px;
   padding: 1.5rem;
   line-height: 1.3;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border: 2px solid;
   border-color: var(--transparent-border);
 }
@@ -2261,7 +2417,7 @@
 }
 .ck.ck-content .alert__icon .fa-1x,
 .ck-content .alert__icon .fa-1x {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 .ck.ck-content .alert--danger,
 .ck-content .alert--danger {
@@ -2269,7 +2425,7 @@
 }
 .ck.ck-content .alert--danger .fa-circle,
 .ck-content .alert--danger .fa-circle {
-  color: #BD472A;
+  color: #bd472a;
 }
 .ck.ck-content .alert--success,
 .ck-content .alert--success {
@@ -2277,7 +2433,7 @@
 }
 .ck.ck-content .alert--success .fa-circle,
 .ck-content .alert--success .fa-circle {
-  color: #00664F;
+  color: #00664f;
 }
 .ck.ck-content .alert--warning,
 .ck-content .alert--warning {
@@ -2285,7 +2441,7 @@
 }
 .ck.ck-content .alert--warning .fa-circle,
 .ck-content .alert--warning .fa-circle {
-  color: #BD472A;
+  color: #bd472a;
 }
 .ck.ck-content .alert--warning .fa-exclamation-triangle,
 .ck-content .alert--warning .fa-exclamation-triangle {
@@ -2297,7 +2453,7 @@
 }
 .ck.ck-content .alert--info .fa-circle,
 .ck-content .alert--info .fa-circle {
-  color: #00558C;
+  color: #00558c;
 }
 .ck.ck-content .alert--centered,
 .ck-content .alert--centered {
@@ -2334,7 +2490,7 @@
 .ck.ck-content ol,
 .ck-content ol {
   list-style-position: outside;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 1.05rem;
   margin-bottom: 1.05rem;
   margin-left: 1.875rem;
@@ -2362,7 +2518,7 @@
 .ck.ck-content ul,
 .ck-content ul {
   list-style: disc outside;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 1.05rem;
   margin-bottom: 1.05rem;
   margin-left: 1.875rem;
@@ -2382,7 +2538,10 @@
 .ck-content ul ul ul {
   list-style-type: square;
 }
-.ck.ck-content ol ol, .ck.ck-content ol ul, .ck.ck-content ul ol, .ck.ck-content ul ul,
+.ck.ck-content ol ol,
+.ck.ck-content ol ul,
+.ck.ck-content ul ol,
+.ck.ck-content ul ul,
 .ck-content ol ol,
 .ck-content ol ul,
 .ck-content ul ol,
@@ -2441,10 +2600,10 @@
     margin-left: 115px;
   }
 }
-.ck.ck-content .artsci-component--circle-list > li:before,
-.ck.ck-content .element--circle-list > li:before,
-.ck-content .artsci-component--circle-list > li:before,
-.ck-content .element--circle-list > li:before {
+.ck.ck-content .artsci-component--circle-list > li::before,
+.ck.ck-content .element--circle-list > li::before,
+.ck-content .artsci-component--circle-list > li::before,
+.ck-content .element--circle-list > li::before {
   display: block;
   margin: 0 auto;
   top: 0px;
@@ -2454,11 +2613,10 @@
   padding-top: 35px;
   content: counter(circle-counter);
   text-align: center;
-  text-transform: uppercase;
   color: black;
-  border: 1px solid #BA0C2F;
+  border: 1px solid #ba0c2f;
   border-radius: 50%;
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   box-shadow: inset 0px 0px 0px 10px white;
   text-transform: uppercase;
   font-family: "ivystyle-sans", "Calibri", sans-serif;
@@ -2470,23 +2628,23 @@
   box-sizing: border-box;
 }
 @media (min-width: 768px) {
-  .ck.ck-content .artsci-component--circle-list > li:before,
-  .ck.ck-content .element--circle-list > li:before,
-  .ck-content .artsci-component--circle-list > li:before,
-  .ck-content .element--circle-list > li:before {
+  .ck.ck-content .artsci-component--circle-list > li::before,
+  .ck.ck-content .element--circle-list > li::before,
+  .ck-content .artsci-component--circle-list > li::before,
+  .ck-content .element--circle-list > li::before {
     position: absolute;
     display: inline-block;
     margin: 0 0.5rem 0;
   }
 }
-.artsci-component--gray .ck.ck-content .artsci-component--circle-list > li:before, .bg--gray .ck.ck-content .artsci-component--circle-list > li:before,
-.artsci-component--gray .ck.ck-content .element--circle-list > li:before,
-.bg--gray .ck.ck-content .element--circle-list > li:before,
-.artsci-component--gray .ck-content .artsci-component--circle-list > li:before,
-.bg--gray .ck-content .artsci-component--circle-list > li:before,
-.artsci-component--gray .ck-content .element--circle-list > li:before,
-.bg--gray .ck-content .element--circle-list > li:before {
-  box-shadow: inset 0px 0px 0px 10px #F3F3F3;
+.artsci-component--gray .ck.ck-content .artsci-component--circle-list > li::before, .bg--gray .ck.ck-content .artsci-component--circle-list > li::before,
+.artsci-component--gray .ck.ck-content .element--circle-list > li::before,
+.bg--gray .ck.ck-content .element--circle-list > li::before,
+.artsci-component--gray .ck-content .artsci-component--circle-list > li::before,
+.bg--gray .ck-content .artsci-component--circle-list > li::before,
+.artsci-component--gray .ck-content .element--circle-list > li::before,
+.bg--gray .ck-content .element--circle-list > li::before {
+  box-shadow: inset 0px 0px 0px 10px #edeae1;
 }
 .ck.ck-content .element--circle-list > li,
 .ck.ck-content .artsci-component--circle-list > li,
@@ -2552,15 +2710,15 @@
 .ck-content .element--list-none.element--margin-none {
   margin: 0;
 }
+.ck.ck-content .fa-field-item > li,
+.ck-content .fa-field-item > li {
+  position: relative;
+}
 .ck.ck-content .fa-field-item,
 .ck-content .fa-field-item {
   position: relative;
   margin-left: 2.5rem;
   padding-left: 0;
-}
-.ck.ck-content .fa-field-item > li,
-.ck-content .fa-field-item > li {
-  position: relative;
 }
 .ck.ck-content .fa-field-item svg[class*=fa-],
 .ck.ck-content .fa-field-item span[class*=fa-],
@@ -2602,7 +2760,6 @@
 .ck.ck-content .bttn,
 .ck-content .bttn {
   border: none;
-  display: inline-block;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -2616,11 +2773,9 @@
   line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  border: 2px solid;
-  border-color: var(--transparent-border);
 }
 .ck.ck-content .bttn i,
 .ck.ck-content .bttn span[class*=fa-],
@@ -2629,6 +2784,11 @@
 .ck-content .bttn span[class*=fa-],
 .ck-content .bttn svg {
   margin-left: 0.625rem;
+}
+.ck.ck-content .bttn,
+.ck-content .bttn {
+  border: 2px solid;
+  border-color: var(--transparent-border);
 }
 [class*=bg--black] .ck.ck-content .bttn,
 [class*=bg--black] .ck-content .bttn {
@@ -2646,9 +2806,7 @@
 }
 .ck.ck-content .bttn--primary,
 .ck-content .bttn--primary {
-  color: #BA0C2F;
-  background: #fff;
-  transition: filter 0.2s ease-in-out;
+  color: black;
 }
 .ck.ck-content .bttn--primary i,
 .ck.ck-content .bttn--primary svg,
@@ -2656,7 +2814,7 @@
 .ck-content .bttn--primary i,
 .ck-content .bttn--primary svg,
 .ck-content .bttn--primary span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 .ck.ck-content .bttn--primary:hover a, .ck.ck-content .bttn--primary:focus a,
 .ck-content .bttn--primary:hover a,
@@ -2666,7 +2824,7 @@
 }
 .ck.ck-content .bttn--primary,
 .ck-content .bttn--primary {
-  border-color: #BA0C2F;
+  border-color: #ba0c2f;
   color: #000000;
 }
 [class*=bg--] [class*=bg--gray] .ck.ck-content .bttn--primary, [class*=bg--gray] .ck.ck-content .bttn--primary, [class*=bg--] [class*=bg--white] .ck.ck-content .bttn--primary, [class*=bg--white] .ck.ck-content .bttn--primary,
@@ -2674,17 +2832,16 @@
 [class*=bg--gray] .ck-content .bttn--primary,
 [class*=bg--] [class*=bg--white] .ck-content .bttn--primary,
 [class*=bg--white] .ck-content .bttn--primary {
-  border-color: #BA0C2F;
+  border-color: #ba0c2f;
 }
-.ck.ck-content .bttn--primary:after,
-.ck-content .bttn--primary:after {
+.ck.ck-content .bttn--primary::after,
+.ck-content .bttn--primary::after {
   background-color: #000000;
 }
 .ck.ck-content .bttn--secondary,
 .ck-content .bttn--secondary {
   color: #fff;
-  background: #000000;
-  transition: filter 0.2s ease-in-out;
+  background: var(--bg--teal);
 }
 .ck.ck-content .bttn--secondary i,
 .ck.ck-content .bttn--secondary svg,
@@ -2692,7 +2849,20 @@
 .ck-content .bttn--secondary i,
 .ck-content .bttn--secondary svg,
 .ck-content .bttn--secondary span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
+}
+.ck.ck-content .bttn--secondary:hover,
+.ck-content .bttn--secondary:hover {
+  background: #d4f1e7;
+  color: black;
+}
+.ck.ck-content .bttn--secondary:hover i,
+.ck.ck-content .bttn--secondary:hover svg,
+.ck.ck-content .bttn--secondary:hover span[class*=fa-],
+.ck-content .bttn--secondary:hover i,
+.ck-content .bttn--secondary:hover svg,
+.ck-content .bttn--secondary:hover span[class*=fa-] {
+  color: black;
 }
 .ck.ck-content .bttn--secondary:hover a, .ck.ck-content .bttn--secondary:focus a,
 .ck-content .bttn--secondary:hover a,
@@ -2713,7 +2883,6 @@
 .ck.ck-content .bttn--tertiary,
 .ck-content .bttn--tertiary {
   color: #000000;
-  transition: filter 0.2s ease-in-out;
 }
 .ck.ck-content .bttn--tertiary i,
 .ck.ck-content .bttn--tertiary svg,
@@ -2721,7 +2890,7 @@
 .ck-content .bttn--tertiary i,
 .ck-content .bttn--tertiary svg,
 .ck-content .bttn--tertiary span[class*=fa-] {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 .ck.ck-content .bttn--tertiary:hover a, .ck.ck-content .bttn--tertiary:focus a,
 .ck-content .bttn--tertiary:hover a,
@@ -2737,7 +2906,6 @@
 .ck-content .bttn--transparent {
   background: transparent;
   color: #000000;
-  transition: filter 0.2s ease-in-out;
 }
 .ck.ck-content .bttn--transparent i,
 .ck.ck-content .bttn--transparent svg,
@@ -2788,7 +2956,7 @@
 [class*=bg--white] .ck-content .bttn--transparent svg,
 [class*=bg--red] [class*=bg--white] .ck-content .bttn--transparent svg,
 [class*=bg--red] [class*=bg--gray] .ck-content .bttn--transparent svg {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 [class*=bg--black] [class*=bg--white] .ck.ck-content .bttn--transparent, [class*=bg--black] [class*=bg--gray] .ck.ck-content .bttn--transparent, [class*=bg--black] [class*=bg--red] .ck.ck-content .bttn--transparent,
 [class*=bg--black] [class*=bg--white] .ck-content .bttn--transparent,
@@ -2801,8 +2969,8 @@
 .ck-content .bttn.borderless.bttn--transparent:hover {
   text-decoration: underline;
 }
-.ck.ck-content .bttn.borderless.bttn--transparent:after,
-.ck-content .bttn.borderless.bttn--transparent:after {
+.ck.ck-content .bttn.borderless.bttn--transparent::after,
+.ck-content .bttn.borderless.bttn--transparent::after {
   display: none;
 }
 .ck.ck-content .bttn--no-text i,
@@ -2920,8 +3088,8 @@
   transform: none;
   line-height: 1;
 }
-.ck.ck-content .bttn--circle:after,
-.ck-content .bttn--circle:after {
+.ck.ck-content .bttn--circle::after,
+.ck-content .bttn--circle::after {
   left: 0;
   top: 0;
   height: 100%;
@@ -2932,9 +3100,9 @@
   transform: none;
   position: absolute;
 }
-.ck.ck-content .bttn--circle:hover:after, .ck.ck-content .bttn--circle:focus:after,
-.ck-content .bttn--circle:hover:after,
-.ck-content .bttn--circle:focus:after {
+.ck.ck-content .bttn--circle:hover::after, .ck.ck-content .bttn--circle:focus::after,
+.ck-content .bttn--circle:hover::after,
+.ck-content .bttn--circle:focus::after {
   transform: none;
   transition: none;
   border: 3px solid;
@@ -2958,7 +3126,7 @@
 .ck-content body.text--serif .ck-content p:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
 .ck-content body.text--serif .ck-content li:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif) {
   font-family: "ivypresto-headline", "Georgia", serif, serif;
-  font-size: calc(1.2rem + 1px);
+  font-size: calc(1rem + 1px);
 }
 .ck.ck-content body.text--serif .field--name-body .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
 .ck.ck-content body.text--serif .block-inline-blockartsci-text-area .lead:not(.artsci-component--bold-intro):not(.element--bold-intro):not(.artsci-component--light-intro):not(.element--light-intro):not(.element--light-intro-serif),
@@ -3111,8 +3279,8 @@
   float: left;
   clear: left;
 }
-.ck.ck-content .inline--align-left:after,
-.ck-content .inline--align-left:after {
+.ck.ck-content .inline--align-left::after,
+.ck-content .inline--align-left::after {
   content: "";
 }
 .ck.ck-content .inline--align-center,
@@ -3125,9 +3293,10 @@
   float: right;
   clear: right;
 }
-.ck.ck-content .element--circle-list > li:before, .ck.ck-content .artsci-component--circle-list > li:before,
-.ck-content .element--circle-list > li:before,
-.ck-content .artsci-component--circle-list > li:before {
+.ck.ck-content .element--circle-list > li::before,
+.ck.ck-content .artsci-component--circle-list > li::before,
+.ck-content .element--circle-list > li::before,
+.ck-content .artsci-component--circle-list > li::before {
   width: 80px;
   height: 80px;
   line-height: 1.8;
@@ -3182,7 +3351,10 @@
   background-color: #333;
   font-weight: bold;
 }
-.ck.ck-content figure.table figcaption em, .ck.ck-content figure.table figcaption strong, .ck.ck-content figure.table figcaption sup, .ck.ck-content figure.table figcaption sub,
+.ck.ck-content figure.table figcaption em,
+.ck.ck-content figure.table figcaption strong,
+.ck.ck-content figure.table figcaption sup,
+.ck.ck-content figure.table figcaption sub,
 .ck-content figure.table figcaption em,
 .ck-content figure.table figcaption strong,
 .ck-content figure.table figcaption sup,
@@ -3193,7 +3365,7 @@
 .ck.ck-content figure.table figcaption :where(p) a:not(.bttn),
 .ck-content figure.table figcaption a,
 .ck-content figure.table figcaption :where(p) a:not(.bttn) {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 [class*=bg--] .ck.ck-content figure.table figcaption a, [class*=bg--] [class*=bg--] .ck.ck-content figure.table figcaption a,
 [class*=bg--] .ck.ck-content figure.table figcaption :where(p) a:not(.bttn),
@@ -3202,7 +3374,7 @@
 [class*=bg--] [class*=bg--] .ck-content figure.table figcaption a,
 [class*=bg--] .ck-content figure.table figcaption :where(p) a:not(.bttn),
 [class*=bg--] [class*=bg--] .ck-content figure.table figcaption :where(p) a:not(.bttn) {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 .ck.ck-content figure.table .table-responsive figcaption,
 .ck-content figure.table .table-responsive figcaption {
@@ -3339,14 +3511,6 @@
 .ck-content .media--type-remote-video video {
   top: 40px;
 }
-.ck.ck-content .media--type-twitter,
-.ck-content .media--type-twitter {
-  height: 150px !important;
-  background-repeat: no-repeat !important;
-  background-size: contain !important;
-  background-position: center center !important;
-  background-image: url("../images/twitter.png") !important;
-}
 
 .ck.ck-button {
   text-transform: inherit;
@@ -3374,7 +3538,7 @@
 .ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library span {
   text-decoration: underline;
 }
-.ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library:before {
+.ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -3386,6 +3550,8 @@
   transform: translate(-50%) scaleX(0);
   transition: transform 0.3s ease-in-out;
 }
-.ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library:hover:before, .ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library:focus:before {
+.ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library:hover::before, .ck.ck-link-form.ck-link-form_layout-vertical button.ck-media-library:focus::before {
   transform: translate(-50%) scaleX(1);
-}/*# sourceMappingURL=artsci_wysiwyg.css.map */
+}
+
+/*# sourceMappingURL=artsci_wysiwyg.css.map */

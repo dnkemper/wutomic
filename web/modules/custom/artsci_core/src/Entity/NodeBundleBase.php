@@ -15,6 +15,10 @@ abstract class NodeBundleBase extends Node implements RendersAsCardInterface {
   /**
    * Link directly to source field name, if it exists.
    *
+   * No longer consulted by getNodeUrl(): a card links directly to its source
+   * link whenever that field is populated. Retained so subclasses that still
+   * declare it do not create dynamic properties.
+   *
    * @var string|null
    */
   protected $sourceLinkDirect = NULL;
@@ -39,11 +43,8 @@ abstract class NodeBundleBase extends Node implements RendersAsCardInterface {
   public function buildCard(array &$build) {
     $this->buildCardStyles($build);
     // V2 pages still need field_teaser, everything else uses body summary.
-    if (artsci_get_version() === 'v3' || $build['#node']->values['type']['x-default'] != 'page') {
+    if ($build['#node']->values['type']['x-default'] != 'page') {
       $content = 'body';
-    }
-    else {
-      $content = 'field_teaser';
     }
     // Add shared fields to card.
     if ($build) {
@@ -110,19 +111,17 @@ abstract class NodeBundleBase extends Node implements RendersAsCardInterface {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function getNodeUrl(): ?string {
-    $source_link_direct = $this->sourceLinkDirect;
     $source_link = $this->sourceLink;
 
-    if (!is_null($source_link_direct) || !is_null($source_link)) {
-      $link_direct = (int) $this->get($source_link_direct)->value;
-      $link = $this->get($source_link)->uri;
-      if ($link_direct === 1 && isset($link) && !empty($link)) {
-        return $this
-          ->get($source_link)
-          ?->get(0)
-          ?->getUrl()
-          ?->toString();
-      }
+    // Link the card directly to its source link whenever that field is
+    // populated. The former "link direct" toggle fields are no longer
+    // consulted; presence of a link is sufficient.
+    if (!is_null($source_link) && !$this->get($source_link)->isEmpty()) {
+      return $this
+        ->get($source_link)
+        ?->get(0)
+        ?->getUrl()
+        ?->toString();
     }
 
     return !$this->isNew() ? $this->toUrl()->toString() : NULL;

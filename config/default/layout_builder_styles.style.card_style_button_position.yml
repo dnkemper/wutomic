@@ -9,6 +9,8 @@ type: component
 group: default
 block_restrictions:
   - 'inline_block:artsci_card'
+  - 'inline_block:artsci_slider'
   - 'inline_block:artsci_aggregator'
+  - 'inline_block:featured_content'
 layout_restrictions: {  }
 weight: -18

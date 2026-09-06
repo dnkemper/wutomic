@@ -4,9 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.paragraph.field_collection_body
+    - filter.format.full_html
     - paragraphs.paragraphs_type.artsci_collection_item
   module:
-    - allowed_formats
     - text
 id: paragraph.artsci_collection_item.field_collection_body
 field_name: field_collection_body
@@ -19,5 +19,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  allowed_formats: {  }
+  allowed_formats:
+    - full_html
 field_type: text_long

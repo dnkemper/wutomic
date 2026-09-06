@@ -1,0 +1,42 @@
+{%
+set classes = [
+  'add-to-calendar'
+]
+%}
+<span{{attributes.addClass(classes)}}>
+
+<div class="event-details">
+  <h3 class="event-details__heading">Event Details</h3>
+  
+  {% if date %}
+    <div class="event-details__date">{{ date }}</div>
+  {% endif %}
+  
+  {% if time %}
+    <div class="event-details__time">
+      <svg role="presentation" class="svg-inline--fa fa-clock field__icon" aria-hidden="true" focusable="false" data-prefix="far" data-icon="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"></path></svg>
+      {{ time }}
+    </div>
+  {% endif %}
+  
+  {% if location %}
+    <div class="event-details__location">
+    <svg role="presentation" class="svg-inline--fa fa-location-dot field__icon" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="location-dot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Pro v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2026 Fonticons, Inc.--><path  fill="currentColor" d="M160 252.6C160 166.6 231.1 96 320 96C408.9 96 480 166.6 480 252.6C480 302.9 454.1 362 418.6 418.2C384.6 472 344.6 518.7 320 545.6C295.4 518.7 255.4 471.9 221.4 418.2C185.9 362 160 302.9 160 252.6zM320 64C214 64 128 148.4 128 252.6C128 371.9 248.2 514.9 298.4 569.4C310.2 582.2 329.8 582.2 341.6 569.4C391.8 514.9 512 371.9 512 252.6C512 148.4 426 64 320 64zM368 256C368 282.5 346.5 304 320 304C293.5 304 272 282.5 272 256C272 229.5 293.5 208 320 208C346.5 208 368 229.5 368 256zM320 176C275.8 176 240 211.8 240 256C240 300.2 275.8 336 320 336C364.2 336 400 300.2 400 256C400 211.8 364.2 176 320 176z"/></svg>
+      {{ location }}
+    </div>
+  {% endif %}
+  
+  {% if contact_email %}
+    <div class="event-details__contact">
+    <svg role="presentation" class="svg-inline--fa fa-envelope field__icon" aria-hidden="true" focusable="false" data-prefix="far" data-icon="envelope" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M576 480C576 515.3 547.5 544 512.1 544L128 544C92.6 544 64 515.3 64 480L64 228C64.1 212.5 71.8 198 84.5 189.2L270 61.3C300.1 40.6 339.8 40.6 369.9 61.3L555.5 189.2C568.3 198 575.9 212.5 576 228L576 480zM128 496L512.1 496C520.9 496 528 488.9 528 480L528 288.3L373.2 405.7C341.8 429.6 298.3 429.6 266.8 405.7L112 288.3L112 480C112 488.9 119.2 496 128 496zM527.6 228.4L342.7 100.8C329 91.4 311 91.4 297.3 100.8L112.4 228.4L295.8 367.5C310.1 378.3 329.9 378.3 344.2 367.5L527.6 228.4z"/></svg>
+      <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+    </div>
+  {% endif %}
+  
+{% if addtocal %}
+  <div class="add-to-cal flex">
+    <svg role="presentation" class="svg-inline--fa fa-calendar field__icon" aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 64L224 128L416 128L416 64L448 64L448 128L544 128L544 544L96 544L96 128L192 128L192 64L224 64zM512 160L128 160L128 224L512 224L512 160zM512 256L416 256L416 320L512 320L512 256zM512 352L416 352L416 416L512 416L512 352zM512 448L416 448L416 512L512 512L512 448zM384 416L384 352L256 352L256 416L384 416zM256 448L256 512L384 512L384 448L256 448zM224 416L224 352L128 352L128 416L224 416zM128 448L128 512L224 512L224 448L128 448zM128 320L224 320L224 256L128 256L128 320zM256 320L384 320L384 256L256 256L256 320z"/></svg>
+    {{ addtocal }}
+  </div>
+{% endif %}
+</div>

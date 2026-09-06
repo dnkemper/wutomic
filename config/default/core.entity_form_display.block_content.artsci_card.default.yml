@@ -17,6 +17,7 @@ dependencies:
     - heading
     - link
     - media_library
+    - media_library_edit
     - text
 _core:
   default_config_hash: hZEWAooCZcl2FsmhveTi2RnTTu9MomdxM4GWF1aeWOY
@@ -52,7 +53,10 @@ content:
         - image
         - remote_video
         - video
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: default
   field_artsci_card_link:
     type: link_default
     weight: 6

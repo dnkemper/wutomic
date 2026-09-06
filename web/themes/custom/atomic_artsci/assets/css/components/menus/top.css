@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -31,7 +46,7 @@
   }
 }
 .menu--top .menu li a {
-  padding: 1.05rem;
+  padding: 0 1.05rem;
   color: #fff;
 }
 @media (min-width: 980px) {
@@ -40,7 +55,9 @@
   }
 }
 .menu--top .menu li a:hover, .menu--top .menu li a:focus {
-  text-decoration: underline;
+  border-radius: 50rem;
+  background: #fff;
+  color: #1a1a1a;
 }
 .artsci-bar--full .menu--top .menu li a {
   font-size: 0.9rem;
@@ -60,21 +77,27 @@
   height: 1px;
   width: 1px;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 @media (min-width: 980px) {
   .artsci-bar--narrow .menu--top {
     position: static !important;
+    /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
     clip: auto;
+    clip-path: none;
     height: auto;
     width: auto;
     overflow: auto;
+    white-space: normal;
     overflow: unset;
   }
 }
 
 .menu--top.nav {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   color: white;
   width: 100%;
   z-index: 2;
@@ -96,6 +119,10 @@
 .nav.menu--top .menu li a {
   font-weight: 400;
   color: #fff;
+}
+
+.nav.menu--top .menu li a:hover {
+  color: #1a1a1a;
 }
 
 @media (min-width: 980px) {
@@ -148,9 +175,9 @@
   }
 }
 @media (min-width: 980px) and (min-width: 84.375em) {
-  .artsci-bar--full.mega .menu--top .menu li a:after,
-  .artsci-bar--full.horizontal .menu--top .menu li a:after,
-  .artsci-bar--full.toggle .menu--top .menu li a:after {
+  .artsci-bar--full.mega .menu--top .menu li a::after,
+  .artsci-bar--full.horizontal .menu--top .menu li a::after,
+  .artsci-bar--full.toggle .menu--top .menu li a::after {
     content: "";
     left: 50%;
     bottom: 0;
@@ -167,11 +194,11 @@
   }
 }
 @media (min-width: 980px) and (min-width: 84.375em) {
-  .artsci-bar--full.mega .menu--top .menu li a:focus:after, .artsci-bar--full.mega .menu--top .menu li a:hover:after,
-  .artsci-bar--full.horizontal .menu--top .menu li a:focus:after,
-  .artsci-bar--full.horizontal .menu--top .menu li a:hover:after,
-  .artsci-bar--full.toggle .menu--top .menu li a:focus:after,
-  .artsci-bar--full.toggle .menu--top .menu li a:hover:after {
+  .artsci-bar--full.mega .menu--top .menu li a:focus::after, .artsci-bar--full.mega .menu--top .menu li a:hover::after,
+  .artsci-bar--full.horizontal .menu--top .menu li a:focus::after,
+  .artsci-bar--full.horizontal .menu--top .menu li a:hover::after,
+  .artsci-bar--full.toggle .menu--top .menu li a:focus::after,
+  .artsci-bar--full.toggle .menu--top .menu li a:hover::after {
     transform: translate(-50%) scaleX(1);
   }
 }
@@ -224,7 +251,7 @@
 
 @media only screen and (min-width: 0) and (max-width: 979px) {
   .menu--top.nav {
-    background: #BA0C2F;
+    background: #ba0c2f;
     margin-top: 0;
     position: inherit;
     padding: 0.75rem 1.25rem;
@@ -255,7 +282,10 @@
     padding-left: 20px;
     position: relative !important;
     overflow: unset !important;
+    /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
     clip: unset !important;
+    clip-path: unset !important;
+    white-space: normal;
   }
   .artsci-bar.artsci-bar--narrow .menu--top.nav .menu li a {
     padding: 0 0 0.75rem 0;
@@ -287,4 +317,6 @@
   justify-content: flex-end;
   align-items: center;
   height: 2rem;
-}/*# sourceMappingURL=top.css.map */
+}
+
+/*# sourceMappingURL=top.css.map */

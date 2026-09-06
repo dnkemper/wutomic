@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Mega menu featured panel for top-level main menu links.
+ *
+ * Rendered for menu_link_content entities in the "mega_panel" view mode and
+ * injected into the Superfish dropdown by
+ * atomic_artsci_preprocess_superfish_menu_items(). The wrapping markup lives
+ * here so the panel has clean BEM hooks instead of default field wrappers.
+ *
+ * Available variables:
+ * - content: Rendered field values, keyed by field name.
+ * - menu_link_content: The menu link entity.
+ * - attributes: HTML attributes for the panel wrapper.
+ *
+ * @see template_preprocess_menu_link_content()
+ */
+#}
+<div{{ attributes.addClass('mega-panel') }}>
+  {% if content.field_image|render|trim is not empty %}
+    <div class="mega-panel__media">
+      {{ content.field_image }}
+    </div>
+  {% endif %}
+
+  {% if content.field_artsci_headline|render|trim is not empty %}
+    <div class="mega-panel__headline">
+      {{ content.field_artsci_headline }}
+    </div>
+  {% endif %}
+
+  {% if content.field_artsci_card_link|render|trim is not empty %}
+    <div class="mega-panel_link">
+      {{ content.field_artsci_card_link }}
+    </div>
+  {% endif %}
+</div>

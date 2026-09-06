@@ -5,21 +5,17 @@ dependencies:
   config:
     - field.field.media.remote_video.field_media_oembed_video
     - field.field.media.remote_video.field_tags
+    - field.field.media.remote_video.field_video_thumbnail
     - media.type.remote_video
   module:
     - media
-    - path
+    - media_library
+    - media_library_edit
 id: media.remote_video.default
 targetEntityType: media
 bundle: remote_video
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_media_oembed_video:
     type: oembed_textfield
     weight: 0
@@ -29,8 +25,8 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_tags:
-    type: entity_reference_autocomplete
-    weight: 1
+    type: entity_reference_autocomplete_tags
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -38,32 +34,24 @@ content:
       size: 40
       placeholder: ''
     third_party_settings: {  }
-  path:
-    type: path
-    weight: 4
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 5
+  field_video_thumbnail:
+    type: media_library_widget
+    weight: 1
     region: content
     settings:
-      display_label: true
-    third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 2
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
 hidden:
+  created: true
   name: true
+  path: true
   publish_on: true
   publish_state: true
+  status: true
+  thumbnail: true
+  uid: true
   unpublish_on: true
   unpublish_state: true

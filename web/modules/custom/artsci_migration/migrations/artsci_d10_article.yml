@@ -1,0 +1,406 @@
+id: artsci_d10_article
+label: 'D10 articles via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # JSON:API list endpoint. Includes a high page limit so each request
+  # pulls a meaningful chunk; the cursor pager below follows links.next.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/article'
+  headers:
+    Accept: 'application/vnd.api+json'
+  # Each record lives under data[].
+  item_selector: data
+  # Follow JSON:API's standard links.next link as the next URL outright.
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  # Unique identifier for source rows.
+  ids:
+    nid:
+      type: integer
+
+  # Source fields. The 'name' is referenced from process; the 'selector'
+  # is the path inside each item under data[].
+  fields:
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: promote
+      label: Promoted
+      selector: 'attributes/promote'
+    - name: sticky
+      label: Sticky
+      selector: 'attributes/sticky'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: body_value
+      label: 'Body value'
+      selector: 'attributes/body/value'
+    - name: body_format
+      label: 'Body format'
+      selector: 'attributes/body/format'
+    - name: body_summary
+      label: 'Body summary'
+      selector: 'attributes/body/summary'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+    - name: link_excerpt
+      label: 'Link excerpt (D10)'
+      selector: 'attributes/field_link_excerpt/value'
+    - name: is_shared
+      label: 'Is shared'
+      selector: 'attributes/field_is_shared'
+    - name: shared_content
+      label: 'Shared content payload'
+      selector: 'attributes/field_shared_content'
+    - name: shared_content_xml
+      label: 'Shared content XML URL'
+      selector: 'attributes/field_shared_content_xml'
+    - name: content_hash
+      label: 'Content hash'
+      selector: 'attributes/field_content_hash'
+    - name: rh_action
+      label: 'Rabbit hole action'
+      selector: 'attributes/rh_action'
+    - name: rh_redirect
+      label: 'Rabbit hole redirect URL'
+      selector: 'attributes/rh_redirect'
+    - name: rh_redirect_response
+      label: 'Rabbit hole redirect HTTP code'
+      selector: 'attributes/rh_redirect_response'
+    - name: rh_redirect_fallback_action
+      label: 'Rabbit hole fallback action'
+      selector: 'attributes/rh_redirect_fallback_action'
+    # The whole categories array; sub_process pulls the IDs out below.
+    - name: source_categories
+      label: 'D10 field_category data array'
+      selector: 'relationships/field_category/data'
+    # Source media reference for field_header_image on D11. (Previously
+    # this fed field_image; that destination now comes from
+    # field_link_thumbnail below.)
+    - name: source_header_image_id
+      label: 'D10 field_header_image media MID'
+      selector: 'relationships/field_header_image/data/meta/drupal_internal__target_id'
+    # Source media reference for field_image on D11 — D10's field_link_thumbnail.
+    - name: source_link_thumbnail_id
+      label: 'D10 field_link_thumbnail media MID'
+      selector: 'relationships/field_link_thumbnail/data/meta/drupal_internal__target_id'
+    # Source author reference — resolved via the author migration so that
+    # field_article_author points to the migrated person node.
+    - name: source_author_id
+      label: 'D10 field_author_select target NID'
+      selector: 'relationships/field_author_select/data/meta/drupal_internal__target_id'
+    # Faculty/staff entity refs (faculty_staff content type on D10).
+    # Resolved through the person migration so field_contact_reference
+    # points to the migrated person node(s).
+    - name: source_faculty_staff_refs
+      label: 'D10 field_faculty_and_staff data array'
+      selector: 'relationships/field_faculty_and_staff/data'
+    # Video paragraph references. Each paragraph holds a remote_video
+    # media entity on field_spotlight_video_url; we walk these in process
+    # via the jsonapi_media_ids_from_refs plugin to resolve the underlying
+    # media ids, then look those up against the remote_video media
+    # migration so the resulting D11 mids can be merged onto
+    # field_header_image alongside the image lookup.
+    - name: source_video_paragraph_refs
+      label: 'D10 field_video_p paragraph references'
+      selector: 'relationships/field_video_p/data'
+    # Plain free text byline ("by Jane Doe") -> field_article_source_org.
+    # If D10 has this as something other than a string, the selector and
+    # process mapping both need to change.
+    - name: source_org_author
+      label: 'D10 field_author (free text byline)'
+      selector: 'attributes/field_author'
+    # Subhead text -> field_article_subhead. /value selector assumes a
+    # text_long field on D10 (matching the link_excerpt pattern above);
+    # drop the /value if it turns out to be a plain string field.
+    - name: introduction_excerpt
+      label: 'D10 field_introduction_excerpt value'
+      selector: 'attributes/field_introduction_excerpt'
+    # Link field URI + title -> field_article_source_link (single delta).
+    - name: ext_link_uri
+      label: 'D10 field_external_link URI'
+      selector: 'attributes/field_external_link/uri'
+    - name: ext_link_title
+      label: 'D10 field_external_link title'
+      selector: 'attributes/field_external_link/title'
+
+process:
+  # ---- Identity ----
+  # Preserve the D10 nid verbatim. If a node with this nid already exists
+  # on D11 (seeded DB or prior run), migrate UPDATEs it; otherwise it
+  # creates a new node with this exact nid. UUID is still carried over so
+  # cross-site references stay stable.
+  nid: nid
+
+  # Preserve UUID across runs; D11 assigns a fresh NID.
+  uuid: uuid
+  type:
+    plugin: default_value
+    default_value: article
+  langcode: langcode
+
+  # ---- Authorship ----
+  # TODO: replace with a migration_lookup against a user migration if
+  # you build one. For now everything is owned by user 1.
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  promote: promote
+  sticky: sticky
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps ----
+  # JSON:API emits ISO 8601; Drupal stores Unix timestamps.
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title ----
+  title: title
+
+  # ---- Body ----
+  # The D10 export wraps content in a literal <html>...</html>. Strip it.
+  'body/value':
+    - plugin: str_replace
+      source: body_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+    source: body_format
+  'body/summary': link_excerpt
+
+  # ---- Path alias ----
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  # ---- Teaser ----
+  field_teaser: field_introduction_excerpt
+
+  # ---- Shared content fields ----
+  field_is_shared: is_shared
+  field_shared_content: shared_content
+  field_shared_content_xml: shared_content_xml
+  field_content_hash: content_hash
+
+  # ---- Tags (mapped from D10 field_category) ----
+  # D10 field_category references the article_categories vocabulary;
+  # those terms migrate into the D11 tags vocabulary via
+  # artsci_d10_taxonomy_article_categories. We resolve each ref through
+  # that migration so field_tags lands the correct D11 tids regardless of
+  # whether the source and destination tids happen to match.
+  field_tags:
+    plugin: sub_process
+    source: source_categories
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration: artsci_d10_taxonomy_article_categories
+          source: meta/drupal_internal__target_id
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+
+  # ---- Header image (image + video sides merged) ----
+  # D10 field_header_image (image media) and D10 field_video_p (paragraph
+  # holding a remote_video media on field_spotlight_video_url) both land
+  # on D11 field_header_image, which accepts image and remote_video
+  # bundles. We resolve each side to D11 media ids, then merge so all
+  # deltas land on the single multi value field.
+  #
+  #   _header_image_id    -> scalar D11 image media mid (or null)
+  #   _header_image_list  -> wrapped as [{target_id: N}] so merge can concat
+  #   _video_d10_mids     -> [{mid: N}, ...] from the JSON:API paragraph walk
+  #   _video_d11_targets  -> sub_process result: [{target_id: N}, ...]
+  _header_image_id:
+    - plugin: skip_on_empty
+      method: process
+      source: source_header_image_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  _header_image_list:
+    plugin: callback
+    callable:
+      - 'Drupal\artsci_migration\LinkHelpers'
+      - 'singleMediaTarget'
+    source: '@_header_image_id'
+
+  _video_d10_mids:
+    plugin: jsonapi_media_ids_from_refs
+    source: source_video_paragraph_refs
+    base_url: 'https://artsci.washu.edu'
+    media_field: field_spotlight_video_url
+    output_key: mid
+
+  _video_d11_targets:
+    plugin: sub_process
+    source: '@_video_d10_mids'
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration: artsci_d10_media_remote_video
+          source: mid
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+
+  field_header_image:
+    plugin: merge
+    source:
+      - '@_header_image_list'
+      - '@_video_d11_targets'
+
+  # ---- Thumbnail -> field_image ----
+  # D10 field_link_thumbnail -> D11 field_image. Same media migration as
+  # the header image; just a different source field.
+  field_image:
+    - plugin: skip_on_empty
+      method: process
+      source: source_link_thumbnail_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  # ---- SoundCloud (legacy text embed -> media reference) ----
+  # D10 stored the SoundCloud player as a raw <iframe> in the field_soundcloud
+  # text field. artsci_d10_media_soundcloud turns each of those into a
+  # soundcloud media entity keyed by the source nid; we resolve that here.
+  # Articles without a SoundCloud embed never produced a media, so the lookup
+  # returns null and skip_on_empty leaves the field unset.
+  field_soundcloud_media:
+    - plugin: migration_lookup
+      migration: artsci_d10_media_soundcloud
+      source: nid
+      no_stub: true
+    - plugin: skip_on_empty
+      method: process
+
+  # ---- Source / organization byline ----
+  # D10 field_author (free text byline) -> D11 field_article_source_org.
+  field_article_source_org: source_org_author
+
+  # ---- Subhead ----
+  # D10 field_introduction_excerpt -> D11 field_article_subhead.
+  field_article_subhead: introduction_excerpt
+
+  # ---- Source link ----
+  # D10 field_external_link -> D11 field_article_source_link. Direct
+  # sub property assignment; when both uri and title are null on a given
+  # row the link field stays empty (Drupal doesn't materialize delta 0).
+  'field_article_source_link/uri': ext_link_uri
+  'field_article_source_link/title': ext_link_title
+
+  # ---- Faculty / staff -> field_contact_reference ----
+  # D10 field_faculty_and_staff references faculty_staff nodes. Those
+  # nodes migrate to D11 person nodes via artsci_d10_person, so we resolve
+  # each ref through that migration and write the new person NIDs into
+  # field_contact_reference. skip_on_empty inside the sub_process drops
+  # any ref whose target person hasn't migrated (rather than stubbing).
+  field_contact_reference:
+    plugin: sub_process
+    source: source_faculty_staff_refs
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration: artsci_d10_person
+          source: meta/drupal_internal__target_id
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+
+  # ---- Author (looked up from the author migration) ----
+  # D10 field_author_select is single-valued; D11 field_article_author is
+  # multi-valued (-1). Single-into-multi is fine — Drupal stores it at
+  # delta 0.
+  field_article_author:
+    - plugin: skip_on_empty
+      method: process
+      source: source_author_id
+    - plugin: migration_lookup
+      migration: artsci_d10_author
+      no_stub: true
+
+  # ---- Rabbit Hole ----
+  # rabbit_hole stores everything in one field with sub-properties whose
+  # column names happen to match the D10 attribute names.
+  'rabbit_hole__settings/rh_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_action
+  'rabbit_hole__settings/rh_redirect': rh_redirect
+  'rabbit_hole__settings/rh_redirect_response':
+    plugin: default_value
+    default_value: 301
+    source: rh_redirect_response
+  'rabbit_hole__settings/rh_redirect_fallback_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_redirect_fallback_action
+
+  # ----------------------------------------------------------------
+  # DEFERRED — wire these up once the prerequisite migrations exist.
+  # ----------------------------------------------------------------
+  # field_meta_tags:
+  #   plugin: artsci_metatag_from_jsonapi   # custom plugin, not yet built
+  #   source: metatag
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: article
+
+migration_dependencies:
+  required:
+    - artsci_d10_media_image
+    - artsci_d10_media_remote_video
+    - artsci_d10_media_soundcloud
+    - artsci_d10_author
+    - artsci_d10_person
+    - artsci_d10_taxonomy_article_categories
+  optional: []

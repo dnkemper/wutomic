@@ -1,0 +1,135 @@
+id: artsci_d10_sample_courses_items
+label: 'D10 sample_courses paragraphs → D11 artsci_collection_item paragraphs'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# Reads D10 sample_courses paragraphs from the source site via JSON:API.
+# Creates one artsci_collection_item paragraph per source row. The block
+# migration (artsci_d10_collection_blocks) then groups these into per-node
+# artsci_collection block_content entities via migration_lookup.
+#
+# IMPORTANT: paragraphs in JSON:API are exposed at /jsonapi/paragraph/{bundle}
+# but the endpoint requires that the source site permits anonymous (or
+# token-authenticated) read access to that resource. If you get 403s,
+# add Authorization headers via request_options, or temporarily enable
+# the JSON:API resource via jsonapi_extras on the source.
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/paragraph/sample_courses?page[limit]=50&sort=drupal_internal__id'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  # Keyed on the D10 paragraph's drupal_internal__id so the block
+  # migration's sub_process can look each one up by the
+  # meta/drupal_internal__target_id from the parent node's
+  # field_sample_courses_p relationship.
+  ids:
+    pid:
+      type: integer
+
+  fields:
+    - name: pid
+      label: 'D10 paragraph ID'
+      selector: 'attributes/drupal_internal__id'
+    - name: uuid
+      label: 'D10 paragraph UUID'
+      selector: 'id'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: title
+      label: 'Source field_title'
+      selector: 'attributes/field_title'
+    - name: subtitle
+      label: 'Source field_subtitle'
+      selector: 'attributes/field_subtitle'
+    - name: description_value
+      label: 'Source field_description value'
+      selector: 'attributes/field_description/value'
+    - name: description_format
+      label: 'Source field_description format'
+      selector: 'attributes/field_description/format'
+
+process:
+  type:
+    plugin: default_value
+    default_value: artsci_collection_item
+
+  langcode:
+    plugin: default_value
+    default_value: en
+
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+
+  # Required field on D11 artsci_collection_item.
+  field_collection_headline: title
+
+  # field_collection_body — strip the literal <html>...</html> wrapper
+  # the same way article/book/person migrations handle text_long fields.
+  #
+  # NOTE on field_subtitle: source D10 sample_courses has a separate
+  # field_subtitle that has no direct home on artsci_collection_item.
+  # Currently DROPPED. Three ways to bring it back if needed:
+  #
+  #   A) Prepend bolded into body — add a callback (mirroring the person
+  #      migration's pattern of small helpers in LinkHelpers.php).
+  #   B) Concat into the headline ("{title} — {subtitle}").
+  #   C) Add a new field_collection_subtitle field to the paragraph type
+  #      and map directly.
+  #
+  # Check how many sample_courses have a non-empty subtitle first:
+  #   curl -s 'https://artsci.washu.edu/jsonapi/paragraph/sample_courses?filter[has_subtitle][condition][path]=field_subtitle&filter[has_subtitle][condition][operator]=IS+NOT+NULL&page[limit]=1' \
+  #     | jq '.meta.count'
+  'field_collection_body/value':
+    - plugin: str_replace
+      source: description_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'field_collection_body/format':
+    plugin: default_value
+    default_value: full_html
+    source: description_format
+
+  # Anchor/fragment id for human-readable URLs. machine_name converts the
+  # title to lowercased-underscore form; if title is empty, default to 'item'.
+  field_unique_id:
+    -
+      plugin: machine_name
+      source: title
+    -
+      plugin: default_value
+      default_value: 'item'
+
+  field_automatically_open:
+    plugin: default_value
+    default_value: 0
+  field_accordion_label_color:
+    plugin: default_value
+    default_value: 'gray'
+
+destination:
+  plugin: 'entity_reference_revisions:paragraph'
+  default_bundle: artsci_collection_item
+
+migration_dependencies:
+  required: []
+  optional: []

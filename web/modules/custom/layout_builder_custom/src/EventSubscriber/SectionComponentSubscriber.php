@@ -119,7 +119,36 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
             }
           }
           break;
-
+        case 'node:article:field_image':
+          // If there is no image, use the empty image.
+          if (empty($build)) {
+            $content = [
+              '#type' => 'image_empty_article',
+            ];
+            $contexts = $event->getContexts();
+            if (isset($contexts['layout_builder.entity'])) {
+              /** @var \Drupal\node\Entity\Node $node */
+              if ($node = $contexts['layout_builder.entity']->getContextValue()) {
+                $content['#alt'] = $node->getTitle();
+              }
+            }
+          }
+          break;
+        case 'node:event:field_image':
+          // If there is no image, use the empty image.
+          if (empty($build)) {
+            $content = [
+              '#type' => 'image_empty_event',
+            ];
+            $contexts = $event->getContexts();
+            if (isset($contexts['layout_builder.entity'])) {
+              /** @var \Drupal\node\Entity\Node $node */
+              if ($node = $contexts['layout_builder.entity']->getContextValue()) {
+                $content['#alt'] = $node->getTitle();
+              }
+            }
+          }
+          break;
       }
 
       // If an alteration has been made, re-build the block.
@@ -151,15 +180,14 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
           // Convert the style list into a map that can be used for overriding
           // style defaults later.
           $style_map = LayoutBuilderStylesHelper::getLayoutBuilderStylesMap($selected_styles);
-          if (isset($style_map['list_format']) && str_contains($style_map['list_format'], 'grid')) {
-            $style_map['card_media_position'] = 'card--stacked';
-          }
           // Filter the style map to just classes related to the card.
           $style_map = Card::filterCardStyles($style_map);
 
+          LayoutBuilderStylesHelper::processGridClasses($build['#attributes']);
+
           LayoutBuilderStylesHelper::removeStylesFromAttributes($build['#attributes'], $style_map);
 
-          // Pass override styles through to the aggregator items.
+          // Pass override styles through to the referenced items.
           $build['#override_styles'] = $style_map;
           break;
 
@@ -190,7 +218,7 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
     'visible' => [
       $image_filled_condition,
       [
-        [':input[name="layout_builder_style_media_format"]' => ['value' => 'media_format_circle']],
+        [':input[name="layout_builder_style_media_format"]' => ['value' => 'media_format_widescreen']],
         [':input[name="layout_builder_style_card_media_position"]' => ['!value' => 'card_media_position_stacked']],
       ],
     ],
@@ -220,6 +248,53 @@ class SectionComponentSubscriber implements EventSubscriberInterface {
         case 'inline_block:artsci_event':
           unset($build['content']['#theme']);
 
+          break;
+
+        case 'inline_block:artsci_slider':
+          // The slider resolves its slide media view mode in
+          // layout_builder_custom_preprocess_paragraph__artsci_slide(), which
+          // runs inside this block's render. The block's own cache entry is
+          // keyed by block content ID and view mode only, so without the
+          // selected media style in the keys a changed selection returns the
+          // previously cached markup. The fallbacks here must stay in step with
+          // _layout_builder_custom_slide_media_view_mode().
+          // @phpstan-ignore-next-line
+          $selected_styles = $event->getComponent()->get('layout_builder_styles_style');
+          $style_map = LayoutBuilderStylesHelper::getLayoutBuilderStylesMap($selected_styles);
+
+          $format_map = [
+            'media--circle' => 'square',
+            'media--landscape' => 'landscape',
+            'media--square' => 'square',
+            'media--widescreen' => 'widescreen',
+            'media--portrait' => 'portrait',
+          ];
+          $size_map = [
+            'media--small' => 'small',
+            'media--medium' => 'medium',
+            'media--large' => 'large',
+          ];
+
+          $format = 'widescreen';
+          foreach ($format_map as $class => $family) {
+            if (str_contains($style_map['media_format'] ?? '', $class)) {
+              $format = $family;
+              break;
+            }
+          }
+
+          $size = 'medium';
+          foreach ($size_map as $class => $tier) {
+            if (str_contains($style_map['media_size'] ?? '', $class)) {
+              $size = $tier;
+              break;
+            }
+          }
+
+          if (isset($build['content']['#cache']['keys'])) {
+            $build['content']['#cache']['keys'][] = $size;
+            $build['content']['#cache']['keys'][] = $format;
+          }
           break;
 
         case 'inline_block:artsci_image':

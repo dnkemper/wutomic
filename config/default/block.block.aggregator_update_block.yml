@@ -1,0 +1,34 @@
+uuid: de9af125-9644-40a1-8e0a-b329643696e4
+langcode: en
+status: true
+dependencies:
+  module:
+    - shared_content
+    - system
+    - user
+  theme:
+    - atomic_artsci
+id: aggregator_update_block
+theme: atomic_artsci
+region: content
+weight: 0
+provider: null
+plugin: aggregator_update_block
+settings:
+  id: aggregator_update_block
+  label: 'Aggregator Update Block'
+  label_display: '0'
+  provider: shared_content
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/shared-content
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      webmaster: webmaster
+      administrator: administrator

@@ -1,0 +1,96 @@
+{#
+/**
+ * @file
+ * Theme override for the artsci_slider block.
+ *
+ * Uses artsci-carousel.js for carousel functionality.
+ * Slides render as cards with LBS style support.
+ *
+ * Available variables:
+ * - content: The block content.
+ * - carousel_size: Carousel mode (four, three, two, one).
+ * - carousel_per_page: Slides visible at once (derived from size).
+ * - carousel_loop: Whether navigation loops.
+ *
+ * Media format and size are not exposed here. They resolve server side into the
+ * slide's {size}__{format} media view mode and land on each slide's inner
+ * .media as media--* classes.
+ *
+ * @see layout_builder_custom_preprocess_block__inline_block__artsci_slider()
+ * @see layout_builder_custom_preprocess_paragraph__artsci_slide()
+ */
+#}
+{%
+  set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+    'artsci-slider',
+    carousel_size ? 'artsci-carousel--' ~ carousel_size : 'artsci-carousel--two',
+  ]|filter(c => c is not empty)
+%}
+
+{# Attach the appropriate carousel library based on size #}
+{% if carousel_size == 'three' %}
+  {{ attach_library('atomic_artsci/artsci-carousel-three') }}
+{% elseif carousel_size == 'one' %}
+  {{ attach_library('atomic_artsci/artsci-carousel-one') }}
+{% elseif carousel_size == 'four' %}
+  {{ attach_library('atomic_artsci/artsci-carousel-four') }}
+{% else %}
+  {{ attach_library('atomic_artsci/artsci-carousel-two') }}
+{% endif %}
+{{ attach_library('atomic_artsci/slider') }}
+
+<div{{ attributes.addClass(classes) }}
+  data-artsci-carousel
+  data-carousel-size="{{ carousel_size|default('two') }}"
+  data-carousel-per-page="{{ carousel_per_page|default(3) }}"
+  {% if carousel_loop is not same as(false) %}data-carousel-loop="true"{% endif %}
+  {% if carousel_autoplay %}data-carousel-autoplay="{{ carousel_autoplay }}"{% endif %}
+>
+
+
+  {# Section headline #}
+  {% if carousel_size == 'three' %}
+    {% if pre_title %}
+      <p class="artsci-carousel__pre-title">{{ pre_title }}</p>
+    {% endif %}
+    {% if headline_text %}
+      <h2 class="artsci-carousel__title">{{ headline_text }}</h2>
+    {% endif %}
+  {% else %}
+    {{ content.field_artsci_headline }}
+  {% endif %}
+
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {{ content.field_artsci_text_area }}
+
+  {# Carousel viewport and track #}
+  <div class="artsci-carousel__viewport" data-carousel-viewport>
+    <div class="artsci-carousel__track" data-carousel-track>
+      {{ content.field_artsci_slider_slides }}
+
+    </div>
+  </div>
+
+  {# Navigation controls. Only shown when there is more than one slide to
+     navigate; a lone slide needs no arrows or dots. #}
+  {% if slide_count > 1 %}
+    <div class="artsci-carousel__nav">
+      <button type="button" class="artsci-carousel__arrow artsci-carousel__arrow--prev" data-carousel-prev aria-label="Previous slide">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <div class="artsci-carousel__dots" data-carousel-dots></div>
+      <button type="button" class="artsci-carousel__arrow artsci-carousel__arrow--next" data-carousel-next aria-label="Next slide">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  {% endif %}
+
+</div>

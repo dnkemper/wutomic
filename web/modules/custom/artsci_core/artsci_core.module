@@ -27,6 +27,7 @@ use Drupal\symfony_mailer\EmailInterface;
 use Drupal\artsci_core\Entity\Card;
 use Drupal\artsci_core\Entity\Contact;
 use Drupal\artsci_core\Entity\Event;
+use Drupal\artsci_core\Entity\ImageCard;
 use Drupal\artsci_core\Entity\RendersAsCardInterface;
 use Drupal\artsci_core\Entity\TimelineItem;
 use Drupal\artsci_core\HeadlineHelper;
@@ -37,32 +38,6 @@ use Drupal\webform\Element\WebformRoles;
 use Drupal\workflows\Entity\Workflow;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
-
-/**
- * Implements hook_cron().
- */
-function artsci_core_cron() {
-  // Daily.
-  $state_key = 'artsci_core_daily_last';
-  $daily_last_cleared = \Drupal::state()->get($state_key);
-  $today = date('Y-m-d');
-  if (!$daily_last_cleared || $daily_last_cleared != $today) {
-    \Drupal::state()->set($state_key, $today);
-    Cache::invalidateTags(['time:daily']);
-
-  }
-
-  // Hourly.
-  $request_time = \Drupal::time()->getRequestTime();
-  $state_key = 'artsci_core_hourly_last';
-  $hourly_last_cleared = \Drupal::state()->get($state_key);
-
-  if (!$hourly_last_cleared || $request_time - $hourly_last_cleared >= 3540) {
-    \Drupal::state()->set($state_key, $request_time);
-    Cache::invalidateTags(['time:hourly']);
-
-  }
-}
 
 /**
  * Implements hook_entity_build_defaults_alter().
@@ -89,6 +64,9 @@ function artsci_core_entity_bundle_info_alter(array &$bundles) {
   }
   if (isset($bundles['node']['contact'])) {
     $bundles['node']['contact']['class'] = Contact::class;
+  }
+  if (isset($bundles['node']['image_card'])) {
+    $bundles['node']['image_card']['class'] = ImageCard::class;
   }
 }
 
@@ -139,7 +117,7 @@ function artsci_core_entity_presave(EntityInterface $entity) {
     if ($set_state = $entity->moderation_state?->value) {
       if ($set_state == 'published' && !$entity->isPublished()) {
         if ($entity->isNew()) {
-          $fallback_state = 'draft';
+          $fallback_state = 'published';
         }
         else {
           $fallback_state = $entity->original->moderation_state->value;
@@ -172,6 +150,123 @@ function artsci_core_entity_presave(EntityInterface $entity) {
     }
   }
 
+  switch ($entity->bundle()) {
+
+    case 'article':
+      // Check for rabbit_hole functionality.
+      if (\Drupal::moduleHandler()->moduleExists('rabbit_hole') && $entity->hasField('rabbit_hole__settings')) {
+        $source_link = $entity->get('field_article_source_link')->uri;
+        // If source link and direct to source are set,
+        // change the rabbit hole setting to redirect
+        // and set the url to the source link token.
+        if (isset($source_link) && !empty($source_link)) {
+          $entity->set('rabbit_hole__settings', [
+            'action' => 'page_redirect',
+            'settings' => [
+              'redirect' => '[node:field_article_source_link:uri]',
+              'redirect_code' => 301,
+              'redirect_fallback_action' => 'display_page',
+            ],
+          ]);
+        }
+        else {
+          // Match content type settings.
+          $entity->set('rabbit_hole__settings', [
+            'action' => 'display_page',
+            'settings' => [
+              'redirect' => NULL,
+              'redirect_code' => 301,
+              'redirect_fallback_action' => 'bundle_default',
+            ],
+          ]);
+        }
+      }
+      break;
+
+    case 'event':
+      // Check for rabbit_hole functionality.
+      if (\Drupal::moduleHandler()->moduleExists('rabbit_hole') && $entity->hasField('rabbit_hole__settings')) {
+        $source_link = $entity->get('field_event_series_link')->uri;
+        // If source link and direct to source are set,
+        // change the rabbit hole setting to redirect
+        // and set the url to the source link token.
+        if (isset($source_link) && !empty($source_link)) {
+          $entity->set('rabbit_hole__settings', [
+            'action' => 'page_redirect',
+            'settings' => [
+              'redirect' => '[node:field_event_series_link:uri]',
+              'redirect_code' => 301,
+              'redirect_fallback_action' => 'display_page',
+            ],
+          ]);
+        }
+        else {
+          // Match content type settings.
+          $entity->set('rabbit_hole__settings', [
+            'action' => 'display_page',
+            'settings' => [
+              'redirect' => NULL,
+              'redirect_code' => 301,
+              'redirect_fallback_action' => 'bundle_default',
+            ],
+          ]);
+        }
+      }
+
+      // Get the id of the webform we want the rsvp button to link to.
+      // $rsvpFormId = ($entity->hasField('field_rsvp_form')) ? $entity->get('field_rsvp_form')->target_id : NULL;
+      // if (!empty($rsvpFormId)) {
+      //   // Set the query parameters we want to include on our link.
+      //   $query_params = [
+      //     'source_entity_type' => $entity->getEntityTypeId(),
+      //     'source_entity_id' => $entity->id(),
+      //   ];
+
+      //   $rsvpForm = \Drupal::entityTypeManager()->getStorage('webform')->load($rsvpFormId);
+      //   if ($rsvpForm) {
+      //     $entity->field_rsvp_form_link->value = $rsvpForm->toUrl('canonical', ['query' => $query_params])->setAbsolute()->toString();
+      //   }
+      // }
+      elseif ($entity->hasField('field_event_series_link')) {
+        $entity->field_rsvp_form_link->value = NULL;
+      }
+      break;
+
+    case 'person':
+      // Setting the title with the first/last name values.
+      $output = $entity->get('field_person_first_name')->value . " " . $entity->get('field_person_last_name')->value;
+      $entity->setTitle($output);
+      // Check for rabbit_hole functionality.
+      if (\Drupal::moduleHandler()->moduleExists('rabbit_hole') && $entity->hasField('rabbit_hole__settings')) {
+        $source_link = $entity->get('field_external_link')->uri;
+        // If source link and direct to source are set,
+        // change the rabbit hole setting to redirect
+        // and set the url to the source link token.
+        if (isset($source_link) && !empty($source_link)) {
+          $entity->set('rabbit_hole__settings', [
+            'action' => 'page_redirect',
+            'settings' => [
+              'redirect' => '[node:field_external_link:uri]',
+              'redirect_code' => 301,
+              'redirect_fallback_action' => 'display_page',
+            ],
+          ]);
+        }
+        else {
+          // Match content type settings.
+          $entity->set('rabbit_hole__settings', [
+            'action' => 'display_page',
+            'settings' => [
+              'redirect' => NULL,
+              'redirect_code' => 301,
+              'redirect_fallback_action' => 'bundle_default',
+            ],
+          ]);
+        }
+      }
+      break;
+
+  }
 }
 
 /**
@@ -237,6 +332,11 @@ function artsci_core_preprocess_node(&$variables) {
       }
     }
   }
+  if (isset($variables["content"]["field_start_date"][0]["addtocal"])) {
+    $variables["content"]["addtocal"] =
+      $variables["content"]["field_start_date"][0]["addtocal"];
+    unset($variables["content"]["field_start_date"][0]["addtocal"]);
+  }
 }
 
 /**
@@ -247,7 +347,49 @@ function artsci_core_theme($existing, $type, $theme, $path) {
     'card' => [
       'render element' => 'element',
     ],
-    'artsci_core_headline' => [
+    'artsci_core_backtolink' => [
+      'variables' => [
+        'link_text' => '',
+        'url' => NULL,
+      ],
+    ],
+  'artsci_social_share' => [
+    'variables' => [
+      'heading' => NULL,
+      'links' => [],
+    ],
+  ],
+  'addtocal_links' => [
+    'variables' => [
+      'label' => NULL,
+      'ical' => NULL,
+      'google' => NULL,
+      'id' => NULL,
+    ],
+  ],
+  'artsci_people_sidebar' => [
+      'variables' => [
+        'contact' => [],
+        'office' => [],
+        'mailing_address' => [],
+        'faculty_links' => [],
+      ],
+    ],
+  'addtocal_block' => [
+    'variables' => [
+      'date' => NULL,
+      'time' => NULL,
+      'location' => NULL,
+      'contact_email' => NULL,
+      'addtocal' => NULL,
+    ],
+  ],
+  'academic_addtocal_block' => [
+    'variables' => [
+      'addtocal' => NULL,
+    ],
+  ],
+  'artsci_core_headline' => [
       'variables' => [
         'headline' => NULL,
         'hide_headline' => FALSE,
@@ -308,6 +450,7 @@ function template_preprocess_card(&$variables) {
           'media--widescreen' => 'large__widescreen',
           'media--square' => 'large__square',
           'media--circle' => 'large__square',
+          'media--portrait' => 'large__portrait',
         ];
         // Change view_mode based on lb_styles.
         foreach ($media_formats as $class => $view_mode) {
@@ -407,12 +550,25 @@ function template_preprocess_card(&$variables) {
     // Set 'click-target' class on headline URL if title is the linked element.
     if ($element['#linked_element'] === 'title' && $link) {
       $element['#headline']['headline_url'] = $link['link_url'];
-      $element['#headline']['headline_url_class'] = 'click-target';
+      $headline_url_class = 'click-target';
 
       // Apply link tracking attributes to headline.
       if (!empty($link['link_attributes'])) {
-        $element['#headline']['headline_url_attributes'] = $link['link_attributes'];
+        $link_attributes = $link['link_attributes'];
+        // Fold any class from the link attributes into the headline URL class.
+        // The headline template prints headline_url_class and
+        // headline_url_attributes as separate class attributes, so a class left
+        // in the attributes array would create a duplicate class attribute that
+        // the browser drops (silently losing e.g. 'use-ajax').
+        if (!empty($link_attributes['class'])) {
+          $extra_classes = is_array($link_attributes['class']) ? $link_attributes['class'] : [$link_attributes['class']];
+          $headline_url_class .= ' ' . implode(' ', $extra_classes);
+          unset($link_attributes['class']);
+        }
+        $element['#headline']['headline_url_attributes'] = $link_attributes;
       }
+
+      $element['#headline']['headline_url_class'] = $headline_url_class;
 
       // If title and link text are set, set a button id attribute for
       // aria-describedby.
@@ -439,7 +595,7 @@ function template_preprocess_card(&$variables) {
     $element['#attributes']['data-artsci-no-link'] = TRUE;
   }
 
-  $element['#attributes']['class'][] = 'block--word-break';
+  // $element['#attributes']['class'][] = 'block--word-break';
 
   // Add the 'click-target' class to the button if it is linked.
   if ($element['#linked_element'] === 'button') {
@@ -535,6 +691,19 @@ function artsci_core_preprocess_field(&$variables) {
       if ($variables['element']['#view_mode'] == 'teaser') {
         artsci_core_set_field_icon($variables, 'fa-fax');
         artsci_core_set_attributes($variables, 'fa-field-item');
+      }
+      break;
+
+    case 'field_person_description':
+      // Let editors override the label per node via a companion text field.
+      // When that field is empty we leave the label untouched, so it falls
+      // back to the field's configured label ("Selected Media").
+      $description_entity = $variables['element']['#object'] ?? NULL;
+      if ($description_entity instanceof ContentEntityInterface && $description_entity->hasField('field_person_description_label')) {
+        $custom_label = trim((string) $description_entity->get('field_person_description_label')->value);
+        if ($custom_label !== '') {
+          $variables['label'] = $custom_label;
+        }
       }
       break;
 
@@ -690,6 +859,40 @@ function artsci_core_page_attachments(&$page) {
         $page['#attached']['library'][] = 'artsci_core/gtag';
       }
     }
+  }
+}
+
+/**
+ * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
+ *
+ * Customizes the body field's summary sub-widget: hides the core
+ * "Leave blank to use trimmed value..." help text, and allows the summary
+ * label to be overridden per content type.
+ */
+function artsci_core_field_widget_single_element_text_textarea_with_summary_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  // The summary sub-element only exists when "Summary input" is enabled on
+  // the field instance. Bail out if it isn't present.
+  if (empty($element['summary'])) {
+    return;
+  }
+
+  // Hide the core help text ("Leave blank to use trimmed value of full text
+  // as the summary.").
+  $element['summary']['#description'] = NULL;
+
+  // Per-content-type summary label. Add "bundle => t('Label')" pairs to
+  // override the default "Summary" textarea title for specific content types.
+  // Bundles not listed keep the default label. The body field exists on these
+  // node bundles: article, book, event, image_card, page, person.
+  $labels = [
+    'person' => t('Intro Text'),
+    'article' => t('Intro Text'),
+    // 'event' => t('Event teaser'),
+  ];
+
+  $bundle = $context['items']->getEntity()->bundle();
+  if (isset($labels[$bundle])) {
+    $element['summary']['#title'] = $labels[$bundle];
   }
 }
 
@@ -978,11 +1181,11 @@ function artsci_core_form_alter(&$form, FormStateInterface $form_state, $form_id
     }
 
   // Adjust the body summary help text for all nodes that use it.
-  if (str_starts_with($form_id, 'node_') && str_ends_with($form_id, '_form')) {
-    if (isset($form['body']['widget'][0]['summary'])) {
-      $form['body']['widget'][0]['summary']['#description'] = t('The summary is used for list displays on this site and in the content\'s <a href="https://artsci.artsci.edu/documentation/search-engine-optimization#summary" target="_blank">meta description</a>. If left blank, a trimmed value of the full text will be used for the meta description, but not for list displays.');
-    }
-  }
+  // if (str_starts_with($form_id, 'node_') && str_ends_with($form_id, '_form')) {
+  //   if (isset($form['body']['widget'][0]['summary'])) {
+  //     $form['body']['widget'][0]['summary']['#description'] = t('The summary is used for list displays on this site and in the content\'s <a href="https://artsci.artsci.edu/documentation/search-engine-optimization#summary" target="_blank">meta description</a>. If left blank, a trimmed value of the full text will be used for the meta description, but not for list displays.');
+  //   }
+  // }
 }
 
 /**
@@ -1338,6 +1541,108 @@ function artsci_core_tokens($type, $tokens, array $data, array $options, Bubblea
 }
 
 /**
+ * Implements hook_cron().
+ */
+function artsci_core_cron() {
+  artsci_core_shared_content_monitor();
+}
+
+/**
+ * Daily node count snapshot and drop detection.
+ *
+ * Takes a daily snapshot of node counts per content type and logs
+ * warnings if content drops exceed thresholds. Also tracks imported
+ * shared content counts separately.
+ */
+function artsci_core_shared_content_monitor() {
+  // Throttle to once daily.
+  $last_run = \Drupal::state()->get('shared_content.monitor_last_run', 0);
+  if (time() - $last_run < 86400) {
+    return;
+  }
+  \Drupal::state()->set('shared_content.monitor_last_run', time());
+
+  $database = \Drupal::database();
+  $state = \Drupal::state();
+  $logger = \Drupal::logger('shared_content');
+
+  // Get current counts per content type.
+  $current = $database->query("
+    SELECT type, COUNT(*) AS count
+    FROM {node_field_data}
+    GROUP BY type
+  ")->fetchAllKeyed();
+  $current = array_map('intval', $current);
+
+  // Get previous snapshot.
+  $previous = $state->get('shared_content.node_count_snapshot');
+
+  if (!empty($previous)) {
+    $threshold = 5;
+    $percent_threshold = 10;
+    $alerts = [];
+
+    foreach ($previous as $type => $prev_count) {
+      $curr_count = $current[$type] ?? 0;
+      $diff = $curr_count - $prev_count;
+
+      // Skip if count stayed the same or increased.
+      if ($diff >= 0) {
+        continue;
+      }
+
+      $abs_diff = abs($diff);
+      $abs_pct = ($prev_count > 0) ? abs(round(($diff / $prev_count) * 100, 1)) : 0;
+
+      // Alert if both absolute and percentage thresholds are exceeded.
+      if ($abs_diff >= $threshold && $abs_pct >= $percent_threshold) {
+        $alerts[] = "$type: $prev_count → $curr_count ($diff nodes, -{$abs_pct}%)";
+      }
+
+      // Always alert if a content type loses all its nodes.
+      if ($prev_count > 0 && $curr_count === 0) {
+        $alerts[] = "$type: ALL $prev_count nodes deleted!";
+      }
+    }
+
+    if (!empty($alerts)) {
+      $logger->error('Node count drop detected since last snapshot. @alerts', [
+        '@alerts' => implode(' | ', $alerts),
+      ]);
+    }
+  }
+
+  // Save new snapshot.
+  $state->set('shared_content.node_count_snapshot', $current);
+  $state->set('shared_content.node_count_snapshot_time', \Drupal::time()->getRequestTime());
+
+  // Also snapshot imported shared content counts if the field exists.
+  if ($database->schema()->tableExists('node__field_content_hash')) {
+    $imported = $database->query("
+      SELECT n.type, COUNT(*) AS count
+      FROM {node_field_data} n
+      INNER JOIN {node__field_content_hash} h ON h.entity_id = n.nid
+      GROUP BY n.type
+    ")->fetchAllKeyed();
+    $state->set('shared_content.node_count_snapshot.imported', array_map('intval', $imported));
+  }
+}
+
+/**
+ * Allowed values callback for uiowa_aggregator_feeds field.
+ */
+function _artsci_core_get_feeds() {
+  $feeds = \Drupal::entityTypeManager()->getStorage('aggregator_feed')->loadMultiple();
+  $options = [];
+
+  foreach ($feeds as $feed) {
+    $options[$feed->id()] = $feed->label();
+  }
+
+  return $options;
+}
+
+/**
  * Implements template_preprocess_views_view().
  */
 function artsci_core_preprocess_views_view(&$variables) {
@@ -1348,10 +1653,13 @@ function artsci_core_preprocess_views_view(&$variables) {
     'academic_groups_taxonomy_term',
     'people_list_block',
     'people_block',
+    'articles_block',
+    'articles_author',
     'book_block',
     'article_block',
     'article_list_block',
     'page_list_block',
+    'image_card_list_block',
     'related_manually_referenced_content',
     'residence_halls',
     'room_list',
@@ -1815,6 +2123,20 @@ function artsci_core_clean_address_fields(array &$form, FormStateInterface $form
         }
       }
     }
+  }
+}
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function artsci_core_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  switch ($variables['element']['#field_name']) {
+    case 'field_person_website':
+    case 'field_person_contact_information':
+    case 'field_person_phone':
+    case 'field_person_fax':
+      $suggestions[] = 'field__bold_headline_label';
+      break;
+
   }
 }
 

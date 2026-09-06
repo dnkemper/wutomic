@@ -1,0 +1,21 @@
+shared_content.schema:
+  type: mapping
+  label: 'Shared Content Schema'
+  mapping:
+    id:
+      type: integer
+      label: 'Primary Key: Unique ID'
+    iid:
+      type: integer
+      label: 'The Aggregator item ID'
+      default: 0
+    nid:
+      type: integer
+      label: 'The node ID in the current site'
+      default: 0
+    url:
+      type: string
+      label: 'The URL of the original node'
+    orig_nid:
+      type: integer
+      label: 'The node ID of the original node'

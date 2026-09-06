@@ -55,8 +55,6 @@ third_party_settings:
         Devel: {  }
         Forms: {  }
         'Inline blocks':
-          - 'inline_block:artsci_button'
-          - 'inline_block:artsci_cta'
           - 'inline_block:artsci_text_area'
         Lists: {  }
         'Lists (Views)': {  }
@@ -66,7 +64,7 @@ third_party_settings:
         'Artsci Dispatch': {  }
         Superfish: {  }
         System: {  }
-        'University of Iowa Alerts': {  }
+        'University of Artsci Alerts': {  }
         User: {  }
         Webform:
           - webform_block

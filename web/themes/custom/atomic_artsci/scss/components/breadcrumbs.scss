@@ -3,7 +3,12 @@
 
 .breadcrumb {
   list-style: none;
-  @include utilities.margin(variables.$top: variables.$sm, variables.$right: 0, variables.$bottom: variables.$sm, variables.$left:0);
+  @include utilities.margin(
+    variables.$top: variables.$sm,
+    variables.$right: 0,
+    variables.$bottom: variables.$sm,
+    variables.$left: 0
+  );
   ol {
     @extend %no-ul-list;
   }
@@ -13,7 +18,7 @@
 .breadcrumb::after {
   display: table;
   content: ' ';
-  flex:1 0 0;
+  flex: 1 0 0;
   order: 1;
 }
 
@@ -31,10 +36,15 @@
 
 .breadcrumb li:not(:last-child)::after {
   position: relative;
-  content: "/";
+  content: '/';
   opacity: 1;
   color: variables.$primary;
-  @include utilities.margin(variables.$top: 0, variables.$right: variables.$sm, variables.$bottom: 0, variables.$left:variables.$sm);
+  @include utilities.margin(
+    variables.$top: 0,
+    variables.$right: variables.$sm,
+    variables.$bottom: 0,
+    variables.$left: variables.$sm
+  );
 }
 
 .breadcrumb a {
@@ -49,7 +59,7 @@
 
 .breadcrumb .disabled {
   cursor: not-allowed;
-  color: variables.$gray-light;
+  color: variables.$gray-dark;
 }
 
 .breadcrumb {
@@ -59,8 +69,8 @@
     margin-bottom: 0;
     margin-top: 1rem;
   }
-  [class*="bg--black"] & li,
-  [class*="bg--black"] & li a {
+  [class*='bg--black'] & li,
+  [class*='bg--black'] & li a {
     color: #fff;
   }
 }
@@ -68,8 +78,13 @@
 .block-system-breadcrumb-block {
   //margin-bottom: -35px;
   z-index: 1;
-    .hero__content & {
-      //@include: -25px;
-    }
+  .hero__content & {
+    //@include: -25px;
+  }
 }
-
+/* hiding breadcrumbs for the single person page (person content type) */
+.node--type-person {
+  .layout.layout--onecol {
+    display: none;
+  }
+}

@@ -1,0 +1,9 @@
+uuid: e3573e89-db29-4e6a-9e73-f4cb9eda295e
+langcode: en
+status: true
+dependencies: {  }
+id: college_office
+label: 'College Office'
+description: ''
+allow_former: false
+allowed_fields: {  }

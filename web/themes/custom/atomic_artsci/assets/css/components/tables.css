@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -34,13 +49,13 @@ table {
   border-spacing: 0;
   color: #000000;
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.15;
   max-width: 100%;
   overflow-x: auto;
   width: 100%;
 }
-[class*=bg--gray] table tbody a, [class*=bg--white] table tbody a, [class*=bg--black] table tbody a, [class*=bg--red] table tbody a, .bg-pattern--brain-reversed table tbody a, .bg--red--pattern--brain table tbody a, .bg-pattern--brain table tbody a, .bg--white--pattern--brain table tbody a, .bg--black--pattern--brain table tbody a, .bg-pattern--brain-black table tbody a {
+[class*=bg--gray] table tbody a, [class*=bg--white] table tbody a, [class*=bg--black] table tbody a, [class*=bg--red] table tbody a {
   color: var(--link-color);
 }
 @media (min-width: 768px) {
@@ -48,11 +63,14 @@ table {
     display: table;
   }
 }
-table p, table ul, table ol {
+table p,
+table ul,
+table ol {
   font-size: 1rem;
   line-height: 1.6;
 }
-table ul p, table ol p {
+table ul p,
+table ol p {
   margin-bottom: 0;
 }
 table td,
@@ -68,7 +86,7 @@ table th:not([align]) {
   text-align: left;
 }
 table thead th {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   border: none;
 }
 table thead th a {
@@ -86,12 +104,12 @@ table tbody th {
 }
 table tbody tr:not(.is-selected):nth-child(even),
 table tbody tr:not(.is-selected):nth-child(even) th {
-  background-color: #F3F3F3;
-}
-table.table--hover-highlight tbody tr:not(.is-selected):hover, table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover {
-  background-color: #fff3c3;
+  background-color: #edeae1;
 }
 table.table--hover-highlight tbody tr:not(.is-selected):hover th, table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover th {
+  background-color: #fff3c3;
+}
+table.table--hover-highlight tbody tr:not(.is-selected):hover, table.table--hover-highlight tbody tr:not(.is-selected):nth-child(even):hover {
   background-color: #fff3c3;
 }
 table caption {
@@ -105,12 +123,12 @@ table caption {
 }
 table caption a,
 table caption :where(p) a:not(.bttn) {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 [class*=bg--] table caption a, [class*=bg--] [class*=bg--] table caption a,
 [class*=bg--] table caption :where(p) a:not(.bttn),
 [class*=bg--] [class*=bg--] table caption :where(p) a:not(.bttn) {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 table tbody tr:last-child td,
 table tbody tr:last-child th {
@@ -159,7 +177,7 @@ table.table--width-default caption {
   border-left: #7c7c7c 1px solid;
   border-bottom: #ddd 1px solid;
 }
-.table-responsive.table-sticky .table--gray-borders thead th:first-child:before {
+.table-responsive.table-sticky .table--gray-borders thead th:first-child::before {
   border-left: none;
 }
 .table-responsive table {
@@ -191,7 +209,8 @@ table th a[href]::after {
   content: none !important;
 }
 
-.table--align-top thead, .table--align-top tbody {
+.table--align-top thead,
+.table--align-top tbody {
   vertical-align: top;
 }
 
@@ -202,4 +221,6 @@ table th a[href]::after {
 }
 .table--sort-arrow-inline th[aria-sort] a .tablesort {
   filter: saturate(0) brightness(0.2);
-}/*# sourceMappingURL=tables.css.map */
+}
+
+/*# sourceMappingURL=tables.css.map */

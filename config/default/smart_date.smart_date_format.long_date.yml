@@ -1,0 +1,15 @@
+uuid: 5ace4515-e297-4544-bc48-3d6120c23f08
+langcode: en
+status: true
+dependencies: {  }
+id: long_date
+label: 'Long Date'
+date_format: 'l, F j, Y'
+time_format: ''
+time_hour_format: ''
+allday_label: 'All day'
+separator: ' - '
+join: ', '
+ampm_reduce: '1'
+date_first: '1'
+site_time_toggle: '1'

@@ -1,105 +1,123 @@
 @use '../../abstracts/_variables.scss';
 @use '../../abstracts/_utilities.scss';
 
-.embed-responsive {
+//TODO: shouldn't we just @use components/embed.scss for these .embed-responsive* placeholders/styles?
+//TODO: also search for other .scss that have .embed-responsive* styles being declared
+
+%embed-responsive {
   position: relative;
   display: block;
   width: 100%;
   padding: 0;
   overflow: hidden;
+
+  embed,
+  iframe,
+  object,
+  video {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
 }
 
-.embed-responsive embed,
-.embed-responsive iframe,
-.embed-responsive object,
-.embed-responsive video {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.embed-responsive-1by1 {
+%embed-responsive-1by1 {
   padding-bottom: 100%;
 }
 
+%embed-responsive-4by3 {
+  // padding-bottom: 75%;
+}
+
+%embed-responsive-16by9 {
+  // padding-bottom: 56.25%;
+}
+
+%embed-responsive-21by9 {
+  // padding-bottom: 42.85714286%;
+}
+
+.embed-responsive {
+  @extend %embed-responsive;
+}
+.embed-responsive-1by1 {
+  @extend %embed-responsive-1by1;
+}
 .embed-responsive-4by3 {
-  padding-bottom: 75%;
+  @extend %embed-responsive-4by3;
 }
-
 .embed-responsive-16by9 {
-  padding-bottom: 56.25%;
+  @extend %embed-responsive-16by9;
 }
-
 .embed-responsive-21by9 {
-  padding-bottom: 42.85714286%;
+  @extend %embed-responsive-21by9;
 }
-
 
 @mixin container-query() {
   @supports (contain: inline-size) {
     @container column (min-width: #{variables.$break-sm}) {
-      @content
+      @content;
     }
   }
   @supports not (contain: inline-size) {
     @include utilities.breakpoint(sm) {
-      @content
+      @content;
     }
   }
 }
 
 // Media alignment
 
-
-  .align-right{
-    &.media, .media, figcaption {
-      @include utilities.breakpoint(sm) {
-        margin-left: variables.$gutter;
-      }
-    }
-  }
-
-  .align-left {
-    &.media, .media, figcaption {
-      @include utilities.breakpoint(sm) {
-        margin-right: variables.$gutter;
-      }
-    }
-
-  }
-
-  .align-right.media--type-remote-video:not(.media--view-mode-vertical),
-  .align-right.media--type-panopto {
-    width: auto;
+.align-right {
+  &.media,
+  .media,
+  figcaption {
     @include utilities.breakpoint(sm) {
       margin-left: variables.$gutter;
     }
-    .field--name-field-media-oembed-video iframe,
-    .field--name-field-media-panopto-url iframe {
-      @include utilities.breakpoint(sm) {
-        float: right;
-      }
-    }
   }
-  .align-left.media--type-remote-video:not(.media--view-mode-vertical),
-  .align-left.media--type-panopto {
-    width: auto;
+}
+
+.align-left {
+  &.media,
+  .media,
+  figcaption {
     @include utilities.breakpoint(sm) {
       margin-right: variables.$gutter;
     }
-    .field--name-field-media-oembed-video iframe,
-    .field--name-field-media-panopto-url iframe {
-      @include utilities.breakpoint(sm) {
-        float: left;
-      }
+  }
+}
+
+.align-right.media--type-remote-video:not(.media--view-mode-vertical),
+.align-right.media--type-panopto {
+  width: auto;
+  @include utilities.breakpoint(sm) {
+    margin-left: variables.$gutter;
+  }
+  .field--name-field-media-oembed-video iframe,
+  .field--name-field-media-panopto-url iframe {
+    @include utilities.breakpoint(sm) {
+      float: right;
     }
   }
-
-
+}
+.align-left.media--type-remote-video:not(.media--view-mode-vertical),
+.align-left.media--type-panopto {
+  width: auto;
+  @include utilities.breakpoint(sm) {
+    margin-right: variables.$gutter;
+  }
+  .field--name-field-media-oembed-video iframe,
+  .field--name-field-media-panopto-url iframe {
+    @include utilities.breakpoint(sm) {
+      float: left;
+    }
+  }
+}
 
 .align-center.media--type-remote-video,
 .align-center.media--type-panopto {
@@ -111,8 +129,8 @@
 
 .media--type-remote-video,
 .media--type-panopto {
-  @extend .embed-responsive;
-  @extend .embed-responsive-16by9;
+  @extend %embed-responsive;
+  @extend %embed-responsive-16by9;
 
   &.media--view-mode-default,
   &.media--view-mode-full {
@@ -182,7 +200,7 @@ figure.caption .media--type-remote-video.media--view-mode-medium iframe,
 figure.caption .media--type-panopto.media--view-mode-medium iframe,
 .media--type-remote-video.media--view-mode-image-medium iframe,
 .media--type-remote-video.media--view-mode-medium iframe,
-.media--type-panopto.media--view-mode-medium iframe{
+.media--type-panopto.media--view-mode-medium iframe {
   @include utilities.breakpoint(sm) {
     width: 640px;
     height: 360px;
@@ -209,7 +227,7 @@ figure.caption .media--type-panopto.media--view-mode-small iframe,
 .media--type-panopto.media--view-mode-medium__ultrawide,
 .media--type-panopto.media--view-mode-large__ultrawide,
 .media--type-panopto.media--view-mode-full__ultrawide {
-  @extend .embed-responsive-21by9;
+  @extend %embed-responsive-21by9;
 }
 
 .media--type-remote-video.media--view-mode-small__widescreen,
@@ -220,7 +238,7 @@ figure.caption .media--type-panopto.media--view-mode-small iframe,
 .media--type-panopto.media--view-mode-medium__widescreen,
 .media--type-panopto.media--view-mode-large__widescreen,
 .media--type-panopto.media--view-mode-full__widescreen {
-  @extend .embed-responsive-16by9;
+  @extend %embed-responsive-16by9;
 }
 
 .media--type-remote-video.media--view-mode-small__square,
@@ -231,7 +249,7 @@ figure.caption .media--type-panopto.media--view-mode-small iframe,
 .media--type-panopto.media--view-mode-medium__square,
 .media--type-panopto.media--view-mode-large__square,
 .media--type-panopto.media--view-mode-full__square {
-  @extend .embed-responsive-4by3;
+  @extend %embed-responsive-4by3;
 }
 
 .media--type-remote-video.media--view-mode-default,
@@ -244,9 +262,8 @@ figure.caption .media--type-panopto.media--view-mode-small iframe,
 .media--type-panopto.media--view-mode-medium__no-crop,
 .media--type-panopto.media--view-mode-large__no-crop,
 .media--type-panopto.media--view-mode-full__no-crop {
-  @extend .embed-responsive-16by9;
+  @extend %embed-responsive-16by9;
 }
-
 
 figure.caption-drupal-media {
   width: calc(100%);

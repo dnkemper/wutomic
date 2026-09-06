@@ -1,0 +1,27 @@
+uuid: 0a9cb200-6095-437a-86f7-f180f662105f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.menu_link_content.main.field_artsci_card_link
+    - field.field.menu_link_content.main.field_artsci_headline
+    - field.field.menu_link_content.main.field_image
+    - system.menu.main
+id: menu_link_content.main.default
+targetEntityType: menu_link_content
+bundle: main
+mode: default
+content:
+  children:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_artsci_card_link: true
+  field_artsci_headline: true
+  field_image: true
+  search_api_excerpt: true

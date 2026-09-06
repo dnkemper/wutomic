@@ -97,11 +97,11 @@
     margin-right: auto;
   }
 
-  body.toolbar-vertical.toolbar-tray-open  .artsci-bar--full.toggle .site-name {
+  body.toolbar-vertical.toolbar-tray-open .artsci-bar--full.toggle .site-name {
     flex: 0 1 30%;
   }
 
-  body.toolbar-vertical.toolbar-tray-open .search-overlay[aria-hidden=false] {
+  body.toolbar-vertical.toolbar-tray-open .search-overlay[aria-hidden='false'] {
     width: 90%;
   }
 }
@@ -115,14 +115,21 @@
 
 // Position top links if vertical toolbar is open.
 @media (min-width: 1550px) {
-  body.toolbar-vertical.toolbar-tray-open  .artsci-bar--full.toggle .site-name+.menu--top {
+  body.toolbar-vertical.toolbar-tray-open
+    .artsci-bar--full.toggle
+    .site-name
+    + .menu--top {
     right: calc(41% - 40vw);
   }
 }
 
 // Hide top links for edge case with vertical toolbar open.
 @media only screen and (min-width: 980px) and (max-width: 1200px) {
-  body.toolbar-vertical.toolbar-tray-open  .artsci-bar--full.toggle .site-name+.menu--top .menu {
+  body.toolbar-vertical.toolbar-tray-open
+    .artsci-bar--full.toggle
+    .site-name
+    + .menu--top
+    .menu {
     display: none;
   }
 }

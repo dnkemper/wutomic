@@ -1,0 +1,24 @@
+{% set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+] %}
+{{ attach_library('atomic_artsci/event') }}
+<div{{ attributes.addClass(classes) }}>
+
+  <div class="artsci-events-wrapper">
+    {{ content|without('more') }}
+    {% set title_attributes = title_attributes.addClass('heading-small') %}
+    {% set remove_classes = ['field__label'] %}
+          {{ title_prefix }}
+    {% if not page %}
+      <div{{ title_attributes }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </div>
+    {% endif %}
+    {{ title_suffix }}
+  </div>
+</div>

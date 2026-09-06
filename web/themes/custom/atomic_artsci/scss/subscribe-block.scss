@@ -5,41 +5,46 @@
  * Designed for placement in the footer region on a dark background.
  */
 input#subscribe-email {
-    background: unset;
-    border: unset;
-    border-bottom: 2px solid gray;
+  background: unset;
+  border: unset;
+  border-bottom: 2px solid gray;
 }
 .subscribe-block {
   button.subscribe-block__submit {
     background: none;
     border: none;
-}
-svg.svg-inline--fa.fa-arrow-right {
+  }
+  input#subscribe-ampersand-email {
+    border-radius: 50px;
+    height: 100%;
+    font-size: 1.75rem;
+  }
+  svg.svg-inline--fa.fa-arrow-right {
     fill: white;
     color: white;
     background: black;
-}
-p.subscribe-block__subheading {
-    font-family: IvyStyle Sans;
+  }
+  p.subscribe-block__subheading {
+    font-family: 'IvyStyle Sans';
     font-weight: 400;
     font-size: 14px;
     line-height: 200%;
     letter-spacing: 0%;
     color: white;
-}
-p.subscribe-block__heading {
-    font-family: IvyStyle Sans;
+  }
+  p.subscribe-block__heading {
+    font-family: 'IvyStyle Sans';
     font-weight: 600;
     font-size: 18px;
     color: white;
     line-height: 200%;
     letter-spacing: 0%;
-}
-input#subscribe-email {
+  }
+  input#subscribe-email {
     background: unset;
     border: unset;
     border-bottom: 2px solid gray;
-}
+  }
   max-width: 600px;
 
   &__heading {
@@ -97,7 +102,9 @@ input#subscribe-email {
     border-radius: 0;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
 
     &:hover,
     &:focus-visible {

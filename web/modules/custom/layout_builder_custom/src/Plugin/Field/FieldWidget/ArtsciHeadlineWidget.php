@@ -26,6 +26,7 @@ class ArtsciHeadlineWidget extends WidgetBase {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $element = HeadlineHelper::getElement([
+      'pre_headline' => $items[$delta]->pre_headline ?? NULL,
       'headline' => $items[$delta]->headline ?? NULL,
       'hide_headline' => $items[$delta]->hide_headline ?? 0,
       'heading_size' => $items[$delta]->heading_size ?? 'h2',
@@ -43,6 +44,7 @@ class ArtsciHeadlineWidget extends WidgetBase {
    */
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
     foreach ($values as $delta => $data) {
+      $values[$delta]['pre_headline'] = $data['container']['pre_headline'];
       $values[$delta]['headline'] = $data['container']['headline'];
       $values[$delta]['hide_headline'] = $data['container']['hide_headline'];
       $values[$delta]['headline_style'] = $data['container']['headline_style'];

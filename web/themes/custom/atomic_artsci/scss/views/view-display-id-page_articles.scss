@@ -7,8 +7,8 @@
     display: grid;
     grid-template-columns: minmax(50%, 1fr) 25%;
     //grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    column-gap: 0px;
+    row-gap: 0px;
   }
 
   .view-header {

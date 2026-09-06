@@ -1,0 +1,16 @@
+uuid: d0b1e300-7e8b-4798-b813-9a1ba453b75d
+langcode: en
+status: true
+dependencies: {  }
+id: block_background_style_red_gradient
+label: 'Red Gradient'
+classes: "bg--red\r\ngradient"
+type: component
+group: background
+block_restrictions:
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_slider'
+  - 'inline_block:artsci_text_area'
+layout_restrictions: {  }
+weight: 0

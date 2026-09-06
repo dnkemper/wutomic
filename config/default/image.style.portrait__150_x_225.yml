@@ -1,0 +1,24 @@
+uuid: d1500000-0000-4000-8000-000000000150
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__150_x_225
+label: 'Portrait (150 x 225)'
+effects:
+  e1500000-0000-4000-8000-000000000150:
+    uuid: e1500000-0000-4000-8000-000000000150
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 150
+      height: 225
+      crop_type: focal_point
+  8cce40b7-a84b-4c9e-8ee9-41f7d07fca92:
+    uuid: 8cce40b7-a84b-4c9e-8ee9-41f7d07fca92
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

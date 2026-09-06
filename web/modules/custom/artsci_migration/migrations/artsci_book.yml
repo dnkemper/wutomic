@@ -1,0 +1,230 @@
+# Migration: Book content from Drupal 10 (JSON:API) to Drupal 11.
+#
+# Drop into a custom module's migrations/ directory (e.g.
+# modules/custom/wustl_migrate/migrations/wustl_book.yml). Requires the
+# migrate_plus and migrate_tools modules. Run with
+#   drush migrate:import wustl_book
+#
+# This pulls books from artsci.washu.edu's JSON:API endpoint and reshapes
+# them for the new D11 book bundle. Same pattern transfers to article,
+# event, and person — change the URL and field list, swap the bundle on
+# the destination.
+#
+# Field mapping (D10 → D11):
+#   Direct copies (same name, same shape):
+#     field_byline_names, field_byline_options, field_content_hash,
+#     field_description, field_is_shared, field_last_fetch,
+#     field_shared_content, field_shared_content_xml
+#   Renamed:
+#     field_thumbnail            → field_image
+#     field_faculty_and_staff    → field_book_author
+#     field_book_categories      → book_tags          (cardinality 1 → -1)
+#   Transformed:
+#     field_links_p (paragraphs) → field_book_links   (link field)
+#     field_description          → body               (text_with_summary)
+#   Dropped (no D11 target):
+#     field_featured_book, field_shared_content_subscribers
+#   D11 fields with no D10 source (left unset, defaults apply):
+#     field_book_publication_date, field_book_related_reads,
+#     field_book_subtitle, field_is_shared_content
+#
+# Pagination: JSON:API defaults to a 50 row max page size. If the source
+# site has more than 50 books, list each page as its own URL below or
+# raise the JSON:API max page size on the source side.
+
+id: artsci_book
+label: 'Books from Drupal 10 JSON:API to Drupal 11'
+migration_group: artsci_d10
+migration_tags:
+  - 'Drupal 10'
+  - 'JSON:API'
+  - 'Content'
+  - 'Book'
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+
+  # Add additional URLs for further pages as needed:
+  #   - 'https://artsci.washu.edu/jsonapi/node/book?page[offset]=50&page[limit]=50&sort=drupal_internal__nid'
+  #   - 'https://artsci.washu.edu/jsonapi/node/book?page[offset]=100&page[limit]=50&sort=drupal_internal__nid'
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/book?page[offset]=0&page[limit]=50&sort=drupal_internal__nid'
+
+  item_selector: data
+
+  fields:
+    # Identity / standard node fields.
+    - name: nid
+      label: 'Source node ID'
+      selector: attributes/drupal_internal__nid
+    - name: uuid
+      label: 'Source UUID'
+      selector: id
+    - name: title
+      label: 'Title'
+      selector: attributes/title
+    - name: status
+      label: 'Status'
+      selector: attributes/status
+    - name: promote
+      label: 'Promoted'
+      selector: attributes/promote
+    - name: sticky
+      label: 'Sticky'
+      selector: attributes/sticky
+    - name: created
+      label: 'Created'
+      selector: attributes/created
+    - name: changed
+      label: 'Changed'
+      selector: attributes/changed
+    - name: langcode
+      label: 'Language'
+      selector: attributes/langcode
+
+    # Direct copies.
+    - name: field_byline_names
+      label: 'Byline names'
+      selector: attributes/field_byline_names
+    - name: field_byline_options
+      label: 'Byline options'
+      selector: attributes/field_byline_options
+    - name: field_content_hash
+      label: 'Content hash'
+      selector: attributes/field_content_hash
+    - name: field_description_value
+      label: 'Description value'
+      selector: attributes/field_description/value
+    - name: field_description_format
+      label: 'Description format'
+      selector: attributes/field_description/format
+    - name: field_is_shared
+      label: 'Is shared'
+      selector: attributes/field_is_shared
+    - name: field_last_fetch
+      label: 'Last fetch'
+      selector: attributes/field_last_fetch
+    - name: field_shared_content
+      label: 'Shared content'
+      selector: attributes/field_shared_content
+    - name: field_shared_content_xml
+      label: 'Shared content XML'
+      selector: attributes/field_shared_content_xml
+
+    # Single value relationships — pull the integer target ID directly.
+    - name: field_thumbnail_target_id
+      label: 'Thumbnail target ID'
+      selector: relationships/field_thumbnail/data/meta/drupal_internal__target_id
+    - name: field_book_categories_target_id
+      label: 'Book categories target ID'
+      selector: relationships/field_book_categories/data/meta/drupal_internal__target_id
+
+    # Multivalue relationship — give us the whole data array, then
+    # sub_process pulls each target_id out below.
+    - name: field_faculty_and_staff
+      label: 'Faculty and staff references'
+      selector: relationships/field_faculty_and_staff/data
+
+    # field_links_p — instead of iterating the data array, we use the
+    # related URL to fetch all linked paragraphs in a single HTTP call.
+    # extract_jsonapi_paragraph_links handles the rest.
+    - name: field_links_p_related
+      label: 'Field links related URL'
+      selector: relationships/field_links_p/links/related/href
+
+  ids:
+    nid:
+      type: integer
+
+process:
+  # Bundle.
+  type:
+    plugin: default_value
+    default_value: book
+
+  # Standard.
+  title: title
+  status: status
+  promote: promote
+  sticky: sticky
+  created: created
+  changed: changed
+  langcode: langcode
+
+  # Direct copies.
+  field_byline_names: field_byline_names
+  field_byline_options: field_byline_options
+  field_content_hash: field_content_hash
+  'field_description/value': field_description_value
+  'field_description/format':
+    plugin: default_value
+    source: field_description_format
+    default_value: full_html
+  field_is_shared: field_is_shared
+  field_last_fetch: field_last_fetch
+  field_shared_content: field_shared_content
+  field_shared_content_xml: field_shared_content_xml
+
+  # body (text_with_summary) sourced from the same description.
+  'body/value': field_description_value
+  'body/format':
+    plugin: default_value
+    source: field_description_format
+    default_value: full_html
+
+  # field_thumbnail (D10 single media ref) → field_image (D11 single
+  # media ref). field_thumbnail_target_id is the D10 media ID, which
+  # only points to a real D11 media entity once media has been migrated
+  # separately. Wrap with migration_lookup against your media migration:
+  #
+  # field_image:
+  #   plugin: migration_lookup
+  #   migration: wustl_media
+  #   source: field_thumbnail_target_id
+  #
+  # Leaving unset for now so field_image stays empty rather than pointing
+  # at a non existent media entity.
+
+  # field_book_categories (D10 single ref) → book_tags (D11 multivalue).
+  # Same migration_lookup story once a taxonomy migration exists:
+  #
+  # book_tags:
+  #   plugin: migration_lookup
+  #   migration: wustl_book_tags
+  #   source: field_book_categories_target_id
+
+  # field_faculty_and_staff (D10 multivalue persons) → field_book_author.
+  # sub_process pulls the integer ID out of each resource identifier.
+  # Wrap target_id with migration_lookup once a person migration exists.
+  field_book_author:
+    plugin: sub_process
+    source: field_faculty_and_staff
+    process:
+      target_id: meta/drupal_internal__target_id
+
+  # field_links_p paragraphs → field_book_links link field.
+  # extract_jsonapi_paragraph_links fetches the related URL, walks the
+  # paragraphs in the response, and emits a list of {uri, title} pairs.
+  field_book_links:
+    plugin: extract_jsonapi_paragraph_links
+    source: field_links_p_related
+    link_field: field_link
+
+  # Optional: flag everything migrated as shared content.
+  # field_is_shared_content:
+  #   plugin: default_value
+  #   default_value: 1
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: book
+
+migration_dependencies:
+  required: []
+  # Add when those migrations exist:
+  #   - wustl_media       (for field_image)
+  #   - wustl_book_tags   (for book_tags)
+  #   - wustl_person      (for field_book_author)
+  optional: []

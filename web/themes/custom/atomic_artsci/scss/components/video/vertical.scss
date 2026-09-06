@@ -7,7 +7,10 @@
   flex: 1 1 0;
 
   @include utilities.breakpoint(sm) {
-    @include utilities.margin(variables.$right: variables.$md, variables.$left: variables.$md);
+    @include utilities.margin(
+      variables.$right: variables.$md,
+      variables.$left: variables.$md
+    );
   }
 
   &:first-child {
@@ -18,7 +21,6 @@
     @include utilities.breakpoint(page-container) {
       flex: 1 1 0;
       text-align: left;
-
     }
   }
 
@@ -67,7 +69,6 @@
     }
   }
 
-
   &__body {
     margin: variables.$md auto;
     @include utilities.breakpoint(sm) {
@@ -92,7 +93,6 @@
     }
 
     span {
-
       @include utilities.breakpoint(sm) {
         display: inline;
       }
@@ -139,23 +139,22 @@
     display: block;
   }
 
-
-  &:hover:before,
-  &:focus:before {
+  &:hover::before,
+  &:focus::before {
     color: #fff;
     cursor: pointer;
   }
 
-  &:before {
+  &::before {
     margin-left: -3px;
-    content: "\f144";
+    content: '\f144';
     color: variables.$primary;
     font-size: 3.5rem;
     @include utilities.fas();
   }
 
-  &.paused:before {
-    content: "\f28b";
+  &.paused::before {
+    content: '\f28b';
   }
 
   span {
@@ -166,7 +165,6 @@
 .portrait .embed-responsive.active .vidbttn.active {
   @include utilities.element-invisible;
 }
-
 
 .portrait .embed-responsive.active .vidbttn.active:focus {
   //display: block;
@@ -200,7 +198,6 @@
 }
 
 .portrait {
-
   .embed-responsive {
     position: relative;
     display: block;
@@ -212,7 +209,7 @@
 
   .embed-responsive::before {
     display: block;
-    content: "";
+    content: '';
   }
 
   .embed-responsive .embed-responsive-item,
@@ -258,6 +255,6 @@
   }
 }
 
-[class*=bg-] .vidbttn:before {
+[class*='bg-'] .vidbttn::before {
   color: variables.$primary;
 }

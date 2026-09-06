@@ -2,19 +2,51 @@
 @use '../abstracts/_utilities.scss';
 
 .block-inline-blockartsci-image {
-  img {
-    width: 100%;
-  }
   a:focus-visible img {
     outline: 1px solid blue;
   }
   a:focus-visible img,
   a:hover img {
-    opacity: .6;
+    opacity: 0.6;
   }
+  // video, img {
+  //   display: block;
+  //   height: 100%;
+  //   width: 100%;
+  //   -o-object-fit: cover;
+  //   object-fit: cover;
+  //   top: 0;
+  //   overflow: visible;
+  // }
+  .media--square {
+    img,
+    iframe,
+    video {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
+  }
+
+  .media--widescreen {
+    img,
+    iframe,
+    video {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    &:has([src$='.svg']) {
+      .media__inner {
+        background: #fff;
+      }
+      img[src$='.svg'] {
+        object-fit: contain;
+      }
+    }
+  }
+
   .video-controls {
     position: absolute;
-    z-index: 2;
+    z-index: 20;
     right: var(--gutter, 2rem);
     bottom: var(--gutter, 2rem);
 
@@ -40,7 +72,7 @@
     }
 
     &::after {
-      content: "\f04b"; // play icon
+      content: '\f04b'; // play icon
       @include utilities.fas();
       font-size: 1rem;
     }
@@ -50,7 +82,14 @@
     }
 
     &.video-btn__pause::after {
-      content: "\f04c"; // pause icon
+      content: '\f04c'; // pause icon
+    }
+  }
+
+  // Light overlay variant (dark button)
+  .banner--overlay-light:not([class*='bg--']) {
+    .video-btn {
+      border: 2px solid var(--color-secondary, #1d1d1b);
     }
   }
 
@@ -62,6 +101,44 @@
     object-fit: cover;
     top: 0;
     overflow: visible;
+  }
+
+  > .media {
+    margin-top: 0;
+    text-align: center;
+    min-width: 7.7rem;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+
+    // @todo this collides with atomic_artsci iframe styles.
+    //embed,
+    //iframe,
+    //object,
+    //video {
+    //  position: relative;
+    //  top: 0;
+    //  bottom: 0;
+    //  left: 0;
+    //  width: 100%;
+    //  height: 100%;
+    //  border: 0;
+    //}
+
+    iframe {
+      border: none;
+    }
+
+    &.media--small.media--circle,
+    &.media--medium.media--circle {
+      margin-left: auto;
+      margin-right: auto;
+      img[src$='.svg'] {
+        width: revert-layer;
+      }
+    }
   }
 }
 

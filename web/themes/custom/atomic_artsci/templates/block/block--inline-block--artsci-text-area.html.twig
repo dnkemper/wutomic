@@ -34,18 +34,12 @@
 ]
 %}
 
-{% set rendered_content = content|render %}
-
 <div{{ attributes.addClass(classes) }}>
-      {% if content.field_pre_title is not empty %}
-      <div class="card__pre-title">
-        {{ content.field_pre_title }}
-      </div>
-      {% endif %}
   {{ title_prefix }}
   {{ title_suffix }}
-
+  {# The field template handles pre_headline and headline rendering #}
+  {{ content.field_artsci_headline }}
   {% block content %}
-    {{ content|without('field_pre_title') }}
+    {{ content|without('field_artsci_headline') }}
   {% endblock %}
 </div>

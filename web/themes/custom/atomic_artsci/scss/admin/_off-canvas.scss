@@ -4,7 +4,7 @@
 // Fix for off-canvas dialog update button being hidden.
 .ui-dialog-off-canvas #drupal-off-canvas:not(.drupal-off-canvas-reset),
 .ui-dialog-off-canvas #drupal-off-canvas-wrapper {
-  overflow-y: scroll!important;
+  overflow-y: scroll !important;
   &::after {
     float: left;
     padding-bottom: 100px;
@@ -17,7 +17,7 @@
 
 // Grid for image gallery block.
 #drupal-off-canvas:not(.drupal-off-canvas-reset),
-#drupal-off-canvas-wrapper  {
+#drupal-off-canvas-wrapper {
   .media-library-selection {
     @include utilities.grid-base;
     @include utilities.breakpoint(sm) {
@@ -31,7 +31,7 @@
   img {
     width: 100%;
   }
-  .media-library-item--grid[draggable="true"] {
+  .media-library-item--grid[draggable='true'] {
     img {
       cursor: move;
     }
@@ -43,11 +43,14 @@
  */
 #drupal-off-canvas:not(.drupal-off-canvas-reset) .search-choice span,
 #drupal-off-canvas-wrapper .search-choice span,
-#drupal-off-canvas:not(.drupal-off-canvas-reset) .search-field .chosen-search-input,
+#drupal-off-canvas:not(.drupal-off-canvas-reset)
+  .search-field
+  .chosen-search-input,
 #drupal-off-canvas-wrapper .search-field .chosen-search-input {
   color: #000 !important;
   background: #fff !important;
-  font-family: "Lucida Grande", "Lucida Sans Unicode", "liberation sans", sans-serif;
+  font-family:
+    'Lucida Grande', 'Lucida Sans Unicode', 'liberation sans', sans-serif;
   border: none !important;
   outline: none !important;
   width: 100% !important;
@@ -85,20 +88,25 @@
   background: transparent !important;
 }
 
-#drupal-off-canvas:not(.drupal-off-canvas-reset) .field--type-entity-reference-revisions>div>fieldset,
-#drupal-off-canvas-wrapper .field--type-entity-reference-revisions>div>fieldset {
+#drupal-off-canvas:not(.drupal-off-canvas-reset)
+  .field--type-entity-reference-revisions
+  > div
+  > fieldset,
+#drupal-off-canvas-wrapper
+  .field--type-entity-reference-revisions
+  > div
+  > fieldset {
   border: 1px solid #999;
   padding: 15px;
 
   .fieldset-wrapper {
-
     table {
       min-width: 100%;
       margin: 0;
     }
 
     .container-inline.form-wrapper {
-      margin-top: 10px
+      margin-top: 10px;
     }
   }
 }
@@ -107,14 +115,15 @@
 #drupal-off-canvas-wrapper th.ief-tabledrag-header,
 #drupal-off-canvas:not(.drupal-off-canvas-reset) td.ief-tabledrag-handle,
 #drupal-off-canvas-wrapper td.ief-tabledrag-handle {
-  width: 20px
+  width: 20px;
 }
 
 #drupal-off-canvas:not(.drupal-off-canvas-reset) select[multiple] option,
 #drupal-off-canvas-wrapper select[multiple] option {
   color: #000;
   background: #fff;
-  font-family: "Lucida Grande", "Lucida Sans Unicode", "liberation sans", sans-serif;
+  font-family:
+    'Lucida Grande', 'Lucida Sans Unicode', 'liberation sans', sans-serif;
 }
 
 #drupal-off-canvas:not(.drupal-off-canvas-reset) form,
@@ -134,15 +143,14 @@
 // itself to the bottom of ui-dialog.
 // See: https://github.com/artsci/artsci/issues/7300
 
-#drupal-off-canvas-wrapper .form-textarea-wrapper{
-    position: relative;
+#drupal-off-canvas-wrapper .form-textarea-wrapper {
+  position: relative;
 }
 
 // Statistic admin UX.
 #drupal-off-canvas:not(.drupal-off-canvas-reset),
 #drupal-off-canvas-wrapper {
-  [id*="edit-settings-block-form-group-artsci-statistic-title--"] {
-
+  [id*='edit-settings-block-form-group-artsci-statistic-title--'] {
     .fieldset-legend {
       display: none !important;
     }
@@ -150,7 +158,7 @@
     .fieldset-wrapper {
       display: grid;
       grid-template-columns: 19% 56% 19%;
-      grid-gap: 3%;
+      gap: 3%;
     }
   }
 }
@@ -160,7 +168,7 @@
 #drupal-off-canvas-wrapper details,
 #drupal-off-canvas:not(.drupal-off-canvas-reset) summary,
 #drupal-off-canvas-wrapper summary {
-  list-style-position:revert;
+  list-style-position: revert;
   list-style-image: none;
   list-style-type: revert;
 }
@@ -179,15 +187,14 @@
 // https://www.drupal.org/project/drupal/issues/3070375.
 .js #drupal-off-canvas-wrapper {
   .js-hide {
-  display: none !important;
+    display: none !important;
   }
 }
-
 
 // Alerts.
 #drupal-off-canvas-wrapper .alert span,
 #drupal-off-canvas-wrapper .alert svg.fa-stack-2x {
-  position: relative!important;
+  position: relative !important;
 }
 
 #drupal-off-canvas-wrapper .alert svg {
@@ -195,20 +202,20 @@
   height: 1.2rem;
 }
 
-#drupal-off-canvas-wrapper .alert  {
+#drupal-off-canvas-wrapper .alert {
   display: flex;
   background: variables.$danger-light;
-  border-color: rgba(0,0,0,.125);
+  border-color: rgba(0, 0, 0, 0.125);
   border-radius: 2px;
-  padding: 1.5rem!important;
+  padding: 1.5rem !important;
   line-height: 1.3;
   font-size: 1.2rem;
   position: relative;
   align-items: center;
 }
 
-#drupal-off-canvas-wrapper .alert__icon  {
-  padding-right: 1.5rem!important;
+#drupal-off-canvas-wrapper .alert__icon {
+  padding-right: 1.5rem !important;
 }
 
 #drupal-off-canvas-wrapper .alert__icon .svg-inline--fa.fa-stack-1x {
@@ -226,7 +233,7 @@
   color: variables.$link-color;
 }
 
-#drupal-off-canvas-wrapper .alert button  {
+#drupal-off-canvas-wrapper .alert button {
   color: variables.$secondary;
   position: absolute;
   right: 1.2rem;
@@ -247,9 +254,9 @@
     border-bottom: none;
 
     + li {
-      &:before {
-        content: ",";
-        padding: 0 .2rem 0 .1rem;
+      &::before {
+        content: ',';
+        padding: 0 0.2rem 0 0.1rem;
       }
     }
   }
@@ -257,7 +264,7 @@
 
 // Accessible off-canvas form item error color.
 #drupal-off-canvas .form .form-item--error-message * {
-  color: #E8A392 !important;
+  color: #e8a392 !important;
 }
 
 // Paragraphs widget admin UX. Collections and Slider.
@@ -267,7 +274,7 @@
       padding: 6px 8px !important;
     }
 
-    [id*="settings-block-form-field-artsci-"][id*="-item-wrapper-"] {
+    [id*='settings-block-form-field-artsci-'][id*='-item-wrapper-'] {
       padding: 12px !important;
       margin: 6px !important;
     }
@@ -296,7 +303,8 @@
       width: 26px;
       height: 26px;
       border: none;
-      background: url(/modules/contrib/paragraphs/icons/icon-actions.svg) no-repeat center !important;
+      background: url('/modules/contrib/paragraphs/icons/icon-actions.svg')
+        no-repeat center !important;
     }
 
     .paragraphs-dropdown {
@@ -325,7 +333,6 @@
 
   // Slide preview
   .paragraph--view-mode--preview {
-
     &.paragraph--type--artsci-slide,
     &.paragraph--type--artsci-timeline-item {
       display: flex;
@@ -348,7 +355,9 @@
 /**
  * Basic Linkit styles for Layout Builder settings tray.
  */
-#drupal-off-canvas .ui-autocomplete.linkit-ui-autocomplete .linkit-result-line--group {
+#drupal-off-canvas
+  .ui-autocomplete.linkit-ui-autocomplete
+  .linkit-result-line--group {
   text-align: center;
   background: #e7e7e7 !important;
 }
@@ -358,16 +367,24 @@
   font-weight: bold;
 }
 
-#drupal-off-canvas-wrapper .ui-autocomplete.linkit-ui-autocomplete .linkit-result-line-wrapper.ui-menu-item-wrapper {
+#drupal-off-canvas-wrapper
+  .ui-autocomplete.linkit-ui-autocomplete
+  .linkit-result-line-wrapper.ui-menu-item-wrapper {
   padding: 10px;
 }
 
-#drupal-off-canvas-wrapper .ui-autocomplete.linkit-ui-autocomplete .linkit-result-line-wrapper.ui-menu-item-wrapper.ui-state-active,
-#drupal-off-canvas-wrapper .ui-autocomplete.linkit-ui-autocomplete .linkit-result-line-wrapper.ui-menu-item-wrapper.ui-state-focus {
+#drupal-off-canvas-wrapper
+  .ui-autocomplete.linkit-ui-autocomplete
+  .linkit-result-line-wrapper.ui-menu-item-wrapper.ui-state-active,
+#drupal-off-canvas-wrapper
+  .ui-autocomplete.linkit-ui-autocomplete
+  .linkit-result-line-wrapper.ui-menu-item-wrapper.ui-state-focus {
   background: #bfbfbf;
   color: #000;
 }
 
-#drupal-off-canvas-wrapper .ui-autocomplete.linkit-ui-autocomplete .linkit-result-line-wrapper.unpublished {
+#drupal-off-canvas-wrapper
+  .ui-autocomplete.linkit-ui-autocomplete
+  .linkit-result-line-wrapper.unpublished {
   background: #fff4f4 !important;
 }

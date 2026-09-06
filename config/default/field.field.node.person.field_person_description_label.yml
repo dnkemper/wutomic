@@ -1,0 +1,21 @@
+uuid: 1b71e779-be59-4d61-ab87-b981dd4477cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_person_description_label
+    - node.type.person
+id: node.person.field_person_description_label
+field_name: field_person_description_label
+entity_type: node
+bundle: person
+label: 'Selected Media heading'
+description: 'Heading shown above Selected Media. Leave blank to use the default ("Selected Media").'
+required: false
+translatable: true
+default_value:
+  -
+    value: 'Selected Media'
+default_value_callback: ''
+settings: {  }
+field_type: string

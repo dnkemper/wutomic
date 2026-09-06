@@ -1,6 +1,6 @@
 name: Artsci Book
-description: Provides updated book module for the University of Iowa.
-package: University of Iowa
+description: Provides updated book module for Artsci.
+package: Arts & Sciences
 
 type: module
 core_version_requirement: ^9 || ^10 || ^11

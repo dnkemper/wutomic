@@ -9,7 +9,7 @@ third_party_settings:
     image_field: null
 id: remote_video
 label: 'Remote video'
-description: 'A remotely hosted video from YouTube, Vimeo or University of Iowa (Kaltura/MediaSpace).'
+description: 'A remotely hosted video from YouTube or Vimeo.'
 source: 'oembed:video'
 queue_thumbnail_downloads: false
 new_revision: false

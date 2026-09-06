@@ -1,0 +1,6 @@
+washu_calendar_subscription.settings:
+  title: 'Academic Calendar'
+  description: 'Set the current semester the academic calendar defaults to.'
+  parent: system.admin_config_content
+  route_name: washu_calendar_subscription.settings
+  weight: 10

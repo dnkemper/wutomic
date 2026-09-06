@@ -1,0 +1,25 @@
+uuid: dd826aa0-f6cb-4974-a467-2a052bb71b14
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.people_list_block
+  module:
+    - views
+  theme:
+    - atomic_artsci
+id: atomic_artsci_views_block__people_list_block_list_card
+theme: atomic_artsci
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:people_list_block-list_card'
+settings:
+  id: 'views_block:people_list_block-list_card'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+  exposed: {  }
+visibility: {  }

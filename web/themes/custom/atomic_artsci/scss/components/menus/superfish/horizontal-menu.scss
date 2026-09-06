@@ -3,12 +3,12 @@
 
 .nav--horizontal {
   // border-bottom: 1px solid #e6e5e5;
-      display: flex;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: center;
-    align-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
 }
 
 // Hide horizontal nav overflow before md breakpoint
@@ -54,33 +54,41 @@
     padding: 0 variables.$gutter;
 
     &.sf-menu.sf-horiz-menu li li a {
-      padding: .45rem 1.5rem .45rem 0rem;
+      padding: 0.45rem 1.5rem 0.45rem 0rem;
     }
 
     .sf-has-clone-parent {
       background: #fff !important;
-
     }
   }
 }
 
-.sf-horizontal li.sfHover li.sf-depth-2.menuparent .sf-depth-2.menuparent:before {
-  content: "\f105";
+.sf-horizontal
+  li.sfHover
+  li.sf-depth-2.menuparent
+  .sf-depth-2.menuparent::before {
+  content: '\f105';
   padding-right: variables.$md;
 }
 
-.sf-horizontal.sf-mega-menu li.sfHover li.sf-depth-2.menuparent .sf-depth-2.menuparent:before {
-  content: "";
+.sf-horizontal.sf-mega-menu
+  li.sfHover
+  li.sf-depth-2.menuparent
+  .sf-depth-2.menuparent::before {
+  content: '';
   padding-right: 0;
 }
 
 // Accordion.
-.sf-horizontal li.sfHover li.sf-depth-2.menuparent .sf-depth-2.menuparent:before {
+.sf-horizontal
+  li.sfHover
+  li.sf-depth-2.menuparent
+  .sf-depth-2.menuparent::before {
   position: absolute;
   top: 50%;
-  right: .3125rem;
+  right: 0.3125rem;
   margin-top: -0.4rem;
-  color: inherit;
+  // color: inherit;
   font-size: 1rem;
   @include utilities.fas();
   color: variables.$secondary;
@@ -94,10 +102,10 @@ ul.sf-menu.sf-horiz-menu li li .nolink {
 
   @include utilities.breakpoint(md) {
     font-size: 1rem;
-    padding: .45rem 2rem .45rem 1rem;
+    padding: 0.45rem 2rem 0.45rem 1rem;
 
     &:hover {
-      background: #e1e1e1;
+      background: #ba0c2f;
     }
   }
 }
@@ -115,12 +123,12 @@ ul.sf-menu.sf-horiz li ul li a:hover {
 
 .block-superfish .menu.sf-horiz-menu li.active-trail.menuparent ul {
   &:hover {
-    background: #e1e1e1;
+    background: #ba0c2f;
   }
 
   .is-active {
     @include utilities.breakpoint(md) {
-      background: #e1e1e1;
+      background: #ba0c2f;
     }
   }
 }

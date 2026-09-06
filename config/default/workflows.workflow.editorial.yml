@@ -3,7 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - node.type.academic_calendar_event
     - node.type.article
+    - node.type.book
+    - node.type.event
     - node.type.page
     - node.type.person
   module:
@@ -72,7 +75,10 @@ type_settings:
       weight: 0
   entity_types:
     node:
+      - academic_calendar_event
       - article
+      - book
       - page
       - person
-  default_moderation_state: draft
+      - event
+  default_moderation_state: published

@@ -1,0 +1,11 @@
+uuid: f955b19e-2ba9-4af7-805c-0298048dc851
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.dotted_line
+label: 'Dotted Line'
+description: ''
+targetEntityType: paragraph
+cache: true

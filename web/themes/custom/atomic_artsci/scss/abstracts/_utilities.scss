@@ -22,21 +22,33 @@
 
 // Makes an element visually hidden, but accessible.
 // @see http://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+// Switched to more recent version from https://vispero.com/resources/the-anatomy-of-visually-hidden/
+// that uses clip-path and adds white-space.
 @mixin element-invisible {
   position: absolute !important;
   height: 1px;
   width: 1px;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
 }
 
 // Turns off the element-invisible effect.
 @mixin element-invisible-off {
   position: static !important;
+
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: auto;
+  clip-path: none;
+
   height: auto;
   width: auto;
   overflow: auto;
+  white-space: normal;
 }
 
 // Makes an element visually hidden by default, but visible when focused.
@@ -57,10 +69,9 @@
   font-variant: normal;
   text-rendering: auto;
   line-height: 1;
-  font-family: "Font Awesome 5 Free";
+  font-family: 'Font Awesome 5 Free';
   font-weight: 900;
 }
-
 
 // Gold Bracket ///////////////
 
@@ -69,8 +80,8 @@
   @include margin($top: variables.$sm, $bottom: variables.$sm);
   padding: variables.$md;
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     content: ' ';
     position: absolute;
     top: 0;
@@ -79,12 +90,12 @@
     border: 3px solid variables.$primary;
   }
 
-  &:before {
+  &::before {
     left: -1em;
     border-right: 0;
   }
 
-  &:after {
+  &::after {
     right: -1em;
     border-left: 0;
   }
@@ -106,14 +117,13 @@
   margin-left: $left;
 }
 
-
 //////////  Responsive BG Image
 
 @mixin responsive-bg {
   [data-responsive-background-image] {
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center
+    background-position: center;
   }
 
   [data-responsive-background-image] img {
@@ -132,16 +142,15 @@
   @include margin($top: variables.$sm, $bottom: variables.$sm);
   font-family: variables.$font-family-serif;
   font-weight: variables.$font-weight-medium-bold;
-
-  // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=2.3&maxFont=3.35
-  font-size: clamp(2.3rem, calc(2.3662vw + 1.4127rem), 3.35rem);
+  font-size: clamp(2.25rem, 4vw + 1rem, 4.5rem);
 }
 
 @mixin h2 {
   line-height: 1.25;
   font-weight: variables.$font-weight-medium;
   // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.95&maxFont=2.3
-  font-size: clamp(1.95rem, calc(0.7887vw + 1.6542rem), 2.3rem);
+  // font-size: clamp(1.95rem, calc(0.7887vw + 1.6542rem), 2.3rem);
+  font-size: clamp(1.75rem, 2.5vw + 1rem, 3rem);
   @include margin($top: 0, $bottom: variables.$xsm);
   &:not(:first-child) {
     @include margin($top: variables.$lg);
@@ -151,7 +160,8 @@
 @mixin h3 {
   line-height: 1.25;
   // https://garyridgway.github.io/clampCalculator/?&minWidth=600&maxWidth=1310&minFont=1.65&maxFont=1.9125
-  font-size: clamp(1.65rem, calc(0.5915vw + 1.4282rem), 1.9125rem);
+  // font-size: clamp(1.65rem, calc(0.5915vw + 1.4282rem), 1.9125rem);
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
   @include margin($top: 0, $bottom: variables.$xsm);
   &:not(:first-child) {
     @include margin($top: variables.$lg);
@@ -197,17 +207,17 @@
 @mixin border {
   border: 2px solid;
   border-color: var(--transparent-border);
-  [class*="bg--black"] & {
-    border-color: hsla(0,0%,100%,.325);
+  [class*='bg--black'] & {
+    border-color: hsla(0, 0%, 100%, 0.325);
   }
 }
 
 @mixin text-light {
-  color: #EDECEB !important;
+  color: #edeceb !important;
 }
 
 @mixin brand-cool-gray {
-  color: variables.$brand-cool-gray !important;
+  color: variables.$gray-dark !important;
 }
 
 @mixin fullwidth-container {
@@ -223,7 +233,7 @@
 }
 
 @mixin bg-dark {
-  background-color: variables.$brand-cool-gray !important;
+  background-color: variables.$gray-dark !important;
 
   h2,
   h3,
@@ -231,8 +241,8 @@
   h5,
   h6 {
     color: #fff;
-  font-family: variables.$font-family-serif;
-  font-weight: variables.$font-weight-medium-bold;
+    font-family: variables.$font-family-serif;
+    font-weight: variables.$font-weight-medium-bold;
     &.card__title {
       color: variables.$secondary;
     }
@@ -256,7 +266,7 @@
 }
 
 @mixin bg-yellow {
-  background-color: #BA0C2F !important;
+  background-color: #ba0c2f !important;
 }
 
 @mixin list-group-item-action {
@@ -294,11 +304,11 @@
   }
 
   .list-group-item:first-child {
-    border-top-width: 0
+    border-top-width: 0;
   }
 
   &:last-child .list-group-item:last-child {
-    border-bottom-width: 0
+    border-bottom-width: 0;
   }
 }
 
@@ -327,7 +337,6 @@
 
 @mixin bttn {
   border: none;
-  display: inline-block;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -341,19 +350,19 @@
   line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: .50rem 1rem;
+  padding: 0.5rem 0.75rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
 
   i,
-  span[class*="fa-"],
+  span[class*='fa-'],
   svg {
     margin-left: variables.$sm;
   }
 }
 
 @mixin bttn--focus {
-  transition: filter 0.2s ease-in-out;
+  // transition: filter 0.2s ease-in-out;
 
   &:hover,
   &:focus {
@@ -363,28 +372,78 @@
     }
   }
 }
+@mixin heading-small {
+  font-family: var(--font-family-serif);
+  font-weight: 400;
 
+  // Fluid scaling: 18px → 24px
+  font-size: clamp(1.125rem, 1vw + 0.875rem, 1.5rem);
+  a {
+    color: black;
+    text-decoration: none;
+  }
+}
 @mixin bttn--primary {
-  color: variables.$primary;
-  background: variables.$white;
+  color: black;
 
   i,
   svg,
-  span[class*="fa-"] {
-    color: variables.$primary;
+  span[class*='fa-'] {
+    color: variables.$white;
   }
 }
-
+@mixin bttn--primary--reverse {
+  color: variables.$white;
+  background: variables.$primary;
+  i,
+  svg,
+  span[class*='fa-'] {
+    color: variables.$white;
+  }
+  &:hover {
+    i,
+    svg,
+    span[class*='fa-'] {
+      color: black;
+    }
+  }
+}
 @mixin bttn--secondary {
   color: variables.$white;
-  background: variables.$secondary;
+  background: var(--bg--teal);
   i,
   svg,
-  span[class*="fa-"] {
-    color: variables.$primary;
+  span[class*='fa-'] {
+    color: variables.$white;
+  }
+  &:hover {
+    background: #d4f1e7;
+    color: black;
+    i,
+    svg,
+    span[class*='fa-'] {
+      color: black;
+    }
   }
 }
-
+@mixin bttn--secondary--reverse {
+  color: black;
+  background: #d4f1e7;
+  i,
+  svg,
+  span[class*='fa-'] {
+    color: black;
+  }
+  &:hover {
+    background: var(--bg--teal);
+    color: variables.$white;
+    i,
+    svg,
+    span[class*='fa-'] {
+      color: variables.$white;
+    }
+  }
+}
 @mixin bttn--secondary__light {
   color: variables.$white;
 }
@@ -393,7 +452,7 @@
   color: variables.$secondary;
   i,
   svg,
-  span[class*="fa-"] {
+  span[class*='fa-'] {
     color: variables.$primary;
   }
 }
@@ -403,7 +462,7 @@
   color: variables.$secondary;
   i,
   svg,
-  span[class*="fa-"] {
+  span[class*='fa-'] {
     color: inherit;
   }
 }
@@ -413,13 +472,12 @@
   text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-
 %no-ul-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
 
-  >li {
+  > li {
     display: inline-block;
     list-style-type: none;
     margin: 0;
@@ -450,7 +508,7 @@
 // utility classes
 
 %artsci-component--center {
-  display: flex;
+  // display: flex;
   align-items: center;
   justify-content: center;
   display: block;
@@ -463,4 +521,3 @@
   align-items: center;
   justify-content: center;
 }
-

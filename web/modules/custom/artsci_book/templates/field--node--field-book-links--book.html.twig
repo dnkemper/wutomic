@@ -15,10 +15,12 @@
 %}
 
 {% if items|length > 0 %}
+<h3 class="event-details__heading">Book Links </h3>
 <div{{ attributes.addClass(classes) }}>
   {% for item in items %}
+  
     <span class="book-links__item">
-      {%- if not loop.first %} | {% endif -%}
+      {%- if not loop.first %} <br /> {% endif -%}
       {{ item.content }}
     </span>
   {% endfor %}

@@ -32,9 +32,15 @@
   'block-' ~ plugin_id|clean_class,
 ]
 %}
-{% set stat_classes = [] %}
-{% if has_hover_effect and content.field_artsci_statistic_content[0]['#context']['value'] is not null %}
-	{% set stat_classes = 'stat stat__grid stat--transform' %}
+
+{# Extract the optional link URL so stat.html.twig can wrap the contents. #}
+{# Skip the wrap inside the Layout Builder UI so the edit pencil and #}
+{# contextual links toggle stay clickable. #}
+{% set stat_link_url = '' %}
+{% if not in_layout_builder
+  and content.field_artsci_statistic_link is not empty
+  and content.field_artsci_statistic_link[0]['#url'] %}
+  {% set stat_link_url = content.field_artsci_statistic_link[0]['#url'] %}
 {% endif %}
 
 {% set stat_block = {
@@ -44,7 +50,8 @@
   'stat_title': content.field_artsci_statistic_title[0]['#text']|render,
   'stat_prefix': content.field_artsci_statistic_title_pre|render,
   'stat_suffix': content.field_artsci_statistic_title_suf|render,
-  'stat_classes': stat_classes ?: 'stat stat__grid',
+  'stat_classes': 'stat stat__grid',
+  'stat_link_url': stat_link_url,
   'headline_text' : content.field_artsci_statistic_title[0]['#text'],
   'headline_level': content.field_artsci_statistic_title[0]['#size'],
   'title_prefix': title_prefix,

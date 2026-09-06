@@ -1,0 +1,26 @@
+uuid: c1facf03-c100-41ab-9601-441e3a494e50
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+_core:
+  default_config_hash: fx7AXCQvBwWSOH4cHZ3cc3_xcUUif7M4gvdI0EzAkWk
+name: widescreen__192_x_108
+label: 'Widescreen (192 x 108)'
+effects:
+  c43de710-cb23-4077-b67f-0e657f733d49:
+    uuid: c43de710-cb23-4077-b67f-0e657f733d49
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 192
+      height: 108
+      crop_type: focal_point
+  485be131-4428-4d94-9dc7-51690838a494:
+    uuid: 485be131-4428-4d94-9dc7-51690838a494
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

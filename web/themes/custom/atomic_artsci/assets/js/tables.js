@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // If it was removed, that means the HTML was regenerated, and we need to regenerate the Responsive tables.
                     setTimeout(function () {
                         //Because the editor drawer closes so slow, we have a delay before we resize the tables.
+                        // eslint-disable-next-line no-undef
                         generateResponsiveTables();
                     }, 500);
                 }
@@ -42,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Add an event listener so that whenever one is expanded, we trigger the tables to respond to the waking of the accordion item.
                 let accordionHeaderButton = table.closest('.accordion__content').previousElementSibling.querySelector('.accordion__button');
                 accordionHeaderButton.addEventListener('click', function () {
+                    // eslint-disable-next-line no-undef
                     triggerTableRespond();
                 });
 
@@ -51,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // This function, when defined, allows user defined functionality to be injected in the beginning of a triggerTableRespond() call.
+// eslint-disable-next-line no-unused-vars
 function hook_triggerTableRespond(responsive_tables) {
     for (let i = 0; i < responsive_tables.length; i++) {
         // Reset Tables container sizes if they are contained in layout containers.
@@ -69,6 +72,7 @@ function hook_triggerTableRespond(responsive_tables) {
 
 // This function, when defined, allows user defined changes to be made to the table selector at the beginning of a generateResponsiveTables() call.
 // This function will modify the single selector 'table:not(.table--static)'.
+// eslint-disable-next-line no-unused-vars
 function hook_modifyTableSelector(selector) {
     let joinedPrefixes = [];
     responsiveTablePrefixes.forEach(function(item, index) {

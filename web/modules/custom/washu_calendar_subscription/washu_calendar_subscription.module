@@ -1,0 +1,172 @@
+<?php
+
+/**
+ * @file
+ * Academic calendar: default semester, subscribe feed, and stepper toolbar.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Url;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_view().
+ *
+ * Defaults the academic calendar to the configured current semester when the
+ * request does not specify one, so the initial load is scoped to the current
+ * term. The front-end stepper and search drive these via query parameters
+ * (semester, year, keys), which override this default.
+ */
+function washu_calendar_subscription_views_pre_view(ViewExecutable $view, $display_id, array &$args): void {
+  if ($view->id() !== 'academic_calendar_of_events') {
+    return;
+  }
+
+  $request = \Drupal::requestStack()->getCurrentRequest();
+  $query = $request?->query;
+
+  // If the visitor has already chosen a semester, leave their input alone.
+  if ($query && ($query->get('semester') || $query->get('year'))) {
+    return;
+  }
+
+  /** @var \Drupal\washu_calendar_subscription\AcademicCalendarManager $manager */
+  $manager = \Drupal::service('washu_calendar_subscription.manager');
+  $current = $manager->getCurrentSemester();
+
+  $exposed = $view->getExposedInput() ?: [];
+  // Preserve any active search term.
+  if ($query && $query->get('keys')) {
+    $exposed['keys'] = $query->get('keys');
+  }
+  $exposed['semester'] = $current['season'];
+  $exposed['year'] = $current['year'];
+  $view->setExposedInput($exposed);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view__academic_calendar_of_events.
+ *
+ * Builds the calendar toolbar: subscribe link, semester stepper (prev/next),
+ * and search state. The actual markup lives in the theme template
+ * views-view--academic-calendar-of-events.html.twig.
+ */
+function washu_calendar_subscription_preprocess_views_view__academic_calendar_of_events(array &$variables): void {
+  /** @var \Drupal\washu_calendar_subscription\AcademicCalendarManager $manager */
+  $manager = \Drupal::service('washu_calendar_subscription.manager');
+
+  $query = \Drupal::requestStack()->getCurrentRequest()?->query;
+  $req_season = $query?->get('semester');
+  $req_year = $query?->get('year');
+  $keys = $query ? (string) $query->get('keys', '') : '';
+
+  $active = $manager->getActiveSemester($req_season, $req_year);
+  $adjacent = $manager->getAdjacent($active['season'], $active['year']);
+
+  // Preserve the active search term across stepper navigation.
+  $extra = $keys !== '' ? ['keys' => $keys] : [];
+
+  $variables['academic_calendar'] = [
+    'label' => $active['label'],
+    'active_season' => $active['season'],
+    'active_year' => $active['year'],
+    'prev_url' => $adjacent['prev'] ? _washu_calendar_subscription_step_url($adjacent['prev'], $extra) : NULL,
+    'next_url' => $adjacent['next'] ? _washu_calendar_subscription_step_url($adjacent['next'], $extra) : NULL,
+    'subscribe_url' => Url::fromRoute('academic_calendar_ical.feed')->toString(),
+    'subscribe_webcal' => _washu_calendar_subscription_webcal(),
+    'subscribe_href' => _washu_calendar_subscription_subscribe_href(),
+    'search_value' => $keys,
+    'search_action' => Url::fromRoute('<current>')->toString(),
+  ];
+}
+
+/**
+ * Builds a stepper link for a semester, preserving extra query parameters.
+ *
+ * @param array $semester
+ *   A semester array with 'season' and 'year'.
+ * @param array $extra
+ *   Additional query parameters to retain (e.g. the search term).
+ *
+ * @return string
+ *   The destination URL for the current page with the semester applied.
+ */
+function _washu_calendar_subscription_step_url(array $semester, array $extra): string {
+  $query = $extra + [
+    'semester' => $semester['season'],
+    'year' => $semester['year'],
+  ];
+  return Url::fromRoute('<current>', [], ['query' => $query])->toString();
+}
+
+/**
+ * Builds a webcal:// URL for the iCal subscription feed.
+ *
+ * @return string
+ *   The feed URL with a webcal scheme so calendar apps offer to subscribe.
+ */
+function _washu_calendar_subscription_webcal(): string {
+  $url = _washu_calendar_subscription_feed_url();
+  return preg_replace('#^http?://#', 'webcal://', $url);
+}
+
+/**
+ * Builds the absolute iCal feed URL, pinned to the production host.
+ *
+ * A webcal subscription is captured by the visitor's calendar app at subscribe
+ * time and then lives there indefinitely, so the link must point at a stable,
+ * publicly reachable host. We therefore build it from the production URL
+ * configured on the site information form (system.site:production_url) rather
+ * than the current request host, which on a Pantheon platform domain, a
+ * multidev, or a non-canonical host would bake the wrong host into every
+ * subscription. Falls back to the request-derived absolute URL when no
+ * production URL is configured, so unconfigured sites do not regress.
+ *
+ * @return string
+ *   The absolute http(s) URL to the iCal feed.
+ */
+function _washu_calendar_subscription_feed_url(): string {
+  $path = Url::fromRoute('academic_calendar_ical.feed')->toString();
+  $production = trim((string) \Drupal::config('system.site')->get('production_url'));
+  if ($production !== '') {
+    return rtrim($production, '/academic-calendar/') . $path;
+  }
+  return Url::fromRoute('academic_calendar_ical.feed', [], ['absolute' => TRUE])->toString();
+}
+
+/**
+ * Returns the subscribe link, chosen by environment.
+ *
+ * A publicly reachable host (production, Pantheon dev/test/live, etc.) gets a
+ * webcal:// URL so calendar apps offer a live, auto-updating subscription.
+ * Local development gets the plain .ics URL, because calendar apps cannot
+ * complete a webcal subscription against a local-only host such as one ending
+ * in .ddev.site.
+ *
+ * @return string
+ *   The subscribe URL appropriate for the current environment.
+ */
+function _washu_calendar_subscription_subscribe_href(): string {
+  if (_washu_calendar_subscription_is_local()) {
+    return Url::fromRoute('academic_calendar_ical.feed')->toString();
+  }
+  return _washu_calendar_subscription_feed_url();
+}
+
+/**
+ * Determines whether the site is running in a local development environment.
+ *
+ * @return bool
+ *   TRUE for DDEV/Lando or a host that is not publicly reachable.
+ */
+function _washu_calendar_subscription_is_local(): bool {
+  if (getenv('IS_DDEV_PROJECT') || getenv('LANDO')) {
+    return TRUE;
+  }
+  $host = \Drupal::requestStack()->getCurrentRequest()?->getHost() ?? '';
+  if ($host === '' || filter_var($host, FILTER_VALIDATE_IP)) {
+    return TRUE;
+  }
+  return (bool) preg_match('/(?:\.ddev\.site|\.lndo\.site|\.local|localhost)$/i', $host);
+}

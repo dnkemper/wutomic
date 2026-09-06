@@ -57,7 +57,7 @@
       }
     }
   }
-    .list-container--list.grid--twocol--50-50 {
+  .list-container--list.grid--twocol--50-50 {
     @if $parent >= 50 {
       @include breakpoints.breakpoint(sm) {
         .list-container__inner {
@@ -101,7 +101,7 @@
 @mixin display-grid {
   display: grid;
   grid-template-rows: auto;
-  grid-gap: variables.$desktop-width-gutter;
+  gap: variables.$desktop-width-gutter;
 }
 
 @mixin grid-base {

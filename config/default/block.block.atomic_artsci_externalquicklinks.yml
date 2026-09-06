@@ -11,7 +11,7 @@ dependencies:
 id: atomic_artsci_externalquicklinks
 theme: atomic_artsci
 region: primary_menu
-weight: -5
+weight: -9
 provider: null
 plugin: 'menu_block:external-quick-links'
 settings:

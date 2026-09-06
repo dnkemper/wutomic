@@ -20,6 +20,7 @@ dependencies:
     - layout_builder
     - layout_builder_restrictions
     - menu_block
+    - private_content
     - system
     - user
   theme:
@@ -49,32 +50,7 @@ third_party_settings:
             weight: 0
             additional: {  }
             third_party_settings: {  }
-          -
-            uuid: d97004fb-53e1-4c3a-8f75-ea497a027be7
-            region: content
-            configuration:
-              id: 'field_block:node:page:private'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: private
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-            third_party_settings: {  }
-        third_party_settings:
-          layout_builder_lock:
-            lock:
-              1: 1
-              2: 2
-              3: 3
-              4: 4
-              5: 5
-              6: 6
-              8: 8
+        third_party_settings: {  }
       -
         layout_id: layout_header
         layout_settings:
@@ -132,7 +108,26 @@ third_party_settings:
                 settings:
                   view_mode: full__ultrawide
                 third_party_settings: {  }
-            weight: 0
+            weight: 1
+            additional: {  }
+            third_party_settings: {  }
+          -
+            uuid: e6fa78b4-cacc-4d27-baa3-f29dde0b845b
+            region: background
+            configuration:
+              id: 'field_block:node:page:body'
+              label: Body
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: -9
             additional: {  }
             third_party_settings: {  }
         third_party_settings:
@@ -179,7 +174,7 @@ third_party_settings:
             third_party_settings: {  }
           -
             uuid: e6fa78b4-cacc-4d27-baa3-f29dde0b845b
-            region: content
+            region: background
             configuration:
               id: 'field_block:node:page:body'
               label: Body
@@ -212,18 +207,10 @@ third_party_settings:
         - layout_fourcol
         - layout_page
       denylisted_blocks:
-        'Custom block types':
-          - artsci_hero
-          - artsci_page_title_hero
-          - artsci_spacer_separator
-        'Inline blocks':
-          - 'inline_block:artsci_hero'
-          - 'inline_block:artsci_page_title_hero'
-          - 'inline_block:artsci_spacer_separator'
+        'Custom block types': {  }
+        'Inline blocks': {  }
       allowlisted_blocks:
         'Chaos Tools': {  }
-        'Content fields':
-          - 'field_block:node:page:body'
         'Custom blocks': {  }
         Forms: {  }
         'Lists (Views)': {  }
@@ -232,36 +219,41 @@ third_party_settings:
         Restricted: {  }
         Superfish: {  }
         System: {  }
-        'University of Iowa Alerts': {  }
         User: {  }
         Webform:
           - webform_block
         core: {  }
       restricted_categories:
+        - Artsci
+        - Devel
         - 'Entity Print'
-        - 'Purge UI'
+        - Help
+        - Tour
+        - 'shared content'
       allowed_blocks: {  }
     allowed_block_categories:
+      - Artsci
       - 'Chaos Tools'
       - 'Content fields'
       - 'Custom block types'
       - 'Custom blocks'
+      - Devel
       - 'Entity Print'
       - Forms
+      - Help
       - 'Inline blocks'
       - Lists
       - 'Lists (Views)'
       - Menus
-      - 'Purge UI'
       - Restricted
       - 'Site custom'
-      - 'Artsci Dispatch'
       - Superfish
       - System
-      - 'University of Iowa Alerts'
+      - Tour
       - User
       - Webform
       - core
+      - 'shared content'
     entity_view_mode_restriction_by_region:
       allowed_layouts:
         - layout_onecol
@@ -297,12 +289,16 @@ third_party_settings:
               - 'inline_block:artsci_timeline'
         layout_twocol:
           all_regions:
-            'Custom block types':
-              - artsci_slider
-              - artsci_timeline
-            'Inline blocks':
-              - 'inline_block:artsci_slider'
-              - 'inline_block:artsci_timeline'
+            'Custom block types': {  }
+            'Inline blocks': {  }
+      restricted_categories:
+        layout_twocol:
+          all_regions:
+            - Artsci
+            - Devel
+            - Help
+            - Tour
+            - 'shared content'
 _core:
   default_config_hash: 0AcX0F0voV5TKB6_GPZxJpAfbKCnDU7er_5TWcqIgSw
 id: node.page.default

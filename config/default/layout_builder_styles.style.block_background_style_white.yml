@@ -11,8 +11,8 @@ type: component
 group: background
 block_restrictions:
   - 'inline_block:artsci_banner'
-  - 'inline_block:artsci_cta'
   - 'inline_block:artsci_card'
+  - 'inline_block:artsci_slider'
   - 'inline_block:artsci_events'
   - 'inline_block:featured_content'
   - 'inline_block:artsci_aggregator'
@@ -21,6 +21,10 @@ block_restrictions:
   - 'views_block:article_list_block-list_article'
   - 'views_block:page_list_block-list_page'
   - 'views_block:people_list_block-list_card'
+  - 'views_block:news_list_block-list_card'
+  - 'views_block:book_list_block-list_card'
+  - 'views_block:event_list_block-list_card'
+  - 'views_block:image_list_block-list_card'
   - webform_block
 layout_restrictions: {  }
 weight: -56

@@ -17,7 +17,7 @@
 
   &__sub {
     color: variables.$secondary;
-    font-size: .9rem;
+    font-size: 0.9rem;
     line-height: 1.7;
 
     @include utilities.breakpoint(sm) {
@@ -47,16 +47,16 @@
     font-family: variables.$font-family-caps-bold;
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
-    font-size: calc(100% + -.7vw);
+    font-size: calc(100% + -0.7vw);
     line-height: 1.7;
 
     @include utilities.breakpoint(md) {
-      font-size: calc(100% + .3vw);
+      font-size: calc(100% + 0.3vw);
       margin-bottom: -1px;
     }
 
     @include utilities.breakpoint(page-container) {
-      font-size: calc(100% + .8vw);
+      font-size: calc(100% + 0.8vw);
     }
 
     span {

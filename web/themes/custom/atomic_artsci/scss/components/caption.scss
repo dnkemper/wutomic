@@ -5,14 +5,16 @@
   color: #fff;
   z-index: 3;
   position: absolute;
-  padding-top: 50px 100px;
+  // padding-top: 50px 100px; //??
   bottom: 0;
   background: #333333e0;
   padding: 20px;
   width: 100%;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+  transition:
+    visibility 0s linear 0.33s,
+    opacity 0.33s linear;
 
   div,
   p {

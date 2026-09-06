@@ -1,0 +1,19 @@
+uuid: 29cccad2-6fa8-42ca-8319-f810ea663e36
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - paragraphs
+id: paragraph.field_youtube_url
+field_name: field_youtube_url
+entity_type: paragraph
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

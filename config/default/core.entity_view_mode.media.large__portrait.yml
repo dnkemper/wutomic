@@ -1,0 +1,11 @@
+uuid: fe7764e8-42a8-41b8-9d9c-eb8e189317a4
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.large__portrait
+label: 'Large Portrait'
+description: null
+targetEntityType: media
+cache: true

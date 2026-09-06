@@ -5,5 +5,5 @@ dependencies: {  }
 id: staff
 label: Staff
 description: ''
-allow_former: true
+allow_former: false
 allowed_fields: {  }

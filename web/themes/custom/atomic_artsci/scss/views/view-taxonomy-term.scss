@@ -23,7 +23,7 @@
     }
   }
 
-  &[class*="grid--"] {
+  &[class*='grid--'] {
     .view-content.list-container__inner {
       @include utilities.breakpoint(sm) {
         display: grid;
@@ -31,4 +31,3 @@
     }
   }
 }
-

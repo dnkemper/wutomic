@@ -7,20 +7,21 @@ dependencies:
     - field.field.media.remote_video.field_tags
     - media.type.remote_video
   module:
-    - media
+    - layout_builder_custom
 id: media.remote_video.default
 targetEntityType: media
 bundle: remote_video
 mode: default
 content:
   field_media_oembed_video:
-    type: oembed
+    type: oembed_thumbnail
     label: hidden
     settings:
       max_width: 0
       max_height: 0
       loading:
         attribute: lazy
+      autoplay: true
     third_party_settings: {  }
     weight: 0
     region: content

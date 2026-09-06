@@ -1,0 +1,9 @@
+uuid: 056a8345-a3f2-472e-aaab-523bd2fc5a1b
+langcode: en
+status: true
+dependencies: {  }
+id: pre_law_advisors
+label: 'Pre-Law Advisors'
+description: ''
+allow_former: false
+allowed_fields: {  }

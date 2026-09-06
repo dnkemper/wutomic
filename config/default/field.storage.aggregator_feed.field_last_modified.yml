@@ -1,0 +1,20 @@
+uuid: bc22c278-20e2-48f5-a026-007da697293b
+langcode: en
+status: true
+dependencies:
+  module:
+    - aggregator
+    - datetime
+id: aggregator_feed.field_last_modified
+field_name: field_last_modified
+entity_type: aggregator_feed
+type: datetime
+settings:
+  datetime_type: datetime
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -12,7 +12,7 @@ id: node.person.field_person_contact_information
 field_name: field_person_contact_information
 entity_type: node
 bundle: person
-label: 'Contact Information'
+label: 'Mailing Address'
 description: ''
 required: false
 translatable: false
@@ -31,7 +31,4 @@ settings:
       artsci_contact:
         weight: 5
         enabled: true
-      artsci_slide:
-        weight: 6
-        enabled: false
 field_type: entity_reference_revisions

@@ -19,3 +19,16 @@ system.admin_config_artsci:
     _title: 'Artsci'
   requirements:
     _permission: 'administer basic site settings'
+
+artsci_core.image_card.modal:
+  path: '/image-card/{node}/lightbox'
+  defaults:
+    _controller: '\Drupal\artsci_core\Controller\ImageCardModalController::view'
+    _title_callback: '\Drupal\artsci_core\Controller\ImageCardModalController::title'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node

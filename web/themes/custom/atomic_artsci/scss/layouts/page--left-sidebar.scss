@@ -40,8 +40,9 @@
   @include utilities.container-width;
 }
 
-
-.content__container .page__container--edge.layout--has-sidebar.sidebar-invisible .layout__spacing_container {
+.content__container
+  .page__container--edge.layout--has-sidebar.sidebar-invisible
+  .layout__spacing_container {
   max-width: 100%;
 }
 

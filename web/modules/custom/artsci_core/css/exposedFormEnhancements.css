@@ -1,4 +1,12 @@
 /*Using this as the default stops the fields from flashing black on pageload.*/
 .views-exposed-form.bef-exposed-form .form-item.form-type-select select {
-  color: #64676b;
+  color: #000000;
+}
+.js-form-item.form-item.js-form-type-select.form-type-select.js-form-item-field-tags-target-id.form-item-field-tags-target-id {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
 }

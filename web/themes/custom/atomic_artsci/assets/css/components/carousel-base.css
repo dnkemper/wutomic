@@ -1,0 +1,21 @@
+.pretitle--red-caps {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--brand-red, #ba0c2f);
+}
+
+.pretitle--subtle {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--color-gray-700, #555);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+/*# sourceMappingURL=carousel-base.css.map */

@@ -1,7 +1,7 @@
 @use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
-#search-results  form.gsc-search-box {
+#search-results form.gsc-search-box {
   max-width: 100%;
 }
 
@@ -39,8 +39,9 @@
 #search-results .gsst_a .gscb_a {
   color: #ccc;
 }
-#search-results .gsst_a:hover .gscb_a, #search-results .gsst_a:focus .gscb_a {
-  color: variables.$blk;
+#search-results .gsst_a:hover .gscb_a,
+#search-results .gsst_a:focus .gscb_a {
+  color: variables.$artsci-black;
 }
 #search-results .gsc-input {
   padding-left: 0;
@@ -62,13 +63,20 @@
 #search-results .gsc-thumbnail {
   display: none;
 }
-#search-results .gsc-result-info-container, #search-results .gsc-thumbnail-inside, #search-results .gsc-url-top, #search-results .gsc-url-bottom, #search-results .gsc-table-result {
+#search-results .gsc-result-info-container,
+#search-results .gsc-thumbnail-inside,
+#search-results .gsc-url-top,
+#search-results .gsc-url-bottom,
+#search-results .gsc-table-result {
   padding: 0;
 }
-#search-results .gs-title, #search-results .gs-snippet {
+#search-results .gs-title,
+#search-results .gs-snippet {
   font-family: variables.$font-family-sans-serif !important;
 }
-#search-results .gs-result .gs-title, #search-results .gs-result .gs-title a, #search-results .gs-title b {
+#search-results .gs-result .gs-title,
+#search-results .gs-result .gs-title a,
+#search-results .gs-title b {
   color: variables.$link-color;
   font-size: 28px;
   line-height: 1.2;
@@ -77,11 +85,13 @@
 #search-results .gs-result .gs-title:hover {
   text-decoration: underline;
 }
-#search-results .gs-snippet, #search-results .gs-snippet b {
+#search-results .gs-snippet,
+#search-results .gs-snippet b {
   font-size: 18px;
   line-height: 1.7;
 }
-#search-results .gs-no-results-result .gs-snippet, #search-results .gs-error-result .gs-snippet {
+#search-results .gs-no-results-result .gs-snippet,
+#search-results .gs-error-result .gs-snippet {
   border: 2px solid variables.$primary;
   background-color: #fffae6;
 }
@@ -90,10 +100,15 @@
   background-color: #ccc;
   border-radius: 0;
   border: 1px solid #ccc;
-  @include utilities.padding(variables.$top: variables.$md, variables.$right: 1.75rem, variables.$bottom: 0.75rem, variables.$left: variables.$md);
+  @include utilities.padding(
+    variables.$top: variables.$md,
+    variables.$right: 1.75rem,
+    variables.$bottom: 0.75rem,
+    variables.$left: variables.$md
+  );
 }
 #search-results .gsc-search-button-v2 svg {
-  fill: variables.$blk;
+  fill: variables.$artsci-black;
   width: 18px;
   height: 18px;
 }
@@ -109,8 +124,9 @@
 #search-results .gsc-search-box-tools .gsc-search-box .gsc-input {
   padding-right: 0;
 }
-#search-results .gsc-url-top .gs-visibleUrl, #search-results .gsc-url-bottom .gs-visibleUrl {
-  color: variables.$brand-cool-gray;
+#search-results .gsc-url-top .gs-visibleUrl,
+#search-results .gsc-url-bottom .gs-visibleUrl {
+  color: variables.$gray-dark;
   font-size: 25px;
   line-height: 1.5;
 }
@@ -125,7 +141,11 @@
 #search-results .gsc-results .gsc-cursor-box .gsc-cursor {
   display: inline-block;
   padding-left: 0;
-  @include utilities.margin(variables.$top: 0, variables.$left: 0, variables.$bottom: variables.$xlg);
+  @include utilities.margin(
+    variables.$top: 0,
+    variables.$left: 0,
+    variables.$bottom: variables.$xlg
+  );
   border-radius: 0;
 
   > div {
@@ -134,20 +154,25 @@
     position: relative;
     float: left;
     font-size: 16px;
-    @include utilities.padding(variables.$top: variables.$md, variables.$right: 1.35rem, variables.$bottom: variables.$md, variables.$left: 1.35rem);
+    @include utilities.padding(
+      variables.$top: variables.$md,
+      variables.$right: 1.35rem,
+      variables.$bottom: variables.$md,
+      variables.$left: 1.35rem
+    );
     line-height: 1;
     text-decoration: none;
-    color: #4F4F4F;
+    color: #4f4f4f;
     background-color: transparent;
-    border: 1px solid variables.$gray-light;
+    border: 1px solid variables.$gray-dark;
     margin-left: -1px;
 
     &:hover,
     &:focus {
       z-index: 2;
-      color: #4F4F4F;
+      color: #4f4f4f;
       background-color: variables.$light;
-      border-color: variables.$gray-light;
+      border-color: variables.$gray-dark;
     }
 
     &.gsc-cursor-current-page {
@@ -156,9 +181,9 @@
       &:focus {
         z-index: 3;
         font-weight: normal;
-        color: #4F4F4F;
+        color: #4f4f4f;
         background-color: variables.$light;
-        border-color: variables.$gray-light;
+        border-color: variables.$gray-dark;
         cursor: default;
       }
     }
@@ -177,11 +202,10 @@
 
       .gs-visibleUrl-long {
         display: inline-block;
-        color: variables.$brand-cool-gray;
+        color: variables.$gray-dark;
         font-size: 25px;
         line-height: 1.5;
       }
     }
   }
 }
-

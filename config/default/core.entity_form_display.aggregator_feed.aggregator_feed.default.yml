@@ -3,23 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.aggregator_feed.aggregator_feed.field_aggregator_feed_image
     - field.field.aggregator_feed.aggregator_feed.field_aggregator_purge_items
+    - field.field.aggregator_feed.aggregator_feed.field_feed_source
+    - field.field.aggregator_feed.aggregator_feed.field_feed_type
+    - field.field.aggregator_feed.aggregator_feed.field_last_modified
   module:
     - aggregator
-    - media_library
+    - datetime
+    - datetimehideseconds
 id: aggregator_feed.aggregator_feed.default
 targetEntityType: aggregator_feed
 bundle: aggregator_feed
 mode: default
 content:
-  field_aggregator_feed_image:
-    type: media_library_widget
-    weight: 2
-    region: content
-    settings:
-      media_types: {  }
-    third_party_settings: {  }
   field_aggregator_purge_items:
     type: boolean_checkbox
     weight: 4
@@ -27,6 +23,30 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
+  field_feed_source:
+    type: string_textfield
+    weight: 7
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_feed_type:
+    type: string_textfield
+    weight: 8
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_last_modified:
+    type: datetime_default
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings:
+      datetimehideseconds:
+        hide: true
   refresh:
     type: options_select
     weight: 3
@@ -49,4 +69,5 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_aggregator_feed_image: true

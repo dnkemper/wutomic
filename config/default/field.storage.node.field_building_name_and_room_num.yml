@@ -1,0 +1,19 @@
+uuid: c87b590b-bd76-49d7-83f8-6cb235f800bd
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_building_name_and_room_num
+field_name: field_building_name_and_room_num
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

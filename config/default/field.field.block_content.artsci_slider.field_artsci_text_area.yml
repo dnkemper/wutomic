@@ -1,0 +1,24 @@
+uuid: b70ddf0f-483a-4d8b-b801-15db8305752e
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_slider
+    - field.storage.block_content.field_artsci_text_area
+    - filter.format.full_html
+  module:
+    - text
+id: block_content.artsci_slider.field_artsci_text_area
+field_name: field_artsci_text_area
+entity_type: block_content
+bundle: artsci_slider
+label: Description
+description: 'Optional description'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - full_html
+field_type: text_long

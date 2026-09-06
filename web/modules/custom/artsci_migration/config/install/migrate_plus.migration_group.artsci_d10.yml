@@ -1,0 +1,5 @@
+id: artsci_d10
+label: 'Artsci D10 import'
+description: 'Migrations that pull legacy D10 content into D11 via JSON:API.'
+source_type: 'JSON:API'
+shared_configuration: {}

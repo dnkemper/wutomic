@@ -3,24 +3,23 @@
 @use '../abstracts/_utilities.scss';
 
 .webform-submission-form {
-
   // Make fields respect field width settings
   input[size]:not([size='60']) {
     width: inherit;
   }
 
-  &.form [type=checkbox][class*="webform-scale"] + label[for],
-  &.form [type=radio][class*="webform-scale"] + label[for],
-  &.form [type=radio] + label[for].webform-options-display-buttons-label {
+  &.form [type='checkbox'][class*='webform-scale'] + label[for],
+  &.form [type='radio'][class*='webform-scale'] + label[for],
+  &.form [type='radio'] + label[for].webform-options-display-buttons-label {
     flex: none;
   }
 
   span.form-required {
     position: relative;
 
-    &:after {
+    &::after {
       margin: 0 variables.$xsm;
-      content: "*";
+      content: '*';
       color: variables.$danger;
       vertical-align: middle;
     }
@@ -35,14 +34,14 @@
   .webform-options-display-side-by-side,
   .webform-options-display-buttons-horizontal,
   .webform-options-display-buttons-vertical {
-    margin-top: -.5rem;
+    margin-top: -0.5rem;
   }
 
   .webform-options-display-side-by-side .form-type-checkbox,
   .webform-options-display-side-by-side .form-type-radio {
     display: inline-flex;
-    margin-top: .5rem;
-    margin-bottom: .5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .fieldgroup {
@@ -51,8 +50,8 @@
   }
 
   .webform-element-help {
-    background: variables.$brand-cool-gray;
-    border: 2px solid variables.$brand-cool-gray;
+    background: variables.$gray-dark;
+    border: 2px solid variables.$gray-dark;
 
     &:hover,
     &:focus {
@@ -123,7 +122,7 @@
   // --------------------------------
   .webform-flexbox {
     & .webform-flex--container {
-      & .form-actions [type="submit"] {
+      & .form-actions [type='submit'] {
         width: 100%; // Set button full-width.
         height: 57px;
       }
@@ -150,14 +149,10 @@
   // --------------------------------
   .webform-scale {
     & input:checked + label {
-      [class*="bg--red"] & {
+      [class*='bg--red'] & {
         border-color: variables.$secondary;
         background-color: variables.$light;
         color: variables.$secondary;
-      }
-
-      [class*="bg--black"] & {
-        background-color: color.scale(#FFCD00, variables.$lightness:40%);
       }
     }
 
@@ -172,11 +167,6 @@
   .webform-button--next,
   .webform-button--previous {
     @include utilities.bttn--secondary;
-
-    [class*="bg--black"] & {
-      background: variables.$light;
-      color: variables.$secondary;
-    }
   }
 
   .webform-progress-tracker .progress-text,
@@ -185,19 +175,19 @@
     color: currentColor;
   }
 
-  .webform-progress-tracker .progress-step .progress-marker:before {
+  .webform-progress-tracker .progress-step .progress-marker::before {
     padding: 1rem;
   }
 
-  .webform-progress-tracker .progress-step .progress-marker:after {
-    top: .8rem;
+  .webform-progress-tracker .progress-step .progress-marker::after {
+    top: 0.8rem;
   }
 
   .webform-progress-tracker .progress-step.is-active .progress-marker::before {
     background-color: variables.$primary;
     color: variables.$secondary;
 
-    [class*="bg--red"] & {
+    [class*='bg--red'] & {
       background: variables.$secondary;
       color: #fff;
     }
@@ -206,36 +196,35 @@
   // --------------------------------
   // Horizontal rules
   // --------------------------------
+  %webform-horizontal-rule {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-block-start: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-block-end: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
   .webform-horizontal-rule {
     &--thin {
-      border: 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.2);
-      border-block-start: 1px solid rgba(0, 0, 0, 0.2);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      border-block-end: 1px solid rgba(255, 255, 255, 0.3);
+      @extend %webform-horizontal-rule;
     }
 
     &--thick {
-      @extend .webform-horizontal-rule--thin;
+      @extend %webform-horizontal-rule;
       border-top-width: 4px;
-
-      [class*="bg--black"] & {
-        border-top-color: rgba(255, 255, 255, 0.8);
-        border-block-start-color: rgba(255, 255, 255, 0.8);
-      }
     }
 
-    &--glyph:after {
-      [class*="bg--gray"] & {
+    &--glyph::after {
+      [class*='bg--gray'] & {
         background-color: variables.$light;
       }
 
-      [class*="bg--red"] & {
+      [class*='bg--red'] & {
         background-color: variables.$primary;
       }
 
-      [class*="bg--black"] & {
-        background-color: variables.$secondary;
+      [class*='bg--teal'] & {
+        background-color: variables.$bg--teal;
       }
     }
   }
@@ -281,4 +270,3 @@
     display: none !important;
   }
 }
-

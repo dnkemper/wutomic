@@ -1,0 +1,24 @@
+uuid: d1650000-0000-4000-8000-000000000165
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__165_x_225
+label: 'Portrait (165 x 225)'
+effects:
+  e1650000-0000-4000-8000-000000000165:
+    uuid: e1650000-0000-4000-8000-000000000165
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 165
+      height: 225
+      crop_type: focal_point
+  92e0ff48-ef43-4f74-8edb-d4c2deff2b9c:
+    uuid: 92e0ff48-ef43-4f74-8edb-d4c2deff2b9c
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

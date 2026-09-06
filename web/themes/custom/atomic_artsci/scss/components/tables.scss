@@ -25,16 +25,10 @@ table {
   width: 100%;
 
   tbody a {
-    [class*="bg--gray"] &,
-    [class*="bg--white"] &,
-    [class*="bg--black"] &,
-    [class*="bg--red"] &,
-    .bg-pattern--brain-reversed &,
-    .bg--red--pattern--brain &,
-    .bg-pattern--brain &,
-    .bg--white--pattern--brain &,
-    .bg--black--pattern--brain &,
-    .bg-pattern--brain-black & {
+    [class*='bg--gray'] &,
+    [class*='bg--white'] &,
+    [class*='bg--black'] &,
+    [class*='bg--red'] & {
       color: variables.$link-color;
     }
   }
@@ -43,12 +37,15 @@ table {
     display: table;
   }
 
-  p, ul, ol {
+  p,
+  ul,
+  ol {
     font-size: variables.$base-font-size;
     line-height: 1.6;
   }
 
-  ul, ol {
+  ul,
+  ol {
     p {
       margin-bottom: 0;
     }
@@ -74,7 +71,7 @@ table {
     border: none;
     a {
       color: variables.$secondary;
-      [class*="bg--"] & {
+      [class*='bg--'] & {
         color: variables.$secondary;
       }
     }
@@ -97,7 +94,7 @@ table {
   &.table--hover-highlight tbody tr:not(.is-selected):nth-child(even) {
     &:hover {
       th {
-        background-color: #fff3c3
+        background-color: #fff3c3;
       }
       background-color: #fff3c3;
     }
@@ -114,8 +111,8 @@ table {
     a,
     :where(p) a:not(.bttn) {
       color: variables.$primary;
-      [class*="bg--"] &,
-      [class*="bg--"] [class*="bg--"] & {
+      [class*='bg--'] &,
+      [class*='bg--'] [class*='bg--'] & {
         color: variables.$primary;
       }
     }
@@ -172,7 +169,7 @@ table {
           border-left: #7c7c7c 1px solid;
           border-bottom: #ddd 1px solid;
         }
-        &:first-child:before {
+        &:first-child::before {
           border-left: none;
         }
       }
@@ -217,9 +214,7 @@ table.table--gray-borders {
       }
     }
   }
-
 }
-
 
 .lb__container .table-responsive {
   margin-right: auto;
@@ -232,12 +227,13 @@ table th {
 }
 
 .table--align-top {
-  thead, tbody {
+  thead,
+  tbody {
     vertical-align: top;
   }
 }
 .table--sort-arrow-inline {
-  th[aria-sort] a{
+  th[aria-sort] a {
     display: flex;
     align-items: center;
     margin-left: 2px;

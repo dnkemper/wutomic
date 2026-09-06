@@ -9,16 +9,20 @@ dependencies:
     - field.field.node.book.field_book_author
     - field.field.node.book.field_book_links
     - field.field.node.book.field_book_publication_date
-    - field.field.node.book.field_book_related_reads
     - field.field.node.book.field_book_subtitle
     - field.field.node.book.field_byline_names
     - field.field.node.book.field_byline_options
+    - field.field.node.book.field_content_hash
     - field.field.node.book.field_description
     - field.field.node.book.field_image
-    - field.field.node.book.field_is_shared_content
+    - field.field.node.book.field_is_shared
+    - field.field.node.book.field_last_fetch
     - field.field.node.book.field_meta_tags
+    - field.field.node.book.field_shared_content
+    - field.field.node.book.field_shared_content_xml
     - field.field.node.book.rabbit_hole__settings
     - node.type.book
+    - workflows.workflow.editorial
   module:
     - content_moderation
     - path
@@ -94,14 +98,17 @@ hidden:
   field_book_author: true
   field_book_links: true
   field_book_publication_date: true
-  field_book_related_reads: true
   field_book_subtitle: true
   field_byline_names: true
   field_byline_options: true
+  field_content_hash: true
   field_description: true
   field_image: true
-  field_is_shared_content: true
+  field_is_shared: true
+  field_last_fetch: true
   field_meta_tags: true
+  field_shared_content: true
+  field_shared_content_xml: true
   promote: true
   publish_on: true
   publish_state: true

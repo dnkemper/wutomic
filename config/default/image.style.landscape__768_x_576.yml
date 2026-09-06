@@ -1,0 +1,24 @@
+uuid: 4858851c-f54d-4e78-a07d-878f71840a6b
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: landscape__768_x_576
+label: 'Landscape (768 x 576)'
+effects:
+  4c98a294-d584-4c2f-9a38-f154fdcfe02c:
+    uuid: 4c98a294-d584-4c2f-9a38-f154fdcfe02c
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 768
+      height: 576
+      crop_type: focal_point
+  75f82e60-758f-4dee-909a-3293550aee87:
+    uuid: 75f82e60-758f-4dee-909a-3293550aee87
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

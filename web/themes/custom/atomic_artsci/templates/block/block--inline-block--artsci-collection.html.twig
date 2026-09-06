@@ -65,6 +65,49 @@
       {# Tab panels (rendered by paragraph--artsci-collection-item--tab.html.twig) #}
       {{ content|without('field_artsci_headline') }}
     </div>
+  {% elseif is_dotted_line %}
+    {{ attach_library('atomic_artsci/dotted-line') }}
+    {% set dl_id = "dotted-line-" ~ id %}
+    <div class="collection--dotted-line">
+      {{ content.field_artsci_headline }}
+      <div class="dotted-line" role="tablist" {% if aria_owns is not empty %}
+        aria-owns="{{ aria_owns }}"
+      {% endif %} aria-multiselectable="{{ multiselect }}" id="{{ dl_id }}">
+        {{ content|without('field_artsci_headline') }}
+      </div>
+    </div>
+  {% elseif is_horizontal_timeline %}
+    {{ attach_library('atomic_artsci/horizontal-timeline') }}
+    {% set ht_id = 'h-timeline-' ~ id %}
+    {% set ht_label = content.field_artsci_headline|render|striptags|trim %}
+    <div class="collection--horizontal-timeline h-timeline" id="{{ ht_id }}">
+      {{ content.field_artsci_headline }}
+      <div class="h-timeline__nav-wrapper">
+        <button type="button" class="h-timeline__arrow h-timeline__arrow--prev" aria-label="{{ 'Previous'|t }}">
+          <span aria-hidden="true">&lsaquo;</span>
+        </button>
+        <div class="h-timeline__rail" role="tablist" data-active-index="0" data-count="{{ h_timeline_nav|length }}"{% if ht_label %} aria-label="{{ ht_label }}"{% endif %}>
+          {% for dot in h_timeline_nav %}
+            <button type="button"
+                    role="tab"
+                    class="h-timeline__dot"
+                    id="{{ ht_id }}__dot--{{ dot.delta }}"
+                    aria-controls="{{ ht_id }}__panel--{{ dot.delta }}"
+                    aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                    {{ loop.first ? '' : 'tabindex="-1"' }}>
+              <span class="h-timeline__dot-label">{{ dot.label }}</span>
+              <span class="h-timeline__dot-marker" aria-hidden="true"></span>
+            </button>
+          {% endfor %}
+        </div>
+        <button type="button" class="h-timeline__arrow h-timeline__arrow--next" aria-label="{{ 'Next'|t }}">
+          <span aria-hidden="true">&rsaquo;</span>
+        </button>
+      </div>
+      <div class="h-timeline__panels">
+        {{ content|without('field_artsci_headline') }}
+      </div>
+    </div>
   {% else %}
     <div class="collection--descriptive-list">
       <dl>

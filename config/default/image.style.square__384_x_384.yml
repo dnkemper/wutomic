@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - focal_point
+    - image
 _core:
   default_config_hash: c7GfVy7bYjJPD9xKdht6yD_orN1mkWraFqkkBlRJ-6g
 name: square__384_x_384
@@ -17,3 +18,9 @@ effects:
       width: 384
       height: 384
       crop_type: focal_point
+  20c0fc4d-65bf-45a8-9a60-0d8a8db232a5:
+    uuid: 20c0fc4d-65bf-45a8-9a60-0d8a8db232a5
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

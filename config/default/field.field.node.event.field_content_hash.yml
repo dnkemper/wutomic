@@ -1,0 +1,19 @@
+uuid: f08c04a5-65db-43a2-89aa-6d4691ef2ab1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content_hash
+    - node.type.event
+id: node.event.field_content_hash
+field_name: field_content_hash
+entity_type: node
+bundle: event
+label: 'Content Hash'
+description: 'SHA-256 hash of remote XML content for change detection.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

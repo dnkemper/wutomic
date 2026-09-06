@@ -2,7 +2,7 @@
 @use '../abstracts/_utilities.scss';
 
 article.node--type-page.node--view-mode-teaser,
-div[role=article].node--type-page.node--view-mode-teaser {
+div[role='article'].node--type-page.node--view-mode-teaser {
   .content-image img {
     height: auto;
   }

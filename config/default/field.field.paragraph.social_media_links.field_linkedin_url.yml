@@ -1,0 +1,23 @@
+uuid: ffa064d9-2b1b-41c6-ad07-2b5192db3df7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_linkedin_url
+    - paragraphs.paragraphs_type.social_media_links
+  module:
+    - link
+id: paragraph.social_media_links.field_linkedin_url
+field_name: field_linkedin_url
+entity_type: paragraph
+bundle: social_media_links
+label: 'LinkedIn URL'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

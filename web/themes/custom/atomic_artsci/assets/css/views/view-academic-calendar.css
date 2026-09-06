@@ -1,0 +1,246 @@
+:root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
+  font-size: 16px;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-red);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #cacaca;
+  --transparent-border: rgb(0, 0, 0, 0);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.academic-calendar {
+  --ac-red: var(--artsci-red, #ba0c2f);
+  --ac-rule: #d7d2cb;
+}
+.academic-calendar__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+.academic-calendar__bar--top {
+  justify-content: flex-start;
+  margin-bottom: 1.05rem;
+}
+.academic-calendar__bar--controls {
+  justify-content: space-between;
+  padding: 0.625rem 0;
+}
+.academic-calendar__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.425rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--ac-red);
+  font-family: var(--font-family-caps);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1;
+}
+.academic-calendar__action:hover, .academic-calendar__action:focus {
+  text-decoration: underline;
+}
+.academic-calendar__icon {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+}
+.academic-calendar__semester {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.academic-calendar__semester-prompt {
+  font-family: var(--font-family-caps);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--artsci-black, #000);
+}
+.academic-calendar__semester-current {
+  min-width: 9em;
+  text-align: center;
+  font-family: var(--font-family-caps);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--artsci-black, #000);
+}
+.academic-calendar__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--ac-red);
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+.academic-calendar__step:hover, .academic-calendar__step:focus {
+  opacity: 0.7;
+}
+.academic-calendar__step.is-disabled {
+  color: var(--artsci-gray-light, #cacaca);
+  pointer-events: none;
+}
+.academic-calendar__chevron {
+  width: 0.7rem;
+  height: 0.9rem;
+}
+.academic-calendar__search {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 1.05rem 0 3rem;
+}
+.academic-calendar__search-input {
+  flex: 1 1 auto;
+  border: 0;
+  border-bottom: 2px solid var(--ac-rule);
+  background: transparent;
+  padding: 0.425rem 0;
+  font-size: 1rem;
+}
+.academic-calendar__search-input:focus {
+  outline: none;
+  border-bottom-color: var(--ac-red);
+}
+.academic-calendar__search-submit {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  color: var(--ac-red);
+  cursor: pointer;
+  padding: 0.325rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.academic-calendar span.add-to-calendar {
+  display: grid;
+  grid-template-columns: auto auto;
+  width: 50%;
+  grid-column: 3;
+  grid-row: 1;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.075em;
+  line-height: 1.2;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  justify-items: start;
+}
+.academic-calendar span.add-to-calendar:nth-child(2) {
+  padding: 20px 15px;
+}
+.academic-calendar .event-details svg {
+  font-size: 30px;
+}
+.academic-calendar .views-row {
+  margin-bottom: 0.625rem;
+}
+.academic-calendar .layout--threecol {
+  align-items: center;
+}
+.academic-calendar .layout__region--first .field--name-field-start-date,
+.academic-calendar .layout__region--first time {
+  font-family: var(--font-family-serif);
+  color: var(--ac-red);
+  font-size: 26px;
+  line-height: 1.15;
+  padding: 10px 20px;
+  margin-right: 10px;
+  width: 100%;
+}
+.academic-calendar .layout__region--second .academic-calendar__event-link {
+  color: var(--ac-red);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-family: var(--font-family-caps);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+.academic-calendar .layout__region--second .academic-calendar__event-link:hover, .academic-calendar .layout__region--second .academic-calendar__event-link:focus {
+  text-decoration: none;
+}
+.academic-calendar .layout__region--second .academic-calendar__event-text {
+  color: var(--artsci-black, #000);
+  font-family: var(--font-family-caps);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  width: 100%;
+}
+.academic-calendar .layout__region--third {
+  text-align: right;
+}
+.academic-calendar .layout__spacing_container {
+  gap: 0rem !important;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding: 10px 20px !important;
+}
+.academic-calendar .layout__container.section-padding__top-restored {
+  padding: 0 !important;
+}
+@media print {
+  .academic-calendar .academic-calendar__bar--controls,
+  .academic-calendar .academic-calendar__search,
+  .academic-calendar .add-to-cal svg {
+    display: none !important;
+  }
+  .academic-calendar .layout__spacing_container {
+    gap: 10rem !important;
+    justify-items: center;
+    align-items: center;
+  }
+  .academic-calendar {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=view-academic-calendar.css.map */

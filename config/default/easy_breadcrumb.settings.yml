@@ -20,7 +20,7 @@ remove_repeated_segments: true
 language_path_prefix_as_segment: false
 absolute_paths: false
 hide_single_home_item: false
-term_hierarchy: false
+term_hierarchy: true
 use_site_title: false
 add_structured_data_json_ld: false
 capitalizator_mode: ucwords

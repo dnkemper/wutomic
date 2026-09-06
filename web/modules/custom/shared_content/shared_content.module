@@ -1,0 +1,586 @@
+<?php
+
+/**
+ * @file
+ * Shared content module hooks.
+ */
+
+use Drupal\node\NodeInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_form_alter().
+ */
+function shared_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Load the current user.
+  $current_user = \Drupal::currentUser();
+
+  // Check if the form is a node form and if the correct content type.
+  if (isset($form['#node']) && $form['#node'] instanceof Node) {
+    $node = $form['#node'];
+    $node_type = $node->bundle();
+
+    if (in_array($node_type, ['person', 'event', 'article', 'book'])) {
+      // Define fields that should still be editable.
+      $editable_fields = [
+        'field_search',
+        'field_content_type',
+        'field_type',
+        'field_faculty_areas_of_study',
+        'field_feature_article',
+        'field_article_featured_image',
+        'field_featured_image',
+        'field_tags',
+        'field_article_home_slideshow',
+        'field_featured_home_slideshow',
+        'field_type_of_staff',
+        'field_areas_of_interest',
+        'field_event_category',
+        'field_feature_event',
+        'field_faculty_and_staff',
+        'field_shared_content_subscribers',
+        'field_byline_options',
+        'field_byline_names',
+        'field_featured_book',
+        'field_department',
+      ];
+
+      // If the user is not an administrator, restrict field access.
+      if (!$current_user->hasPermission('administer nodes')) {
+        if ($node->get('field_is_shared')->value) {
+          foreach ($form as $field_name => &$field) {
+            if (preg_match("/^field_/", $field_name) || $field_name == 'body') {
+              if (!in_array($field_name, $editable_fields)) {
+                $form[$field_name]['#access'] = FALSE;
+              }
+            }
+          }
+        }
+
+        // Hide fields that should not be accessible.
+        $form['field_shared_content_xml']['#access'] = FALSE;
+        $form['field_shared_content']['#access'] = FALSE;
+        // Allow viewing of this field.
+        $form['field_is_shared']['#access'] = TRUE;
+      }
+    }
+  }
+
+  // Handle specific book node form fields.
+  if (isset($form['#node']) && $form['#node'] instanceof Node && $form['#node']->bundle() == 'book') {
+    if ($form['#node']->get('field_is_shared')->value) {
+      $form['field_image'][0]['#required'] = FALSE;
+    }
+  }
+
+  // Add vertical tabs and custom fieldset for shared content settings.
+  if (isset($form['#node']) && in_array($form['#node']->bundle(), [
+    'article',
+    'event',
+    'person',
+    'book',
+  ])) {
+    $xml = $form_state->getValue(['field_shared_content_xml', 0, 'value'], '');
+
+    if ($xml == '') {
+      if (!$current_user->hasPermission('administer nodes')) {
+        $form['field_shared_content_xml']['#access'] = FALSE;
+        $form['field_shared_content_subscribers']['#access'] = FALSE;
+      }
+
+      // Add shared content vertical tab.
+      $form['shared_content_tab'] = [
+        '#type' => 'fieldset',
+        '#title' => t('Shared content settings'),
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+        '#weight' => -99,
+        '#group' => 'additional_settings',
+        '#description' => t('Checking this box will allow other sites to import this content on their site.'),
+        '#attributes' => ['class' => ['shared_content-settings-form']],
+      ];
+
+      // Shared content enabled checkbox.
+      $default_value = in_array(\Drupal::config('system.site')
+        ->get('name'), ['Arts & Sciences', 'Arts &amp; Sciences']);
+      $form['shared_content_tab']['shared_content_enabled'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Shareable'),
+        '#default_value' => $default_value,
+      ];
+
+      // Email notifications select field.
+      $form['shared_content_tab']['shared_content_notify'] = [
+        '#type' => 'select',
+        '#title' => t('Email Notifications'),
+        '#description' => t('Select all sites that should be notified of this content creation. Hold Control (Command on Mac) to select multiple.'),
+        '#options' => [
+          'none' => t('None'),
+          'afas@wustl.edu' => t('AFAS'),
+          'amcs@wustl.edu' => t('AmCS'),
+          'anthro@wustl.edu' => t('Anthropology'),
+          'artarch@wustl.edu' => t('Art History'),
+          'artsci-comm@wustl.edu' => t('ArtSci'),
+          // Add more options as needed...
+        ],
+        '#default_value' => 'none',
+        '#multiple' => TRUE,
+      ];
+
+      // Create a container for enabling/disabling custom settings with JavaScript.
+      $form['shared_content_tab']['shared_content_tabcontainer'] = [
+        '#type' => 'container',
+        '#parents' => ['shared_content_tab'],
+        '#states' => [
+          'invisible' => [
+            ':input[name="shared_content_tab[shared_content_enabled]"]' => ['checked' => FALSE],
+          ],
+        ],
+      ];
+
+      // Add submit handler for custom shared content settings.
+      $form['actions']['submit']['#submit'][] = 'shared_content_tab_form_submit';
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function shared_content_form_aggregator_admin_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Remove never from aggregator cleanup options. Keeping items forever has
+  // potential to create very large database tables. Add additional options.
+  unset($form['processors']['aggregator']['aggregator_clear']['#options'][0]);
+  $form['processors']['aggregator']['aggregator_clear']['#options'][15552000] = t('6 months');
+  $form['processors']['aggregator']['aggregator_clear']['#options'][31557600] = t('1 year');
+  $form['processors']['aggregator']['aggregator_clear']['#options'][157788000] = t('5 years');
+  $form['processors']['aggregator']['aggregator_clear']['#options'][315576000] = t('10 years');
+
+  // Remove access to aggregator teaser length as it does nothing!
+  // @see: https://www.drupal.org/project/drupal/issues/2283877
+  $form['processors']['aggregator']['aggregator_teaser_length']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_toolbar().
+ */
+function shared_content_toolbar() {
+  $url = Url::fromUri('https://it.artsci.wustl.edu/website-guide');
+  $items = [];
+
+  $items['shared_content'] = [
+    '#type' => 'toolbar_item',
+    'tab' => [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('shared_content.callback'),
+      '#title' => t('@version Content', [
+        '@version' => 'Shared',
+      ]),
+      '#options' => [
+        'attributes' => [
+          'title' => t('Opens shared content tab in new window.'),
+          'class' => [
+            'toolbar-item',
+            'toolbar-icon',
+            'toolbar-icon-olympian-content-sharing',
+          ],
+          'role' => 'button',
+        ],
+      ],
+      '#weight' => 100,
+    ],
+    '#weight' => 30,
+  ];
+
+  $items['user_logout'] = [
+    '#type' => 'toolbar_item',
+    'tab' => [
+      '#type' => 'link',
+      '#url' => Url::fromRoute('user.logout'),
+      '#title' => t('Logout'),
+      '#options' => [
+        'attributes' => [
+          'title' => t('Opens shared content tab in new window.'),
+          'class' => [
+            'toolbar-item',
+            'toolbar-icon',
+            'toolbar-icon-olympian-content-logout',
+          ],
+          'role' => 'button',
+        ],
+      ],
+      '#weight' => 9999905,
+    ],
+    '#weight' => 9999985,
+    '#access' => \Drupal::currentUser()->isAuthenticated(),
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for aggregator_feed.
+ *
+ * Ensures field_aggregator_purge_items is always enabled on new feeds so that
+ * ItemsImporterOverride::refresh() calls deleteItems() before re-fetching,
+ * keeping the aggregator item list in sync with the remote feed.
+ */
+function shared_content_aggregator_feed_insert($feed) {
+  if ($feed->hasField('field_aggregator_purge_items') && !$feed->get('field_aggregator_purge_items')->value) {
+    $feed->set('field_aggregator_purge_items', 1);
+    $feed->save();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function shared_content_form_aggregator_feed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Set the minimum feed refresh to match our hourly cron job so that
+  // users aren't confused as to why it's not refreshing sooner. Admins can
+  // set this to whatever assuming they set up a custom job to run more often.
+  foreach ($form['refresh']['widget']['#options'] as $key => $value) {
+    if ($key !== 0 && $key < 3600) {
+      unset($form['refresh']['widget']['#options'][$key]);
+    }
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function shared_content_node_presave($node) {
+  if (!$node->hasField('field_shared_content_xml') || $node->get('field_shared_content_xml')->isEmpty()) {
+    return;
+  }
+  if (!$node->hasField('field_content_hash') || !$node->hasField('field_shared_content') || $node->get('field_shared_content')->isEmpty() || $node->get('field_content_hash')->isEmpty()) {
+    return;
+  }
+
+  $xml_value = $node->get('field_shared_content')->value;
+  if (empty($xml_value)) {
+    return;
+  }
+
+  // Recalculate hash from field_shared_content whenever it changes.
+  $new_hash = hash('sha256', $xml_value);
+  $current_hash = $node->get('field_content_hash')->value;
+
+  if ($new_hash !== $current_hash) {
+    $node->set('field_content_hash', $new_hash);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function shared_content_form_views_form_aggregator_item_page_1_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (empty($form['views_bulk_operations_bulk_form']) || !is_array($form['views_bulk_operations_bulk_form'])) {
+    return;
+  }
+
+  // Collect all GUIDs and shared URLs for the current page in one pass.
+  $guid_map = [];
+  foreach ($form['views_bulk_operations_bulk_form'] as $key => $values) {
+    if (!is_int($key)) {
+      continue;
+    }
+    $entity = $form['output'][0]['#rows'][$key]->_entity ?? NULL;
+    if (!$entity) {
+      continue;
+    }
+
+    $guid = $entity->get('guid')->value;
+    $guid_parts = explode(' at ', $guid);
+    if (count($guid_parts) !== 2) {
+      continue;
+    }
+
+    [$node_id, $base_url] = $guid_parts;
+    $fid_title = $entity->get('fid')->entity->label();
+    // Pass entire feed title to detect content type from any word.
+    $content_type = shared_content_get_content_type($fid_title);
+    if ($content_type === '') {
+      continue;
+    }
+
+    $shared_url = $base_url . '/xml/' . strtolower($content_type) . '/' . $node_id . '/rss.xml';
+    $guid_map[$key] = [
+      'url' => $shared_url,
+      'title' => $entity->get('title')->value,
+    ];
+  }
+
+  if (empty($guid_map)) {
+    return;
+  }
+
+  // Single bulk query for all URLs on this page.
+  $all_urls = array_column($guid_map, 'url');
+  $existing = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('field_shared_content_xml', $all_urls, 'IN')
+    ->execute();
+
+  // Load just the URLs of existing nodes for the lookup — raw DB query, no entity loading.
+  $imported_urls = [];
+  if (!empty($existing)) {
+    $imported_urls = \Drupal::database()->select('node__field_shared_content_xml', 'f')
+      ->fields('f', ['field_shared_content_xml_value'])
+      ->condition('f.entity_id', $existing, 'IN')
+      ->execute()
+      ->fetchCol();
+  }
+
+  // Now disable checkboxes for already-imported items.
+  foreach ($guid_map as $key => $data) {
+    if (in_array($data['url'], $imported_urls, TRUE)) {
+      $form['views_bulk_operations_bulk_form'][$key]['#disabled'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Checks if a node with the given shared URL already exists.
+ *
+ * Kept for backwards compatibility but no longer called — bulk query in
+ * shared_content_form_views_form_aggregator_item_page_1_alter() handles
+ * this now.
+ */
+function shared_content_check_existing_node($entity, $title) {
+  return FALSE;
+}
+
+/**
+ * Determines content type by searching the entire feed title for keywords.
+ *
+ * @param string $fid_title
+ *   The full feed title to search.
+ *
+ * @return string
+ *   The content type machine name, or empty string if not found.
+ */
+function shared_content_get_content_type($fid_title) {
+  $fid_title_lower = strtolower($fid_title);
+
+  // Check for content type keywords anywhere in the feed title.
+  // Order matters: check more specific terms first.
+  if (strpos($fid_title_lower, 'person') !== FALSE || strpos($fid_title_lower, 'faculty_staff') !== FALSE) {
+    return 'faculty_staff';
+  }
+  if (strpos($fid_title_lower, 'article') !== FALSE) {
+    return 'article';
+  }
+  if (strpos($fid_title_lower, 'event') !== FALSE) {
+    return 'events';
+  }
+  if (strpos($fid_title_lower, 'book') !== FALSE) {
+    return 'book';
+  }
+
+  return '';
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Takes a daily node count snapshot and logs warnings if content drops
+ * exceed thresholds.
+ */
+function shared_content_cron() {
+  // Pause during domain migration.
+  if (\Drupal::state()->get('shared_content.migration_pause', FALSE)) {
+    \Drupal::logger('shared_content')->notice('Shared content cron paused for domain migration.');
+    return;
+  }
+  /** @var \Drupal\shared_content\Service\SharedContentFeedRefresherForce $refresher */
+  $refresher = \Drupal::service('shared_content.feed_refresher_force');
+  $refresher->runChunked(50);
+}
+
+/**
+ * Helper function convert exposed filter to select dropdown.
+ */
+function shared_content_config_entity_filter_select(array &$form, $entity_id) {
+  // Query feed URLs directly from the database — no entity loading.
+  // Use the feed's url column to extract the source site hostname.
+  $results = \Drupal::database()->select('aggregator_feed', 'af')
+    ->fields('af', ['url'])
+    ->orderBy('af.url')
+    ->execute()
+    ->fetchCol();
+
+  $options = [];
+  foreach ($results as $url) {
+    if (!empty($url)) {
+      $host = parse_url($url, PHP_URL_HOST);
+      if (!empty($host) && !isset($options[$host])) {
+        $options[$host] = $host;
+      }
+    }
+  }
+  asort($options);
+
+  // Rebuild the text filter as select list dropdown.
+  $form['#type'] = 'select';
+  $form['#multiple'] = FALSE;
+  $form['#empty_option'] = t('All');
+  $form['#options'] = $options;
+  unset($form['#size']);
+}
+
+/**
+ * Helper function convert exposed filter to select dropdown.
+ */
+function shared_content_config_user_filter_select(array &$form, $entity_id) {
+  // Query distinct authors directly from the database — no entity loading.
+  $results = \Drupal::database()->select('aggregator_item', 'ai')
+    ->fields('ai', ['author'])
+    ->isNotNull('ai.author')
+    ->condition('ai.author', '', '<>')
+    ->distinct()
+    ->orderBy('ai.author')
+    ->execute()
+    ->fetchCol();
+
+  $options = [];
+  foreach ($results as $author) {
+    $options[$author] = $author;
+  }
+
+  // Rebuild the text filter as select list dropdown.
+  $form['#type'] = 'select';
+  $form['#multiple'] = FALSE;
+  $form['#empty_option'] = t('All');
+  $form['#options'] = $options;
+  unset($form['#size']);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function shared_content_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  $view = $form_state->get('view');
+  if ($view->id() === 'aggregator_item') {
+    $feed_filter = 'feed';
+    if (isset($form[$feed_filter])) {
+      shared_content_config_entity_filter_select($form[$feed_filter], 'aggregator_feed');
+      $form[$feed_filter]['#process'] = [
+        [
+          'Drupal\Core\Render\Element\Select',
+          'processSelect',
+        ],
+        [
+          'Drupal\Core\Render\Element\Select',
+          'processAjaxForm',
+        ],
+        [
+          'Drupal\inline_form_errors\RenderElementHelper',
+          'processElement',
+        ],
+        [
+          '\Drupal\Core\Render\Element\RenderElement',
+          'processGroup',
+        ],
+      ];
+      $form[$feed_filter]['#pre_render'] = [
+        [
+          'Drupal\Core\Render\Element\Select',
+          'preRenderSelect',
+        ],
+        [
+          '\Drupal\Core\Render\Element\RenderElement',
+          'preRenderGroup',
+        ],
+      ];
+    }
+    $user_filter = 'author';
+    if (isset($form[$user_filter])) {
+      shared_content_config_user_filter_select($form[$user_filter], 'aggregator_item');
+      $form[$user_filter]['#process'] = [
+        [
+          'Drupal\Core\Render\Element\Select',
+          'processSelect',
+        ],
+        [
+          'Drupal\Core\Render\Element\Select',
+          'processAjaxForm',
+        ],
+        [
+          'Drupal\inline_form_errors\RenderElementHelper',
+          'processElement',
+        ],
+        [
+          '\Drupal\Core\Render\Element\RenderElement',
+          'processGroup',
+        ],
+      ];
+      $form[$user_filter]['#pre_render'] = [
+        [
+          'Drupal\Core\Render\Element\Select',
+          'preRenderSelect',
+        ],
+        [
+          '\Drupal\Core\Render\Element\RenderElement',
+          'preRenderGroup',
+        ],
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function shared_content_views_data_alter(&$data) {
+  $data['views']['shared_content_site_name'] = [
+    'title' => t('Department'),
+    'help' => t('Display Shared Content Site Name.'),
+    'field' => [
+      'id' => 'shared_content_site_name',
+    ],
+  ];
+  $data['views']['shared_content_site_image'] = [
+    'title' => t('Department Image'),
+    'help' => t('Display Department Image.'),
+    'field' => [
+      'id' => 'shared_content_site_image',
+    ],
+  ];
+  $data['node__field_shared_content_xml']['field_shared_content_xml_value']['filter'] = [
+    'title' => t('Shared Content XML Source'),
+    'help' => t('Filter by the source site hostname of the shared content XML feed URL.'),
+    'id' => 'shared_content_xml_source',
+  ];
+  $data['aggregator_item']['imported_status'] = [
+    'title' => t('Imported Status'),
+    'help' => t('Shows whether this item has been imported.'),
+    'field' => [
+      'id' => 'imported_status',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function shared_content_entity_predelete(EntityInterface $entity): void {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  // Use the audit subscriber service directly.
+  try {
+    /** @var \Drupal\shared_content\EventSubscriber\NodeDeletionAuditSubscriber $audit */
+    $audit = \Drupal::service('shared_content.node_deletion_audit');
+    $audit->auditNodeDeletion($entity);
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('shared_content')->error('Deletion audit failed: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+}

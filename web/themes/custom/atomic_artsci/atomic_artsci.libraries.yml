@@ -5,12 +5,14 @@ global-styling:
     base:
       assets/css/global.css: {}
       /libraries/fontawesome/css/all.min.css: {}
-      https://use.typekit.net/ual3ogb.css: { type: external }
+      https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,700&family=Zilla+Slab:wght@400;600;700&family=Antonio:wght@100;300;700&display=swap: { type: external, minified: false }
     layout:
       assets/css/components/page-layouts.css: {}
     component:
+      assets/css/subscribe-block.css: {}
       assets/css/components/badge.css: {}
       assets/css/components/breadcrumbs.css: {}
+      assets/css/components/blockquote.css: {}
       assets/css/components/colors.css: {}
       assets/css/components/button.css: {}
       assets/css/components/form/forms.css: {}
@@ -33,12 +35,12 @@ global-styling:
       assets/css/components/background.css: { weight: 200 }
       assets/css/components/grid.css: {}
       https://use.typekit.net/ual3ogb.css: { type: external }
+      assets/css/components/event.css: {}
     theme:
       assets/css/theme/print.css: { media: print }
   dependencies:
     - core/jquery
     - core/once
-# Adobe Typekit fonts (already external fonts pattern exists)
 typekit:
   css:
     base:
@@ -100,6 +102,21 @@ accordion:
       assets/css/components/accordion.css: {}
   js:
     assets/js/accordion-init.js: { attributes: { type: module } }
+dotted-line:
+  css:
+    component:
+      assets/css/components/dotted-line.css: {}
+  dependencies:
+    - atomic_artsci/accordion
+horizontal-timeline:
+  css:
+    component:
+      assets/css/components/horizontal-timeline.css: {}
+  js:
+    assets/js/horizontal-timeline.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
 tabs:
   css:
     component:
@@ -184,21 +201,10 @@ badge:
   css:
     component:
       assets/css/components/badge.css: {}
-cta:
-  css:
-    component:
-      assets/css/components/cta.css: {}
 stat:
   css:
     component:
       assets/css/components/stat.css: {}
-timeline:
-  css:
-    component:
-      assets/css/components/timeline.css: {}
-  js:
-    assets/js/scroll.js: {}
-
 top-scroll:
   css:
     component:
@@ -219,10 +225,6 @@ local-tasks:
   css:
     component:
       assets/css/components/menus/local-tasks.css: {}
-artsci-events-single:
-  css:
-    component:
-      assets/css/content/artsci-event-single.css: {}
 chosen:
   css:
     component:
@@ -263,6 +265,15 @@ view-calendar:
   css:
     component:
       assets/css/views/view-calendar.css: {}
+view-academic-calendar:
+  css:
+    component:
+      assets/css/views/view-academic-calendar.css: {}
+  js:
+    assets/js/academic-calendar.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
 views:
   css:
     component:
@@ -283,10 +294,6 @@ media-type-image:
   css:
     component:
       assets/css/media/media--type-image.css: {}
-field-uip-title:
-  css:
-    component:
-      assets/css/fields/field--name-field-uip-title.css: {}
 fields:
   css:
     component:
@@ -387,3 +394,71 @@ theme-overrides:
   css:
     component:
       assets/css/theme-overrides.css: {}
+anchor-links:
+  css:
+    component:
+      assets/css/components/anchor-links.css: {}
+  js:
+    assets/js/anchor-links.js: {}
+  dependencies:
+    - core/drupal
+artsci-carousel:
+  css:
+    component:
+      assets/css/components/carousel-base.css: {}
+  js:
+    js/artsci-carousel.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+# Large fan carousel (teal bg, 3-card fan)
+artsci-carousel-three:
+  css:
+    component:
+      assets/css/components/carousel-three.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# One carousel (compact sidebar widget)
+artsci-carousel-one:
+  css:
+    component:
+      assets/css/components/carousel-one.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Paged carousel (N cards per page with dots)
+artsci-carousel-two:
+  css:
+    component:
+      assets/css/components/carousel-two.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Stories carousel (portrait scroll cards)
+artsci-stories-carousel:
+  css:
+    component:
+      assets/css/components/stories-carousel.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+# Stats carousel (big numbers, paged — extends paged carousel)
+artsci-carousel-four:
+  css:
+    component:
+      assets/css/components/carousel-four.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel
+
+
+# Slider block layout — flex track, slide sizing, per-size refinements.
+# Attached by block--inline-block--artsci-slider.html.twig as
+# atomic_artsci/slider; without this the track never becomes a flex row.
+slider:
+  css:
+    component:
+      assets/css/components/slider-carousel.css: {}
+  dependencies:
+    - atomic_artsci/artsci-carousel

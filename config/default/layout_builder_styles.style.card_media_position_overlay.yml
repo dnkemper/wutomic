@@ -1,0 +1,15 @@
+uuid: 8e4f2c91-3a7b-4d6e-9f1a-2b8c5d0e7f3a
+langcode: en
+status: true
+dependencies: {  }
+id: card_media_position_overlay
+label: 'Overlay (Text over media)'
+classes: card--layout-overlay
+type: component
+group: card_media_position
+block_restrictions:
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_slider'
+  - 'inline_block:artsci_image'
+layout_restrictions: {  }
+weight: -45

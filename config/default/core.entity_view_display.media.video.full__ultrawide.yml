@@ -1,0 +1,47 @@
+uuid: f1b5bb63-1c0f-44e8-9d09-aa2a5c7c57c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.full__ultrawide
+    - field.field.media.video.field_media_video_file
+    - field.field.media.video.field_tags
+    - media.type.video
+  module:
+    - layout_builder
+    - layout_builder_custom
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: media.video.full__ultrawide
+targetEntityType: media
+bundle: video
+mode: full__ultrawide
+content:
+  field_media_video_file:
+    type: artsci_file_video
+    label: hidden
+    settings:
+      loop: '1'
+      multiple_file_display_type: tags
+      muted: '1'
+      width: '1300'
+      height: '730'
+      play_label: 'Watch the video'
+      controls: 0
+      autoplay: 0
+      playsinline: 0
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_tags: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

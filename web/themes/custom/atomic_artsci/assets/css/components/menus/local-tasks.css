@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -53,7 +68,7 @@
 .block-local-tasks-block .tabs li > a {
   display: block;
   text-decoration: none;
-  color: #000;
+  color: #000000;
   line-height: 1;
   padding-top: 1.05rem;
   padding-right: 1.875rem;
@@ -70,29 +85,29 @@
   }
 }
 .block-local-tasks-block .tabs > li > a.local-task-icon:focus, .block-local-tasks-block .tabs > li > a.local-task-icon:hover {
-  background: #f3f3f3;
+  background: #edeae1;
   text-decoration: underline;
 }
 .block-local-tasks-block .tabs > li > a.local-task-icon.is-active {
   background: none;
   position: relative;
 }
-.block-local-tasks-block .tabs > li > a.local-task-icon.is-active:after {
+.block-local-tasks-block .tabs > li > a.local-task-icon.is-active::after {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 5px;
-  background: #BA0C2F;
+  background: #ba0c2f;
   content: "";
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--delete {
-  color: #BD472A;
+  color: #bd472a;
 }
-.block-local-tasks-block .local-task-icon:focus:before, .block-local-tasks-block .local-task-icon:hover:before {
+.block-local-tasks-block .local-task-icon:focus::before, .block-local-tasks-block .local-task-icon:hover::before {
   color: #000000;
 }
-.block-local-tasks-block .local-task-icon:before {
+.block-local-tasks-block .local-task-icon::before {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
@@ -103,34 +118,45 @@
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   margin-right: 15px;
-  color: #737373;
+  color: #971b2f;
   font-size: 13px;
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--view::before {
   content: "\f06e";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--edit::before {
   content: "\f044";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--delete::before {
   content: "\f2ed";
-  color: #BD472A;
+  color: #971b2f;
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--layout::before {
   content: "\f009";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--history::before {
   content: "\f1da";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--usage::before {
   content: "\f0c1";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--devel::before {
   content: "\f121";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--replicate::before {
   content: "\f24d";
+  font: var(--fa-font-solid);
 }
 .block-local-tasks-block .local-task-icon.local-task-icon--latest::before {
   content: "\f0c5";
-}/*# sourceMappingURL=local-tasks.css.map */
+  font: var(--fa-font-solid);
+}
+
+/*# sourceMappingURL=local-tasks.css.map */

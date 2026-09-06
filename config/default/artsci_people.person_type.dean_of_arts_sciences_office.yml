@@ -1,0 +1,9 @@
+uuid: 5836c2d5-ce67-4d39-b0eb-cf90f8f4810d
+langcode: en
+status: true
+dependencies: {  }
+id: dean_of_arts_sciences_office
+label: 'Dean of Arts & Sciences Office'
+description: ''
+allow_former: false
+allowed_fields: {  }

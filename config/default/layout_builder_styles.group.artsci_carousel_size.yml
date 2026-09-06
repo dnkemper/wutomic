@@ -1,0 +1,10 @@
+uuid: 6c99e076-0d61-4c8c-bc44-0c7f9cd3648d
+langcode: en
+status: true
+dependencies: {  }
+id: artsci_carousel_size
+label: 'Artsci: Carousel Size'
+multiselect: single
+form_type: select
+required: true
+weight: 126

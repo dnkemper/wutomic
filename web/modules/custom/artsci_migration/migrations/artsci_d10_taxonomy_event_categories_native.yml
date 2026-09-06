@@ -1,0 +1,109 @@
+id: artsci_d10_taxonomy_event_categories_native
+label: 'D10 event_categories terms imported into the D11 event_categories vocabulary'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# WHY THIS EXISTS / HOW IT DIFFERS FROM artsci_d10_taxonomy_event_categories:
+# There are TWO migrations reading the same D10 source vocabulary
+# (event_categories), with DIFFERENT D11 destinations:
+#
+#   artsci_d10_taxonomy_event_categories        -> research_areas  (vocab consolidation)
+#   artsci_d10_taxonomy_event_categories_native -> event_categories (THIS FILE)
+#
+# node.event's field_event_category is restricted to the event_categories
+# vocabulary (target_bundles: event_categories), and that vocab was empty
+# on D11, so the research_areas consolidation migration cannot feed it.
+# This migration recreates the terms natively in event_categories so the
+# event node migration can migration_lookup against it.
+#
+# IMPORTANT: unlike the research_areas migration, this one does NOT carry
+# the D10 UUID across. A UUID is unique per entity, and the research_areas
+# migration already claims each source term's UUID; reusing it here would
+# collide. These terms therefore get fresh D11 UUIDs, and identity is
+# tracked solely through this migration's own map table. Look terms up via
+# THIS migration id wherever event_categories tids are needed.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/taxonomy_term/event_categories?page[limit]=500'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+
+  ids:
+    tid:
+      type: integer
+
+  fields:
+    - name: tid
+      label: 'Original TID (in D10 event_categories)'
+      selector: 'attributes/drupal_internal__tid'
+    - name: name
+      label: Name
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: weight
+      label: Weight
+      selector: 'attributes/weight'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: desc_value
+      label: 'Description value'
+      selector: 'attributes/description/value'
+    - name: desc_format
+      label: 'Description format'
+      selector: 'attributes/description/format'
+    - name: source_parent
+      label: 'Parent term reference (in D10 event_categories)'
+      selector: 'relationships/parent/data'
+
+process:
+  # No tid pinning and no entity_lookup: let D11 assign fresh tids/uuids,
+  # tracked by this migration's map table.
+  langcode: langcode
+
+  vid:
+    plugin: default_value
+    default_value: event_categories
+
+  name: name
+  weight:
+    plugin: default_value
+    default_value: 0
+    source: weight
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  'description/value': desc_value
+  'description/format':
+    plugin: default_value
+    default_value: full_html
+    source: desc_format
+
+  # Parent hierarchy resolved against THIS migration so parents land on the
+  # migrated event_categories tids. Stubs auto-fill as parents come through.
+  parent:
+    plugin: sub_process
+    source: source_parent
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: artsci_d10_taxonomy_event_categories_native
+        source: meta/drupal_internal__target_id
+
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: event_categories
+
+migration_dependencies:
+  required: []
+  optional: []

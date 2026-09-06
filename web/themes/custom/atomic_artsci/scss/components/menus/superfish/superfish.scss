@@ -48,11 +48,7 @@
 }
 
 .block-superfish .block__title {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  @include utilities.element-invisible;
 }
 
 .block-superfish #superfish-main-toggle {
@@ -63,17 +59,13 @@
   color: variables.$secondary;
 }
 
-.block-superfish #superfish-main-toggle:before {
-  content: "\f0c9";
-  font-size: 1.1rem;
+.block-superfish #superfish-main-toggle::before {
+  content: '\f0c9';
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  line-height: 0.8;
-  font-family: "Font Awesome 5 Free";
+  font: var(--fa-font-solid);
   font-weight: 900;
   margin-right: 15px;
   margin-top: 5px;
@@ -82,17 +74,13 @@
   height: 25px;
 }
 
-.block-superfish #superfish-main-toggle.sf-expanded:before {
-  content: "\f00d";
-  font-size: 1rem;
+.block-superfish #superfish-main-toggle.sf-expanded::before {
+  content: '\f00d';
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
+  font: var(--fa-font-solid);
   color: #fff;
   border-radius: 50%;
   background: #999;
@@ -105,21 +93,20 @@
   color: variables.$secondary;
   font-weight: 600;
   @include utilities.breakpoint(md) {
-    padding: 1.35rem .75rem;
+    padding: 1.35rem 0.75rem;
   }
   @include utilities.breakpoint(page-container) {
     padding: 1.35rem 1.25rem;
   }
 }
 
-.block-superfish .menu li a:after {
+.block-superfish .menu li a::after {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0;
   height: 2px;
-  content: "";
-  -webkit-transition: 300ms;
+  content: '';
   transition: 300ms;
 }
 
@@ -128,22 +115,18 @@
   padding-right: 2.5rem;
 }
 
-.block-superfish .menu > li > .sf-depth-1.menuparent:before {
+.block-superfish .menu > li > .sf-depth-1.menuparent::before {
   position: absolute;
   top: 50%;
-  right: .4rem;
+  right: 0.4rem;
   margin-top: -0.4rem;
-  content: "\f078";
+  content: '\f078';
   color: inherit;
-  font-size: 1rem;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  line-height: 1;
-  font-family: "Font Awesome 5 Free";
+  font: var(--fa-font-solid);
   font-weight: 900;
 }
 
@@ -157,23 +140,18 @@
   justify-content: space-between;
 }
 
-.block-superfish .sf-with-ul:before {
-  -webkit-box-ordinal-group: 3;
-  -ms-flex-order: 2;
+.block-superfish .sf-with-ul::before {
   order: 2;
   content: 1rem;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  line-height: 1;
-  font-family: "Font Awesome 5 Free";
+  font: var(--fa-font-solid);
   font-weight: 900;
 }
 
-.block-superfish .sf-with-ul:only-child:before {
+.block-superfish .sf-with-ul:only-child::before {
   content: '';
 }
 
@@ -187,11 +165,7 @@
 
 .block-superfish-alt .block__title,
 .region-primary-menu .block__title {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  @include utilities.element-invisible;
 }
 
 .block-superfish-alt #superfish-main-toggle {
@@ -202,32 +176,23 @@
   color: #737373;
 }
 
-.block-superfish-alt #superfish-main-toggle:before {
-  content: "\f0c9";
-  font-size: 1.875rem;
+.block-superfish-alt #superfish-main-toggle::before {
+  content: '\f0c9';
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  line-height: 1;
-  font-family: "Font Awesome 5 Free";
+  font: var(--fa-font-solid);
   font-weight: 900;
 }
 
-.block-superfish-alt #superfish-main-toggle.sf-expanded:before {
-  content: "\f00d";
-  font-size: 1.875rem;
+.block-superfish-alt #superfish-main-toggle.sf-expanded::before {
+  content: '\f00d';
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  line-height: 1;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
+  font: var(--fa-font-solid);
 }
 
 // Shared by horizontal and mega menu.
@@ -258,43 +223,42 @@ ul.sf-menu.sf-horizontal > li > a {
   line-height: 1.2;
 }
 
-ul.sf-menu.sf-horizontal > li > .nolink:after,
-ul.sf-menu.sf-horizontal > li > a:after {
+ul.sf-menu.sf-horizontal > li > .nolink::after,
+ul.sf-menu.sf-horizontal > li > a::after {
   background: variables.$primary;
 }
 
-ul.sf-menu.sf-horizontal > li .nolink:after,
-ul.sf-menu.sf-horizontal > li a:after {
+ul.sf-menu.sf-horizontal > li .nolink::after,
+ul.sf-menu.sf-horizontal > li a::after {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0;
   height: 5px;
-  content: "";
-  -webkit-transition: 300ms;
+  content: '';
   transition: 300ms;
 }
 
-ul.sf-menu.sf-horizontal > li > a.is-active:after,
-ul.sf-menu.sf-horizontal > li.active-trail > .sf-depth-1:after {
+ul.sf-menu.sf-horizontal > li > a.is-active::after,
+ul.sf-menu.sf-horizontal > li.active-trail > .sf-depth-1::after {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 5px;
-  background: #e1e1e1;
+  background: #ba0c2f;
 }
 
-ul.sf-menu.sf-horizontal > li.active-trail > .sf-depth-1:hover:after {
+ul.sf-menu.sf-horizontal > li.active-trail > .sf-depth-1:hover::after {
   background: variables.$primary;
 }
 
-ul.sf-menu.sf-horizontal > li.sfHover > .nolink:after,
-ul.sf-menu.sf-horizontal > li.sfHover > a:after,
-ul.sf-menu.sf-horizontal > li:focus > .nolink:focus:after,
-ul.sf-menu.sf-horizontal > li:focus > a:focus:after,
-ul.sf-menu.sf-horizontal > li:hover > .nolink:after,
-ul.sf-menu.sf-horizontal > li:hover > a:after {
+ul.sf-menu.sf-horizontal > li.sfHover > .nolink::after,
+ul.sf-menu.sf-horizontal > li.sfHover > a::after,
+ul.sf-menu.sf-horizontal > li:focus > .nolink:focus::after,
+ul.sf-menu.sf-horizontal > li:focus > a:focus::after,
+ul.sf-menu.sf-horizontal > li:hover > .nolink::after,
+ul.sf-menu.sf-horizontal > li:hover > a::after {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -307,14 +271,14 @@ ul.sf-menu.sf-horizontal li ul a:focus {
   text-decoration: underline;
 }
 
-ul.sf-menu.sf-horizontal > li > .sf-depth-1.menuparent:before {
+ul.sf-menu.sf-horizontal > li > .sf-depth-1.menuparent::before {
   color: #999;
   font-size: 0.7rem;
   line-height: 1.4;
 }
 
-ul.sf-menu.sf-horizontal > li.sfHover > .sf-depth-1.menuparent:before {
-  content: "\f077";
+ul.sf-menu.sf-horizontal > li.sfHover > .sf-depth-1.menuparent::before {
+  content: '\f077';
 }
 
 ul.sf-menu.sf-horizontal > li:first-child > .sf-depth-1 {
@@ -334,7 +298,7 @@ ul.sf-menu.sf-horizontal > li > .sf-depth-1.menuparent {
   font-size: 1.6rem;
 }
 
-.sf-accordion .sf-with-ul:only-child:before {
+.sf-accordion .sf-with-ul:only-child::before {
   content: '';
 }
 
@@ -344,7 +308,6 @@ ul.sf-menu.sf-horizontal > li > .sf-depth-1.menuparent {
 }
 
 .menu.sf-accordion ul {
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -371,35 +334,40 @@ ul.sf-has-clone-parent {
   @include utilities.element-invisible;
 }
 
-.sf-accordion li.sf-expanded .sf-depth-1.menuparent:before {
-  content: "\f077";
+.sf-accordion li.sf-expanded .sf-depth-1.menuparent::before {
+  content: '\f077';
 }
 
-.sf-accordion li.sf-expanded li.sf-depth-2.menuparent .sf-depth-2.menuparent:before {
+.sf-accordion
+  li.sf-expanded
+  li.sf-depth-2.menuparent
+  .sf-depth-2.menuparent::before {
   position: absolute;
   top: 50%;
   right: 0.3125rem;
   margin-top: -0.4rem;
-  color: inherit;
-  font-size: 1rem;
+  // color: inherit;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
-  font-style: normal;
-  font-variant: normal;
   text-rendering: auto;
-  line-height: 1;
-  font-family: "Font Awesome 5 Free";
+  font: var(--fa-font-solid);
   font-weight: 900;
   color: variables.$secondary;
 }
 
-.sf-accordion li.sf-expanded li.sf-depth-2.menuparent .sf-depth-2.menuparent:before {
-  content: "\f0d7";
+.sf-accordion
+  li.sf-expanded
+  li.sf-depth-2.menuparent
+  .sf-depth-2.menuparent::before {
+  content: '\f0d7';
 }
 
-.sf-accordion li.sf-expanded li.sf-depth-2.menuparent.sf-expanded .sf-depth-2.menuparent:before {
-  content: "\f0d8";
+.sf-accordion
+  li.sf-expanded
+  li.sf-depth-2.menuparent.sf-expanded
+  .sf-depth-2.menuparent::before {
+  content: '\f0d8';
 }
 
 .sf-accordion-toggle {
@@ -423,7 +391,11 @@ ul.sf-has-clone-parent {
 
 ul.sf-accordion ul:focus-within {
   position: static !important;
+
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: auto;
+  clip-path: none;
+
   height: auto !important;
   width: auto !important;
 }
@@ -435,7 +407,7 @@ ul.sf-accordion ul:focus-within {
   }
 
   &.is-active.menuparent {
-   // text-decoration: none;
+    // text-decoration: none;
   }
 
   &:focus {
@@ -462,7 +434,6 @@ ul.sf-accordion ul:focus-within {
 .block-superfish .menu li li .nolink:focus {
   font-weight: bold;
 }
-
 
 .block-superfish .menu.sf-accordion li li .nolink,
 .block-superfish .menu.sf-accordion li li a {
@@ -523,18 +494,18 @@ ul.sf-menu.sf-accordion .active-trail.sf-no-children.sf-depth-1 > .is-active {
   padding-right: 0.8rem;
 }
 
-.block-superfish .menu > li > .sf-depth-1.menuparent:before {
+.block-superfish .menu > li > .sf-depth-1.menuparent::before {
   position: absolute;
   top: 31px;
 }
 
 // ie11
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .block-superfish .menu.sf-accordion > li > .sf-depth-1.menuparent:before {
+  .block-superfish .menu.sf-accordion > li > .sf-depth-1.menuparent::before {
     right: -30px;
   }
 
-  .block-superfish .menu.sf-horizontal > li > .sf-depth-1.menuparent:before {
+  .block-superfish .menu.sf-horizontal > li > .sf-depth-1.menuparent::before {
     right: 0;
   }
 }

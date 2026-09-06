@@ -1,0 +1,7 @@
+name: Artsci Entities
+type: module
+description: 'Shared config entities for use across the Artsci platform.'
+package: Artsci
+core_version_requirement: ^10 || ^11
+configure: entity.artsci_academic_unit.collection
+dependencies:

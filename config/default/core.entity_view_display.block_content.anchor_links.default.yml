@@ -1,0 +1,31 @@
+uuid: 340d7eac-fb64-4cc1-b75f-382ffacaaa64
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.anchor_links
+    - field.field.block_content.anchor_links.field_links
+  module:
+    - link
+id: block_content.anchor_links.default
+targetEntityType: block_content
+bundle: anchor_links
+mode: default
+content:
+  field_links:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  search_api_excerpt: true

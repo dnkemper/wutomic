@@ -1,0 +1,21 @@
+uuid: 206f56c7-285f-4d16-b2e0-e433df80f8db
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_person_description_label
+field_name: field_person_description_label
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

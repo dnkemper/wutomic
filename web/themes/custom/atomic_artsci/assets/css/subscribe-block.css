@@ -10,12 +10,14 @@ input#subscribe-email {
   border-bottom: 2px solid gray;
 }
 
-.subscribe-block {
-  max-width: 600px;
-}
 .subscribe-block button.subscribe-block__submit {
   background: none;
   border: none;
+}
+.subscribe-block input#subscribe-ampersand-email {
+  border-radius: 50px;
+  height: 100%;
+  font-size: 1.75rem;
 }
 .subscribe-block svg.svg-inline--fa.fa-arrow-right {
   fill: white;
@@ -23,7 +25,7 @@ input#subscribe-email {
   background: black;
 }
 .subscribe-block p.subscribe-block__subheading {
-  font-family: IvyStyle Sans;
+  font-family: "IvyStyle Sans";
   font-weight: 400;
   font-size: 14px;
   line-height: 200%;
@@ -31,7 +33,7 @@ input#subscribe-email {
   color: white;
 }
 .subscribe-block p.subscribe-block__heading {
-  font-family: IvyStyle Sans;
+  font-family: "IvyStyle Sans";
   font-weight: 600;
   font-size: 18px;
   color: white;
@@ -42,6 +44,9 @@ input#subscribe-email {
   background: unset;
   border: unset;
   border-bottom: 2px solid gray;
+}
+.subscribe-block {
+  max-width: 600px;
 }
 .subscribe-block__heading {
   font-weight: 500;
@@ -123,4 +128,6 @@ input#subscribe-email {
 }
 .subscribe-block__messages--error {
   color: #f5a8a8;
-}/*# sourceMappingURL=subscribe-block.css.map */
+}
+
+/*# sourceMappingURL=subscribe-block.css.map */

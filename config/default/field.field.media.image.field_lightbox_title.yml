@@ -1,0 +1,19 @@
+uuid: 1d6093ed-67dd-4d33-a1ea-ec4d8182737a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_lightbox_title
+    - media.type.image
+id: media.image.field_lightbox_title
+field_name: field_lightbox_title
+entity_type: media
+bundle: image
+label: 'Lightbox Title'
+description: 'Heading shown in the gallery lightbox (Photoswipe). Distinct from the square-thumbnail overlay, which uses the media name.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

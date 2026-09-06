@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Article card override.
+ *
+ * Identical to the base card, except the tags (meta) render above the title
+ * and the created date. All inner parts are reused from card.html.twig so this
+ * template only changes their order.
+ */
+#}
+{% extends '@atomic_artsci/artsci/card.html.twig' %}
+
+{% block body %}
+  <div class="card__body">
+    {# Tags first, before the title and the created date. #}
+    {{ block('meta') }}
+
+    {% if subtitle is not empty %}
+      <div class="card__details">
+        {{ block('subtitle') }}
+      </div>
+    {% endif %}
+    {% if pre_title is not empty %}
+      <div class="card__pre-title">
+        {{ pre_title }}
+      </div>
+    {% endif %}
+
+    {{ block('heading') }}
+    {{ block('content') }}
+    {{ block('button') }}
+  </div>
+{% endblock %}

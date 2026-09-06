@@ -1,0 +1,11 @@
+uuid: a3f8b9c2-7e1d-4f5a-8b3c-1d2e3f4a5b6c
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.horizontal_timeline
+label: 'Horizontal Timeline'
+description: ''
+targetEntityType: paragraph
+cache: true

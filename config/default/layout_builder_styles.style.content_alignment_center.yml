@@ -9,11 +9,14 @@ type: component
 group: content_alignment
 block_restrictions:
   - 'inline_block:featured_content'
+  - 'inline_block:artsci_slider'
   - 'inline_block:artsci_card'
   - 'inline_block:artsci_events'
   - 'inline_block:artsci_aggregator'
   - 'views_block:article_list_block-list_article'
+  - 'views_block:article_list_block-list_article_recent'
   - 'views_block:page_list_block-list_page'
   - 'views_block:people_list_block-list_card'
+  - 'views_block:events_list_block-card_list'
 layout_restrictions: {  }
 weight: -42

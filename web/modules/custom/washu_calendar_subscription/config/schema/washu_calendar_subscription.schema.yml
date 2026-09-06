@@ -1,0 +1,10 @@
+washu_calendar_subscription.settings:
+  type: config_object
+  label: 'Academic Calendar settings'
+  mapping:
+    current_season:
+      type: string
+      label: 'Current season'
+    current_year:
+      type: string
+      label: 'Current year'

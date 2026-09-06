@@ -289,7 +289,7 @@ display:
         type: normal
         title: Authors
         description: ''
-        weight: -46
+        weight: -47
         enabled: false
         expanded: true
         menu_name: main

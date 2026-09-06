@@ -13,6 +13,7 @@ editor: ckeditor5
 settings:
   toolbar:
     items:
+      - anchor
       - bold
       - italic
       - '|'
@@ -20,14 +21,17 @@ settings:
       - '|'
       - bulletedList
       - numberedList
+      - insertTable
       - '|'
       - blockQuote
-      - drupalInsertImage
+      - drupalMedia
       - '|'
       - heading
-      - code
+      - style
       - '|'
+      - horizontalLine
       - sourceEditing
+      - htmlEmbed
   plugins:
     ckeditor5_heading:
       enabled_headings:
@@ -36,27 +40,176 @@ settings:
         - heading4
         - heading5
         - heading6
-    ckeditor5_imageResize:
-      allow_resize: true
     ckeditor5_list:
       properties:
         reversed: false
         startIndex: true
         styles: true
       multiBlock: true
+    ckeditor5_paste_filter_pasteFilter:
+      enabled: true
+      filters:
+        -
+          enabled: true
+          weight: -12
+          search: '<span[^>]*>'
+          replace: ''
+        -
+          enabled: true
+          weight: -11
+          search: '<\/span>'
+          replace: ''
+        -
+          enabled: true
+          weight: -10
+          search: '(<[^>]*) (style="[^"]*")'
+          replace: $1
+        -
+          enabled: true
+          weight: -9
+          search: '<font[^>]*>'
+          replace: ''
+        -
+          enabled: true
+          weight: -7
+          search: '<\/font>'
+          replace: ''
+        -
+          enabled: true
+          weight: -6
+          search: '<p>&nbsp;<\/p>'
+          replace: ''
+        -
+          enabled: true
+          weight: -5
+          search: '<p><\/p>'
+          replace: ''
+        -
+          enabled: false
+          weight: -4
+          search: '(<h([1-6])>)(.*?)(<\/h\2>)'
+          replace: $1$3$4
+        -
+          enabled: true
+          weight: -3
+          search: '<o:p><\/o:p>'
+          replace: ''
+        -
+          enabled: true
+          weight: -2
+          search: '(<[^>]*) (valign="[^"]*")'
+          replace: $1
+        -
+          enabled: true
+          weight: -8
+          search: '(class="[^"]*")'
+          replace: ''
+        -
+          enabled: true
+          weight: -13
+          search: '(<(h[1-6]|p)(?:\s+[^>]*?)?)(?:\s+class\s*=\s*([''"])[^''"]*\3)([^>]*>)'
+          replace: ''
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<cite>'
         - '<dl>'
         - '<dt>'
         - '<dd>'
-        - '<a hreflang>'
-        - '<blockquote cite>'
-        - '<h2 id>'
-        - '<h3 id>'
-        - '<h4 id>'
-        - '<h5 id>'
-        - '<h6 id>'
+        - '<mark class>'
+        - '<pre class>'
+        - '<span class role>'
+        - '<small class>'
+        - '<iframe src width height allowfullscreen title loading seamless sandbox="allow-same-origin allow-scripts allow-popups">'
+        - '<div class>'
+        - '<blockquote cite class>'
+        - '<ul class>'
+        - '<ol class>'
+        - '<hr class>'
+        - '<table border summary id role="presentation grid" aria-label aria-labelledby class>'
+        - '<caption id>'
+        - '<tbody class>'
+        - '<thead class>'
+        - '<tfoot class>'
+        - '<th id align valign colspan rowspan scope class>'
+        - '<td align valign colspan rowspan headers class>'
+        - '<tr align valign class>'
+        - '<drupal-media title>'
+        - '<a href hreflang title id target aria-label rel data-* class>'
+        - '<p class>'
+        - '<h2 id class>'
+        - '<h3 id class>'
+        - '<h4 id class>'
+        - '<h5 id class>'
+        - '<h6 id class>'
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Red Button'
+          element: '<a class="bttn bttn--primary--reverse">'
+        -
+          label: 'Teal Button'
+          element: '<a class="bttn bttn--secondary">'
+        -
+          label: 'Outline Button'
+          element: '<a class="bttn bttn--primary">'
+        -
+          label: 'Add Red Arrow'
+          element: '<a class="link--arrow--red">'
+        -
+          label: 'Add Arrow'
+          element: '<a class="link--arrow">'
+        -
+          label: 'Intro Bold'
+          element: '<p class="artsci-component--bold-intro">'
+        -
+          label: 'Intro Light'
+          element: '<p class="artsci-component--light-intro">'
+        -
+          label: 'H2 Serif'
+          element: '<h2 class="headline headline--serif">'
+        -
+          label: 'H2 Serif Underline'
+          element: '<h2 class="headline headline--serif headline--underline">'
+        -
+          label: 'H3 Serif'
+          element: '<h3 class="headline headline--serif">'
+        -
+          label: 'H3 Serif Underline'
+          element: '<h3 class="headline headline--serif headline--underline">'
+        -
+          label: 'H4 Serif'
+          element: '<h4 class="headline headline--serif">'
+        -
+          label: 'H4 Serif Underline'
+          element: '<h4 class="headline headline--serif headline--underline">'
+        -
+          label: 'H5 Serif'
+          element: '<h5 class="headline headline--serif">'
+        -
+          label: 'H5 Serif Underline'
+          element: '<h5 class="headline headline--serif headline--underline">'
+        -
+          label: 'H6 Serif'
+          element: '<h6 class="headline headline--serif">'
+        -
+          label: 'H6 Serif Underline'
+          element: '<h6 class="headline headline--serif headline--underline">'
+        -
+          label: 'Alert Success'
+          element: '<div class="alert alert--success">'
+        -
+          label: 'Alert Info'
+          element: '<div class="alert alert--info">'
+        -
+          label: 'Alert Warning'
+          element: '<div class="alert alert--warning">'
+        -
+          label: 'Alert Danger'
+          element: '<div class="alert alert--danger">'
+    editor_advanced_link_link:
+      enabled_attributes: {  }
+    media_media:
+      allow_view_mode_override: true
 image_upload:
   status: true
   scheme: public

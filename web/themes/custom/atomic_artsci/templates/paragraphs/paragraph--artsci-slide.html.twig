@@ -1,0 +1,87 @@
+{#
+/**
+ * @file
+ * Theme override for the artsci_slide paragraph.
+ *
+ * Every slide renders through the card component (card.html.twig). The parent
+ * slider's size style affects layout/behaviour only, not which component is
+ * used. In 'stats' size the card is rendered WITHOUT an image (an image-less
+ * card); all other sizes render the image normally.
+ *
+ * CARD: the card component receives position classes on the .card element and
+ * format/size classes on the inner .media element (see preprocess), so the
+ * existing card.scss rules apply. The slide also establishes a `column` query
+ * container (see slider-carousel.scss) so card--layout-* resolve.
+ *
+ * Available variables (set in layout_builder_custom_preprocess_paragraph__artsci_slide):
+ * - slide_title: Headline text.
+ * - slide_summary: Rendered body content.
+ * - slide_image: Rendered image field.
+ * - slide_allows_link: TRUE unless the slide media is a remote_video. The link
+ *   is only populated when this is TRUE, so link.link_url is NULL on
+ *   remote_video slides (a link is allowed on image, local video, and no-media
+ *   slides).
+ * - link: { link_url, link_text, link_classes }.
+ * - card_classes: Position classes for the .card element (card--layout-*, card--stacked).
+ * - media_classes: Format + size classes for the inner .media element (media--*).
+ * - button_classes: Button style classes for the card button (button_style LB group).
+ * - slider_context: Full context array from the parent slider block.
+ *
+ * @see layout_builder_custom_preprocess_paragraph__artsci_slide()
+ * @see layout_builder_custom_preprocess_block__inline_block__artsci_slider()
+ */
+#}
+{% set is_stats = slider_context.carousel_size == 'four' %}
+{% set is_one = slider_context.carousel_size == 'one' %}
+{{ attach_library('atomic_artsci/card') }}
+
+{% set card_attributes = create_attribute({ 'class': card_classes|default([]) }) %}
+{% set media_attributes = create_attribute({ 'class': media_classes|default([]) }) %}
+
+<div{{ attributes.addClass(['slider__slide', 'paragraph--carousel-slide']).setAttribute('data-carousel-slide', '') }}>
+  {% if is_stats %}
+  {{ attach_library('atomic_artsci/stat') }}
+
+    {# Stat-card variant for the 4-up "Numbers" carousel. The slide's Headline
+       field supplies the big serif number; the Body supplies the label
+       (optionally wrapped in the slide Link for the underlined treatment). #}
+    <div class="stat-card element--flex-left stat stat__grid">
+    {% if link.link_url %}
+            <a href="{{ link.link_url }}" class="stat__link">
+    {% endif %}
+      {% if slide_title %}
+        <h2 class="stat__title headline--default">{{ slide_title }}</h2>
+      {% endif %}
+      {% if slide_summary %}
+        <div class="stat__description">
+          {{ slide_summary|render|striptags|trim }}
+        </div>
+      {% endif %}
+    {% if link.link_url %}</a>{% endif %}
+    </div>
+  {% else %}
+  {# In the two-up and three-up sizes the slide CTA is the linked headline
+     only: no button, and no media / whole-card click target. The headline
+     stays clickable via headline_url below. #}
+  {% set link_only_headline = slider_context.carousel_size in ['two', 'three'] %}
+  {% embed '@atomic_artsci/artsci/card.html.twig' with {
+    'attributes': card_attributes,
+    'media': is_stats ? null : slide_image,
+    'media_attributes': media_attributes,
+    'headline': {
+      'headline_level': 'h3',
+      'headline_class': ['headline', 'headline--serif', 'headline--medium'],
+      'headline_text': slide_title,
+      'headline_url': link.link_url,
+      'headline_url_class': link.link_url ? 'click-target' : null,
+    },
+    'content': slide_summary,
+    'links': (link.link_url and not link_only_headline) ? [link] : [],
+    'linked_element': link_only_headline ? null : ((not is_stats and not is_one and link.link_url and not link.link_text) ? 'media' : (link.link_text ? 'button' : null)),
+    'show_button': link_only_headline ? false : (link.link_text is not empty),
+    'button_classes': button_classes|default(['bttn', 'bttn--transparent']),
+    'button_attributes': create_attribute(),
+  } only %}
+  {% endembed %}
+  {% endif %}
+</div>

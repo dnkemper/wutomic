@@ -1,0 +1,128 @@
+id: artsci_d10_media_image
+label: 'D10 image media via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    # NOTE: sort=drupal_internal__mid returns 400 on this resource (likely
+    # a jsonapi_extras per-resource sort restriction). The file migration
+    # uses sort=drupal_internal__fid successfully, so it's media-specific.
+    # For a one-time follow-the-links.next migration, order doesn't matter.
+    - 'https://artsci.washu.edu/jsonapi/media/image?page[limit]=50&sort=drupal_internal__mid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    mid:
+      type: integer
+
+  fields:
+    - name: mid
+      label: 'Original MID'
+      selector: 'attributes/drupal_internal__mid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: name
+      label: 'Media name'
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    # The file reference plus its image-attribute meta. JSON:API exposes
+    # alt/title/width/height in the relationship's meta block.
+    - name: file_target_id
+      label: 'Source file FID'
+      selector: 'relationships/field_media_image/data/meta/drupal_internal__target_id'
+    - name: file_alt
+      label: 'Image alt text'
+      selector: 'relationships/field_media_image/data/meta/alt'
+    - name: file_title
+      label: 'Image title attribute'
+      selector: 'relationships/field_media_image/data/meta/title'
+    - name: file_width
+      label: 'Image width'
+      selector: 'relationships/field_media_image/data/meta/width'
+    - name: file_height
+      label: 'Image height'
+      selector: 'relationships/field_media_image/data/meta/height'
+
+process:
+  # Look up existing media by UUID. If a match exists (because the D11 DB
+  # was seeded from a D10 dump, or a prior run partially completed),
+  # return its mid so the destination plugin does an UPDATE instead of
+  # trying to INSERT a duplicate (which violates the uuid unique key).
+  # Returns NULL for truly new rows, in which case Drupal auto-assigns mid.
+  mid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: media
+    value_key: uuid
+
+  uuid: uuid
+  bundle:
+    plugin: default_value
+    default_value: image
+  name: name
+  status: status
+  langcode:
+    plugin: default_value
+    default_value: en
+    source: langcode
+  uid:
+    plugin: default_value
+    default_value: 1
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # Resolve the file reference via the file migration. If the file isn't
+  # in the map, skip the row entirely rather than orphaning a media entity.
+  'field_media_image/target_id':
+    - plugin: skip_on_empty
+      method: row
+      source: file_target_id
+      message: 'Media row skipped: no source file id.'
+    - plugin: migration_lookup
+      migration: artsci_d10_file_image
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+      message: 'Media row skipped: source file not yet migrated.'
+
+  'field_media_image/alt': file_alt
+  'field_media_image/title': file_title
+  'field_media_image/width': file_width
+  'field_media_image/height': file_height
+
+destination:
+  plugin: 'entity:media'
+  default_bundle: image
+
+migration_dependencies:
+  required:
+    - artsci_d10_file_image
+  optional: []

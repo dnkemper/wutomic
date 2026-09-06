@@ -1,0 +1,24 @@
+uuid: 2f9095e1-c423-4f97-aa9e-f1959f338043
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: landscape__1312_x_984
+label: 'Landscape (1312 x 984)'
+effects:
+  32303780-fecc-4418-8c68-689d36208679:
+    uuid: 32303780-fecc-4418-8c68-689d36208679
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1312
+      height: 984
+      crop_type: focal_point
+  15fc4538-0a78-47a4-8818-70c15e7084f1:
+    uuid: 15fc4538-0a78-47a4-8818-70c15e7084f1
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

@@ -1,12 +1,20 @@
+{% set node = element['#object'] %}
+{% set node_url = node.id ? path('entity.node.canonical', {'node': node.id}) : null %}
+
 {% if view_mode == 'teaser' %}
   {%- for item in items -%}
-    {{ item.content }}
+    {% if node_url %}
+      <a href="{{ node_url }}">{{ item.content }}</a>
+    {% else %}
+      {{ item.content }}
+    {% endif %}
   {%- endfor -%}
 {% else %}
   {%- for item in items -%}
-    <h1 {{ attributes }}><span>{{ item.content }}</span></h1>
+    <h1 {{ attributes }}>
+      <span>
+          {{ item.content }}
+      </span>
+    </h1>
   {%- endfor -%}
-  {% if title %}
-    {{ title }}
-  {% endif %}
 {% endif %}

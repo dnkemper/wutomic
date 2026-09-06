@@ -1,0 +1,29 @@
+uuid: 3aff1cea-314c-4a56-addd-0ec242ecaaa2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_person_file_upload
+    - media.type.file
+    - node.type.person
+id: node.person.field_person_file_upload
+field_name: field_person_file_upload
+entity_type: node
+bundle: person
+label: 'File Upload'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      file: file
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

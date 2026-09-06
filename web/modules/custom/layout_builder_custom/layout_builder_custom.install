@@ -1,0 +1,316 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for the Layout Builder Custom module.
+ */
+
+/**
+ * Apply the "banner_narrow" Layout Builder style to all artsci_banner blocks.
+ *
+ * Adds the `banner_narrow` style (group: container) to every artsci_banner
+ * block component found in node layout overrides. Idempotent: banners that
+ * already have the style are skipped. Batched over nodes for safety.
+ *
+ * Note: only the default revision of each node is updated. Nodes whose latest
+ * revision is an unpublished (draft) revision will not have that draft changed.
+ */
+function layout_builder_custom_update_8001(&$sandbox) {
+  $style_id = 'banner_narrow';
+  // Also catch reusable block_content banners, not just inline blocks.
+  $include_reusable = TRUE;
+
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  // First invocation: build the work list and counters.
+  if (!isset($sandbox['nids'])) {
+    $sandbox['nids'] = array_values($node_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->execute());
+    $sandbox['total'] = count($sandbox['nids']);
+    $sandbox['offset'] = 0;
+    $sandbox['components'] = 0;
+    $sandbox['nodes_changed'] = 0;
+  }
+
+  if ($sandbox['total'] == 0) {
+    $sandbox['#finished'] = 1;
+    return t('Layout Builder Custom: no nodes found; nothing to update.');
+  }
+
+  $block_content_storage = \Drupal::entityTypeManager()->getStorage('block_content');
+
+  // Identify an artsci_banner component (inline or, optionally, reusable).
+  $is_banner = function ($component) use ($block_content_storage, $include_reusable) {
+    $plugin_id = $component->getPluginId();
+    if ($plugin_id === 'inline_block:artsci_banner') {
+      return TRUE;
+    }
+    if ($include_reusable && strpos($plugin_id, 'block_content:') === 0) {
+      $blocks = $block_content_storage->loadByProperties([
+        'uuid' => substr($plugin_id, strlen('block_content:')),
+      ]);
+      $block = $blocks ? reset($blocks) : NULL;
+      return $block && $block->bundle() === 'artsci_banner';
+    }
+    return FALSE;
+  };
+
+  // Process a slice of nodes per pass.
+  $slice = array_slice($sandbox['nids'], $sandbox['offset'], 50);
+  foreach ($node_storage->loadMultiple($slice) as $node) {
+    if (!$node->hasField('layout_builder__layout')) {
+      continue;
+    }
+    $changed = FALSE;
+    foreach ($node->get('layout_builder__layout')->getSections() as $section) {
+      foreach ($section->getComponents() as $component) {
+        if (!$is_banner($component)) {
+          continue;
+        }
+        $styles = $component->get('layout_builder_styles_style');
+        $styles = is_array($styles) ? $styles : ($styles ? [$styles] : []);
+        // Skip if already applied (render reads values, not keys).
+        if (in_array($style_id, $styles, TRUE)) {
+          continue;
+        }
+        // Remove any stale copy under another key, then set once.
+        $styles = array_filter($styles, fn($v) => $v !== $style_id);
+        $styles[$style_id] = $style_id;
+        $component->set('layout_builder_styles_style', $styles);
+        $sandbox['components']++;
+        $changed = TRUE;
+      }
+    }
+    if ($changed) {
+      $node->save();
+      $sandbox['nodes_changed']++;
+    }
+  }
+
+  $sandbox['offset'] += count($slice);
+  $sandbox['#finished'] = $sandbox['offset'] >= $sandbox['total']
+    ? 1
+    : ($sandbox['offset'] / $sandbox['total']);
+
+  if ($sandbox['#finished'] === 1) {
+    return t('Applied "@style" to @count banner block(s) across @nodes node(s).', [
+      '@style' => $style_id,
+      '@count' => $sandbox['components'],
+      '@nodes' => $sandbox['nodes_changed'],
+    ]);
+  }
+}
+
+
+/**
+ * Reconcile the field_artsci_headline storage schema (varchar 355, nullable).
+ *
+ * The artsci_headline field type drifted from what the database and Drupal's
+ * stored schema record. Target state: every text column is varchar(355),
+ * pre_headline exists, and heading_size / headline_alignment /
+ * child_heading_size / hide_headline are nullable. Drupal refuses to apply this
+ * through the normal field-storage update path because the field holds data, so
+ * we apply it directly and resync the stored schema so no pending change
+ * remains. Idempotent and only ever widens varchars, adds a missing column, or
+ * relaxes NOT NULL; it never shrinks a column or adds NOT NULL.
+ */
+function layout_builder_custom_update_8004() {
+  $entity_type_id = 'block_content';
+  $field_name = 'field_artsci_headline';
+
+  $definitions = \Drupal::service('entity_field.manager')
+    ->getFieldStorageDefinitions($entity_type_id);
+  if (empty($definitions[$field_name])) {
+    return t('Field @field not found on @type; nothing to reconcile.', [
+      '@field' => $field_name,
+      '@type' => $entity_type_id,
+    ]);
+  }
+  $field_definition = $definitions[$field_name];
+
+  // Authoritative target column specs, straight from the field type schema().
+  $columns = $field_definition->getSchema()['columns'] ?? [];
+  if (empty($columns)) {
+    return t('No columns defined for @field; nothing to reconcile.', [
+      '@field' => $field_name,
+    ]);
+  }
+
+  /** @var \Drupal\Core\Entity\Sql\DefaultTableMapping $table_mapping */
+  $table_mapping = \Drupal::entityTypeManager()
+    ->getStorage($entity_type_id)
+    ->getTableMapping();
+
+  $tables = [$table_mapping->getDedicatedDataTableName($field_definition)];
+  if ($field_definition->isRevisionable()) {
+    $tables[] = $table_mapping->getDedicatedRevisionTableName($field_definition);
+  }
+
+  // 1. Bring the real columns in line in each dedicated table.
+  $db_schema = \Drupal::database()->schema();
+  foreach ($tables as $table) {
+    if (!$db_schema->tableExists($table)) {
+      continue;
+    }
+    foreach ($columns as $logical_name => $spec) {
+      $db_column = $table_mapping->getFieldColumnName($field_definition, $logical_name);
+      if ($db_schema->fieldExists($table, $db_column)) {
+        // Widens varchars and relaxes NOT NULL; a no-op where already correct.
+        $db_schema->changeField($table, $db_column, $db_column, $spec);
+      }
+      else {
+        $db_schema->addField($table, $db_column, $spec);
+      }
+    }
+  }
+
+  // 2. Resync Drupal's stored table schema so it stops seeing a pending change.
+  // For existing columns only the changed keys (length, not null) are touched,
+  // preserving the stored format; missing columns (e.g. pre_headline on older
+  // sites) are added in full.
+  $kv = \Drupal::keyValue('entity.storage_schema.sql');
+  $kv_key = $entity_type_id . '.field_schema_data.' . $field_name;
+  $stored = $kv->get($kv_key, []);
+  foreach ($tables as $table) {
+    foreach ($columns as $logical_name => $spec) {
+      $db_column = $table_mapping->getFieldColumnName($field_definition, $logical_name);
+      if (isset($stored[$table]['fields'][$db_column])) {
+        if (isset($spec['length'])) {
+          $stored[$table]['fields'][$db_column]['length'] = $spec['length'];
+        }
+        $stored[$table]['fields'][$db_column]['not null'] = $spec['not null'] ?? FALSE;
+      }
+      else {
+        $stored[$table]['fields'][$db_column] = $spec;
+      }
+    }
+  }
+  $kv->set($kv_key, $stored);
+
+  // 3. Refresh the last-installed field storage definition to match the code,
+  // so the entity definition update manager no longer reports a mismatch.
+  \Drupal::service('entity.last_installed_schema.repository')
+    ->setLastInstalledFieldStorageDefinition($field_definition);
+
+  return t('Reconciled @field schema (varchar 355, nullable) across @count table(s).', [
+    '@field' => $field_name,
+    '@count' => count($tables),
+  ]);
+}
+
+
+/**
+ * Repopulate missing field storage schema baselines (table already correct).
+ *
+ * Some sites carry field storage definitions that Drupal reports as needing an
+ * update even though the database table and indexes already match the field
+ * type: the stored schema baseline (entity.storage_schema.sql) was never
+ * written for them, usually a side effect of how the database was built or
+ * restored. For each such field this repopulates the baseline through the
+ * supported update path, which performs no table change.
+ *
+ * It is strictly limited to that case. A field is only touched when it is
+ * flagged for update, uses dedicated table storage, has an empty stored
+ * baseline, and already has every column the field type declares. Anything that
+ * looks like a real schema change (baseline present, or a column missing from
+ * the table) is skipped and listed so it gets individual attention rather than
+ * risking a forbidden change on a field that holds data. Idempotent, and a
+ * no-op on healthy sites.
+ */
+function layout_builder_custom_update_8005() {
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $db_schema = \Drupal::database()->schema();
+  $stored_schema = \Drupal::keyValue('entity.storage_schema.sql');
+
+  $reconciled = [];
+  $skipped = [];
+
+  foreach ($update_manager->getChangeList() as $entity_type_id => $changes) {
+    $flagged = $changes['field_storage_definitions'] ?? [];
+    if (!$flagged) {
+      continue;
+    }
+
+    $definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
+    $table_mapping = $entity_type_manager->getStorage($entity_type_id)->getTableMapping();
+
+    foreach ($flagged as $field_name => $op) {
+      $label = $entity_type_id . '.' . $field_name;
+
+      // Only the "update an existing definition" case is in scope.
+      if ($op !== \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface::DEFINITION_UPDATED
+        || empty($definitions[$field_name])) {
+        $skipped[] = $label . ' (not a field update)';
+        continue;
+      }
+      $definition = $definitions[$field_name];
+
+      if (!$table_mapping->requiresDedicatedTableStorage($definition)) {
+        $skipped[] = $label . ' (shared table storage)';
+        continue;
+      }
+
+      // Guard 1: the stored baseline must be empty (never recorded). A present
+      // baseline that still differs means a real change, not a missing record.
+      $baseline = $stored_schema->get($entity_type_id . '.field_schema_data.' . $field_name, []);
+      if (!empty($baseline)) {
+        $skipped[] = $label . ' (baseline present; review separately)';
+        continue;
+      }
+
+      // Guard 2: every declared column must already exist, so the update has
+      // nothing to add or alter on the table.
+      $tables = [$table_mapping->getDedicatedDataTableName($definition)];
+      if ($definition->isRevisionable()) {
+        $tables[] = $table_mapping->getDedicatedRevisionTableName($definition);
+      }
+      $columns = $definition->getSchema()['columns'] ?? [];
+      $all_present = TRUE;
+      foreach ($tables as $table) {
+        if (!$db_schema->tableExists($table)) {
+          $all_present = FALSE;
+          break;
+        }
+        foreach ($columns as $logical_name => $spec) {
+          $db_column = $table_mapping->getFieldColumnName($definition, $logical_name);
+          if (!$db_schema->fieldExists($table, $db_column)) {
+            $all_present = FALSE;
+            break 2;
+          }
+        }
+      }
+      if (!$all_present) {
+        $skipped[] = $label . ' (table missing a column; review separately)';
+        continue;
+      }
+
+      // Safe: repopulate the baseline. No table change happens because every
+      // column already exists.
+      try {
+        $update_manager->updateFieldStorageDefinition($definition);
+        $reconciled[] = $label;
+      }
+      catch (\Throwable $e) {
+        $skipped[] = $label . ' (update threw: ' . $e->getMessage() . ')';
+      }
+    }
+  }
+
+  if (!$reconciled && !$skipped) {
+    return t('No field storage schema baselines needed reconciling.');
+  }
+
+  $message = t('Reconciled @count baseline(s): @list.', [
+    '@count' => count($reconciled),
+    '@list' => $reconciled ? implode(', ', $reconciled) : 'none',
+  ]);
+  if ($skipped) {
+    $message .= ' ' . t('Skipped (needs review): @skipped.', [
+      '@skipped' => implode(', ', $skipped),
+    ]);
+  }
+  return $message;
+}

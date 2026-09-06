@@ -684,6 +684,7 @@ class ListBlock extends CoreBlock {
       'block_people_slf',
       'block_people_sfl',
       'block_articles',
+      'list_article',
     ];
     if (in_array($display->display['id'], $exceptions)) {
       return TRUE;
@@ -703,6 +704,7 @@ class ListBlock extends CoreBlock {
       'block_people_slf',
       'block_people_sfl',
       'block_articles',
+      'list_article'
     ];
     if (in_array($display->display['id'], $exceptions)) {
       return FALSE;

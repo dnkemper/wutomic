@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -90,7 +105,7 @@ form#fragment-region-item-layout-builder-form, form#node-page-layout-builder-for
   width: 40px;
   margin-left: 0;
   border: 1px solid #ccc;
-  background: url(/core/misc/icons/bebebe/ex.svg) #fff center center/16px 16px no-repeat !important;
+  background: url("/core/misc/icons/bebebe/ex.svg") #fff center center/16px 16px no-repeat !important;
 }
 .layout-builder .layout-builder__link:focus {
   opacity: 1;
@@ -115,7 +130,7 @@ form#fragment-region-item-layout-builder-form, form#node-page-layout-builder-for
 }
 .layout-builder__link {
   color: #545454 !important;
-  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen-Sans", "Ubuntu", "Cantarell", "Helvetica Neue", sans-serif;
   font-weight: bold;
   border-bottom: 0;
   padding: 0.3rem 0 0 0;
@@ -138,7 +153,7 @@ form#fragment-region-item-layout-builder-form, form#node-page-layout-builder-for
 }
 .layout-builder__link--remove:hover {
   background-color: #111111;
-  background-image: url(/core/misc/icons/ffffff/ex.svg);
+  background-image: url("/core/misc/icons/ffffff/ex.svg");
 }
 .layout-builder .layout-builder-block:hover {
   outline: 1px dashed #d6d6d6;
@@ -186,76 +201,94 @@ form#fragment-region-item-layout-builder-form, form#node-page-layout-builder-for
   flex-basis: unset;
 }
 
-.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container {
+.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container,
+.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__section_container:not([class*=bg-]) > .layout__container,
+.layout__section_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container,
+.layout__section_container:not([class*=bg-]) + .layout-builder__add-section + .layout__section_container:not([class*=bg-]) > .layout__container {
   padding-top: 0;
 }
-.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container.section-padding__top-restored {
+.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container.section-padding__top-restored,
+.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__section_container:not([class*=bg-]) > .layout__container.section-padding__top-restored,
+.layout__section_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container.section-padding__top-restored,
+.layout__section_container:not([class*=bg-]) + .layout-builder__add-section + .layout__section_container:not([class*=bg-]) > .layout__container.section-padding__top-restored {
   padding-top: 3rem;
 }
-.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container.section-padding__top-extra {
+.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container.section-padding__top-extra,
+.layout__spacing_container:not([class*=bg-]) + .layout-builder__add-section + .layout__section_container:not([class*=bg-]) > .layout__container.section-padding__top-extra,
+.layout__section_container:not([class*=bg-]) + .layout-builder__add-section + .layout__spacing_container:not([class*=bg-]) > .layout__container.section-padding__top-extra,
+.layout__section_container:not([class*=bg-]) + .layout-builder__add-section + .layout__section_container:not([class*=bg-]) > .layout__container.section-padding__top-extra {
   padding-top: 6rem;
 }
-.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container {
+.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container,
+.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__section_container[class*=bg--red] > .layout__container,
+.layout__section_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container,
+.layout__section_container[class*=bg--red] + .layout-builder__add-section + .layout__section_container[class*=bg--red] > .layout__container {
   padding-top: 0;
 }
-.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container.section-padding__top-restored {
+.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container.section-padding__top-restored,
+.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__section_container[class*=bg--red] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--red] + .layout-builder__add-section + .layout__section_container[class*=bg--red] > .layout__container.section-padding__top-restored {
   padding-top: 3rem;
 }
-.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container.section-padding__top-extra {
+.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container.section-padding__top-extra,
+.layout__spacing_container[class*=bg--red] + .layout-builder__add-section + .layout__section_container[class*=bg--red] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--red] + .layout-builder__add-section + .layout__spacing_container[class*=bg--red] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--red] + .layout-builder__add-section + .layout__section_container[class*=bg--red] > .layout__container.section-padding__top-extra {
   padding-top: 6rem;
 }
-.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container {
+.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container,
+.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__section_container[class*=bg--black] > .layout__container,
+.layout__section_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container,
+.layout__section_container[class*=bg--black] + .layout-builder__add-section + .layout__section_container[class*=bg--black] > .layout__container {
   padding-top: 0;
 }
-.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container.section-padding__top-restored {
+.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container.section-padding__top-restored,
+.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__section_container[class*=bg--black] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--black] + .layout-builder__add-section + .layout__section_container[class*=bg--black] > .layout__container.section-padding__top-restored {
   padding-top: 3rem;
 }
-.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container.section-padding__top-extra {
+.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container.section-padding__top-extra,
+.layout__spacing_container[class*=bg--black] + .layout-builder__add-section + .layout__section_container[class*=bg--black] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--black] + .layout-builder__add-section + .layout__spacing_container[class*=bg--black] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--black] + .layout-builder__add-section + .layout__section_container[class*=bg--black] > .layout__container.section-padding__top-extra {
   padding-top: 6rem;
 }
-.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container {
+.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container,
+.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__section_container[class*=bg--gray] > .layout__container,
+.layout__section_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container,
+.layout__section_container[class*=bg--gray] + .layout-builder__add-section + .layout__section_container[class*=bg--gray] > .layout__container {
   padding-top: 0;
 }
-.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container.section-padding__top-restored {
+.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container.section-padding__top-restored,
+.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__section_container[class*=bg--gray] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--gray] + .layout-builder__add-section + .layout__section_container[class*=bg--gray] > .layout__container.section-padding__top-restored {
   padding-top: 3rem;
 }
-.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container.section-padding__top-extra {
+.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container.section-padding__top-extra,
+.layout__spacing_container[class*=bg--gray] + .layout-builder__add-section + .layout__section_container[class*=bg--gray] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--gray] + .layout-builder__add-section + .layout__spacing_container[class*=bg--gray] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--gray] + .layout-builder__add-section + .layout__section_container[class*=bg--gray] > .layout__container.section-padding__top-extra {
   padding-top: 6rem;
 }
-.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container {
+.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container,
+.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__section_container[class*=bg--white] > .layout__container,
+.layout__section_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container,
+.layout__section_container[class*=bg--white] + .layout-builder__add-section + .layout__section_container[class*=bg--white] > .layout__container {
   padding-top: 0;
 }
-.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container.section-padding__top-restored {
+.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container.section-padding__top-restored,
+.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__section_container[class*=bg--white] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container.section-padding__top-restored,
+.layout__section_container[class*=bg--white] + .layout-builder__add-section + .layout__section_container[class*=bg--white] > .layout__container.section-padding__top-restored {
   padding-top: 3rem;
 }
-.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container.section-padding__top-extra {
-  padding-top: 6rem;
-}
-.layout__spacing_container.bg-pattern--brain + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain > .layout__container {
-  padding-top: 0;
-}
-.layout__spacing_container.bg-pattern--brain + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain > .layout__container.section-padding__top-restored {
-  padding-top: 3rem;
-}
-.layout__spacing_container.bg-pattern--brain + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain > .layout__container.section-padding__top-extra {
-  padding-top: 6rem;
-}
-.layout__spacing_container.bg-pattern--brain-reversed + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain-reversed > .layout__container {
-  padding-top: 0;
-}
-.layout__spacing_container.bg-pattern--brain-reversed + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain-reversed > .layout__container.section-padding__top-restored {
-  padding-top: 3rem;
-}
-.layout__spacing_container.bg-pattern--brain-reversed + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain-reversed > .layout__container.section-padding__top-extra {
-  padding-top: 6rem;
-}
-.layout__spacing_container.bg-pattern--brain-black + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain-black > .layout__container {
-  padding-top: 0;
-}
-.layout__spacing_container.bg-pattern--brain-black + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain-black > .layout__container.section-padding__top-restored {
-  padding-top: 3rem;
-}
-.layout__spacing_container.bg-pattern--brain-black + .layout-builder__add-section + .layout__spacing_container.bg-pattern--brain-black > .layout__container.section-padding__top-extra {
+.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container.section-padding__top-extra,
+.layout__spacing_container[class*=bg--white] + .layout-builder__add-section + .layout__section_container[class*=bg--white] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--white] + .layout-builder__add-section + .layout__spacing_container[class*=bg--white] > .layout__container.section-padding__top-extra,
+.layout__section_container[class*=bg--white] + .layout-builder__add-section + .layout__section_container[class*=bg--white] > .layout__container.section-padding__top-extra {
   padding-top: 6rem;
 }
 
@@ -329,14 +362,17 @@ form#fragment-region-item-layout-builder-form, form#node-page-layout-builder-for
 
 .js-layout-builder-block.element-invisible {
   position: static !important;
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: auto;
+  clip-path: none;
   height: auto;
   width: auto;
   overflow: auto;
+  white-space: normal;
   position: relative !important;
   width: 100%;
 }
-.js-layout-builder-block.element-invisible:before {
+.js-layout-builder-block.element-invisible::before {
   content: "This block is set to be visually hidden";
   display: block;
   width: 100%;
@@ -344,7 +380,7 @@ form#fragment-region-item-layout-builder-form, form#node-page-layout-builder-for
   font-style: italic;
   z-index: 1;
 }
-.js-layout-builder-block.element-invisible:after {
+.js-layout-builder-block.element-invisible::after {
   content: "";
   display: block;
   width: 100%;
@@ -432,4 +468,6 @@ div[data-drupal-selector=edit-moderation-state-0] #edit-moderation-state-0-curre
 
 [data-drupal-selector=edit-message] {
   display: none;
-}/*# sourceMappingURL=layout-builder.css.map */
+}
+
+/*# sourceMappingURL=layout-builder.css.map */

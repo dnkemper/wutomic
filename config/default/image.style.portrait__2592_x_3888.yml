@@ -1,0 +1,24 @@
+uuid: 05c7a4d9-2aef-4d23-8516-c234b5d6071c
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__2592_x_3888
+label: 'Portrait (2592 x 3888)'
+effects:
+  f4b693c8-1fde-4c12-9405-b123a4c5f60b:
+    uuid: f4b693c8-1fde-4c12-9405-b123a4c5f60b
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 2592
+      height: 3888
+      crop_type: focal_point
+  bda7b624-f23e-49f3-bf36-3fa41e42356a:
+    uuid: bda7b624-f23e-49f3-bf36-3fa41e42356a
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

@@ -16,7 +16,26 @@
     }
   }
 }
+.section__headline {
+  width: 100%;
+}
+.headline__prefix,
+.banner__pre-title {
+  color: #971b2f;
+  font-family: var(--font-family-sans-serif);
+  font-size: 1rem;
+  margin: 10px 0;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 1.3125rem */
+  letter-spacing: 0.04375rem;
+  text-transform: uppercase;
 
+  [class*='bg--teal'] &,
+  [class*='bg--red'] & {
+    color: variables.$white;
+  }
+}
 @mixin headline-negative {
   color: variables.$white;
 
@@ -56,7 +75,7 @@
   -webkit-box-decoration-break: clone;
   color: variables.$secondary;
   text-shadow: none;
-  [class*="bg--red"] & {
+  [class*='bg--red'] & {
     background: variables.$secondary;
     color: #fff;
   }
@@ -65,16 +84,16 @@
 @mixin headline-highlight-word-uppercase {
   background: variables.$primary;
   display: inline-block;
-  margin-bottom: .8rem;
-  margin-top: .8rem;
-  padding: .4rem 1.2rem .8rem;
+  margin-bottom: 0.8rem;
+  margin-top: 0.8rem;
+  padding: 0.4rem 1.2rem 0.8rem;
   color: variables.$secondary;
-  [class*="bg--red"] & {
+  [class*='bg--red'] & {
     background: variables.$secondary;
     color: #fff;
     font-weight: 400;
   }
-  [class*="bg--red"] [class*="bg--black"] & {
+  [class*='bg--red'] [class*='bg--black'] & {
     background: variables.$primary;
     color: variables.$secondary;
   }
@@ -82,27 +101,25 @@
 
 @mixin headline-underline {
   padding-bottom: variables.$sm;
-  overflow: auto;
+  // overflow: auto;
 
-  &:after {
-    content: "";
+  &::after {
+    content: '';
     display: block;
-    width: 75px;
-    height: 6px;
-    margin-top: 15px;
+    width: 20%;
+    height: 2px;
+    margin-top: 2rem;
     background: variables.$primary;
   }
 
   &.headline--center {
-    &:after {
+    &::after {
       margin-right: auto;
       margin-left: auto;
     }
   }
-
-  .bg-pattern--brain-reversed &,
-  [class*="bg--red"] & {
-    &:after {
+  [class*='bg--red'] & {
+    &::after {
       background: variables.$light;
     }
   }
@@ -122,7 +139,24 @@ h6 {
   line-height: 1.125;
   letter-spacing: 0;
 }
-
+.headline--red {
+  color: variables.$primary !important;
+  [class*='bg--teal'] &,
+  [class*='bg--red'] &,
+  [class*='bg--'] [class*='bg--teal'] &,
+  [class*='bg--'] [class*='bg--red'] & {
+    color: white !important;
+  }
+}
+.block__pre-title {
+  color: #971b2f;
+  font-weight: 600;
+  font-family: variables.$font-family-sans-serif;
+  line-height: 150%;
+  letter-spacing: 5%;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
 h1,
 .h1 {
   @include utilities.h1;
@@ -207,7 +241,8 @@ h1 {
   margin-top: 1.75rem;
 }
 
-body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-title {
+body:not(.page-node-type-article, .page-node-type-page)
+  #block-artsci-base-page-title {
   margin-bottom: 1.5rem;
 }
 
@@ -237,7 +272,7 @@ body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-
 .headline {
   @include headline;
 
-  [class*="bg-"] & {
+  [class*='bg-'] & {
     a {
       color: inherit;
     }
@@ -251,6 +286,10 @@ body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-
 
 .headline--center {
   text-align: center;
+}
+
+.headline--left {
+  text-align: left;
 }
 
 .bold-headline--caps,
@@ -283,7 +322,7 @@ body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-
 .bold-headline--caps .headline__heading,
 .headline--uppercase .headline__heading,
 .headline--uppercase .headline__text {
-  [class*="bg--red"] & {
+  [class*='bg--red'] & {
     font-weight: 400;
   }
 }
@@ -300,7 +339,7 @@ body:not(.page-node-type-article, .page-node-type-page) #block-artsci-base-page-
 
   &.text-align-center,
   .text-align-center & {
-    &:after {
+    &::after {
       margin-right: auto;
       margin-left: auto;
     }
@@ -313,7 +352,7 @@ h5,
   &.headline--underline {
     @include headline-underline;
 
-    &:after {
+    &::after {
       height: 5px;
     }
   }
@@ -325,7 +364,7 @@ h6,
   &.headline--underline {
     @include headline-underline;
 
-    &:after {
+    &::after {
       height: 4px;
     }
   }
@@ -335,15 +374,13 @@ h6,
 // UNDERLINE OVERRIDES (nested background contexts)
 // --------------------------------------------------------------------------
 
-.bg-pattern--brain-black [class*="bg--gray"],
-[class*="bg--black"] [class*="bg--gray"],
-.bg-pattern--brain-reversed [class*="bg--gray"],
-[class*="bg--red"] [class*="bg--gray"],
-.bg-pattern--brain-reversed [class*="bg--white"],
-[class*="bg--red"] [class*="bg--white"] {
+[class*='bg--tan'] [class*='bg--gray'],
+[class*='bg--red'] [class*='bg--gray'],
+[class*='bg--tan'] [class*='bg--white'],
+[class*='bg--red'] [class*='bg--white'] {
   .bold-headline--underline,
   .headline--underline {
-    &:after {
+    &::after {
       background: variables.$primary;
     }
   }

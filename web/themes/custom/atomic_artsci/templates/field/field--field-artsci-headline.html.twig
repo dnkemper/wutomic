@@ -45,15 +45,31 @@
 %}
 
 {% for item in items %}
-  {% if item.content['#text'] %}
+  {% if item.content['#text'] or item.content['#pre_headline'] %}
     {% set styles = item.content['#styles'] %}
     {% set headline_classes = headline_classes|merge([styles]) %}
-    {% set headline = {
-      'headline_level' : item.content['#size'] ?: 'h2',
-      'headline_class' : headline_classes,
-      'headline_text' : item.content['#text'] ?: '',
-      'headline_location' : item.content['#alignment'] ?: 'default',
-    } %}
-    {% include '@atomic_artsci/artsci/headline.html.twig' with headline only %}
+
+    {# Render main headline if it exists #}
+    {% if item.content['#text'] %}
+      {% set headline = {
+        'headline_level': item.content['#size'] ?: 'h2',
+        'headline_class': headline_classes,
+        'headline_prefix' : item.content['#pre_headline'] ?: null,
+        'headline_text': item.content['#text'],
+        'headline_location': item.content['#alignment'] ?: 'default',
+      } %}
+      {% include '@atomic_artsci/artsci/headline.html.twig' with headline only %}
+          {# Render pre-headline if it exists #}
+    {% elseif item.content['#pre_headline'] %}
+      {% set pre_headline_classes = headline_classes|filter(class => class != 'headline--highlight')|merge(['banner__pre-title']) %}
+      {% set pre_headline = {
+        'headline_level': 'div',
+        'headline_class': pre_headline_classes,
+        'headline_text': item.content['#pre_headline'],
+        'headline_location': item.content['#alignment'] ?: 'default',
+      } %}
+      {% include '@atomic_artsci/artsci/headline.html.twig' with pre_headline only %}
+    {% endif %}
+
   {% endif %}
 {% endfor %}

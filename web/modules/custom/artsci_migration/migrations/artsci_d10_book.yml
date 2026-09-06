@@ -1,0 +1,310 @@
+id: artsci_d10_book
+label: 'D10 book nodes to D11 book via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/book?page[limit]=50&sort=drupal_internal__nid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+
+    # ---- Base node properties ----
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: promote
+      label: Promoted
+      selector: 'attributes/promote'
+    - name: sticky
+      label: Sticky
+      selector: 'attributes/sticky'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Book-specific scalar fields (same-name passthroughs) ----
+    - name: byline_options
+      label: 'Byline options'
+      selector: 'attributes/field_byline_options'
+    - name: byline_names
+      label: 'Byline names'
+      selector: 'attributes/field_byline_names'
+    - name: description_value
+      label: 'Description value'
+      selector: 'attributes/field_description/value'
+    - name: description_format
+      label: 'Description format'
+      selector: 'attributes/field_description/format'
+
+    # ---- Shared content ----
+    - name: is_shared
+      label: 'Is shared'
+      selector: 'attributes/field_is_shared'
+    - name: shared_content
+      label: 'Shared content payload'
+      selector: 'attributes/field_shared_content'
+    - name: shared_content_xml
+      label: 'Shared content XML URL'
+      selector: 'attributes/field_shared_content_xml'
+    - name: content_hash
+      label: 'Content hash'
+      selector: 'attributes/field_content_hash'
+
+    # ---- Rabbit Hole ----
+    - name: rh_action
+      label: 'Rabbit hole action'
+      selector: 'attributes/rh_action'
+    - name: rh_redirect
+      label: 'Rabbit hole redirect URL'
+      selector: 'attributes/rh_redirect'
+    - name: rh_redirect_response
+      label: 'Rabbit hole redirect HTTP code'
+      selector: 'attributes/rh_redirect_response'
+    - name: rh_redirect_fallback_action
+      label: 'Rabbit hole fallback action'
+      selector: 'attributes/rh_redirect_fallback_action'
+
+    # ---- Media reference ----
+    # D10 field_thumbnail -> D11 field_image
+    - name: source_thumbnail_id
+      label: 'D10 field_thumbnail media MID'
+      selector: 'relationships/field_thumbnail/data/meta/drupal_internal__target_id'
+
+    # ---- Taxonomy references ----
+    # D10 field_book_categories (book_categories vocab) -> D11 book_tags (tags vocab)
+    - name: source_book_categories
+      label: 'D10 field_book_categories taxonomy data'
+      selector: 'relationships/field_book_categories/data'
+
+    # ---- Author references ----
+    # D10 field_faculty_and_staff references `author` content type nodes;
+    # those now migrate into D11 person nodes with person_type=author via
+    # artsci_d10_author. We resolve each D10 author NID through that
+    # migration's map to get the D11 person node id.
+    - name: source_faculty_and_staff
+      label: 'D10 field_faculty_and_staff node refs (author bundle)'
+      selector: 'relationships/field_faculty_and_staff/data'
+
+    # ---- Link paragraph references ----
+    # D10 field_links_p paragraph refs -> D11 field_book_links link field.
+    # Handled by the jsonapi_links_from_refs plugin the same way person
+    # migration consolidates paragraph links into field_person_website.
+    - name: source_links_refs
+      label: 'D10 field_links_p paragraph references'
+      selector: 'relationships/field_links_p/data'
+
+process:
+  # ---- Identity ----
+  # Preserve the D10 nid verbatim. If a node with this nid already exists
+  # on D11 (seeded DB or prior run), migrate UPDATEs it; otherwise it
+  # creates a new node with this exact nid. UUID is still carried over so
+  # cross-site references stay stable.
+  nid: nid
+  uuid: uuid
+
+  type:
+    plugin: default_value
+    default_value: book
+  langcode: langcode
+
+  # ---- Authorship ----
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  promote: promote
+  sticky: sticky
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps ----
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title ----
+  title: title
+
+  # ---- Byline ----
+  field_byline_options: byline_options
+  field_byline_names: byline_names
+
+  # ---- Description ----
+  # D10 field_description is text_long; D11 field_description is text_long too.
+  # Strip the literal <html>...</html> wrapper same as article/person migrations.
+  'field_description/value':
+    - plugin: str_replace
+      source: description_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'field_description/format':
+    plugin: default_value
+    default_value: full_html
+    source: description_format
+
+  # ---- Path alias ----
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  # ---- Shared content ----
+  field_is_shared: is_shared
+  field_shared_content: shared_content
+  field_shared_content_xml: shared_content_xml
+  field_content_hash: content_hash
+
+  # ---- Book cover: D10 field_thumbnail -> D11 field_image ----
+  field_image:
+    - plugin: skip_on_empty
+      method: process
+      source: source_thumbnail_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  # ---- Book tags (D10 field_book_categories -> D11 book_tags) ----
+  # TODO: once a book_categories -> tags taxonomy migration exists, swap
+  # the direct target_id passthrough below for a migration_lookup against
+  # it (see artsci_d10_taxonomy_faculty_areas_of_study as a template).
+  # For now, raw target_id pass-through matches the article migration's
+  # field_tags approach. If the D11 tags term IDs don't match D10
+  # book_categories term IDs, build the taxonomy migration first.
+# ---- Book tags (D10 field_book_categories -> D11 book_tags) ----
+  # D10 book_categories terms get migrated into D11 tags vocab via
+  # artsci_d10_taxonomy_book_categories. Resolve each D10 term ID through
+  # that migration's map to get the destination D11 tags term ID.
+  book_tags:
+    plugin: sub_process
+    source: source_book_categories
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration: artsci_d10_taxonomy_book_categories
+          source: meta/drupal_internal__target_id
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+  # ---- Book author (D10 author nodes -> D11 person with type=author) ----
+  # D10 field_faculty_and_staff references author-bundle nodes (NOT
+  # faculty_staff). Those were consolidated into person nodes with
+  # person_type=author by the artsci_d10_author migration. Resolve each
+  # D10 NID through that migration's map to get the destination person nid.
+  field_book_author:
+    plugin: sub_process
+    source: source_faculty_and_staff
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration: artsci_d10_author
+          source: meta/drupal_internal__target_id
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+
+  # ---- Book links (D10 field_links_p paragraphs -> D11 field_book_links) ----
+  # Same pattern as person's field_person_website: we do NOT create
+  # paragraph entities on D11. Instead, jsonapi_links_from_refs fetches
+  # each paragraph's attributes from the source via JSON:API and returns
+  # an array of link field values {uri, title, options}.
+  field_book_links:
+    plugin: jsonapi_links_from_refs
+    source: source_links_refs
+    base_url: 'https://artsci.washu.edu'
+    url_field: field_button_url
+    title_field: field_call_to_action_button_text
+    new_window_field: field_new_window
+  # ---- Rabbit Hole ----
+  'rabbit_hole__settings/rh_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_action
+  'rabbit_hole__settings/rh_redirect': rh_redirect
+  'rabbit_hole__settings/rh_redirect_response':
+    plugin: default_value
+    default_value: 301
+    source: rh_redirect_response
+  'rabbit_hole__settings/rh_redirect_fallback_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_redirect_fallback_action
+
+  # ----------------------------------------------------------------
+  # UNMAPPED D10 fields (intentional):
+  #   field_featured_book              -> no D11 equivalent; surfaced
+  #                                       via featured_content block now
+  #   field_shared_content_subscribers -> no D11 equivalent
+  #
+  # UNMAPPED D11 fields (source data doesn't exist on D10):
+  #   field_book_publication_date  -> new field, no D10 source
+  #   field_book_subtitle          -> new field, no D10 source
+  #   field_book_related_reads     -> new field, curated post-migration
+  #   field_is_shared_content      -> duplicate-looking flag (vs field_is_shared);
+  #                                   confirm intended semantics before mapping
+  #   field_last_fetch             -> populated by shared-content ingest, not migration
+  #   field_meta_tags              -> deferred, same as article/person
+  #   body                         -> D11 has body AND field_description;
+  #                                   description is the authored prose on D10,
+  #                                   so it maps to field_description here. If
+  #                                   you want body populated too, add a parallel
+  #                                   'body/value' mapping.
+  # ----------------------------------------------------------------
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: book
+
+migration_dependencies:
+  required:
+    - artsci_d10_media_image
+    - artsci_d10_author
+  optional: []

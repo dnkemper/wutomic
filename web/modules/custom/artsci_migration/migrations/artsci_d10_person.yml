@@ -1,0 +1,634 @@
+id: artsci_d10_person
+label: 'D10 faculty_staff nodes to D11 person via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/faculty_staff?page[limit]=50&sort=drupal_internal__nid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+
+    # ---- Base node properties ----
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: promote
+      label: Promoted
+      selector: 'attributes/promote'
+    - name: sticky
+      label: Sticky
+      selector: 'attributes/sticky'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Biography -> body ----
+    - name: bio_value
+      label: 'Biography body'
+      selector: 'attributes/field_biography/value'
+    - name: bio_format
+      label: 'Biography format'
+      selector: 'attributes/field_biography/format'
+    # NOTE: bio_summary (the native summary on field_biography) is no longer
+    # mapped. body/summary is now sourced from link_excerpt below to match
+    # the shared_content import behavior. Leaving the source field declared
+    # in case it's needed later; safe to remove if it never is.
+    - name: bio_summary
+      label: 'Biography summary'
+      selector: 'attributes/field_biography/summary'
+
+    # ---- Dani's explicit renames ----
+    - name: first_name
+      label: 'First name'
+      selector: 'attributes/field_first_name'
+    - name: last_name
+      label: 'Last name'
+      selector: 'attributes/field_last_name'
+    - name: phone
+      label: Phone
+      selector: 'attributes/field_phone_number'
+    - name: email
+      label: Email
+      selector: 'attributes/field_email_address'
+    - name: fax
+      label: Fax
+      selector: 'attributes/field_fax_number'
+    - name: pronouns
+      label: Pronouns
+      selector: 'attributes/field_pronouns'
+    - name: education
+      label: Education
+      selector: 'attributes/field_education'
+    - name: link_excerpt
+      label: 'Link excerpt'
+      selector: 'attributes/field_link_excerpt/value'
+    - name: office_hours
+      label: 'Office hours'
+      selector: 'attributes/field_office_hours'
+
+    # ---- Same-name passthroughs ----
+    - name: building_room
+      label: 'Building and room'
+      selector: 'attributes/field_building_name_and_room_num'
+    - name: mailing_address
+      label: 'Mailing address'
+      selector: 'attributes/field_mailing_address'
+    - name: position
+      label: Position
+      selector: 'attributes/field_position'
+    - name: additional_titles
+      label: 'Additional titles'
+      selector: 'attributes/field_additional_titles'
+    - name: interests
+      label: Interests
+      selector: 'attributes/field_interests'
+    - name: external_url
+      label: 'Office Directions link (legacy)'
+      selector: 'attributes/field_external_url'
+    - name: ext_url_uri
+      label: 'External link URI'
+      selector: 'attributes/field_external_url/uri'
+    - name: ext_url_title
+      label: 'External link title'
+      selector: 'attributes/field_external_url/title'
+    - name: source_links_refs
+      label: 'D10 field_links_p paragraph references'
+      selector: 'relationships/field_links_p/data'
+    - name: external_link
+      label: 'External Link (legacy)'
+      selector: 'attributes/field_external_link'
+    - name: ext_link_uri
+      label: 'External URL URI'
+      selector: 'attributes/field_external_link/uri'
+
+    # ---- Shared content ----
+    - name: is_shared
+      label: 'Is shared'
+      selector: 'attributes/field_is_shared'
+    - name: shared_content
+      label: 'Shared content payload'
+      selector: 'attributes/field_shared_content'
+    - name: shared_content_xml
+      label: 'Shared content XML URL'
+      selector: 'attributes/field_shared_content_xml'
+    - name: content_hash
+      label: 'Content hash'
+      selector: 'attributes/field_content_hash'
+
+    # ---- Rabbit Hole ----
+    - name: rh_action
+      label: 'Rabbit hole action'
+      selector: 'attributes/rh_action'
+    - name: rh_redirect
+      label: 'Rabbit hole redirect URL'
+      selector: 'attributes/rh_redirect'
+    - name: rh_redirect_response
+      label: 'Rabbit hole redirect HTTP code'
+      selector: 'attributes/rh_redirect_response'
+    - name: rh_redirect_fallback_action
+      label: 'Rabbit hole fallback action'
+      selector: 'attributes/rh_redirect_fallback_action'
+
+    # ---- Media reference ----
+    - name: source_headshot_id
+      label: 'D10 field_author_headshot media MID'
+      selector: 'relationships/field_author_headshot/data/meta/drupal_internal__target_id'
+    - name: source_cv_id
+      label: 'D10 field_cv media MID'
+      selector: 'relationships/field_cv/data/meta/drupal_internal__target_id'
+
+    # ---- Taxonomy references ----
+    # research_areas vocab has matching term IDs on both sites (per Dani),
+    # so raw target_id passthrough is safe. field_type_of_staff terms need
+    # a static_map to convert to D11 person_type machine names.
+    - name: source_research_areas
+      label: 'D10 field_faculty_areas_of_study taxonomy data'
+      selector: 'relationships/field_faculty_areas_of_study/data'
+    - name: source_type_of_staff
+      label: 'D10 field_type_of_staff taxonomy data'
+      selector: 'relationships/field_type_of_staff/data'
+    # D10 field_type is a list_string with values like "Faculty" or "Staff".
+    # These feed into field_person_types alongside the taxonomy-derived types.
+    - name: d10_field_type_array
+      label: 'D10 field_type label array'
+      selector: 'attributes/field_type'
+
+    # ---- Social media paragraph reference ----
+    - name: source_social_paragraph_id
+      label: 'D10 social_media_links paragraph ID'
+      selector: 'relationships/field_social_media_links_p/data/meta/drupal_internal__id'
+    - name: source_department
+      label: 'D10 field_department node refs'
+      selector: 'relationships/field_department/data'
+    # ---- Description (text_long) ----
+    - name: description_value
+      label: 'Description body'
+      selector: 'attributes/field_description/value'
+    - name: description_format
+      label: 'Description format'
+      selector: 'attributes/field_description/format'
+process:
+  # ---- Identity ----
+  # Preserve the D10 nid verbatim. If a node with this nid already exists
+  # on D11 (seeded DB or prior run), migrate UPDATEs it; otherwise it
+  # creates a new node with this exact nid. UUID is still carried over so
+  # cross-site references stay stable.
+  nid: nid
+
+  # Preserve UUID across runs; D11 assigns a fresh NID.
+  type:
+    plugin: default_value
+    default_value: person
+  langcode: langcode
+
+  # ---- Authorship ----
+  # TODO: replace with migration_lookup against a user migration.
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  promote: promote
+  sticky: sticky
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps ----
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title ----
+  title: title
+
+  # ---- Biography -> body ----
+  # D10 field_biography (text_long) -> D11 body (text_with_summary).
+  # Strip the literal <html>...</html> wrapper same as the article migration.
+  # body/summary is sourced from link_excerpt (not bio_summary) to keep this
+  # migration aligned with the shared_content import path, which also routes
+  # the link excerpt / introText into the body summary.
+  'body/value':
+    - plugin: str_replace
+      source: bio_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+    source: bio_format
+  'body/summary':
+    - plugin: skip_on_empty
+      method: process
+      source: link_excerpt
+    - plugin: callback
+      callable: strip_tags
+    - plugin: callback
+      callable: html_entity_decode
+    - plugin: callback
+      callable:
+        - 'Drupal\artsci_migration\LinkHelpers'
+        - 'stripInvisibleChars'
+    - plugin: callback
+      callable: trim
+    - plugin: skip_on_empty
+      method: process
+
+  # ---- Path alias ----
+  # D10 uses /faculty-staff/... D11 likely uses a different pathauto pattern.
+  # We pass the alias through so outbound links don't break; if you want to
+  # let pathauto regenerate, set path/pathauto to 1 and remove path/alias.
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  # ---- Name (required fields in D11) ----
+  field_person_first_name: first_name
+  field_person_last_name: last_name
+
+  # ---- Contact ----
+  field_person_phone: phone
+  field_person_email: email
+  field_person_fax: fax
+
+  # ---- Bio-adjacent strings ----
+  field_person_credential: pronouns
+  field_person_education: education
+  # Both D10 field_position and field_additional_titles feed into the
+  # multi-value field_person_position. `merge` would be the obvious tool,
+  # but it requires *every* input to be an array and field_position is a
+  # scalar string on D10 — which trips "index (0) in the source value is
+  # not an array that can be merged." So instead: `get` with array source
+  # pulls both values (scalar or array or null), `flatten` normalizes any
+  # nested arrays from additional_titles, and `array_filter` drops nulls.
+  #
+  # additional_titles arrives as a single string with CRLF separators
+  # between titles, e.g. "Lecturer in X\r\nDirector of Y\r\nCoordinator of
+  # the Z Festival". We explode it into an array first via the
+  # _additional_titles_split intermediate so each line becomes its own
+  # delta in field_person_position. The CRLF delimiter MUST be in
+  # double-quoted YAML so \r and \n are interpreted as actual control
+  # characters (single quotes would give the literal four-character
+  # sequence \r\n and would never match the line breaks in the data).
+  _additional_titles_split:
+    - plugin: skip_on_empty
+      method: process
+      source: additional_titles
+    - plugin: explode
+      delimiter: "\r\n"
+
+  field_person_position:
+    - plugin: get
+      source:
+        - position
+        - '@_additional_titles_split'
+    - plugin: flatten
+    - plugin: callback
+      callable: array_filter
+  # Interests — D10 field_interests is a plain string with CRLF between
+  # items. D11 field_person_interests is text_long and expects the
+  # rendered <ul><li>...</li></ul> HTML, matching the shared_content
+  # import path. The helper handles split + trim + wrap in one pass.
+  field_person_interests/value:
+    - plugin: skip_on_empty
+      method: process
+      source: interests
+    - plugin: callback
+      callable:
+        - 'Drupal\artsci_migration\LinkHelpers'
+        - 'htmlListFromDelimited'
+    - plugin: str_replace
+      search: ['<ul>', '</ul>']
+      replace: ['', '']
+    - plugin: str_replace
+      search: ['<li>', '</li>']
+      replace: ['', "\n"]
+  field_person_interests/format:
+    plugin: default_value
+    default_value: full_html
+  # ---- Location ----
+  field_building_name_and_room_num: building_room
+  # NOTE: field_mailing_address is no longer mapped here. Its data is now
+  # parsed and placed into an artsci_contact paragraph referenced from
+  # field_person_contact_information (see below).
+
+  # ---- Contact paragraph ----
+  # migration_lookup against an entity_reference_revisions:paragraph
+  # destination returns [paragraph_id, revision_id] as a numeric array. If
+  # we assign that whole array to the field, Drupal misinterprets it as two
+  # separate deltas (each holding a scalar) and crashes with "Cannot access
+  # offset of type string on string". Workaround: stash the lookup result
+  # in an intermediate process key, then extract index 0 -> target_id and
+  # index 1 -> target_revision_id via the field-property-path syntax.
+  _contact_paragraph_ids:
+    - plugin: skip_on_empty
+      method: process
+      source: mailing_address
+    - plugin: migration_lookup
+      migration: artsci_d10_paragraph_artsci_contact
+      source: nid
+      no_stub: true
+
+  'field_person_contact_information/target_id':
+    - plugin: skip_on_empty
+      method: process
+      source: '@_contact_paragraph_ids'
+    - plugin: extract
+      index:
+        - 0
+
+  'field_person_contact_information/target_revision_id':
+    - plugin: skip_on_empty
+      method: process
+      source: '@_contact_paragraph_ids'
+    - plugin: extract
+      index:
+        - 1
+
+  # ---- External links ----
+  # field_external_url stays as-is (different field from the link consolidation).
+  field_external_link: external_link
+
+  # ---- Person website (consolidated link field) ----
+  # Two D10 sources flow into the single multi-value link field on D11:
+  #
+  #   1. field_external_url (link field) -> goes in as the FIRST delta
+  #   2. field_links_p (paragraph references) -> each paragraph's button URL
+  #      and CTA text become an additional delta. We do NOT create the
+  #      paragraph entities on D11; instead we fetch each paragraph's
+  #      attributes from the source via JSON:API and build link values
+  #      directly. See JsonApiLinksFromRefs custom plugin.
+  #
+  # Both intermediate keys produce arrays of {uri, title, options} arrays,
+  # which `merge` concatenates without complaint.
+  _external_url:
+    plugin: callback
+    callable:
+      - 'Drupal\artsci_migration\LinkHelpers'
+      - 'singleLink'
+    unpack_source: true
+    source:
+      - ext_url_uri
+      - ext_url_title
+
+  _paragraph_links:
+    plugin: jsonapi_links_from_refs
+    source: source_links_refs
+    base_url: 'https://artsci.washu.edu'
+    url_field: field_button_url
+    title_field: field_call_to_action_button_text
+    new_window_field: field_new_window
+
+  field_person_website:
+    plugin: merge
+    source:
+      - '@_external_url'
+      - '@_paragraph_links'
+  field_external_url:
+    plugin: callback
+    callable:
+      - 'Drupal\artsci_migration\LinkHelpers'
+      - 'singleLink'
+    unpack_source: true
+    source:
+      - ext_url_uri
+      - ext_url_title
+  # ---- Office hours ----
+  # NOTE: you mentioned field_office_hours -> field_office_directions, but
+  # your current D11 still has field_office_hours (the rename config import
+  # is stuck). Writing to the field that actually exists today; once the
+  # rename is resolved, swap this key to field_office_directions.
+  field_office_hours: office_hours
+
+  # ---- Shared content ----
+  field_is_shared: is_shared
+  field_shared_content: shared_content
+  field_shared_content_xml: shared_content_xml
+  field_content_hash: content_hash
+
+  # ---- Headshot -> field_image ----
+  field_image:
+    - plugin: skip_on_empty
+      method: process
+      source: source_headshot_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  # ---- CV -> field_person_file_upload ----
+  # field_person_file_upload is plain entity_reference (not
+  # entity_reference_revisions), so the property-path workaround we needed
+  # for paragraph fields isn't required here — a single migration_lookup
+  # returning a scalar mid works as the field value directly.
+  field_person_file_upload:
+    - plugin: skip_on_empty
+      method: process
+      source: source_cv_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_cv
+      no_stub: true
+  # ---- Department (was node ref on D10, now taxonomy ref on D11) ----
+  # The prerequisite migration keys terms by the D10 node's internal id,
+  # so we hand migration_lookup the meta/drupal_internal__target_id from
+  # each relationship entry and get back the new D11 term id.
+  field_person_department:
+    plugin: sub_process
+    source: source_department
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: artsci_d10_taxonomy_departments_programs
+        source: meta/drupal_internal__target_id
+        no_stub: true
+  # ---- Description ----
+  # D10 field_description (text_long) -> D11 field_person_description.
+  # Media embeds pass through as-is since media entities already exist
+  # in final form on D10; no custom_media_wysiwyg_filter needed like D7.
+  field_person_description/value: description_value
+  field_person_description/format:
+    plugin: default_value
+    default_value: full_html
+    source: description_format
+  # ---- Research areas (sourced from the areas_of_study vocabulary) ----
+  # Despite the field name on D11, the actual taxonomy backing
+  # field_person_research_areas is areas_of_study, so we resolve through
+  # that term migration.
+  field_person_research_areas:
+    plugin: sub_process
+    source: source_research_areas
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: artsci_d10_taxonomy_faculty_areas_of_study
+        source: meta/drupal_internal__target_id
+
+  # ---- Person types ----
+  # Two separate D10 sources feed into the single D11 field_person_types:
+  #
+  #   1. field_type (list_string) with "Faculty" or "Staff" labels
+  #   2. field_type_of_staff (taxonomy ref) with leadership / college_office /
+  #      dean_of_arts_sciences_office / etc.
+  #
+  # Both paths must produce arrays of {target_id: X} for `merge` to work.
+  # field_type comes through as a scalar array like ["Faculty"], which
+  # sub_process can't iterate (it requires arrays-of-arrays). Workaround:
+  # coerce null to [] via default_value, extract index 0 as a scalar,
+  # then static_map directly to an array-valued map entry like
+  # `Faculty: [{target_id: faculty}]`. That gives us an array structure
+  # that merge accepts.
+  _types_from_list:
+    - plugin: default_value
+      source: d10_field_type_array
+      default_value: []
+    - plugin: extract
+      index:
+        - 0
+      default: ''
+    - plugin: static_map
+      map:
+        Faculty:
+          - target_id: faculty
+        Staff:
+          - target_id: staff
+      default_value: []
+      bypass: false
+
+  _types_from_taxonomy:
+    plugin: sub_process
+    source: source_type_of_staff
+    process:
+      target_id:
+        - plugin: static_map
+          source: meta/drupal_internal__target_id
+          map:
+            39: leadership
+            82: dean_of_arts_sciences_office
+            85: college_office
+            91: pre_health_advisors
+            94: pre_law_advisors
+            97: pre_graduate_advisors
+            100: college_registrar
+          default_value: null
+          bypass: false
+        - plugin: skip_on_empty
+          method: process
+
+  field_person_types:
+    plugin: merge
+    source:
+      - '@_types_from_list'
+      - '@_types_from_taxonomy'
+
+  # ---- Social media paragraph ----
+  # Same property-path workaround as field_person_contact_information — the
+  # entity_reference_revisions:paragraph destination returns a numeric array
+  # of [id, revision_id] which can't be assigned directly to the field.
+  _social_paragraph_ids:
+    - plugin: skip_on_empty
+      method: process
+      source: source_social_paragraph_id
+    - plugin: migration_lookup
+      migration: artsci_d10_paragraph_social_media_links
+      no_stub: true
+
+  'field_social_media_links_p/target_id':
+    - plugin: skip_on_empty
+      method: process
+      source: '@_social_paragraph_ids'
+    - plugin: extract
+      index:
+        - 0
+
+  'field_social_media_links_p/target_revision_id':
+    - plugin: skip_on_empty
+      method: process
+      source: '@_social_paragraph_ids'
+    - plugin: extract
+      index:
+        - 1
+
+  # ---- Rabbit Hole ----
+  'rabbit_hole__settings/rh_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_action
+  'rabbit_hole__settings/rh_redirect': rh_redirect
+  'rabbit_hole__settings/rh_redirect_response':
+    plugin: default_value
+    default_value: 301
+    source: rh_redirect_response
+  'rabbit_hole__settings/rh_redirect_fallback_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_redirect_fallback_action
+
+  # ----------------------------------------------------------------
+  # DEFERRED — build the prerequisite migration first, then uncomment.
+  # ----------------------------------------------------------------
+  #
+  # field_meta_tags:
+  #   Same as article migration — needs a custom process plugin to
+  #   convert JSON:API metatag array into metatag's serialized format.
+  #
+  # field_last_fetch:
+  #   D10 has `attributes.field_last_fetch`. If it's ever non-null in
+  #   your data, wire it through with a strtotime callback.
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: person
+
+migration_dependencies:
+  required:
+    - artsci_d10_media_image
+    - artsci_d10_media_cv
+    - artsci_d10_paragraph_social_media_links
+    - artsci_d10_paragraph_artsci_contact
+    - artsci_d10_taxonomy_faculty_areas_of_study
+    - artsci_d10_taxonomy_departments_programs
+  optional: []

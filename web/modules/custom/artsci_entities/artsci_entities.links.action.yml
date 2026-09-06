@@ -1,0 +1,5 @@
+entity.artsci_academic_unit.add_form:
+  route_name: 'entity.artsci_academic_unit.add_form'
+  title: 'Add an academic unit'
+  appears_on:
+    - entity.artsci_academic_unit.collection

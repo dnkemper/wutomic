@@ -1,0 +1,157 @@
+@use 'sass:color';
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
+
+// === Dotted Line === //
+// A vertical-rail accordion variant. Uses the same <details>/<summary>
+// markup as .accordion, with a left rail and circle markers in place
+// of the gray summary background. Open items get a filled marker;
+// closed items show a hollow ring. Note: despite the name, this is
+// rendered as a solid rail with circular nodes (matches design comp).
+
+.collection--dotted-line {
+  --dl-color: #{variables.$primary};
+  --dl-rail-thickness: 2px;
+  --dl-rail-offset: 1.5rem; // distance from item left edge to rail center
+  --dl-marker-size: 0.875rem; // 14px outer diameter
+  --dl-marker-border: 2px;
+  --dl-marker-bg: #{variables.$light}; // ring interior; override per page if bg differs
+  --dl-summary-min-h: 3.5rem;
+  --dl-summary-half: calc(var(--dl-summary-min-h) / 2);
+  --dl-content-pad-left: 4rem;
+  --dl-divider: rgba(0, 0, 0, 0.1);
+
+  // Items: position the rail and divider here, not inside .accordion
+  // (so we override .accordion__item border/margin without !important).
+  .dotted-line .accordion__item {
+    position: relative;
+    border: none;
+    margin: 0;
+    background: transparent;
+    border-bottom: 1px solid var(--dl-divider);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    // Vertical rail spans full item height by default.
+    &::before {
+      content: '';
+      position: absolute;
+      left: var(--dl-rail-offset);
+      top: 0;
+      bottom: 0;
+      width: var(--dl-rail-thickness);
+      background-color: var(--dl-color);
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    // First item: rail starts at marker (not above it).
+    &:first-child::before {
+      top: var(--dl-summary-half);
+    }
+
+    // Last item: rail ends at marker (not below it).
+    &:last-child::before {
+      bottom: auto;
+      height: var(--dl-summary-half);
+    }
+
+    // Single item: no rail at all, just the marker.
+    &:first-child:last-child::before {
+      display: none;
+    }
+  }
+
+  // Summary: drop the gray pill, indent for the marker, draw the ring,
+  // and lay out headline + chevron horizontally.
+  .dotted-line summary {
+    background-color: transparent;
+    padding-left: var(--dl-content-pad-left);
+    min-height: var(--dl-summary-min-h);
+    position: relative;
+    cursor: pointer;
+
+    // Hide the native disclosure triangle.
+    list-style: none;
+    &::-webkit-details-marker {
+      visibility: hidden;
+    }
+
+    // Lay out headline (with trailing chevron) horizontally.
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      outline: none;
+    }
+
+    // Hollow ring marker (default / closed state).
+    &::before {
+      content: '';
+      position: absolute;
+      left: var(--dl-rail-offset);
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: var(--dl-marker-size);
+      height: var(--dl-marker-size);
+      border-radius: 50%;
+      border: var(--dl-marker-border) solid var(--dl-color);
+      background-color: var(--dl-marker-bg);
+      z-index: 1;
+    }
+
+    // Chevron: red, points down by default (fa-chevron-up rotated).
+    i,
+    svg {
+      color: var(--dl-color);
+      background-color: transparent;
+      transition: transform 0.2s ease-in-out;
+      transform: rotate(-180deg);
+    }
+  }
+
+  // Filled marker when item is open.
+  .dotted-line details[open] > summary::before {
+    background-color: var(--dl-color);
+  }
+
+  // Open item: chevron points up.
+  .dotted-line details[open] > summary i,
+  .dotted-line details[open] > summary svg {
+    transform: rotate(0deg);
+  }
+
+  // Headline: serif, no background pill.
+  .dotted-line .accordion__heading :is(h2, h3, h4, h5, h6) {
+    font-family: variables.$font-family-serif;
+    font-weight: variables.$font-weight-medium;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    padding: variables.$md 0;
+    color: variables.$secondary;
+    background-color: transparent;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // Content: align under headline, no white background, no top border.
+  .dotted-line .accordion__content,
+  .dotted-line .accordion__content.bg--white {
+    background-color: transparent;
+    border-top: none;
+    padding: 0 0 variables.$md var(--dl-content-pad-left);
+    width: 85%;
+
+    p:last-child {
+      margin-bottom: variables.$sm;
+    }
+  }
+}

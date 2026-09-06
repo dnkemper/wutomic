@@ -1,20 +1,58 @@
-# Extend the system.site configuration
-system.site.artsci:
-  type: mapping
-  label: 'Additional setting for system.site.'
+# Extend the core system.site configuration with custom Arts & Sciences keys.
+# Declaring them under `system.site` (rather than an unrelated type name) lets
+# Drupal merge these into the core config object so they have real schema.
+system.site:
+  type: config_object
   mapping:
     # Whether this site is part of a larger organization.
     has_parent:
       type: integer
       label: 'This site has a parent organization.'
+      nullable: true
     # A collection of information about the parent site.
     parent:
       type: mapping
+      label: 'Parent organization'
       mapping:
         name:
           type: label
+          label: 'Parent name'
+          nullable: true
         url:
           type: uri
+          label: 'Parent URL'
+          nullable: true
+    # Canonical production URL, used for absolute links that must always point
+    # to production (e.g. the academic calendar webcal subscription feed).
+    production_url:
+      type: uri
+      label: 'Production URL'
+      nullable: true
+    social_media:
+      type: mapping
+      label: 'Social media accounts'
+      mapping:
+        twitter_username:
+          type: string
+          label: 'Twitter username'
+          nullable: true
+        facebook_username:
+          type: string
+          label: 'Facebook username'
+          nullable: true
+        instagram_username:
+          type: string
+          label: 'Instagram username'
+          nullable: true
+        youtube_username:
+          type: string
+          label: 'YouTube channel'
+          nullable: true
+        linkedin_username:
+          type: string
+          label: 'LinkedIn profile'
+          nullable: true
+
 filter_settings.filter_iframe:
   type: mapping
   label: 'Filter iframe settings'

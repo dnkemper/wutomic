@@ -1,0 +1,29 @@
+uuid: d5a3d44c-3048-492a-b5da-c2d2e8845970
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.artsci_collection
+    - field.storage.node.field_artsci_collection
+    - node.type.image_card
+id: node.image_card.field_artsci_collection
+field_name: field_artsci_collection
+entity_type: node
+bundle: image_card
+label: 'Accordion (Collection Block)'
+description: 'References an artsci_collection block_content entity. Reuses the existing accordion functionality (collection items, accordion type, label color).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:block_content'
+  handler_settings:
+    target_bundles:
+      artsci_collection: artsci_collection
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,153 @@
+:root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
+  font-size: 16px;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
+  --artsci-black: #000000;
+  --brand-primary: var(--artsci-red);
+  --brand-secondary: var(--artsci-black);
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
+  --artsci-gray-mid: #9a9a9a;
+  --artsci-gray: #737373;
+  --artsci-gray-light: #cacaca;
+  --transparent-border: rgb(0, 0, 0, 0);
+  --space-lg-width-gutter: 3rem;
+  --space-md-width-gutter: 2rem;
+  --space-sm-width-gutter: 1.25rem;
+}
+
+.collection--dotted-line {
+  --dl-color: #ba0c2f;
+  --dl-rail-thickness: 2px;
+  --dl-rail-offset: 1.5rem;
+  --dl-marker-size: 0.875rem;
+  --dl-marker-border: 2px;
+  --dl-marker-bg: #edeae1;
+  --dl-summary-min-h: 3.5rem;
+  --dl-summary-half: calc(var(--dl-summary-min-h) / 2);
+  --dl-content-pad-left: 4rem;
+  --dl-divider: rgba(0, 0, 0, 0.1);
+}
+.collection--dotted-line .dotted-line .accordion__item {
+  position: relative;
+  border: none;
+  margin: 0;
+  background: transparent;
+  border-bottom: 1px solid var(--dl-divider);
+}
+.collection--dotted-line .dotted-line .accordion__item:last-child {
+  border-bottom: none;
+}
+.collection--dotted-line .dotted-line .accordion__item::before {
+  content: "";
+  position: absolute;
+  left: var(--dl-rail-offset);
+  top: 0;
+  bottom: 0;
+  width: var(--dl-rail-thickness);
+  background-color: var(--dl-color);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+.collection--dotted-line .dotted-line .accordion__item:first-child::before {
+  top: var(--dl-summary-half);
+}
+.collection--dotted-line .dotted-line .accordion__item:last-child::before {
+  bottom: auto;
+  height: var(--dl-summary-half);
+}
+.collection--dotted-line .dotted-line .accordion__item:first-child:last-child::before {
+  display: none;
+}
+.collection--dotted-line .dotted-line summary {
+  background-color: transparent;
+  padding-left: var(--dl-content-pad-left);
+  min-height: var(--dl-summary-min-h);
+  position: relative;
+  cursor: pointer;
+  list-style: none;
+}
+.collection--dotted-line .dotted-line summary::-webkit-details-marker {
+  visibility: hidden;
+}
+.collection--dotted-line .dotted-line summary {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+.collection--dotted-line .dotted-line summary:hover, .collection--dotted-line .dotted-line summary:focus {
+  background-color: transparent;
+  outline: none;
+}
+.collection--dotted-line .dotted-line summary::before {
+  content: "";
+  position: absolute;
+  left: var(--dl-rail-offset);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--dl-marker-size);
+  height: var(--dl-marker-size);
+  border-radius: 50%;
+  border: var(--dl-marker-border) solid var(--dl-color);
+  background-color: var(--dl-marker-bg);
+  z-index: 1;
+}
+.collection--dotted-line .dotted-line summary i,
+.collection--dotted-line .dotted-line summary svg {
+  color: var(--dl-color);
+  background-color: transparent;
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(-180deg);
+}
+.collection--dotted-line .dotted-line details[open] > summary::before {
+  background-color: var(--dl-color);
+}
+.collection--dotted-line .dotted-line details[open] > summary i,
+.collection--dotted-line .dotted-line details[open] > summary svg {
+  transform: rotate(0deg);
+}
+.collection--dotted-line .dotted-line .accordion__heading :is(h2, h3, h4, h5, h6) {
+  font-family: "ivypresto-headline", "Georgia", serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  padding: 1.05rem 0;
+  color: #000000;
+  background-color: transparent;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.collection--dotted-line .dotted-line .accordion__content,
+.collection--dotted-line .dotted-line .accordion__content.bg--white {
+  background-color: transparent;
+  border-top: none;
+  padding: 0 0 1.05rem var(--dl-content-pad-left);
+  width: 85%;
+}
+.collection--dotted-line .dotted-line .accordion__content p:last-child,
+.collection--dotted-line .dotted-line .accordion__content.bg--white p:last-child {
+  margin-bottom: 0.625rem;
+}
+
+/*# sourceMappingURL=dotted-line.css.map */

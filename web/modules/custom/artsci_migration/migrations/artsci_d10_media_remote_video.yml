@@ -1,0 +1,119 @@
+id: artsci_d10_media_remote_video
+label: 'D10 remote_video media via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# Unlike artsci_d10_media_image, remote_video has no underlying file
+# entity to migrate first — the video lives at a remote URL stored on
+# field_media_oembed_video. So no file migration dependency, and no
+# property path lookup in process.
+#
+# ASSUMPTION: the D10 remote_video bundle uses Drupal core's default
+# field_media_oembed_video string field to hold the oEmbed URL. If the
+# site customized the field name, swap the selector and the process key
+# below.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # page[limit]=500 + no explicit sort. JSON:API on this site auto-appends
+  # sort=drupal_internal__mid to its links.next URL for media resources,
+  # and that sort returns 400 on the next page request (likely a
+  # jsonapi_extras per-resource restriction — see the matching note on
+  # artsci_d10_media_image). As long as the full set fits in one page the
+  # pager never follows links.next and the broken sort is never sent. The
+  # image migration gets away with limit=50 because the image count
+  # happens to be below that; remote_video crosses 50 so we bump higher.
+  # If the remote video count ever exceeds 500, bump this further.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/media/remote_video?page[limit]=500'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    mid:
+      type: integer
+
+  fields:
+    - name: mid
+      label: 'Original MID'
+      selector: 'attributes/drupal_internal__mid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: name
+      label: 'Media name'
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    # The oEmbed video URL (YouTube / Vimeo etc.). Plain string, no
+    # sub-properties; JSON:API exposes it directly on the attribute.
+    - name: oembed_video
+      label: 'oEmbed video URL'
+      selector: 'attributes/field_media_oembed_video'
+
+process:
+  # Look up existing media by UUID. If a match exists (because the D11 DB
+  # was seeded from a D10 dump, or a prior run partially completed),
+  # return its mid so the destination plugin does an UPDATE instead of
+  # trying to INSERT a duplicate (which violates the uuid unique key).
+  # Returns NULL for truly new rows, in which case Drupal auto-assigns mid.
+  mid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: media
+    value_key: uuid
+
+  uuid: uuid
+  bundle:
+    plugin: default_value
+    default_value: remote_video
+  name: name
+  status: status
+  langcode:
+    plugin: default_value
+    default_value: en
+    source: langcode
+  uid:
+    plugin: default_value
+    default_value: 1
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # The oEmbed URL is the entire payload for this bundle — if it's empty
+  # there's nothing to migrate, so drop the row outright.
+  field_media_oembed_video:
+    - plugin: skip_on_empty
+      method: row
+      source: oembed_video
+      message: 'Media row skipped: no oEmbed video URL.'
+
+destination:
+  plugin: 'entity:media'
+  default_bundle: remote_video
+
+migration_dependencies:
+  required: []
+  optional: []

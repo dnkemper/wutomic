@@ -11,8 +11,23 @@ type: component
 group: margin
 block_restrictions:
   - 'inline_block:artsci_collection'
-  - 'inline_block:artsci_spacer_separator'
   - 'inline_block:artsci_text_area'
   - webform_block
+  - 'inline_block:anchor_links'
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_card'
+  - 'inline_block:collection'
+  - 'inline_block:component_tabs'
+  - 'inline_block:artsci_event'
+  - 'inline_block:artsci_events'
+  - 'inline_block:featured_content'
+  - 'inline_block:artsci_image'
+  - 'inline_block:image_carousel'
+  - 'inline_block:artsci_image_gallery'
+  - 'inline_block:media_carousel'
+  - 'inline_block:artsci_aggregator'
+  - 'inline_block:artsci_slider'
+  - 'inline_block:artsci_statistic'
+  - 'inline_block:artsci_timeline'
 layout_restrictions: {  }
 weight: -39

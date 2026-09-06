@@ -1,0 +1,19 @@
+uuid: c3e9a4b6-5d8f-4a13-9e4c-7f5d0b236a85
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - menu_link_content
+id: menu_link_content.field_artsci_card_link
+field_name: field_artsci_card_link
+entity_type: menu_link_content
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

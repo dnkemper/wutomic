@@ -1,0 +1,46 @@
+uuid: 3e61a2f9-351e-4d3f-a6b4-6695d7afef3e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.full__landscape
+    - field.field.media.image.field_media_caption
+    - field.field.media.image.field_media_image
+    - field.field.media.image.field_tags
+    - media.type.image
+    - responsive_image.styles.full__landscape
+  module:
+    - layout_builder
+    - responsive_image
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: media.image.full__landscape
+targetEntityType: media
+bundle: image
+mode: full__landscape
+content:
+  field_media_image:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: full__landscape
+      image_link: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_lightbox_title: true
+  field_media_caption: true
+  field_tags: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

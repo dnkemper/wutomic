@@ -1,0 +1,24 @@
+uuid: 998f4f7e-8441-44b5-b048-fd37db777790
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: ultrawide__2592_x_1166
+label: 'Ultrawide (2592 x 1166)'
+effects:
+  68738d29-4c84-4e48-9b58-7bf35705ba2b:
+    uuid: 68738d29-4c84-4e48-9b58-7bf35705ba2b
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 2592
+      height: 1166
+      crop_type: focal_point
+  2751096c-f7cd-4c7d-802d-cddb6e80034f:
+    uuid: 2751096c-f7cd-4c7d-802d-cddb6e80034f
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

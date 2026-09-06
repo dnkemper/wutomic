@@ -1,0 +1,16 @@
+uuid: 90fecb40-1ab1-4bcf-a107-ddaa8d7952c0
+langcode: en
+status: true
+dependencies: {  }
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: ''
+name: 'Image Card'
+type: image_card
+description: 'Card with image, link, body, optional accordion, and sidebar content. Migrated from departments_programs and majors_minors.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

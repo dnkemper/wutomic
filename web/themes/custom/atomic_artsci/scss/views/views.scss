@@ -7,7 +7,9 @@
   padding: 19px;
   margin-bottom: 4rem;
   position: relative;
-
+  .form-item {
+    margin: 0 0.5rem;
+  }
   fieldset {
     border: 0;
     padding: 0;
@@ -42,21 +44,77 @@
   &.form:not(.artsci-search) {
     label,
     .fieldset-legend {
-      font-size: 1rem;
+      text-align: left;
+      flex-basis: 20%;
+      flex-shrink: 0;
+      color: #000;
+      font-family: var(--font-family-sans-serif);
+      font-style: normal;
+      // margin: 0 1rem;
+      font-weight: 600;
+      line-height: 120%; /* 1.35rem */
     }
+
+    // Search field and category select share one rounded, thin-bordered pill.
+    [type='text'],
+    [type='search'],
+    select {
+      // height: 3.45rem;
+      border: 1px solid variables.$secondary;
+      border-radius: 6.25rem;
+      box-shadow: none;
+      padding: 0 1.25rem;
+    }
+
+    // Chevron caret on the select, kept clear of the rounded right edge.
+    select {
+      padding-right: 3rem;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+      background-repeat: no-repeat;
+      background-position: right 1.25rem center;
+      margin-top: 1rem;
+      margin-right: 1rem;
+      background-size: 15px 15px;
+      background-origin: border-box;
+    }
+
+    // Apply / Reset / Browse by Date: crimson outline pill that fills on hover.
     .button {
-      @include utilities.bttn--secondary;
+      font-family: variables.$font-family-sans-serif;
+      border: 2px solid #ba0c2f;
+      border-radius: 6.25rem;
+      background: none !important;
+      color: variables.$secondary;
       max-height: 3.45rem;
-      padding: 1rem 1.25rem;
-      font-size: clamp(0.9rem, calc(0.7887vw + 0.6042rem), 1.25rem);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      font-style: normal;
+      line-height: 120%;
+      text-transform: none;
+
+      &:hover,
+      &:focus {
+        color: variables.$white;
+        background: variables.$primary !important;
+      }
+
       @include utilities.breakpoint(md) {
-        padding: 0.9rem 1.25rem 1.1rem;
+        // padding: 0.9rem 1.25rem 1.1rem;
       }
     }
 
+    // Reset reads as an outline button (crimson text), not a filled one.
     input[id^='edit-reset'] {
-      color: var(--brand-secondary);
-      background: var(--brand-primary);
+      color: variables.$secondary;
+      background: none;
+
+      &:hover,
+      &:focus {
+        color: variables.$white;
+        background: variables.$primary !important;
+      }
     }
   }
 
@@ -74,10 +132,15 @@
   .form--inline {
     align-items: flex-start;
     flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    align-content: flex-start;
+    flex-direction: row;
   }
 }
 
-.views-exposed-form:not([class*="bef"]) {
+.views-exposed-form:not([class*='bef']) {
   .form--inline {
     @include utilities.breakpoint(sm) {
       display: flex;
@@ -113,7 +176,7 @@
       padding: 1rem 1.5rem;
     }
 
-    [type=text],
+    [type='text'],
     select {
       .views-form--stacked & {
         margin-bottom: 0;
@@ -197,16 +260,6 @@
   }
 }
 
-.bg-yellow {
-  .pager__item a {
-    color: variables.$secondary;
-  }
-
-  .pager__item.is-active a {
-    color: white;
-  }
-}
-
 // feed icons
 .feed-icons {
   .bttn {
@@ -232,7 +285,7 @@
   @include utilities.grid-base;
   @include utilities.breakpoint(sm) {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
 
     .view-header {
@@ -256,5 +309,90 @@
   }
   @include utilities.breakpoint(page-container) {
     gap: 3rem;
+  }
+}
+
+.view-id-people_list_block,
+.view-id-events_list_block {
+  background-color: #0000000a;
+}
+input#edit-submit-news-list-block {
+  display: none;
+}
+.view-id-events.view-display-id-page_upcoming {
+  .views-exposed-form {
+    // Search field and category select: rounded, thin neutral border.
+    [type='text'],
+    [type='search'],
+    select {
+      height: 3.25rem;
+      border: 1px solid variables.$color-gray-300; // #b5b5b5, matches the screenshot
+      border-radius: 6.25rem;
+      box-shadow: none;
+      padding-left: 1.25rem;
+    }
+
+    // Keep the dropdown caret clear of the rounded edge.
+    select {
+      padding-right: variables.$xlg;
+      background-position: right 1.1rem center;
+    }
+
+    // Apply and Reset: crimson outline pills that fill on hover.
+    .form-actions .button,
+    input[id^='edit-submit'],
+    input[id^='edit-reset'] {
+      border: 2px solid variables.$primary;
+      border-radius: 6.25rem;
+      background: transparent;
+      color: variables.$secondary;
+      font-family: variables.$font-family-caps-bold;
+      padding: 0.85rem 1.5rem;
+
+      &:hover,
+      &:focus {
+        color: variables.$white;
+        background: variables.$primary;
+      }
+    }
+  }
+}
+input.js-hide {
+  display: none;
+}
+.views-exposed-form {
+  input.js-hide.button.js-form-submit.form-submit {
+    display: none;
+  }
+  .form-checkboxes.bef-checkboxes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+  }
+  input.event-date-picker.bef-datepicker.form-date {
+    border-radius: 6.25rem;
+    border: 2px solid #ba0c2f;
+  }
+  .js-form-item.form-item.js-form-type-radio.form-type-radio.js-form-item-people-research-areas.form-item-people-research-areas {
+    display: inline-flex;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+  }
+}
+.view.view-book-list-block .card {
+  align-items: center;
+}
+.people {
+  .card__subtitle,
+  .card__subtitle a {
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: black;
+    text-transform: none;
   }
 }

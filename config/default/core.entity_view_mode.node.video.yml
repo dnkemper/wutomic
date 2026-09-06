@@ -1,0 +1,11 @@
+uuid: f7a70b3a-d3bb-4e6d-b346-9fd1e295c06a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.video
+label: Video
+description: null
+targetEntityType: node
+cache: true

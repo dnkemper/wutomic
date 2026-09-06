@@ -1,0 +1,128 @@
+id: artsci_d10_media_cv
+label: 'D10 cv media imported into D11 file media bundle'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# Source on D10 is `media/cv`; destination on D11 is the `file` media bundle.
+# Bundle consolidation pattern: the migration ID matches the SOURCE bundle
+# (matches the JSON:API endpoint), while every `bundle` / `default_bundle`
+# config references the DESTINATION bundle. Migration_lookup against this
+# migration returns D11 file-bundle media IDs.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # No sort param — same per-resource sort restriction we hit on media/image.
+  # No multi-subkey page params — single page[limit] only to dodge the
+  # source's Symfony 6 InputBag pagination bug.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/media/cv?page[limit]=50'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    mid:
+      type: integer
+
+  fields:
+    - name: mid
+      label: 'Original MID (in D10 cv bundle)'
+      selector: 'attributes/drupal_internal__mid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: name
+      label: 'Media name'
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    # File reference. CV media bundle uses `field_media_file` (not
+    # field_media_image) — no alt/title/width/height to track.
+    - name: file_target_id
+      label: 'Source file FID'
+      selector: 'relationships/field_media_file/data/meta/drupal_internal__target_id'
+    - name: file_description
+      label: 'File description'
+      selector: 'relationships/field_media_file/data/meta/description'
+    - name: file_display
+      label: 'File display flag'
+      selector: 'relationships/field_media_file/data/meta/display'
+
+process:
+  # Existing-by-UUID lookup so re-runs UPDATE rather than fail on the uuid
+  # unique constraint.
+  mid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: media
+    value_key: uuid
+
+  uuid: uuid
+  # Hardcoded to D11's `file` media bundle.
+  bundle:
+    plugin: default_value
+    default_value: file
+  name: name
+  status: status
+  langcode:
+    plugin: default_value
+    default_value: en
+    source: langcode
+  uid:
+    plugin: default_value
+    default_value: 1
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # Resolve the file via the CV file migration. If the file isn't in the map
+  # (didn't get migrated, e.g. because of a mime filter mismatch), skip the
+  # row rather than create an orphaned media entity.
+  'field_media_file/target_id':
+    - plugin: skip_on_empty
+      method: row
+      source: file_target_id
+      message: 'CV media row skipped: no source file id.'
+    - plugin: migration_lookup
+      migration: artsci_d10_file_cv
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+      message: 'CV media row skipped: source file not yet migrated (mime filter?).'
+
+  # File description and display flag if present on D10 (often empty).
+  'field_media_file/description': file_description
+  'field_media_file/display':
+    plugin: default_value
+    default_value: 1
+    source: file_display
+
+destination:
+  plugin: 'entity:media'
+  default_bundle: file
+
+migration_dependencies:
+  required:
+    - artsci_d10_file_cv
+  optional: []

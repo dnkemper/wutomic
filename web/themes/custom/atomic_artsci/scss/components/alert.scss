@@ -30,7 +30,7 @@
     margin-bottom: 0;
 
     & + *:not(span):not(div):not(svg) {
-      margin-top: .2rem;
+      margin-top: 0.2rem;
       line-height: 1.6;
     }
   }
@@ -39,7 +39,7 @@
 
 // === Alert Icon === //
 .alert__icon {
-  padding: 0  1.5rem 0 0;
+  padding: 0 1.5rem 0 0;
 
   .fa-stack {
     width: 2em;
@@ -103,7 +103,7 @@
 // === End: Alert horizontally centered === //
 
 // === Alert vertically centered === //
-.alert--vertically-centered  {
+.alert--vertically-centered {
   display: flex;
   align-items: center;
 }
@@ -137,16 +137,14 @@
 
 // === End: Modifiers === //
 
-
 .alert {
- [class*="bg--black"] & {
-   color: variables.$secondary;
-   a {
-     color: variables.$secondary;
-   }
- }
+  [class*='bg--black'] & {
+    color: variables.$secondary;
+    a {
+      color: variables.$secondary;
+    }
+  }
 }
-
 
 .alert ul {
   margin-top: 0;
@@ -174,7 +172,7 @@
 }
 
 // Override form styles for type="button".
-.alert--dismissible [type="button"] {
+.alert--dismissible [type='button'] {
   position: absolute;
   padding: 0;
   margin: 0;
@@ -195,7 +193,7 @@
   .alert {
     margin-top: 1.6rem;
 
-    &:nth-last-child(n+1) {
+    &:nth-last-child(n + 1) {
       margin-bottom: 1.6rem;
     }
   }
@@ -205,6 +203,6 @@
   width: 100%;
 }
 
-.alert[data-once="artsciStatusMessages"] details summary {
+.alert[data-once='artsciStatusMessages'] details summary {
   white-space: normal;
 }

@@ -14,6 +14,8 @@ use Drupal\Core\Url;
 use Drupal\ctools_views\Plugin\Display\Block;
 use Drupal\layout_builder\Form\ConfigureBlockFormBase;
 use Drupal\layout_builder_custom\BannerBlockFormHandler;
+use Drupal\layout_builder_custom\CardBlockFormHandler;
+use Drupal\layout_builder_custom\SliderBlockFormHandler;
 use Drupal\artsci_core\LinkAnalyticsHelper;
 use Drupal\layout_builder_custom\LayoutBuilderPreRender;
 use Drupal\layout_builder_custom\LayoutBuilderStylesHelper;
@@ -21,6 +23,43 @@ use Drupal\layout_builder_custom\Plugin\Display\ListBlock;
 use Drupal\artsci_core\Element\Card;
 use Drupal\artsci_core\HeadlineHelper;
 use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_theme().
+ */
+function layout_builder_custom_theme() {
+  return [
+    'oembed_thumbnail' => [
+      'variables' => [
+        'thumbnail_url' => NULL,
+        'thumbnail_fallback_url' => NULL,
+        'video_url' => NULL,
+        'iframe_url' => NULL,
+        'max_width' => 0,
+        'max_height' => 0,
+        'autoplay' => FALSE,
+        'media_entity' => NULL,
+      ],
+    ],
+    // 'artsci_headline_field_type' => [
+    //   'variables' => [
+    //     'pre_headline' => NULL,
+    //     'text' => NULL,
+    //     'size' => 'h2',
+    //     'styles' => '',
+    //     'alignment' => 'headline--left',
+    //   ],
+    // ],
+  ];
+}
+
+/**
+ * Preprocess function for artsci_headline_field_type.
+ */
+// function template_preprocess_artsci_headline_field_type(&$variables) {
+//   // Variables are passed directly from the formatter.
+//   // The template handles the rendering logic.
+// }
 
 /**
  * Implements hook_element_info_alter().
@@ -61,6 +100,11 @@ function layout_builder_custom_form_layout_builder_configure_section_alter(&$for
     '#weight' => -10,
     '#open' => !empty($headline_config['headline']),
   ];
+  $form['section_headline']['pre_headline'] = [
+    '#type' => 'textfield',
+    '#title' => t('Pre-headline'),
+    '#default_value' => $headline_config['pre_headline'] ?? '',
+  ];
   $form['section_headline']['headline'] = [
     '#type' => 'textfield',
     '#title' => t('Headline'),
@@ -92,7 +136,7 @@ function layout_builder_custom_form_layout_builder_configure_section_alter(&$for
     '#title' => t('Headline style'),
     '#options' => [
       'default' => t('Default'),
-      'headline_bold_serif' => t('Bold serif'),
+      'headline_bold_serif_red' => t('Bold serif, red text'),
       'headline_bold_serif_underline' => t('Bold serif, underlined'),
     ],
     '#default_value' => $headline_config['headline_style'] ?? 'default',
@@ -164,8 +208,9 @@ function _layout_builder_custom_submit_section_form(array &$form, FormStateInter
     unset($config['layout_builder_custom_unique_id']);
   }
   $headline_values = $form_state->getValue('section_headline');
-  if (!empty($headline_values['headline'])) {
+  if (!empty($headline_values['headline']) || !empty($headline_values['pre_headline'])) {
     $config['layout_builder_custom_headline'] = [
+      'pre_headline' => $headline_values['pre_headline'] ?? '',
       'headline' => $headline_values['headline'],
       'hide_headline' => $headline_values['hide_headline'] ?? 0,
       'heading_size' => $headline_values['heading_size'] ?? 'h2',
@@ -290,7 +335,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
         switch ($block->getPluginId()) {
           case 'inline_block:artsci_card':
             $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.washu.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
             
             // Hide margin field - will default to block_margin_default_removed.
             if (isset($form['layout_builder_style_margin'])) {
@@ -301,6 +346,21 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
             if (isset($form['layout_builder_style_default'])) {
               $form['layout_builder_style_default']['#access'] = FALSE;
             }
+              if (isset($form['button_group']['layout_builder_style_button_style'])) {
+                $form['button_group']['layout_builder_style_button_style']['#states'] = [
+                  'visible' => [
+                    ':input[name="settings[block_form][field_artsci_card_link][0][uri]"]' => ['filled' => TRUE],
+                  ],
+                ];
+              }
+
+              if (isset($form['button_group']['layout_builder_style_button_font_duplicate'])) {
+                $form['button_group']['layout_builder_style_button_font_duplicate']['#states'] = [
+                  'visible' => [
+                    ':input[name="settings[block_form][field_artsci_card_link][0][uri]"]' => ['filled' => TRUE],
+                  ],
+                ];
+              }
             break;
             
             case 'inline_block:artsci_image_gallery':
@@ -311,23 +371,20 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           // Media left, media circle, and no border are the defaults.
           case 'inline_block:artsci_aggregator':
           case 'views_block:events-card_list':
-          case 'views_block:events_list_block-card_list':
-          case 'views_block:people_list_block-list_card':
-            $lb_styles_extra_settings['card_media_position']['default'] = 'card_media_position_left';
-            $lb_styles_extra_settings['media_format']['default'] = 'media_format_circle';
-            $lb_styles_extra_settings['border']['default'] = 'no_border';
-            break;
-
-          // No border is the default.
           case 'views_block:article_list_block-list_article':
+          case 'views_block:article_list_block-list_article_recent':
+          case 'views_block:image_card_list_block-list_image_card':
+          case 'views_block:people_list_block-list_card':
+            $lb_styles_extra_settings['card_media_position']['default'] = 'card_media_position_stacked';
+            $lb_styles_extra_settings['media_format']['default'] = 'media_format_widescreen';
             $lb_styles_extra_settings['border']['default'] = 'no_border';
             break;
           
           case 'inline_block:featured_content':
             // Hide list format field - will default to grid.
-            if (isset($form['layout_builder_style_list_format'])) {
-              $form['layout_builder_style_list_format']['#access'] = FALSE;
-            }
+            // if (isset($form['layout_builder_style_list_format'])) {
+            //   $form['layout_builder_style_list_format']['#access'] = FALSE;
+            // }
             // Hide margin field - will default to block_margin_default_removed.
             if (isset($form['layout_builder_style_margin'])) {
               $form['layout_builder_style_margin']['#access'] = FALSE;
@@ -388,12 +445,12 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
             break;
 
           case 'inline_block:artsci_card':
-            $form['#attached']['library'][] = 'layout_builder_custom/card-block-form';
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/card-block">The media position will change based on the width of the layout column.</a>');
-            // Note: #states for media style fields removed because Media Library
-            // widget selectors are not reliably targetable with Drupal States API.
-            // These fields will always be visible. Consider adding JavaScript-based
-            // visibility toggle in card-block-form library if needed.
+            CardBlockFormHandler::formAlter($form, $form_state, $form_id);
+            break;
+
+          case 'inline_block:artsci_slider':
+            unset($form['layout_builder_style_artsci_carousel_size']['#empty_option']);
+            SliderBlockFormHandler::formAlter($form, $form_state, $form_id);
             break;
 
           case 'inline_block:artsci_text_area':
@@ -404,12 +461,16 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
           case 'inline_block:artsci_aggregator':
           case 'inline_block:artsci_events':
           case 'views_block:article_list_block-list_article':
+          case 'views_block:article_list_block-list_article_recent':
+          case 'views_block:article_list_block-list_book':
+          case 'views_block:article_list_block-list_event':
+          case 'views_block:article_list_block-list_person':
           case 'views_block:events-card_list':
-          case 'views_block:events_list_block-card_list':
           case 'views_block:page_list_block-list_page':
+          case 'views_block:image_card_list_block-list_image_card':
           case 'views_block:people_list_block-list_card':
             // Set help text for media position.
-            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.artsci.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
+            $form['layout_builder_style_card_media_position']['#description'] = t('<a target="_blank" href="https://artsci.washu.edu/documentation/layout-builder/content-lists">The media position will change based on the width of the layout column.</a>');
 
             // Listblock specific default.
             if ($form_id === 'layout_builder_add_block') {
@@ -421,7 +482,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
             if ($form_id === 'layout_builder_add_block' || $form_id === 'layout_builder_update_block') {
               switch ($block->getPluginId()) {
                 case 'views_block:events_list_block-card_list':
-                  $form['settings']['exposed']['filter-field_event_when_value']['field_event_when_value']['#type'] = 'hidden';
+                  // $form['settings']['exposed']['filter-field_event_when_value']['field_event_when_value']['#type'] = 'hidden';
                   break;
 
                 case 'views_block:people_list_block-list_card':
@@ -435,6 +496,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
             if ($form_id === 'layout_builder_add_block') {
               switch ($block->getPluginId()) {
                 case 'views_block:article_list_block-list_article':
+                case 'views_block:article_list_block-list_article_recent':
                   $form['settings']['override']['hide_fields']['order_fields']['field_article_source_link']['hide']['#default_value'] = 1;
                   break;
 
@@ -459,13 +521,14 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
 
             $view_options = [
               'accordion',
-              'descriptive_list',
+              'dotted_line',
+              'horizontal_timeline',
               'tab',
             ];
 
             // If view mode not in our options (eg 'full'), set it to <dl>.
             if (!in_array($form['settings']['view_mode']['#default_value'], $view_options)) {
-              $form['settings']['view_mode']['#default_value'] = 'descriptive_list';
+              $form['settings']['view_mode']['#default_value'] = 'accordion';
             }
 
             // Move view mode to the block form.
@@ -604,6 +667,7 @@ function layout_builder_custom_form_alter(&$form, FormStateInterface $form_state
     case 'layout_builder_configure_section':
       // Remove container settings - None - empty option.
       unset($form['layout_builder_style_container']['#empty_option']);
+      unset($form['layout_builder_style_container_duplicate']['#empty_option']);
       if (isset($form['layout_builder_style_container'])) {
         // Add (Default) after Normal option.
         $form['layout_builder_style_container']['#options']['section_margin_fixed_width_container'] = 'Normal (Default)';
@@ -658,11 +722,11 @@ function _layout_builder_custom_block_validate(array &$form, FormStateInterface 
         break;
 
       case 'inline_block:artsci_card':
-        LinkAnalyticsHelper::sanitizeLinkAnalyticsAttributes($form_state, 'field_artsci_card_link', 'link');
+        CardBlockFormHandler::validateForm($form, $form_state);
         break;
 
-      case 'inline_block:artsci_cta':
-        LinkAnalyticsHelper::sanitizeLinkAnalyticsAttributes($form_state, 'field_artsci_cta_link', 'button');
+      case 'inline_block:artsci_slider':
+        SliderBlockFormHandler::validateForm($form, $form_state);
         break;
 
       case 'inline_block:artsci_statistic':
@@ -717,110 +781,36 @@ function _layout_builder_custom_block_submit(array &$form, FormStateInterface $f
       case 'inline_block:artsci_banner':
         BannerBlockFormHandler::submitForm($form, $form_state);
         break;
+      case 'inline_block:artsci_slider':
+        SliderBlockFormHandler::submitForm($form, $form_state);
+        break;
       case 'inline_block:artsci_card':
         // Force default values for hidden style fields.
-        $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
-        $form_state->setValue('layout_builder_style_default', 'card_style_button_position');
-                $media_position = $form_state->getValue('layout_builder_style_card_media_position');
-        $media_format = $form_state->getValue('layout_builder_style_media_format');
-
-        // If the media position is stacked and the media format is square or
-        // widescreen, set the media size to large.
-        if ($media_position === '' && in_array($media_format, [
-          'media_format_widescreen',
-          'media_format_square',
-        ])) {
-          $form_state->setValue('layout_builder_style_media_size', 'media_size_medium');
-        }
-
-        if ($block->getPluginId() === 'inline_block:artsci_card') {
-          // Remove image or icon based on media_options selection.
-          $media_option = $form_state->getValue([
-            'settings',
-            'block_form',
-            'media_types',
-          ]);
-
-          if ($media_option) {
-
-            $form_image_selection = [
-              'settings',
-              'block_form',
-              'field_artsci_card_image',
-              'selection',
-            ];
-
-            $form_icon_selection = [
-              'settings',
-              'block_form',
-              'field_icon',
-              0,
-              'value',
-              'icon',
-            ];
-
-            if ($media_option === 'image') {
-              if ($form_state->hasValue($form_icon_selection)) {
-                $form_state->unsetValue($form_icon_selection);
-              }
-            }
-            elseif ($media_option === 'icon') {
-              if ($form_state->hasValue($form_image_selection)) {
-                $form_state->unsetValue($form_image_selection);
-              }
-            }
-
-            // Save as a third-party setting.
-            if (!empty($media_option)) {
-              $component->setThirdPartySetting('layout_builder_custom', 'media_types', $media_option);
-            }
-          }
-
-          // Make sure button display field is checked
-          // if the link title field is filled in.
-          $link_title = $form_state->getValue(
-            [
-              'settings',
-              'block_form',
-              'field_artsci_card_link',
-            ]
-            )[0]['title'];
-          if ($link_title) {
-            $form_state->setValue(
-            [
-              'settings',
-              'block_form',
-              'field_artsci_card_button_display',
-            ],
-            [
-              'value' => 1,
-            ],
-            );
-          }
-        }
+        CardBlockFormHandler::submitForm($form, $form_state);
         break;
       case 'inline_block:featured_content':
-        $form_state->setValue('layout_builder_style_list_format', 'list_format_grid');
+        // $form_state->setValue('layout_builder_style_list_format', 'list_format_grid');
         $form_state->setValue('layout_builder_style_margin', 'block_margin_default_removed');
         
         break;
       case 'inline_block:artsci_aggregator':
       case 'views_block:article_list_block-list_article':
+      case 'views_block:article_list_block-list_article_recent':
       case 'views_block:page_list_block-list_page':
       case 'views_block:events-card_list':
-      case 'views_block:events_list_block-card_list':
+      case 'views_block:image_card_list_block-list_image_card':
       case 'views_block:people_list_block-list_card':
         $media_position = $form_state->getValue('layout_builder_style_card_media_position');
         $media_format = $form_state->getValue('layout_builder_style_media_format');
 
         // If the media position is stacked and the media format is square or
         // widescreen, set the media size to large.
-        if ($media_position === '' && in_array($media_format, [
-          'media_format_widescreen',
-          'media_format_square',
-        ])) {
-          $form_state->setValue('layout_builder_style_media_size', 'media_size_medium');
-        }
+        //  if ($media_position === '' && in_array($media_format, [
+        //   'media_format_widescreen',
+        //   'media_format_square',
+        // ])) {
+        //   $form_state->setValue('layout_builder_style_media_size', 'media_size_medium');
+        // }
 
         if ($block->getPluginId() === 'inline_block:artsci_card') {
           // Remove image or icon based on media_options selection.
@@ -952,8 +942,12 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
       case 'inline_block:artsci_banner':
         return BannerBlockFormHandler::processElement($element, $form_state);
 
+      case 'inline_block:artsci_slider':
+        return SliderBlockFormHandler::processElement($element, $form_state);
+
       case 'inline_block:artsci_card':
         // Hide heading size field and default to h2.
+        return CardBlockFormHandler::processElement($element, $form_state);
         if (isset($element['field_artsci_card_title']['widget'][0]['container']['size'])) {
           $element['field_artsci_card_title']['widget'][0]['container']['size']['#access'] = FALSE;
           $element['field_artsci_card_title']['widget'][0]['container']['size']['#default_value'] = 'h2';
@@ -1028,17 +1022,9 @@ function _layout_builder_custom_process_element(array $element, FormStateInterfa
 
         break;
 
-      case 'inline_block:artsci_cta':
-        // Set the default text format to plain if the block is new.
-        // We look at the #default_value in the widget, as it is empty
-        // unless we're editing a block with existing content.
-        if (isset($element['field_artsci_cta_summary']) && empty($element['field_artsci_cta_summary']['widget'][0]['#default_value'])) {
-          $element['field_artsci_cta_summary']['widget'][0]['#format'] = 'plain_text';
-        }
-        break;
-
       case 'inline_block:artsci_aggregator':
       case 'inline_block:artsci_image_gallery':
+      case 'inline_block:artsci_image':
       case 'inline_block:featured_content':
         if (isset($element['field_artsci_headline']['widget'][0]['container'])) {
           $container = &$element['field_artsci_headline']['widget'][0]['container'];
@@ -1143,9 +1129,13 @@ function layout_builder_custom_preprocess_block(&$variables) {
 
     $allowlist = [
       'views_block:article_list_block-list_article',
+      'views_block:article_list_block-list_article_recent',
+      'views_block:article_list_block-list_book',
+      'views_block:article_list_block-list_event',
+      'views_block:article_list_block-list_person',
       'views_block:events-card_list',
-      'views_block:events_list_block-card_list',
       'views_block:page_list_block-list_page',
+      'views_block:image_card_list_block-list_image_card',
       'views_block:people_list_block-list_card',
       'views_block:student_card-block_student_card',
     ];
@@ -1183,8 +1173,8 @@ function layout_builder_custom_preprocess_block__inline_block__featured_content(
   LayoutBuilderStylesHelper::processGridClasses($variables['attributes']);
   $variables['attributes']['class'][] = 'list-container';
 
-  // Take control of the referenced entity renders to pass in heading size.
-  unset($variables['content']['field_featured_content_item']);
+  // Build the list of referenced item cards. Heading size and override styles
+  // are applied per item below; the original field render is removed at the end.
   $variables['content']['referenced_items'] = [];
 
   /** @var \Drupal\block_content\Entity\BlockContent $block */
@@ -1202,33 +1192,32 @@ function layout_builder_custom_preprocess_block__inline_block__featured_content(
     $heading_size = HeadlineHelper::getHeadingSizeUp($headline_field?->heading_size);
     // Add grid modifier class to exclude headline for rendering in grid.
     $lb_styles_array = $variables['elements']['#layout_builder_style'] ?? [];
-    if (!in_array('list_format_list', $lb_styles_array)) {
-      $variables['attributes']['class'][] = 'grid--first-item-full-width';
-    }
   }
 
-  foreach ($block->get('field_featured_content_item') as $item) {
-    $target = $item->getProperties(TRUE)['entity']->getTarget();
-    if ($target) {
-      $entity = $target->getEntity();
+  // Reuse the per-item builds the entity reference formatter already produced
+  // instead of re-rendering each node by hand. Decorate each card build with
+  // the heading size and override styles, wrap it in a column-container, and
+  // let it render lazily with the rest of the block. This matches how
+  // aggregator items pick up override styles through the normal pipeline and
+  // avoids the standalone render pass that produced a duplicate item render.
+  $items = $variables['content']['field_featured_content_item'] ?? [];
+  foreach (Element::children($items) as $delta) {
+    $build = $items[$delta];
+    $build['#title_heading_size'] = $heading_size;
+    $build['#prefix'] = '<div class="column-container">';
+    $build['#suffix'] = '</div>';
 
-      // Construct the entity teaser markup manually to pass in the heading
-      // size variable for the template and append it to the block content.
-      $build = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, 'teaser');
-      $build['#title_heading_size'] = $heading_size;
-
-      if (!empty($override_styles)) {
-        $build['#override_styles'] = $override_styles;
-      }
-      $render = \Drupal::service('renderer')->render($build);
-
-      $variables['content']['referenced_items'][] = [
-        '#markup' => $render,
-        '#prefix' => '<div class="column-container">',
-        '#suffix' => '</div>',
-      ];
+    if (!empty($override_styles)) {
+      $build['#override_styles'] = $override_styles;
     }
+
+    $variables['content']['referenced_items'][] = $build;
   }
+
+  // Drop the original field render so only the flattened cards above remain;
+  // this keeps the entity reference field wrapper from sitting between the
+  // grid container and the cards.
+  unset($variables['content']['field_featured_content_item']);
 }
 
 /**
@@ -1262,6 +1251,7 @@ function layout_builder_custom_preprocess_layout(&$variables) {
     $alignment_map = HeadlineHelper::getHeadingAlignment();
 
     $variables['section_headline'] = [
+      'pre_headline' => $headline_config['pre_headline'] ?? '',
       'text' => $headline_config['headline'],
       'size' => $headline_config['heading_size'] ?? 'h2',
       'styles' => $style_map[$headline_config['headline_style'] ?? 'default'] ?? 'headline block__headline',
@@ -1364,9 +1354,10 @@ function layout_builder_custom_preprocess_views_view(&$variables) {
       }
     }
 
-    // Clear static variables to prevent style bleed between blocks.
-    drupal_static_reset('layout_builder_custom_card_override_styles');
-    drupal_static_reset('layout_builder_custom_card_hide_fields');
+    // NOTE: Do NOT reset static variables here!
+    // Entity rendering happens AFTER preprocessing (when Twig renders rows),
+    // so the static must persist until then. The reset happens at the START
+    // of the next view's pre_render hook instead.
   }
 }
 
@@ -1428,7 +1419,11 @@ function layout_builder_custom_views_pre_render(ViewExecutable $view) {
   $exceptions = [
     'block_people_slf',
     'block_people_sfl',
+    'article_list_block',
     'block_articles',
+    'list_article',
+    'list_event',
+    'list_people',
   ];
   if (!in_array($display->display['id'], $exceptions) && $view->display_handler instanceof ListBlock) {
     $view->exposed_raw_input = [];
@@ -1437,6 +1432,12 @@ function layout_builder_custom_views_pre_render(ViewExecutable $view) {
   // Inject card override styles and hide_fields BEFORE entities render.
   // Use drupal_static so entities can access during buildCard().
   if ($view->display_handler instanceof ListBlock) {
+    // Clear previous block's styles BEFORE setting new ones.
+    // This must happen here, not in preprocess_views_view, because entity
+    // rendering happens AFTER preprocessing (when Twig renders the rows).
+    drupal_static_reset('layout_builder_custom_card_override_styles');
+    drupal_static_reset('layout_builder_custom_card_hide_fields');
+
     $layout_builder_styles = $view->display_handler->getOption('layout_builder_styles');
 
     if (!empty($layout_builder_styles)) {
@@ -1498,4 +1499,505 @@ function _layout_builder_custom_banner_midpoint_options() {
     '60%' => '60%',
     '70%' => '70% (default for horizontal direction)',
   ];
+}
+
+
+/**
+ * ---------------------------------------------------------------------------
+ * artsci_slider render-stage logic.
+ *
+ * Relocated from atomic_artsci.theme so the slider's render handling lives in
+ * the same module as SliderBlockFormHandler. Module preprocess hooks run
+ * before theme hooks, so the block preprocess still populates the static
+ * bridge before the slide paragraphs are preprocessed.
+ * ---------------------------------------------------------------------------
+ */
+
+/**
+ * Removes a set of classes from an attributes array or Attribute object.
+ *
+ * @param array|\Drupal\Core\Template\Attribute|null $attributes
+ *   The attributes container, passed by reference.
+ * @param string[] $classes
+ *   Class names to remove.
+ */
+function _layout_builder_custom_strip_classes(&$attributes, array $classes): void {
+  if (is_array($attributes)) {
+    if (!empty($attributes['class']) && is_array($attributes['class'])) {
+      $attributes['class'] = array_values(array_diff($attributes['class'], $classes));
+    }
+  }
+  elseif ($attributes instanceof \Drupal\Core\Template\Attribute) {
+    $attributes->removeClass($classes);
+  }
+}
+
+/**
+ * Maps a carousel size to the number of slides visible per page.
+ *
+ * @param string $size
+ *   One of 'four', 'three', 'two', 'one'.
+ *
+ * @return float
+ *   Slides per page. Returns float because 'paged' is 2.5.
+ */
+function _layout_builder_custom_carousel_per_page(string $size): float {
+  $map = [
+    'four' => 4,
+    'three' => 3,
+    'two' => 2.5,
+    'one'  => 1,
+  ];
+  return $map[$size] ?? 3;
+}
+
+/**
+ * Stores/retrieves slider context for a block content entity.
+ *
+ * Bridges block preprocess (has LB Styles) to paragraph preprocess (doesn't).
+ *
+ * @param int|string $block_content_id
+ *   The block content entity ID.
+ * @param array|null $context
+ *   If provided, stores this context. If NULL, retrieves.
+ *
+ * @return array
+ *   The slider context array.
+ */
+function _layout_builder_custom_slider_context_bridge($block_content_id, ?array $context = NULL): array {
+  static $contexts = [];
+
+  if ($context !== NULL) {
+    $contexts[$block_content_id] = $context;
+  }
+
+  return $contexts[$block_content_id] ?? [
+    'carousel_size' => 'three',
+    'carousel_per_page' => 3,
+    'media_format' => NULL,
+    'media_position' => NULL,
+    'media_size' => NULL,
+  ];
+}
+
+/**
+ * Resolves the media view mode for a slide from its parent slider context.
+ *
+ * @param array $ctx
+ *   The slider context. Its media_format and media_size are view mode family
+ *   names and size tiers, not CSS classes, so they concatenate directly.
+ * @param string $bundle
+ *   The media bundle of the slide's media.
+ *
+ * @return string|null
+ *   The {size}__{format} view mode, or NULL when no enabled display exists for
+ *   that bundle. NULL leaves the media on the view mode pinned in the slide's
+ *   paragraph display.
+ */
+function _layout_builder_custom_slide_media_view_mode(array $ctx, string $bundle): ?string {
+  // Fallbacks for a slider saved before the media style defaults existed.
+  // Medium rather than full: a slide is never full-bleed in any carousel size,
+  // and full__* declares the 1310px sizes clause and a full-tier fallback
+  // image, which is what made slider posters the heaviest assets on the page.
+  $format = $ctx['media_format'] ?? 'widescreen';
+  $size = $ctx['media_size'] ?? 'medium';
+
+  // Circle has no view mode family of its own; it is a CSS mask over a square
+  // crop.
+  if ($format === 'circle') {
+    $format = 'square';
+  }
+
+  $view_mode = "{$size}__{$format}";
+
+  return LayoutBuilderStylesHelper::mediaViewDisplayExists($bundle, $view_mode)
+    ? $view_mode
+    : NULL;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block--inline-block--artsci-slider.
+ *
+ * Extracts carousel settings and card styles from Layout Builder Styles.
+ * Bridges context to child paragraphs via static storage.
+ */
+function layout_builder_custom_preprocess_block__inline_block__artsci_slider(&$variables) {
+  // Default carousel settings.
+  // Per-page is derived from carousel_size below; do not hardcode here.
+  $variables['carousel_size'] = 'three';
+  $variables['carousel_per_page'] = _layout_builder_custom_carousel_per_page('three');
+  $variables['carousel_loop'] = TRUE;
+  $variables['carousel_autoplay'] = NULL;
+  // Number of slides. The template uses this to render the nav controls only
+  // when there is more than one slide to navigate.
+  $variables['slide_count'] = 0;
+
+  // Get the block content entity.
+  $block = NULL;
+  if (isset($variables['elements']['content']['#block_content'])) {
+    $block = $variables['elements']['content']['#block_content'];
+
+    // Count the slides so the template can hide the nav controls when there is
+    // only a single slide.
+    if ($block->hasField('field_artsci_slider_slides')) {
+      $variables['slide_count'] = $block->get('field_artsci_slider_slides')->count();
+    }
+
+    // Extract headline for large carousel mode.
+    if ($block->hasField('field_artsci_headline') && !$block->get('field_artsci_headline')->isEmpty()) {
+      $headline_field = $block->get('field_artsci_headline')->first();
+      if ($headline_field) {
+        $values = $headline_field->getValue();
+        $variables['headline_text'] = $values['headline'] ?? NULL;
+        $variables['pre_title'] = $values['pre_headline'] ?? NULL;
+      }
+    }
+  }
+
+  // Extract styles from Layout Builder Styles classes.
+  $classes = $variables['elements']['#attributes']['class'] ?? [];
+
+  // Initialize slider context for bridging to paragraphs.
+  $slider_context = [
+    'carousel_size' => 'three',
+    'carousel_per_page' => _layout_builder_custom_carousel_per_page('three'),
+    'media_format' => NULL,
+    'media_position' => NULL,
+    'media_size' => NULL,
+  ];
+
+  // Carousel size mapping. The LB style class determines the size, which in
+  // turn determines slides per page via _layout_builder_custom_carousel_per_page().
+  $size_map = [
+    'carousel--four' => 'four',
+    'carousel--three' => 'three',
+    'carousel--two' => 'two',
+    'carousel--one'  => 'one',
+  ];
+  foreach ($size_map as $class => $size) {
+    if (in_array($class, $classes)) {
+      $variables['carousel_size'] = $size;
+      $slider_context['carousel_size'] = $size;
+      break;
+    }
+  }
+
+  // Derive per_page from the resolved size (single source of truth).
+  $variables['carousel_per_page'] = _layout_builder_custom_carousel_per_page($variables['carousel_size']);
+
+  // Media format mapping. The value is the media view mode FAMILY, which the
+  // slide preprocess concatenates with the size tier to build {size}__{format}.
+  $format_map = [
+    'media--circle' => 'circle',
+    'media--landscape' => 'landscape',
+    'media--square' => 'square',
+    'media--widescreen' => 'widescreen',
+    'media--portrait' => 'portrait',
+  ];
+  foreach ($format_map as $class => $format) {
+    if (in_array($class, $classes)) {
+      $slider_context['media_format'] = $format;
+      break;
+    }
+  }
+
+  // Media position mapping (card layout).
+  $position_map = [
+    'card--layout-left' => 'left',
+    'card--layout-right' => 'right',
+    'card--stacked' => 'stacked',
+    'card--layout-overlay' => 'overlay',
+  ];
+  foreach ($position_map as $class => $position) {
+    if (in_array($class, $classes)) {
+      $slider_context['media_position'] = $position;
+      break;
+    }
+  }
+
+  // Media size mapping.
+  $size_style_map = [
+    'media--small' => 'small',
+    'media--medium' => 'medium',
+    'media--large' => 'large',
+  ];
+  foreach ($size_style_map as $class => $size) {
+    if (in_array($class, $classes)) {
+      $slider_context['media_size'] = $size;
+      break;
+    }
+  }
+
+  // Check for autoplay class.
+  if (in_array('carousel--autoplay', $classes)) {
+    $variables['carousel_autoplay'] = 5000;
+  }
+
+  // Check for no-loop class.
+  if (in_array('carousel--no-loop', $classes)) {
+    $variables['carousel_loop'] = FALSE;
+  }
+
+  // Store context in per_page variable too.
+  $slider_context['carousel_per_page'] = $variables['carousel_per_page'];
+
+  // The card-level LB styles (card_media_position, media_format, media_size)
+  // are meant for the individual slide cards, not the slider block wrapper.
+  // layout_builder_styles applies them to the block's #attributes; if they
+  // remain on the .artsci-slider wrapper, global card.scss rules such as
+  // `.card--layout-left { display: flex; flex-direction: row }` match the
+  // wrapper itself and lay the whole block (headline + track + nav) out in a
+  // row. They've been captured in $slider_context above, so strip them from
+  // the wrapper now; the slide template re-applies them to .card and .media.
+  $relocated_classes = [
+    'card--layout-left',
+    'card--layout-right',
+    'card--stacked',
+    'card--layout-overlay',
+    'media--circle',
+    'media--border',
+    'media--landscape',
+    'media--square',
+    'media--widescreen',
+    'media--portrait',
+    'media--small',
+    'media--medium',
+    'media--large',
+  ];
+
+  // Button style LB group ("bttn bttn--primary--reverse", "bttn bttn--tertiary",
+  // "bttn bttn--transparent", "bttn bttn--arrow--red") and the
+  // button-align-bottom card style are card-level too. Capture them for the
+  // card's button (the card embed applies them) and relocate them off the
+  // wrapper, the same way the banner block reads bttn* classes. LB stores the
+  // multiple classes of one style as a single space-separated entry, so split.
+  $button_classes = [];
+  foreach ($classes as $cls) {
+    if (!is_string($cls)) {
+      continue;
+    }
+
+    elseif (str_starts_with($cls, 'bttn')) {
+      foreach (preg_split('/\s+/', trim($cls)) as $part) {
+        if ($part !== '') {
+          $button_classes[] = $part;
+        }
+      }
+      $relocated_classes[] = $cls;
+    }
+  }
+  if (!empty($button_classes)) {
+    $slider_context['button_classes'] = array_values(array_unique($button_classes));
+  }
+
+  if (isset($variables['attributes'])) {
+    _layout_builder_custom_strip_classes($variables['attributes'], $relocated_classes);
+  }
+  if (isset($variables['elements']['#attributes'])) {
+    _layout_builder_custom_strip_classes($variables['elements']['#attributes'], $relocated_classes);
+  }
+
+  // Bridge context to child paragraphs via static storage.
+  if ($block) {
+    _layout_builder_custom_slider_context_bridge($block->id(), $slider_context);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--artsci-slide.
+ *
+ * Reads parent slider context, extracts slide field values into clean
+ * template variables, and builds the card class list from
+ * media_format / media_position / media_size so the card.scss rules apply.
+ */
+function layout_builder_custom_preprocess_paragraph__artsci_slide(array &$variables): void {
+  /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+  $paragraph = $variables['paragraph'];
+
+  // Default slider context (used when no parent block context is available,
+  // e.g. when previewing the paragraph in isolation).
+  $variables['slider_context'] = [
+    'carousel_size' => 'three',
+    'media_format' => NULL,
+    'media_position' => NULL,
+    'media_size' => NULL,
+  ];
+
+  // Read slider context from static bridge (set by block preprocess).
+  $parent = $paragraph->getParentEntity();
+  if ($parent && $parent instanceof \Drupal\block_content\BlockContentInterface) {
+    $variables['slider_context'] = _layout_builder_custom_slider_context_bridge($parent->id());
+  }
+
+  $ctx = $variables['slider_context'];
+
+  // Build two separate class lists from slider context. The card.scss rules
+  // are scoped so that:
+  //   - position classes (card--layout-*, card--stacked) go on the .card
+  //     element, e.g. `.card--layout-left { display: flex }`
+  //   - format + size classes (media--*) go on the inner .media element,
+  //     e.g. `.card .media--square img { aspect-ratio: 1/1 }`
+  // Splitting them is essential: putting media--* on the .card produces
+  // `.card.media--square`, which matches none of the descendant rules.
+  $card_classes = [];
+  $media_classes = [];
+
+  // Position -> on the .card element (via the embed's `attributes`).
+  // The 2.5 "two" peek style is built around overlay cards (full-bleed image
+  // with the text over a panel); that overlay layout is what hosts the
+  // active-slide teal panel in slider-carousel.scss. Force it for that size
+  // regardless of the media position style the editor picked, so the teal
+  // always has a host to attach to and follows the active slide on paginate.
+  $position = ($ctx['carousel_size'] ?? NULL) === 'two'
+    ? 'overlay'
+    : ($ctx['media_position'] ?? NULL);
+  if (!empty($position)) {
+    // 'stacked' uses class 'card--stacked'; others use 'card--layout-X'.
+    $card_classes[] = $position === 'stacked'
+      ? 'card--stacked'
+      : 'card--layout-' . $position;
+  }
+
+  // Format -> on the inner .media element (via the embed's `media_attributes`).
+  if (!empty($ctx['media_format'])) {
+    $media_classes[] = 'media--' . $ctx['media_format'];
+    // The media_format_circle LB style also applies media--border; mirror it.
+    if ($ctx['media_format'] === 'circle') {
+      $media_classes[] = 'media--border';
+    }
+  }
+
+  // Size -> on the inner .media element (combines with format, e.g.
+  // `.media--small.media--circle`).
+  if (!empty($ctx['media_size'])) {
+    $media_classes[] = 'media--' . $ctx['media_size'];
+  }
+
+  // Button-align-bottom is a card-level style (card_style_button_position LB
+  // group); apply it to the .card alongside the position classes.
+  $card_classes[] = 'card--button-align-bottom';
+
+  $variables['card_classes'] = $card_classes;
+  $variables['media_classes'] = $media_classes;
+
+  // Button style classes for the card's button (button_style LB group on the
+  // slider block, captured in the block preprocess). NULL when none is
+  // selected; the template falls back to a default.
+  $variables['button_classes'] = !empty($ctx['button_classes'])
+    ? $ctx['button_classes']
+    : NULL;
+
+  // Extract slide field values into clean template variables.
+  $variables['slide_title'] = NULL;
+  if ($paragraph->hasField('field_collection_headline') && !$paragraph->get('field_collection_headline')->isEmpty()) {
+    $variables['slide_title'] = $paragraph->get('field_collection_headline')->value;
+  }
+
+  $variables['slide_summary'] = !empty($variables['content']['field_artsci_slide_content'])
+    ? $variables['content']['field_artsci_slide_content']
+    : NULL;
+
+  $variables['slide_image'] = !empty($variables['content']['field_artsci_slide_image'])
+    ? $variables['content']['field_artsci_slide_image']
+    : NULL;
+
+  // Render the slide media in the {size}__{format} view mode matching the
+  // block's Layout Builder style, the same pipeline the card and image blocks
+  // use. Without this the media falls back to the view mode pinned in
+  // core.entity_view_display.paragraph.artsci_slide.default.yml
+  // (field_artsci_slide_image => full__widescreen), so neither the format nor
+  // the size selection reaches a responsive image style.
+  //
+  // $ctx already holds family names and size tiers, not CSS classes, so they
+  // concatenate directly and must not be run back through a class map.
+  //
+  // For images the swap delivers a real server-side focal-point crop and the
+  // matching responsive image style. For remote_video and video there is no
+  // server-side crop, so the ratio still comes from CSS (.media--* in
+  // card.scss); the swap still buys the per-display poster and play-label
+  // settings.
+  if ($paragraph->hasField('field_artsci_slide_image')
+    && !$paragraph->get('field_artsci_slide_image')->isEmpty()) {
+    $slide_media = $paragraph->get('field_artsci_slide_image')->entity;
+    if ($slide_media instanceof \Drupal\media\MediaInterface) {
+      $view_mode = _layout_builder_custom_slide_media_view_mode($ctx, $slide_media->bundle());
+      if ($view_mode !== NULL) {
+        $variables['slide_image'] = \Drupal::entityTypeManager()
+          ->getViewBuilder('media')
+          ->view($slide_media, $view_mode);
+      }
+    }
+  }
+
+  // Normalize the link field for the card embed. A link is allowed on every
+  // slide except a remote_video one, so gate on the media bundle here. This is
+  // the only place the template's `link` comes from, so leaving link_url/
+  // link_text NULL makes every CTA path in the template (headline link, button,
+  // media link, stat link) fall back to no-link without per-line guards. This
+  // also covers legacy remote_video slides not re-saved through the presave
+  // that clears their stale links.
+  $variables['link'] = [
+    'link_url' => NULL,
+    'link_text' => NULL,
+    'link_classes' => NULL,
+  ];
+
+  $slide_allows_link = TRUE;
+  if ($paragraph->hasField('field_artsci_slide_image')
+    && !$paragraph->get('field_artsci_slide_image')->isEmpty()) {
+    $slide_media = $paragraph->get('field_artsci_slide_image')->entity;
+    if ($slide_media instanceof \Drupal\media\MediaInterface
+      && $slide_media->bundle() === 'remote_video') {
+      $slide_allows_link = FALSE;
+    }
+  }
+  // Exposed for the template in case an explicit guard is ever wanted there.
+  $variables['slide_allows_link'] = $slide_allows_link;
+
+  if ($slide_allows_link
+    && $paragraph->hasField('field_artsci_slide_link')
+    && !$paragraph->get('field_artsci_slide_link')->isEmpty()) {
+    $link_item = $paragraph->get('field_artsci_slide_link')->first();
+    try {
+      $variables['link']['link_url'] = $link_item->getUrl()->toString();
+    }
+    catch (\Throwable $e) {
+      // Invalid stored URL; leave as NULL.
+    }
+    $variables['link']['link_text'] = $link_item->title;
+  }
+}
+
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for paragraph entities.
+ *
+ * Enforces the slide data model: a remote_video slide must not carry a link.
+ * When an artsci_slide's media is a remote_video, any stored link is cleared so
+ * it cannot leak into the rendered output. The form hides the link for these
+ * slides via #states, but #states only hides, it does not clear, so this keeps
+ * the saved data in step with the UI. Image slides, local video slides, slides
+ * with no media, and slides with no link are all left untouched.
+ */
+function layout_builder_custom_paragraph_presave(\Drupal\paragraphs\ParagraphInterface $paragraph) {
+  if ($paragraph->bundle() !== 'artsci_slide') {
+    return;
+  }
+
+  if (!$paragraph->hasField('field_artsci_slide_image')
+    || !$paragraph->hasField('field_artsci_slide_link')) {
+    return;
+  }
+
+  // Nothing to gate on if there is no media, and nothing to clear if there is
+  // no link.
+  if ($paragraph->get('field_artsci_slide_image')->isEmpty()
+    || $paragraph->get('field_artsci_slide_link')->isEmpty()) {
+    return;
+  }
+
+  $media = $paragraph->get('field_artsci_slide_image')->entity;
+  if ($media instanceof \Drupal\media\MediaInterface && $media->bundle() === 'remote_video') {
+    $paragraph->set('field_artsci_slide_link', NULL);
+  }
 }

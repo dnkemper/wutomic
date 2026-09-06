@@ -1,0 +1,115 @@
+id: artsci_d10_taxonomy_faculty_areas_of_study
+label: 'D10 faculty_areas_of_study terms imported into D11 research_areas vocabulary'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# IMPORTANT: This migration consolidates two differently-named vocabularies.
+# Source on D10 is `faculty_areas_of_study`; destination on D11 is `research_areas`.
+# That's why the migration ID still references the SOURCE name (matches the
+# JSON:API endpoint) while every `vid` / `default_bundle` references the
+# DESTINATION name. Resulting D11 term IDs are tracked in this migration's
+# map table, so any node-side migration that needs to attach these terms
+# should migration_lookup against this migration ID.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # Single page[*] subkey only — see research_areas migration notes for the
+  # source-side pagination bug background.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/taxonomy_term/faculty_areas_of_study?page[limit]=500'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+
+  ids:
+    tid:
+      type: integer
+
+  fields:
+    - name: tid
+      label: 'Original TID (in D10 faculty_areas_of_study)'
+      selector: 'attributes/drupal_internal__tid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: name
+      label: Name
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: weight
+      label: Weight
+      selector: 'attributes/weight'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: desc_value
+      label: 'Description value'
+      selector: 'attributes/description/value'
+    - name: desc_format
+      label: 'Description format'
+      selector: 'attributes/description/format'
+    - name: source_parent
+      label: 'Parent term reference (in D10 faculty_areas_of_study)'
+      selector: 'relationships/parent/data'
+
+process:
+  # Look up existing term by UUID to avoid duplicate-key inserts when a
+  # matching term already exists on D11. NOTE: entity_lookup is not bundle-
+  # restricted; if the same UUID exists in a different D11 vocab, that term
+  # will be matched. Unlikely in practice but worth knowing.
+  tid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: taxonomy_term
+    value_key: uuid
+
+  uuid: uuid
+
+  # Hardcoded to research_areas — the D11 destination vocab.
+  vid:
+    plugin: default_value
+    default_value: areas_of_study
+
+  langcode: langcode
+  name: name
+  weight:
+    plugin: default_value
+    default_value: 0
+    source: weight
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  'description/value': desc_value
+  'description/format':
+    plugin: default_value
+    default_value: full_html
+    source: desc_format
+
+  # Parent hierarchy. D10 parents reference other D10 faculty_areas_of_study terms.
+  # We resolve via migration_lookup against this same migration so the
+  # parent ref ends up pointing at the migrated D11 research_areas tid.
+  # Stubs are created automatically for parents not yet migrated; they get
+  # filled in when the actual parent comes through later in the run.
+  parent:
+    plugin: sub_process
+    source: source_parent
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: artsci_d10_taxonomy_faculty_areas_of_study
+        source: meta/drupal_internal__target_id
+
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: areas_of_study
+
+migration_dependencies:
+  required: []
+  optional: []

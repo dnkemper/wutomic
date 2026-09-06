@@ -1,0 +1,8 @@
+uuid: f40aacc5-d6f2-4654-9f7c-47bcc53c057e
+langcode: en
+status: true
+dependencies: {  }
+id: anchor_links
+label: 'Anchor Links'
+revision: false
+description: 'A horizontal navigation bar with links to anchor points on the page.'

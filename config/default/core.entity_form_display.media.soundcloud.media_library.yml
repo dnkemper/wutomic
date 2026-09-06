@@ -1,0 +1,33 @@
+uuid: 04fed8cd-76c6-4152-a96d-471ed99d0e53
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.soundcloud.field_media_soundcloud
+    - media.type.soundcloud
+id: media.soundcloud.media_library
+targetEntityType: media
+bundle: soundcloud
+mode: media_library
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_media_soundcloud: true
+  path: true
+  publish_on: true
+  publish_state: true
+  scheduler_settings: true
+  status: true
+  thumbnail: true
+  uid: true
+  unpublish_on: true
+  unpublish_state: true

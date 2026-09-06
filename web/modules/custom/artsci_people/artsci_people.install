@@ -8,6 +8,8 @@
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Site\Settings;
 use Drupal\node\Entity\Node;
+use \Drupal\field\Entity\FieldStorageConfig;
+use \Drupal\field\Entity\FieldConfig;
 
 /**
  * Updates any site with 'person_extended' split.
@@ -270,16 +272,28 @@ function artsci_people_update_10000(&$sandbox) {
 
     if ($node && $node->hasField('rabbit_hole__settings')) {
       // Check for required field values before processing.
-      $link_direct = (int) $node->get('field_person_website_link_direct')->value;
-      $source_link = $node->get('field_person_website')->uri;
+      $link_direct = (int) $node->get('field_external_link')->value;
+        $is_external = FALSE;
+        if ($node->hasField('field_external_link') && !$node->get('field_external_link')->isEmpty()) {
+          $website = $node->get('field_external_link')->first();
+          if ($website) {
+            $variables['external_url'] = $website->getUrl()->toString();
+            // Check if link should go directly to external site.
+            // if ($node->hasField('field_person_website_link_direct') && $node->get('field_person_website_link_direct')->value) {
+              $is_external = TRUE;
+            // }
+          }
+        }
+        $variables['is_external'] = $is_external;
+      $source_link = $node->get('field_external_link')->uri;
 
       // Only process nodes with direct link enabled and source link set.
-      if ($link_direct === 1 && isset($source_link) && !empty($source_link)) {
+      if ($is_external === 1 && isset($source_link) && !empty($source_link)) {
         $node->setNewRevision(TRUE);
         $node->rabbit_hole__settings->setValue([
           "action" => "page_redirect",
           "settings" => [
-            "redirect" => "[node:field_person_website:0:uri]",
+            "redirect" => "[node:field_external_link:0:uri]",
             "redirect_code" => 301,
             "redirect_fallback_action" => "display_page",
           ],
@@ -389,4 +403,65 @@ function artsci_people_update_10001() {
 
   $view->save();
 
+}
+function artsci_people_update_10003() {
+  $database = \Drupal::database();
+  $entityType = 'node';
+  $fieldName = 'field_person_interests';
+  $table = $entityType . '__' . $fieldName;
+  $currentRows = NULL;
+  $newFieldsList = [];
+  $fieldStorage = FieldStorageConfig::loadByName($entityType, $fieldName);
+
+  if (is_null($fieldStorage)) {
+    return;
+  }
+
+  // Get all current data from DB.
+  if ($database->schema()->tableExists($table)) {
+    // The table data to restore after the update is completed.
+    $currentRows = $database->select($table, 'n')
+      ->fields('n')
+      ->execute()
+      ->fetchAll();
+  }
+
+  // Use existing field config for new field.
+  foreach ($fieldStorage->getBundles() as $bundle => $label) {
+    $field = FieldConfig::loadByName($entityType, $bundle, $fieldName);
+    $newField = $field->toArray();
+    $newField['field_type'] = 'string_long';
+    $newField['settings'] = [];
+    $newFieldsList[] = $newField;
+  }
+
+  // Deleting field storage which will also delete bundles(fields).
+  $newFieldStorage = $fieldStorage->toArray();
+  $newFieldStorage['type'] = 'string_long';
+  $newFieldStorage['settings'] = [];
+
+  $fieldStorage->delete();
+
+  // Purge field data now to allow new field and field_storage with same name
+  // to be created.
+  field_purge_batch(40);
+
+  // Create new field storage.
+  $newFieldStorage = FieldStorageConfig::create($newFieldStorage);
+  $newFieldStorage->save();
+
+  // Create new fields.
+  foreach ($newFieldsList as $nfield) {
+    $nfieldConfig = FieldConfig::create($nfield);
+    $nfieldConfig->save();
+  }
+
+  // Restore existing data in new table.
+  if (!is_null($currentRows)) {
+    foreach ($currentRows as $row) {
+      $database->insert($table)
+        ->fields((array) $row)
+        ->execute();
+    }
+  }
 }

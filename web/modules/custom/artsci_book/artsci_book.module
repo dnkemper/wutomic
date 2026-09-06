@@ -6,7 +6,17 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\artsci_book\Entity\Book;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function artsci_book_entity_bundle_info_alter(array &$bundles) {
+  if (isset($bundles['node']['book'])) {
+    $bundles['node']['book']['class'] = Book::class;
+  }
+}
 
 /**
  * Implements hook_help().
@@ -85,6 +95,12 @@ function artsci_book_theme($existing, $type, $theme, $path) {
       'template' => 'field--node--field-book-author--book',
       'path' => $path . '/templates',
     ],
+    'field__node__field_book_author__teaser' => [
+      'render element' => 'content',
+      'base hook' => 'field',
+      'template' => 'field--node--field-book-author--teaser',
+      'path' => $path . '/templates',
+    ],
     'field__node__field_book_subtitle__book' => [
       'render element' => 'content',
       'base hook' => 'field',
@@ -145,14 +161,14 @@ function artsci_book_preprocess_node__person__book_author(&$variables) {
 
   // Check if person is external (has website but no internal page content).
   $is_external = FALSE;
-  if ($node->hasField('field_person_website') && !$node->get('field_person_website')->isEmpty()) {
-    $website = $node->get('field_person_website')->first();
+  if ($node->hasField('field_external_link') && !$node->get('field_external_link')->isEmpty()) {
+    $website = $node->get('field_external_link')->first();
     if ($website) {
       $variables['external_url'] = $website->getUrl()->toString();
       // Check if link should go directly to external site.
-      if ($node->hasField('field_person_website_link_direct') && $node->get('field_person_website_link_direct')->value) {
+      // if ($node->hasField('field_person_website_link_direct') && $node->get('field_person_website_link_direct')->value) {
         $is_external = TRUE;
-      }
+      // }
     }
   }
   $variables['is_external'] = $is_external;
@@ -165,4 +181,12 @@ function artsci_book_preprocess_field__node__field_book_author__book(&$variables
   // Add "About the author" / "About the authors" label based on count.
   $count = count($variables['items']);
   $variables['author_label'] = $count > 1 ? t('About the authors') : t('About the author');
+}
+/**
+ * Implements hook_preprocess_field() for book author field.
+ */
+function artsci_book_preprocess_field__node__field_book_author__teaser(&$variables) {
+  // Add "About the author" / "About the authors" label based on count.
+
+  unset($variables['author_label']);
 }

@@ -1,0 +1,21 @@
+uuid: c300ab2b-69ba-4f8f-a0b0-a30d0dce86ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.rabbit_hole__settings
+    - node.type.academic_calendar_event
+  module:
+    - rabbit_hole
+id: node.academic_calendar_event.rabbit_hole__settings
+field_name: rabbit_hole__settings
+entity_type: node
+bundle: academic_calendar_event
+label: 'Rabbit Hole settings'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: rabbit_hole

@@ -1,0 +1,227 @@
+id: artsci_d10_majors_minors_image_card
+label: 'D10 majors_minors → D11 image_card via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/majors_minors?page[limit]=50&sort=drupal_internal__nid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  constants:
+    card_type_key: majors_minors
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+
+    # ---- Base node properties ----
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: promote
+      label: Promoted
+      selector: 'attributes/promote'
+    - name: sticky
+      label: Sticky
+      selector: 'attributes/sticky'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Description -> body ----
+    - name: description_value
+      label: 'Description value'
+      selector: 'attributes/field_description/value'
+    - name: description_format
+      label: 'Description format'
+      selector: 'attributes/field_description/format'
+
+    # ---- CTA button -> field_link ----
+    - name: cta_url
+      label: 'D10 field_call_to_action_button_url'
+      selector: 'attributes/field_call_to_action_button_url'
+    - name: cta_text
+      label: 'D10 field_call_to_action_button_text'
+      selector: 'attributes/field_call_to_action_button_text'
+
+    # ---- Media reference ----
+    # majors_minors has only field_thumbnail; no field_background_image fallback.
+    - name: source_thumbnail_id
+      label: 'D10 field_thumbnail media MID'
+      selector: 'relationships/field_thumbnail/data/meta/drupal_internal__target_id'
+
+    # ---- Related links paragraph refs -> field_sidebar_links ----
+    - name: source_related_links_refs
+      label: 'D10 field_related_links_p paragraph refs'
+      selector: 'relationships/field_related_links_p/data'
+
+process:
+  # ---- Identity ----
+  nid: nid
+  uuid: uuid
+  type:
+    plugin: default_value
+    default_value: image_card
+  langcode: langcode
+
+  # ---- Authorship ----
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  promote: promote
+  sticky: sticky
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps ----
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title ----
+  title: title
+
+  # ---- Body (from D10 field_description) ----
+  'body/value':
+    - plugin: str_replace
+      source: description_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+    source: description_format
+  'body/summary':
+    plugin: default_value
+    default_value: ''
+
+  # ---- Path alias ----
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  # ---- Image (from field_thumbnail) ----
+  # ASSUMES field_image on image_card is an entity_reference to media
+  # (matching article/book/person). See the departments_programs migration
+  # for fallback notes — majors_minors only has field_thumbnail so no
+  # coalesce needed here.
+  field_image:
+    - plugin: skip_on_empty
+      method: process
+      source: source_thumbnail_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  # ---- Primary link (CTA button) ----
+  'field_link/uri':
+    - plugin: skip_on_empty
+      method: process
+      source: cta_url
+    - plugin: get
+  'field_link/title': cta_text
+
+  # ---- Sidebar links (D10 field_related_links_p paragraphs) ----
+  field_sidebar_links:
+    plugin: jsonapi_links_from_refs
+    source: source_related_links_refs
+    base_url: 'https://artsci.washu.edu'
+    url_field: field_external_url
+    title_field: field_title
+    new_window_field: field_new_window
+
+  # Only set the sidebar links section heading when there's actually at
+  # least one related link to label. Using count + static_map (rather than
+  # skip_on_empty) means the field is ALWAYS explicitly set on every row
+  # — either to 'Program Details' or to '' — so subsequent --update runs
+  # can clear a value that was wrongly populated by an earlier run.
+  field_sidebar_links_title:
+    -
+      plugin: callback
+      callable: '\Drupal\artsci_migration\LinkHelpers::countOrZero'
+      source: source_related_links_refs
+    -
+      plugin: static_map
+      map:
+        0: ''
+      default_value: 'Program Details'
+
+  # field_sidebar_title and field_sidebar_text are populated by the
+  # artsci_d10_optional_callout migration (which reads the source paragraph
+  # directly and writes back to this node by nid). Intentionally not
+  # mapped here.
+
+  # ---- Card type taxonomy term ----
+  field_card_type:
+    plugin: migration_lookup
+    migration: artsci_d10_card_type_terms
+    source: constants/card_type_key
+    no_stub: true
+
+  # ---- Accordion / collection block reference ----
+  field_artsci_collection:
+    - plugin: migration_lookup
+      migration: artsci_d10_collection_blocks
+      source: nid
+      no_stub: true
+    - plugin: skip_on_empty
+      method: process
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: image_card
+
+migration_dependencies:
+  required:
+    - artsci_d10_card_type_terms
+    - artsci_d10_collection_blocks
+    - artsci_d10_media_image
+  optional: []

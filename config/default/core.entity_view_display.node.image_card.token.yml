@@ -1,0 +1,58 @@
+uuid: 47cb34dd-9343-489c-a3d6-5b4987b0207e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.token
+    - field.field.node.image_card.body
+    - field.field.node.image_card.field_artsci_collection
+    - field.field.node.image_card.field_card_type
+    - field.field.node.image_card.field_image
+    - field.field.node.image_card.field_link
+    - field.field.node.image_card.field_sidebar_links
+    - field.field.node.image_card.field_sidebar_links_title
+    - field.field.node.image_card.field_sidebar_text
+    - field.field.node.image_card.field_sidebar_title
+    - node.type.image_card
+  module:
+    - private_content
+    - user
+id: node.image_card.token
+targetEntityType: node
+bundle: image_card
+mode: token
+content:
+  field_image:
+    type: entity_reference_entity_view
+    label: visually_hidden
+    settings:
+      view_mode: large__widescreen
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  private:
+    type: private
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_artsci_collection: true
+  field_card_type: true
+  field_link: true
+  field_sidebar_links: true
+  field_sidebar_links_title: true
+  field_sidebar_text: true
+  field_sidebar_title: true
+  search_api_excerpt: true

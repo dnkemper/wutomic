@@ -5,12 +5,18 @@
 .banner {
   --banner-padding: #{variables.$gutter};
   --banner-overlay-color-rgb: 0, 0, 0;
-  --banner-overlay-solid-opacity: .5;
+  --banner-overlay-solid-opacity: 0.5;
   --banner-overlay-gradient-midpoint: 40%;
-  --banner-overlay-gradient: rgb(var(--banner-overlay-color-rgb), .8) 0%, rgb(var(--banner-overlay-color-rgb), .6) var(--banner-overlay-gradient-midpoint), transparent;
+  --banner-overlay-gradient:
+    rgb(var(--banner-overlay-color-rgb), 0.8) 0%,
+    rgb(var(--banner-overlay-color-rgb), 0.6)
+      var(--banner-overlay-gradient-midpoint),
+    transparent;
   --banner-text-color: #fff;
   --banner-bg-failsafe: #{variables.$secondary};
   --link-color: var(--banner-text-color);
+  // Transparent button border. Swapped per background in the bg color block below.
+  --bttn-transparent-border: var(--banner-text-color);
 
   display: flex;
   flex-basis: 100%;
@@ -26,6 +32,7 @@
     --banner-padding: #{variables.$mobile-height-gutter};
   }
 }
+
 // === End: Banner base === //
 
 // === Media === //
@@ -46,32 +53,33 @@
     display: block;
     height: 100%;
     width: 100%;
-    -o-object-fit: cover;
     object-fit: cover;
     top: 0;
     overflow: visible;
   }
 
   // Overlay/Gradient.
-  &:after {
+  &::after {
     display: block;
     position: absolute;
     height: 100%;
     width: 100%;
     top: 0;
     left: 0;
-    content: "";
-    -webkit-transition: all 0.5s ease-in-out;
+    content: '';
     transition: all 0.5s ease-in-out;
     will-change: opacity;
     // Default is dark overlay.
-    background: rgb(var(--banner-overlay-color-rgb), var(--banner-overlay-solid-opacity));
+    background: rgb(
+      var(--banner-overlay-color-rgb),
+      var(--banner-overlay-solid-opacity)
+    );
   }
 
   // Video.
   .video-controls {
     position: absolute;
-    z-index: 2;
+    z-index: 20;
     right: #{variables.$gutter};
     bottom: #{variables.$gutter};
 
@@ -97,7 +105,7 @@
     }
 
     &::after {
-      content: "\f04b";
+      content: '\f04b';
       @include utilities.fas();
       font-size: 1rem;
     }
@@ -107,10 +115,11 @@
     }
 
     &.video-btn__pause::after {
-      content: "\f04c";
+      content: '\f04c';
     }
   }
 }
+
 // === End: Media === //
 
 // === Content === //
@@ -130,6 +139,7 @@
     flex-basis: 100%;
   }
 }
+
 // === End: Content === //
 
 // === Headline === //
@@ -155,7 +165,7 @@
 
   &.banner--horizontal-center {
     .headline.headline--underline {
-      &:after {
+      &::after {
         margin-right: auto;
         margin-left: auto;
       }
@@ -176,16 +186,17 @@
         font-size: clamp(2.5rem, calc(4.9577vw + 0.6408rem), 4.7rem);
       }
     }
+
     // Set medium heading size
     &.headline--medium,
     &.headline--medium.headline--serif {
       font-size: clamp(1.5rem, calc(2vw + 1rem), 2.2rem);
 
-
       @include utilities.container-query() {
         font-size: clamp(2.2rem, calc(3.3803vw + 0.9324rem), 3.7rem);
       }
     }
+
     // Set small heading size
     &.headline--small,
     &.headline--small.headline--serif {
@@ -197,15 +208,16 @@
     }
   }
 }
+
 // === End: Headline === //
 
 // === Pre-title === //
 .banner__pre-title {
-font-family: "ivystyle-sans", "Calibri", sans-serif;
-font-weight: 700;
-line-height: 150%;
-letter-spacing: 5%;
-
+  font-family: 'ivystyle-sans', 'Calibri', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 150%;
+  letter-spacing: 5%;
 
   &.headline.headline--serif {
     margin-bottom: 1rem;
@@ -214,7 +226,8 @@ letter-spacing: 5%;
 
   &.headline.headline--underline {
     padding-bottom: 0;
-    &:after {
+
+    &::after {
       display: none;
     }
   }
@@ -236,6 +249,7 @@ letter-spacing: 5%;
     font-size: clamp(1rem, calc(0.4507vw + 1.031rem), 1rem);
   }
 }
+
 // === End: Pre-title === //
 
 // === Text/buttons === //
@@ -243,17 +257,21 @@ letter-spacing: 5%;
   z-index: 1;
   color: var(--banner-text-color);
   margin-bottom: 1.05rem;
-  font-family: "ivystyle-sans", "Calibri", sans-serif;
-
+  font-family: 'ivystyle-sans', 'Calibri', sans-serif;
 
   blockquote {
     margin-left: 0;
+
     a {
       color: var(--banner-text-color);
     }
   }
 
-  h2, h3, h4, h5, h6 {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     a {
       color: var(--banner-text-color);
     }
@@ -265,7 +283,6 @@ letter-spacing: 5%;
     font-weight: 400;
     line-height: 140%;
     letter-spacing: 0%;
-    
 
     a {
       position: relative;
@@ -277,11 +294,12 @@ letter-spacing: 5%;
   // Set the border color for blockquote when background is gold.
   blockquote {
     // Match gold background color and patterns.
-    [class*="bg--red"] & {
+    [class*='bg--red'] & {
       border-left-color: #{variables.$light};
     }
   }
 }
+
 // === End: Text/buttons === //
 
 // === Buttons === //
@@ -291,9 +309,36 @@ letter-spacing: 5%;
   }
 }
 
-.banner .bttn--transparent {
+// Transparent button border is driven by --bttn-transparent-border.
+// The bg color block below swaps that variable per background, so this rule
+// stays simple and the cascade fight goes away.
+
+.banner__content--has-content.banner__content--has-image {
+  .banner__action .bttn--transparent {
+    color: var(--banner-text-color);
+    border-color: var(--bttn-transparent-border);
+
+    &:hover {
+      color: variables.$artsci-black;
+      background: variables.$white;
+    }
+  }
+}
+
+.banner__content--has-content .bttn--transparent {
   color: var(--banner-text-color);
-  border-color: var(--banner-text-color);
+  border-color: var(--bttn-transparent-border);
+}
+
+.banner__content--has-content .bttn--transparent:hover {
+  color: #{variables.$white};
+  background: #{variables.$primary};
+
+  [class*='bg--teal'] &,
+  [class*='bg--'] [class*='bg--teal'] & {
+    color: #{variables.$secondary} !important;
+    background: variables.$white;
+  }
 }
 
 .banner__action .bttn {
@@ -305,32 +350,32 @@ letter-spacing: 5%;
     }
   }
 }
+
 // === End: Buttons === //
 
 // === Background colors === //
 // 'bg--*' selectors match solid color and patterns.
 .banner {
-  &[class*="bg--red"],
-  &[class*="bg--white"],
-  &[class*="bg--gray"] {
+  // Light backgrounds need dark text instead of the default white.
+  &[class*='bg--tan'],
+  &[class*='bg--white'],
+  &[class*='bg--gray'] {
     --banner-text-color: #{variables.$secondary};
   }
-}
-// Add text shadow to the headline and text when there is
-// no background class.
-// .banner:not([class*="bg--"]) {
-//   background-color: var(--banner-bg-failsafe);
 
-  // .headline,
-  // .banner__text {
-  //   text-shadow: 0 1px 3px rgb(var(--banner-overlay-color-rgb));
-  // }
-// }
+  // Gray and white backgrounds use the brand red on transparent button borders
+  // for visual punch (the dark text color reads flat against light fills).
+  &[class*='bg--gray'],
+  &[class*='bg--white'] {
+    --bttn-transparent-border: var(--artsci-red);
+  }
+}
+
 // === End: Background colors === //
 
 // === Stacked === //
 // if the banner is stacked and has no background color.
-.banner--stacked:not([class*="bg--"]) {
+.banner--stacked:not([class*='bg--']) {
   // We use a max-width rule here to avoid having to
   // override these rules in other places.
   @include utilities.container-query($type: max) {
@@ -343,7 +388,7 @@ letter-spacing: 5%;
       position: relative;
       height: auto;
 
-      &:after {
+      &::after {
         background: none !important;
       }
     }
@@ -354,8 +399,8 @@ letter-spacing: 5%;
     }
 
     .bttn--transparent {
-      color: #{variables.$secondary};
-      border-color: #{variables.$secondary};
+      color: #{variables.$white};
+      border-color: #{variables.$white};
     }
 
     .banner__text {
@@ -368,6 +413,7 @@ letter-spacing: 5%;
     }
   }
 }
+
 // === End: Stacked === //
 
 // === Sizes === //
@@ -376,6 +422,7 @@ letter-spacing: 5%;
   padding-top: 45.25%;
   content: '';
 }
+
 .banner--medium::before {
   float: left;
   padding-top: 32.25%;
@@ -389,6 +436,7 @@ letter-spacing: 5%;
     }
   }
 }
+
 // === End: Sizes === //
 
 // === Alignment === //
@@ -418,56 +466,68 @@ letter-spacing: 5%;
 .banner--horizontal-left {
   text-align: left;
 }
+
 // === End: Alignment === //
 
 // === Banner narrow === //
-.banner--narrow  {
+.banner--narrow {
   .banner__content {
     @include utilities.container-query() {
-      max-width: 65%;
+      max-width: 75%;
     }
     @include utilities.container-query($size: variables.$break-page-container) {
-      max-width: 47.75em;
+      max-width: 77.75em;
     }
   }
+
   &.banner--horizontal-left {
     .banner__content {
       @include utilities.container-query() {
         margin-left: 0;
       }
-      @include utilities.container-query($size: variables.$break-page-container) {
+      @include utilities.container-query(
+        $size: variables.$break-page-container
+      ) {
         margin-left: calc(50% - 81.875em / 2);
       }
     }
   }
 }
+
 // === End: Banner narrow === //
 
 // === Overlay/Gradient === //
 .banner--overlay-btt,
 .banner--overlay-ttb,
 .banner--overlay-ltr {
-  .media:after {
+  .media::after {
     // Gradient comes in at the sm container breakpoint.
     @include utilities.container-query() {
-      background: linear-gradient(var(--banner-overlay-gradient-direction), var(--banner-overlay-gradient));
+      background: linear-gradient(
+        var(--banner-overlay-gradient-direction),
+        var(--banner-overlay-gradient)
+      );
     }
   }
 }
+
 .banner--overlay-btt {
   --banner-overlay-gradient-direction: 0deg;
 }
+
 .banner--overlay-ttb {
   --banner-overlay-gradient-direction: 180deg;
 }
+
 .banner--overlay-ltr {
   --banner-overlay-gradient-direction: 90deg;
   --banner-overlay-gradient-midpoint: 70%;
 }
+
 // if the banner overlay light is selected and has no background color.
-.banner--overlay-light:not([class*="bg--"]) {
+.banner--overlay-light:not([class*='bg--']) {
   --banner-overlay-color-rgb: 255, 255, 255;
-  --banner-overlay-solid-opacity: .7;
+  --banner-overlay-solid-opacity: 0.7;
   --banner-text-color: #{variables.$secondary};
   --banner-bg-failsafe: white;
 
@@ -492,28 +552,15 @@ letter-spacing: 5%;
 // === Background colors === //
 // Remove left/right padding if container background matches banner background.
 
-$bg-colors: "white", "black", "gray", "gold";
-$bg-patterns: "pattern--brain", "pattern--community", "pattern--particle";
+$bg-colors: 'white', 'red', 'gray', 'teal', 'tan';
 
 // Background color only case (no pattern)
 @each $color in $bg-colors {
-  div[class*="bg--#{$color}"]:not([class*="pattern--"]) {
-    .banner[class*="bg--#{$color}"]:not([class*="pattern--"]) {
+  div[class*='bg--#{$color}']:not([class*='pattern--']) {
+    .banner[class*='bg--#{$color}']:not([class*='pattern--']) {
       .banner__content {
-        padding-left: 0;
-        padding-right: 0;
-      }
-    }
-  }
-}
-
-// Patterns only.
-@each $pattern in $bg-patterns {
-  div[class*="#{$pattern}"] {
-    .banner[class*="#{$pattern}"] {
-      .banner__content {
-        padding-left: 0;
-        padding-right: 0;
+        padding-left: 100;
+        padding-right: 100;
       }
     }
   }
@@ -521,7 +568,7 @@ $bg-patterns: "pattern--brain", "pattern--community", "pattern--particle";
 
 // When the containing element has no background color
 // and the banner has a solid white background, remove padding.
-div:not([class*="bg--"]) {
+div:not([class*='bg--']) {
   .banner.bg--white {
     .banner__content {
       padding-left: 0;
@@ -529,9 +576,12 @@ div:not([class*="bg--"]) {
     }
   }
 }
+
 // === End: Background colors === //
 
-.layout--onecol[class*=page__container--edge] .banner--horizontal-left .banner__content {
+.layout--onecol[class*='page__container--edge']
+  .banner--horizontal-left
+  .banner__content {
   @include utilities.breakpoint(page-container) {
     padding-left: 0;
   }
@@ -550,18 +600,20 @@ div:not([class*="bg--"]) {
 .layout--title.banner .bold-headline,
 .layout--title.banner .headline.page-title {
   font-size: 3.7rem;
-  font-size: clamp(2.2rem,calc(3.3803vw + .9324rem),3.7rem);
+  font-size: clamp(2.2rem, calc(3.3803vw + 0.9324rem), 3.7rem);
 }
 
 .media--image {
   .contextual-region {
     // Remove contextual position for logged in view of banner image
     position: unset;
+
     &.media--video {
       position: absolute;
       @include utilities.breakpoint(sm) {
         position: unset;
       }
+
       .banner--stacked & {
         position: relative;
         @include utilities.breakpoint(sm) {
@@ -581,14 +633,15 @@ div:not([class*="bg--"]) {
   height: 100%;
 }
 
-
 .banner--list {
   height: 100%;
+
   .headline--small {
     font-size: 1.5rem;
   }
+
   .banner__content {
-    .layout--onecol[class*="page"] & {
+    .layout--onecol[class*='page'] & {
       padding: 2rem;
     }
   }
@@ -609,7 +662,7 @@ div:not([class*="bg--"]) {
 
 // Remove featured image gradient if page title is hidden.
 .banner--overlay-none {
-  .media:after {
+  .media::after {
     background: none;
   }
 }
@@ -619,11 +672,37 @@ div:not([class*="bg--"]) {
   position: relative;
   background: none;
   width: auto;
+
   a {
     position: relative;
     z-index: 1;
   }
-  &:after {
+
+  &::after {
     background: none;
+  }
+}
+
+.bg--red .banner--vertical-center {
+  .banner__content--has-content {
+    padding: 0 6.25rem;
+  }
+}
+
+.banner__content--has-image {
+  .bttn--transparent {
+    i,
+    span[class*='fa-'],
+    svg {
+      color: #{variables.$white} !important;
+    }
+
+    &:hover {
+      i,
+      span[class*='fa-'],
+      svg {
+        color: black !important;
+      }
+    }
   }
 }

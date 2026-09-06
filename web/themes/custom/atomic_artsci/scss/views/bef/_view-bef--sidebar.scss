@@ -17,19 +17,18 @@
           margin-top: 0;
         }
       }
-
     }
 
     .form--inline {
       display: block !important;
     }
 
-    &[data-drupal-form-fields*="edit-reset--"] .bef--secondary {
+    &[data-drupal-form-fields*='edit-reset--'] .bef--secondary {
       width: auto;
     }
 
     &.form {
-      [type="text"],
+      [type='text'],
       select {
         margin-bottom: 0;
       }
@@ -66,7 +65,7 @@
       }
 
       // Sort select.
-      &[data-drupal-form-fields*="edit-reset--"] {
+      &[data-drupal-form-fields*='edit-reset--'] {
         .form-item:not(:last-child).form-item-sort-bef-combine {
           @include utilities.breakpoint(sm) {
             width: 100%;

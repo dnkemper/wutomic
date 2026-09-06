@@ -8,3 +8,10 @@ layout_builder_custom.media_type:
     parameters:
       media:
         type: entity:media
+layout_builder_custom.download:
+  path: '/download/{media}'
+  defaults:
+    _controller: '\Drupal\layout_builder_custom\Controller\DownloadController::download'
+    _title: 'Download Media'
+  requirements:
+    _permission: 'access content'

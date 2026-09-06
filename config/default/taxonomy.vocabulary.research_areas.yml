@@ -2,7 +2,7 @@ uuid: f03d17c9-fe88-4174-a8ba-39dfdfafea29
 langcode: en
 status: true
 dependencies: {  }
-name: 'Research areas'
+name: 'Areas of Study'
 vid: research_areas
 description: null
 weight: 0

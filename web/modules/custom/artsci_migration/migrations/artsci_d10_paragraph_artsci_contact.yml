@@ -1,0 +1,77 @@
+id: artsci_d10_paragraph_artsci_contact
+label: 'D10 mailing addresses synthesized into artsci_contact paragraphs'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# This migration's source is the D10 person endpoint, but its destination is
+# paragraphs — one artsci_contact paragraph synthesized per person who has a
+# non-empty field_mailing_address. Map keys are person NIDs, so re-runs with
+# --update modify the existing paragraph instead of creating orphans.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/faculty_staff?page[limit]=50&sort=drupal_internal__nid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    - name: nid
+      label: 'Source person NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Source person UUID'
+      selector: 'id'
+    - name: mailing_address
+      label: 'Mailing address (raw text with <br/> separators)'
+      selector: 'attributes/field_mailing_address'
+
+process:
+  # Skip persons with no mailing address — we don't want empty paragraphs.
+  # `method: row` halts processing for this row entirely so nothing is saved.
+  _check_address:
+    plugin: skip_on_empty
+    method: row
+    source: mailing_address
+
+  type:
+    plugin: default_value
+    default_value: artsci_contact
+
+  langcode:
+    plugin: default_value
+    default_value: en
+
+  status:
+    plugin: default_value
+    default_value: 1
+
+  # Parse the multi-line address into structured address field components.
+  field_artsci_contact_address:
+    plugin: parse_mailing_address
+    source: mailing_address
+    country_code: US
+
+# entity_reference_revisions:paragraph (NOT entity:paragraph) so that the
+# destination IDs include both id and revision_id. The person migration's
+# migration_lookup against this migration then returns the
+# [target_id, target_revision_id] tuple that the entity_reference_revisions
+# field on the person node expects.
+destination:
+  plugin: 'entity_reference_revisions:paragraph'
+  default_bundle: artsci_contact
+
+migration_dependencies:
+  required: []
+  optional: []

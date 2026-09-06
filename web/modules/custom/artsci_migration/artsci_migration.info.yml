@@ -1,0 +1,14 @@
+name: Artsci Migration
+type: module
+description: 'Migrations to import D10 content into the D11 Atomic Artsci site via JSON:API.'
+core_version_requirement: ^10 || ^11
+package: Artsci
+dependencies:
+  - migrate:migrate
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools
+  - node:node
+  - taxonomy:taxonomy
+  - media:media
+  - file:file
+  - rabbit_hole:rabbit_hole

@@ -1,0 +1,11 @@
+uuid: 6f9aa014-003c-4ccd-9af8-3f8c53f223e7
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.full__landscape
+label: 'Full - Landscape'
+description: ''
+targetEntityType: media
+cache: true

@@ -8,14 +8,14 @@ aside .region,
 }
 
 .layout-container {
-  @include utilities.container-width;;
+  @include utilities.container-width;
 }
 
 .page__container {
-  @include utilities.container-width;;
+  @include utilities.container-width;
 
   &--mixed {
-    @include utilities.container-width;;
+    @include utilities.container-width;
   }
 }
 
@@ -26,9 +26,11 @@ aside .region,
   }
 }
 
-
 .block-inline-blockartsci-spacer-separator {
-  @include utilities.margin(variables.$top: variables.$sm, variables.$bottom: variables.$sm);
+  @include utilities.margin(
+    variables.$top: variables.$sm,
+    variables.$bottom: variables.$sm
+  );
   flex-basis: 100%;
   background: #fff;
   clear: both;
@@ -39,10 +41,13 @@ aside .region,
 }
 
 .block-spacer-separator {
-   @include utilities.margin(variables.$top: variables.$sm, variables.$bottom: variables.$sm);
-   flex-basis: 100%;
-   background: #fff;
-   height: 23px;
+  @include utilities.margin(
+    variables.$top: variables.$sm,
+    variables.$bottom: variables.$sm
+  );
+  flex-basis: 100%;
+  background: #fff;
+  height: 23px;
 }
 
 // layout_builder_styles full width override

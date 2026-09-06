@@ -39,7 +39,7 @@ class ImageEmptyPerson extends RenderElementBase {
    */
   public static function preRenderImageEmptyPerson(array $element): array {
     $path = \Drupal::service('extension.list.theme')->getPath('atomic_artsci');
-    $path = \Drupal::service('file_url_generator')->generateAbsoluteString($path . '/assets/images/person-one.png');
+    $path = \Drupal::service('file_url_generator')->generateAbsoluteString($path . '/assets/images/default-person.png');
     $element['#uri'] = $path;
     $element['#attributes'] = [
       'data-lazy' => TRUE,

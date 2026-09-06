@@ -1,0 +1,457 @@
+// ==========================================================================
+// SLIDER CAROUSEL — Bridge between slider block and carousel system
+//
+// The artsci_slider block can display in multiple modes:
+// - two: N cards visible, sliding pages with dots (default)
+// - three: 3-card fan with center focus (teal background)
+// - one: Single card visible at a time
+// - stories: Horizontal scroll snap cards
+//
+// Activated by: data-artsci-carousel on .artsci-slider
+// ==========================================================================
+@use 'sass:map';
+@use 'carousel-base';
+
+.artsci-slider {
+  position: relative;
+
+  // Viewport clips the track.
+  .artsci-carousel__viewport {
+    overflow: hidden;
+    position: relative;
+  }
+
+  // Track holds all slides in a row.
+  .artsci-carousel__track {
+    display: flex;
+    gap: 1.5rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    justify-content: space-between;
+
+    // Remove field wrapper flex interference.
+    > .field {
+      display: contents;
+    }
+  }
+
+  // Individual slides.
+  .slider__slide,
+  .paragraph--carousel-slide,
+  [data-carousel-slide] {
+    flex-shrink: 0;
+    min-width: 0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  // Navigation controls row.
+  .artsci-carousel__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  // Arrow buttons.
+  .artsci-carousel__arrow {
+    @include carousel-base.arrow-button;
+  }
+
+  // Dot pagination.
+  .artsci-carousel__dots {
+    @include carousel-base.dot-container;
+  }
+
+  .artsci-carousel__dot {
+    @include carousel-base.dot-button;
+  }
+}
+
+// --------------------------------------------------------------------------
+// two MODE — Default, N cards per page
+// --------------------------------------------------------------------------
+
+.artsci-slider.artsci-carousel--two {
+  .slider__slide,
+  .paragraph--carousel-slide {
+    // Width is calculated by JS based on per-page setting.
+    flex: 0 0 auto;
+  }
+
+  // Hide the legacy teaser overlay.
+  .slider__teaser {
+    display: none;
+  }
+
+  // Slide image.
+  .artsci-carousel__slide-image,
+  .carousel-slide__image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+
+    img,
+    .media,
+    .media__inner {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  // Caption below or overlay.
+  .artsci-carousel__slide-overlay {
+    padding: 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .artsci-carousel__slide-caption {
+    color: #fff;
+    font-size: var(--text-sm, 0.875rem);
+    font-weight: 500;
+    margin: 0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// two MODE — Overlay cards with an active-slide teal panel (2.5 "two")
+//
+// Design: in the 2.5/peek style every slide uses the overlay card layout
+// (full-bleed image, text over a dark gradient). The leading/active slide —
+// flagged .is-active by artsci-carousel.js (inittwoCarousel) — swaps that
+// dark gradient for a solid teal panel behind the text. The teal follows the
+// active slide as you paginate.
+//
+// NOTE: this engages when slides carry .card--layout-overlay, which comes from
+// the slider block's media position style being set to "Overlay". To make the
+// two/2.5 size force overlay regardless of the position style, add
+// 'card--layout-overlay' for carousel_size === 'two' in
+// atomic_artsci_preprocess_paragraph__artsci_slide().
+// --------------------------------------------------------------------------
+.artsci-slider.artsci-carousel--two {
+  // Format sets the card's shape, size scales it inside the slide slot. The
+  // slide keeps the width the carousel JS assigns it, so the track geometry
+  // and the 2.5 peek are untouched; a smaller size simply leaves more gap.
+  // These four maps are the tuning knobs.
+  $shape-width: (
+    'portrait': 2,
+    'square': 1,
+    'landscape': 4,
+    'widescreen': 16,
+  );
+  $shape-height: (
+    'portrait': 3,
+    'square': 1,
+    'landscape': 3,
+    'widescreen': 9,
+  );
+
+  // How wide the card sits in its slide, and how much taller or shorter the
+  // shape's height runs.
+  $size-scale: (
+    'small': 65%,
+    'medium': 82%,
+    'large': 100%,
+  );
+  $size-nudge: (
+    'small': 0.9,
+    'medium': 1,
+    'large': 1.15,
+  );
+
+  // The slide's chrome moves to the card so the shadow and rounded corners
+  // follow the card edge rather than framing the empty space a smaller size
+  // leaves behind.
+  [data-carousel-slide] {
+    background: none;
+    box-shadow: none;
+  }
+
+  // Shape when no media format is selected.
+  .card--layout-overlay {
+    aspect-ratio: 3 / 4;
+    min-height: 0;
+    margin-inline: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  @each $format, $w in $shape-width {
+    .card--layout-overlay:has(.media--#{$format}) {
+      aspect-ratio: #{$w} / #{map.get($shape-height, $format)};
+    }
+  }
+
+  @each $size, $scale in $size-scale {
+    $nudge: map.get($size-nudge, $size);
+
+    .card--layout-overlay:has(.media--#{$size}) {
+      width: $scale;
+      aspect-ratio: 3 / #{4 * $nudge};
+    }
+
+    @each $format, $w in $shape-width {
+      $h: map.get($shape-height, $format) * $nudge;
+
+      .card--layout-overlay:has(.media--#{$format}):has(.media--#{$size}) {
+        aspect-ratio: #{$w} / #{$h};
+      }
+    }
+  }
+
+  // Solid teal panel behind the slide text. Present on every overlay slide but
+  // transparent until the slide is active, so it fades in/out as the teal
+  // follows pagination. Sits above the image (and its gradient) but below the
+  // text and the full-card click target, which stays clickable.
+  // [data-carousel-slide] .card--layout-overlay::after {
+  //   content: '';
+  //   position: absolute;
+  //   inset: auto 0 0 0;
+  //   height: 25%;
+  //   background: var(--color-teal, #007d8a);
+  //   opacity: 0;
+  //   transition: opacity 0.4s ease;
+  //   pointer-events: none;
+  //   z-index: 1;
+  // }
+
+  // Active (current) slide: reveal the teal panel, drop the dark image
+  // gradient so the photo above the panel reads clean. The carousel JS marks
+  // this slide .is-focused (the leading slide by default, or whichever slide
+  // keyboard focus has driven active).
+  [data-carousel-slide].is-focused .card--layout-overlay {
+    > .media::after {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// one MODE — Single slide visible
+// --------------------------------------------------------------------------
+
+.artsci-slider.artsci-carousel--one {
+  border-radius: 0.5rem;
+
+  .artsci-carousel__viewport {
+    overflow: hidden;
+  }
+
+  .slider__slide,
+  .paragraph--carousel-slide {
+    display: none;
+    width: 100%;
+
+    &[style*='display: block'],
+    &:first-child:not([style]) {
+      display: block;
+    }
+  }
+
+  // Hide teaser.
+  .slider__teaser {
+    display: none;
+  }
+
+  .artsci-carousel__slide-image {
+    aspect-ratio: 4 / 3;
+    border-radius: 0.375rem;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .artsci-carousel__slide-overlay {
+    position: static;
+    background: none;
+    padding: 0;
+  }
+
+  .artsci-carousel__slide-caption {
+    color: var(--color-gray-900, #1a1a1a);
+    font-size: var(--text-sm, 0.875rem);
+    font-weight: 600;
+  }
+
+  .artsci-carousel__nav {
+    margin-top: 1rem;
+  }
+
+  .artsci-carousel__arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  // Hide dots in one mode.
+  .artsci-carousel__dots {
+    display: none;
+  }
+}
+
+// --------------------------------------------------------------------------
+// three MODE — See carousel-three.scss for full styles
+// This just ensures the slider block inherits the three carousel styles.
+// --------------------------------------------------------------------------
+
+.artsci-slider.artsci-carousel--three {
+  // Inherits from .artsci-carousel--three in carousel-three.scss.
+  // The JS positions slides absolutely and sets each slide's width/height
+  // inline for the fan effect, so we don't fix a width here.
+
+  .slider__slide,
+  .paragraph--carousel-slide {
+    position: absolute;
+  }
+
+  // Hide legacy teaser.
+  .slider__teaser {
+    display: none;
+  }
+}
+
+// --------------------------------------------------------------------------
+// STORIES MODE — Horizontal scroll with snap
+// --------------------------------------------------------------------------
+
+.artsci-slider.artsci-carousel--stories {
+  .artsci-carousel__viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .artsci-carousel__track {
+    gap: 1rem;
+    transition: none; // Native scroll handles movement.
+  }
+
+  .slider__slide,
+  .paragraph--carousel-slide {
+    scroll-snap-align: start;
+    flex: 0 0 200px;
+    aspect-ratio: 9 / 16;
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  // Hide legacy teaser.
+  .slider__teaser {
+    display: none;
+  }
+
+  .artsci-carousel__slide-image {
+    position: absolute;
+    inset: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .artsci-carousel__slide-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 1rem 1rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  }
+
+  .artsci-carousel__slide-caption {
+    color: #fff;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+  }
+}
+
+// --------------------------------------------------------------------------
+// RESPONSIVE
+// --------------------------------------------------------------------------
+
+@media (max-width: 991px) {
+  .artsci-slider.artsci-carousel--two {
+    .artsci-carousel__track {
+      gap: 1rem;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .artsci-slider.artsci-carousel--two {
+    .artsci-carousel__nav {
+      gap: 0.5rem;
+    }
+
+    .artsci-carousel__arrow {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .artsci-slider.artsci-carousel--stories {
+    .slider__slide,
+    .paragraph--carousel-slide {
+      flex: 0 0 160px;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// NO-SCROLL STATE — Fewer slides than per-page
+// --------------------------------------------------------------------------
+
+.artsci-slider.artsci-carousel--no-scroll {
+  .artsci-carousel__track {
+    justify-content: center;
+    transition: none;
+  }
+
+  .artsci-carousel__nav {
+    display: none;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Media format and size are not styled here. Each slide's inner .media carries
+// the media--* classes (see the slide preprocess and paragraph--artsci-slide),
+// so the card.scss rules apply to slides exactly as they do to a card block.
+// --------------------------------------------------------------------------

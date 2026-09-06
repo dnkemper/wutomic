@@ -1,0 +1,223 @@
+id: artsci_d10_author
+label: 'D10 author nodes to D11 person (with person_type=author)'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/author'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+
+    # ---- Base node properties ----
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: promote
+      label: Promoted
+      selector: 'attributes/promote'
+    - name: sticky
+      label: Sticky
+      selector: 'attributes/sticky'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Body ----
+    - name: body_value
+      label: 'Body value'
+      selector: 'attributes/body/value'
+    - name: body_format
+      label: 'Body format'
+      selector: 'attributes/body/format'
+    - name: body_summary
+      label: 'Body summary'
+      selector: 'attributes/body/summary'
+
+    # ---- Rabbit Hole ----
+    - name: rh_action
+      label: 'Rabbit hole action'
+      selector: 'attributes/rh_action'
+    - name: rh_redirect
+      label: 'Rabbit hole redirect URL'
+      selector: 'attributes/rh_redirect'
+    - name: rh_redirect_response
+      label: 'Rabbit hole redirect HTTP code'
+      selector: 'attributes/rh_redirect_response'
+    - name: rh_redirect_fallback_action
+      label: 'Rabbit hole fallback action'
+      selector: 'attributes/rh_redirect_fallback_action'
+
+    # ---- Media reference (author headshot) ----
+    - name: source_headshot_id
+      label: 'D10 field_author_headshot media MID'
+      selector: 'relationships/field_author_headshot/data/meta/drupal_internal__target_id'
+
+process:
+  # ---- Identity ----
+  # Preserve the D10 nid verbatim. If a node with this nid already exists
+  # on D11 (seeded DB or prior run), migrate UPDATEs it; otherwise it
+  # creates a new node with this exact nid. UUID is still carried over so
+  # cross-site references stay stable.
+  nid: nid
+
+  # Preserve UUID across runs; D11 assigns a fresh NID.
+  uuid: uuid
+  # Target bundle is 'person', NOT 'author' — we're consolidating D10 authors
+  # into the D11 person content type with person_type=author.
+  type:
+    plugin: default_value
+    default_value: person
+  langcode: langcode
+
+  # ---- Authorship ----
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  promote: promote
+  sticky: sticky
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps ----
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title (kept as-is for display, also split into name fields below) ----
+  title: title
+
+  # ---- Name split ----
+  # D10 author bundle stores the full name in `title` only — there are no
+  # separate first/last name fields. D11 person requires both. Split on the
+  # first space: "Bernard Cummings" -> ["Bernard", "Cummings"], "Mary Jane
+  # Smith" -> ["Mary", "Jane Smith"]. Single-word titles get the full title
+  # as first name and "." as a last name placeholder (the field is required
+  # and can't be empty; you can bulk-fix these in the admin UI afterward).
+  _name_parts:
+    plugin: explode
+    source: title
+    delimiter: ' '
+    limit: 2
+
+  field_person_first_name:
+    plugin: extract
+    source: '@_name_parts'
+    index:
+      - 0
+
+  field_person_last_name:
+    plugin: extract
+    source: '@_name_parts'
+    index:
+      - 1
+    default: '.'
+
+  # ---- Body ----
+  'body/value':
+    - plugin: str_replace
+      source: body_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+    source: body_format
+  'body/summary': body_summary
+
+  # ---- Path alias ----
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  # ---- Headshot -> field_image ----
+  field_image:
+    - plugin: skip_on_empty
+      method: process
+      source: source_headshot_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  # ---- Person type = author (hardcoded for every row) ----
+  # field_person_types is entity_reference (multi) to person_type config
+  # entities. Setting just the target_id machine name works; Drupal resolves
+  # it to the person_type config entity at save time.
+  field_person_types:
+    plugin: default_value
+    default_value:
+      - target_id: author
+
+  # ---- Rabbit Hole ----
+  'rabbit_hole__settings/rh_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_action
+  'rabbit_hole__settings/rh_redirect': rh_redirect
+  'rabbit_hole__settings/rh_redirect_response':
+    plugin: default_value
+    default_value: 301
+    source: rh_redirect_response
+  'rabbit_hole__settings/rh_redirect_fallback_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_redirect_fallback_action
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: person
+
+migration_dependencies:
+  required:
+    - artsci_d10_media_image
+  optional: []

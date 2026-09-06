@@ -1,0 +1,13 @@
+uuid: 590ecf41-51ea-4874-9608-4657daf30dc7
+langcode: en
+status: true
+dependencies: {  }
+id: artsci_carousel_three
+label: '3 Slides'
+classes: carousel--three
+type: component
+group: artsci_carousel_size
+block_restrictions:
+  - 'inline_block:artsci_slider'
+layout_restrictions: {  }
+weight: 0

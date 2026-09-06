@@ -1,3 +1,4 @@
+/*global ArtsciVideo*/
 (function() {
 
   // Check if the user prefers reduced motion.
@@ -15,7 +16,7 @@
         // Give each video button an id so that we can index them individually later.
         // As well, no two elements should have the same ID, so assigning them like this ensures that is the case.
         this.video_btn = this.element.querySelector('.video-controls .video-btn');
-        
+
         this.video_btn.id = this.video_btn.id + '-' + index;
 
         // Do a reduced motion check, and attach a listener to do on every time it changes.

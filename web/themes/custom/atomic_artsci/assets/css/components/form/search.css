@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -24,20 +39,24 @@
   height: 1px;
   width: 1px;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
+.artsci-search input[type=text]::-moz-placeholder {
+  color: #000000;
+}
+
+.artsci-search input[type=text]::placeholder {
+  color: #000000;
+}
 .artsci-search input[type=text] {
   padding-left: 1.05rem;
   border-bottom: 1px solid #f1f1f1;
   font-size: 1.5rem;
   text-align: center;
-}
-.artsci-search input[type=text]::-moz-placeholder {
-  color: #000000;
-}
-.artsci-search input[type=text]::placeholder {
-  color: #000000;
 }
 @media (min-width: 980px) {
   .artsci-search input[type=text] {
@@ -186,8 +205,7 @@
 }
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) [type=submit],
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] {
-  color: #BA0C2F;
-  background: #fff;
+  color: black;
 }
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) [type=submit] i,
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) [type=submit] svg,
@@ -195,16 +213,15 @@
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] i,
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] svg,
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) [type=submit],
 .layout__container:not([class*=bg-]) .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] {
-  border: 1px solid #BA0C2F;
+  border: 1px solid #ba0c2f;
 }
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) [type=submit],
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] {
-  color: #BA0C2F;
-  background: #fff;
+  color: black;
 }
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) [type=submit] i,
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) [type=submit] svg,
@@ -212,18 +229,18 @@
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] i,
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] svg,
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) [type=submit],
 [class*=bg--black] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] {
-  border: 1px solid #BA0C2F;
+  border: 1px solid #ba0c2f;
 }
 [class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit], [class*=bg--red] .artsci-search-form.form:not(.artsci-search) [type=submit], [class*=bg--white] .artsci-search-form.form:not(.artsci-search) [type=submit],
 [class*=bg--gray] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit],
 [class*=bg--red] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit],
 [class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] {
   color: #fff;
-  background: #000000;
+  background: var(--bg--teal);
 }
 [class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit] i,
 [class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit] svg,
@@ -241,7 +258,32 @@
 [class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] i,
 [class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] svg,
 [class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit] span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
+}
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover, [class*=bg--red] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover, [class*=bg--white] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover,
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover,
+[class*=bg--red] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover,
+[class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover {
+  background: #d4f1e7;
+  color: black;
+}
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover i,
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover svg,
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover span[class*=fa-], [class*=bg--red] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover i,
+[class*=bg--red] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover svg,
+[class*=bg--red] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover span[class*=fa-], [class*=bg--white] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover i,
+[class*=bg--white] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover svg,
+[class*=bg--white] .artsci-search-form.form:not(.artsci-search) [type=submit]:hover span[class*=fa-],
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover i,
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover svg,
+[class*=bg--gray] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover span[class*=fa-],
+[class*=bg--red] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover i,
+[class*=bg--red] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover svg,
+[class*=bg--red] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover span[class*=fa-],
+[class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover i,
+[class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover svg,
+[class*=bg--white] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit]:hover span[class*=fa-] {
+  color: black;
 }
 [class*=bg--gray] .artsci-search-form.form:not(.artsci-search) [type=submit], [class*=bg--red] .artsci-search-form.form:not(.artsci-search) [type=submit], [class*=bg--white] .artsci-search-form.form:not(.artsci-search) [type=submit],
 [class*=bg--gray] .artsci-search-form.form:not(.artsci-search) input[id^=edit-submit],
@@ -257,5 +299,10 @@
   height: 1px;
   width: 1px;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-}/*# sourceMappingURL=search.css.map */
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*# sourceMappingURL=search.css.map */

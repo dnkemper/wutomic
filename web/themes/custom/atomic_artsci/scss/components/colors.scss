@@ -1,7 +1,6 @@
 @use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
-
 .bg-primary {
   background: variables.$primary;
 }
@@ -10,8 +9,8 @@
   background: variables.$secondary;
 }
 
-.bg-cool-gray {
-  background: variables.$brand-cool-gray;
+.bg-gray {
+  background: variables.$gray;
 }
 
 .bg-blue {
@@ -31,10 +30,10 @@
 }
 
 .text--gray {
-  color: variables.$brand-cool-gray;
+  color: variables.$gray;
 }
 
-.text--gold {
+.text--red {
   color: variables.$primary;
 }
 
@@ -44,8 +43,8 @@
 
 a.text--black {
   color: variables.$secondary;
-  [class*="bg-"] &,
-  [class*="bg-"] [class*="bg-"] & {
+  [class*='bg-'] &,
+  [class*='bg-'] [class*='bg-'] & {
     color: variables.$secondary;
   }
 }
@@ -58,16 +57,8 @@ a.text--black {
   background: variables.$primary;
 }
 
-.bg--red {
-  background: variables.$color-red;
-}
-
 .bg--teal {
   background: variables.$color-teal;
-}
-
-.bg--black {
-  background: variables.$secondary;
 }
 
 .bg--gray {

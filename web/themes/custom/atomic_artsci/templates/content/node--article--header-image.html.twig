@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Header view-mode node template for articles.
+ *
+ * Used by the 'header_image' view mode, which is rendered inside the adaptive
+ * Article header block (\Drupal\artsci_core\Plugin\Block\ArticleHeaderBlock).
+ * The title, date, and subhead are placed by the view mode's Layout Builder
+ * layout, so this template intentionally omits the node-template title link and
+ * the submitted footer that node.html.twig would otherwise add when the node is
+ * rendered outside the main page (page = FALSE), which would duplicate the
+ * title above the hero.
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <div{{ content_attributes.addClass('node__content') }}>
+    {{ content|without('field_header_image') }}
+  </div>
+</div>

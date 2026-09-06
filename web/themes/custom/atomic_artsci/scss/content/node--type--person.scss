@@ -2,16 +2,107 @@
 @use '../abstracts/_utilities.scss';
 
 .field--name-field-person-contact-information {
-  margin-bottom: .7rem;
+  margin-bottom: 0.7rem;
 }
 
 .field--name-field-artsci-contact-label {
-  margin-top: .7rem;
+  margin-top: 0.7rem;
   font-weight: variables.$font-weight-bold;
   line-height: 1.7;
   font-size: 1.2rem;
 
-  &:after {
-    content: ":";
+  &::after {
+    content: ':';
+  }
+}
+.person-sidebar {
+  &__section {
+    margin-bottom: 2rem;
+  }
+
+  &__heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-bottom: 0.325rem;
+  }
+
+  &__email {
+    display: block;
+    color: #a51417;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__phone,
+  &__fax {
+    margin-bottom: 0.25rem;
+  }
+
+  &__label {
+    font-weight: 500;
+    margin-right: 0.25rem;
+  }
+
+  &__location,
+  &__hours {
+    margin-bottom: 0.5rem;
+  }
+
+  &__directions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #a51417;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    .icon {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+
+  &__address {
+    font-style: normal;
+
+    .address-line {
+      display: block;
+    }
+  }
+
+  &__link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: #a51417;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      .icon {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+    }
   }
 }

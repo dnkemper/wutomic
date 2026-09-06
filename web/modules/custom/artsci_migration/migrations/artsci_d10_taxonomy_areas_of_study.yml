@@ -1,0 +1,107 @@
+id: artsci_d10_taxonomy_areas_of_study
+label: 'D10 areas_of_study taxonomy terms via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # NOTE: single page[*] subkey only. The source site has a Symfony 6
+  # InputBag bug that 400s on multi-subkey page params, so we can't paginate
+  # via links.next. Use a limit large enough to fit the entire vocabulary
+  # in one request. If the source's jsonapi page-size cap is lower than
+  # this, raise it server-side OR implement filter-based pagination.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/taxonomy_term/areas_of_study?page[limit]=500'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+
+  ids:
+    tid:
+      type: integer
+
+  fields:
+    - name: tid
+      label: 'Original TID'
+      selector: 'attributes/drupal_internal__tid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: name
+      label: Name
+      selector: 'attributes/name'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: weight
+      label: Weight
+      selector: 'attributes/weight'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: desc_value
+      label: 'Description value'
+      selector: 'attributes/description/value'
+    - name: desc_format
+      label: 'Description format'
+      selector: 'attributes/description/format'
+    - name: source_parent
+      label: 'Parent term reference'
+      selector: 'relationships/parent/data'
+
+process:
+  # Look up existing term by UUID to avoid duplicate-key inserts when
+  # D11 was seeded from D10.
+  tid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: taxonomy_term
+    value_key: uuid
+
+  uuid: uuid
+  vid:
+    plugin: default_value
+    default_value: areas_of_study
+  langcode: langcode
+  name: name
+  weight:
+    plugin: default_value
+    default_value: 0
+    source: weight
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  # Description (text_long with format)
+  'description/value': desc_value
+  'description/format':
+    plugin: default_value
+    default_value: full_html
+    source: desc_format
+
+  # Parent hierarchy. Resolved via migration_lookup against this same
+  # migration. If a child references a parent that hasn't been migrated yet,
+  # migrate creates a stub and fills it in when the actual parent comes
+  # through (default no_stub: false). For root terms, source_parent is an
+  # empty array, so sub_process produces no entries and Drupal treats the
+  # parent as 0 (root) automatically.
+  parent:
+    plugin: sub_process
+    source: source_parent
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: artsci_d10_taxonomy_areas_of_study
+        source: meta/drupal_internal__target_id
+
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: areas_of_study
+
+migration_dependencies:
+  required: []
+  optional: []

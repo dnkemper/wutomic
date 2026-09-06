@@ -1,0 +1,117 @@
+id: artsci_d10_media_soundcloud
+label: 'D10 SoundCloud media built from article field_soundcloud'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# D10 has no soundcloud media entities — SoundCloud players were stored as a
+# raw <iframe> embed in the legacy text field node.article.field_soundcloud
+# (~125 articles). D11 models SoundCloud as a media entity (bundle soundcloud,
+# media_entity_soundcloud) referenced from node.article.field_soundcloud_media.
+#
+# This migration is therefore driven by the ARTICLE list (not a media
+# endpoint): one soundcloud media is created per article that carries a
+# non-empty field_soundcloud, keyed by the source nid. The article migration
+# then resolves field_soundcloud_media via migration_lookup against this
+# migration on that same nid. Rows whose embed yields no usable URL are dropped
+# so we never create an invalid soundcloud media (the source field is
+# required). Idempotency across re-runs is handled by the migrate map (keyed by
+# nid) rather than a uuid lookup — there is no D10 soundcloud uuid to match.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/article'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    - name: nid
+      label: 'Source article NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: title
+      label: 'Article title'
+      selector: 'attributes/title'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    # Legacy formatted-text field holding the SoundCloud <iframe> embed.
+    - name: soundcloud_embed
+      label: 'D10 field_soundcloud embed HTML'
+      selector: 'attributes/field_soundcloud/value'
+
+process:
+  # Drop every article that has no SoundCloud embed before doing any work —
+  # only a small slice of the article set carries one. No message is logged
+  # here on purpose: the vast majority of articles legitimately have no
+  # SoundCloud, so messaging each one would bury the genuinely useful
+  # "had an embed but no URL" messages below under ~1850 noise rows.
+  _embed:
+    - plugin: skip_on_empty
+      method: row
+      source: soundcloud_embed
+
+  # Extract the player URL (api.soundcloud.com/tracks/{id} or a soundcloud.com
+  # URL) from the iframe embed. If extraction yields nothing usable, drop the
+  # row rather than create an invalid media — field_media_soundcloud is
+  # required and is parsed by SoundCloud's oEmbed endpoint on save.
+  field_media_soundcloud:
+    - plugin: callback
+      callable:
+        - 'Drupal\artsci_migration\LinkHelpers'
+        - 'soundcloudUrlFromEmbed'
+      source: soundcloud_embed
+    - plugin: skip_on_empty
+      method: row
+      message: 'SoundCloud media skipped: no URL could be extracted from embed.'
+
+  bundle:
+    plugin: default_value
+    default_value: soundcloud
+  name: title
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+  langcode:
+    plugin: default_value
+    default_value: en
+    source: langcode
+  uid:
+    plugin: default_value
+    default_value: 1
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+destination:
+  plugin: 'entity:media'
+  default_bundle: soundcloud
+
+migration_dependencies:
+  required: []
+  optional: []

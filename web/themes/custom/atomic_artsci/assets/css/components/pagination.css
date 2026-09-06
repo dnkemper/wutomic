@@ -1,19 +1,34 @@
 @charset "UTF-8";
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -75,7 +90,7 @@
 
 .pager a:hover,
 .pager button:hover {
-  background: #F3F3F3;
+  background: #edeae1;
 }
 
 .pager .is-active a {
@@ -85,12 +100,12 @@
 }
 .pager .is-active a:hover {
   color: #000000;
-  background: #BA0C2F;
+  background: #ba0c2f;
 }
 
 .pager .disabled {
   cursor: not-allowed;
-  color: #CACACA;
+  color: #e8e6e1;
   padding-top: 0.625rem;
   padding-right: 1.05rem;
   padding-bottom: 0.625rem;
@@ -118,26 +133,26 @@
 .pager a {
   color: #000000;
 }
-[class*=bg--black] .pager a {
-  background-color: #000000;
+[class*=bg--teal] .pager a {
+  background-color: var(--bg--teal);
 }
 [class*=bg--white] .pager a {
   background-color: #fff;
 }
 [class*=bg--red] .pager a {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
 }
 [class*=bg--gray] .pager a {
-  background-color: #F3F3F3;
+  background-color: #edeae1;
 }
 
 .pager a:hover,
 .pager a:focus {
-  background-color: #F3F3F3;
+  background-color: #edeae1;
   color: #000000;
 }
-[class*=bg--black] .pager a:hover, [class*=bg--red] .pager a:hover,
-[class*=bg--black] .pager a:focus,
+[class*=bg--teal] .pager a:hover, [class*=bg--red] .pager a:hover,
+[class*=bg--teal] .pager a:focus,
 [class*=bg--red] .pager a:focus {
   background-color: #fff;
 }
@@ -150,19 +165,23 @@
 .pager .is-active a {
   background-color: #000000;
   color: #fff;
-  /* Active Hover/Focus States */
 }
 [class*=bg--gray] .pager .is-active a, [class*=bg--white] .pager .is-active a {
   color: #fff;
 }
-[class*=bg--black] .pager .is-active a {
-  background-color: #BA0C2F;
+[class*=bg--teal] .pager .is-active a {
+  background-color: #007d8a;
   color: #000000;
+}
+.pager .is-active a {
+  /* Active Hover/Focus States */
 }
 .pager .is-active a:hover, .pager .is-active a:focus {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   color: #000000;
 }
-[class*=bg--black] .pager .is-active a:hover, [class*=bg--red] .pager .is-active a:hover, [class*=bg--black] .pager .is-active a:focus, [class*=bg--red] .pager .is-active a:focus {
+[class*=bg--teal] .pager .is-active a:hover, [class*=bg--red] .pager .is-active a:hover, [class*=bg--teal] .pager .is-active a:focus, [class*=bg--red] .pager .is-active a:focus {
   background-color: #fff;
-}/*# sourceMappingURL=pagination.css.map */
+}
+
+/*# sourceMappingURL=pagination.css.map */

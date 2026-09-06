@@ -15,7 +15,7 @@
     display: inline-block;
   }
   .badge {
-    margin-right: .5rem;
+    margin-right: 0.5rem;
     margin-bottom: 1rem;
     font-weight: lighter;
     padding: 0 1rem;
@@ -33,6 +33,9 @@
 }
 
 // Remove default margin until we can get layout-builder-enabled class to appear for taxonomy pages
-body:not(.page-node-type-article):not(.page-node-type-page).path-taxonomy.layout-builder-disabled main.page__container {
+body:not(.page-node-type-article):not(
+    .page-node-type-page
+  ).path-taxonomy.layout-builder-disabled
+  main.page__container {
   margin-bottom: 0;
 }

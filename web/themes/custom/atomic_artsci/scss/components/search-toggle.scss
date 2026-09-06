@@ -19,7 +19,11 @@ $search-img-path: '../../images/search-01.svg';
   margin: 0;
   padding: 7px 25px;
   cursor: pointer;
-  transition: background .15s, border .15s, color .15s, transform .15s;
+  transition:
+    background 0.15s,
+    border 0.15s,
+    color 0.15s,
+    transform 0.15s;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
@@ -53,7 +57,6 @@ $search-img-path: '../../images/search-01.svg';
 
   &:focus,
   &:hover {
-
     /* Some exciting button focus styles */
     //outline:none;
     span {
@@ -109,20 +112,19 @@ $search-img-path: '../../images/search-01.svg';
     }
   }
 
-  &[aria-expanded="true"] {
+  &[aria-expanded='true'] {
     background: variables.$white;
 
     @include utilities.breakpoint(md) {
       background: none;
     }
 
-    &:before {
+    &::before {
       padding: variables.$xsm;
-      content: "\f00d";
+      content: '\f00d';
       color: variables.$secondary;
 
       @include utilities.breakpoint(md) {
-        color: variables.$secondary;
         border-radius: 50%;
         background: #fff;
         line-height: 1.2;
@@ -145,9 +147,9 @@ $search-img-path: '../../images/search-01.svg';
     }
   }
 
-  &:before {
+  &::before {
     padding: variables.$xsm;
-    content: "\f002";
+    content: '\f002';
     color: #fff;
     font-size: 1.5rem;
     @include utilities.fas();
@@ -187,7 +189,6 @@ $search-img-path: '../../images/search-01.svg';
     width: 73%;
     margin-right: 90px;
   }
-
 }
 
 .search-is-open {
@@ -199,13 +200,11 @@ $search-img-path: '../../images/search-01.svg';
   }
 }
 
-
 .search-is-open .artsci-bar--narrow .artsci-search {
   @include utilities.breakpoint(md) {
     border-bottom: 1px solid #666;
   }
 }
-
 
 .search-is-open .artsci-bar--full .menu--top {
   display: none;
@@ -218,16 +217,15 @@ $search-img-path: '../../images/search-01.svg';
   right: 0;
   width: 0px;
   cursor: pointer;
-  transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
+  transition: width 0.4s cubic-bezier(0, 0.795, 0, 1);
   background: none;
 
-  button>* {
+  button > * {
     pointer-events: none;
-
   }
 }
 
-.search-overlay .artsci-search input[type="text"] {
+.search-overlay .artsci-search input[type='text'] {
   padding-left: 0;
   text-align: left;
   color: #fff;
@@ -293,22 +291,22 @@ $search-img-path: '../../images/search-01.svg';
   }
 }
 
-.search-overlay .artsci-search [type="submit"] {
+.search-overlay .artsci-search [type='submit'] {
   padding: 0 10px;
   background: none;
   border: none;
 }
 
-.search-overlay[aria-hidden=false] .artsci-search [type="submit"] {
-  animation: fadeIn .5s;
+.search-overlay[aria-hidden='false'] .artsci-search [type='submit'] {
+  animation: fadeIn 0.5s;
 }
 
-.search-overlay .artsci-search [type="submit"] span {
+.search-overlay .artsci-search [type='submit'] span {
   //@include utilities.element-invisible;
   display: none;
 }
 
-.search-overlay .artsci-search [type="submit"]::before {
+.search-overlay .artsci-search [type='submit']::before {
   padding: 20px;
   content: ' ';
   background: url($search-mobile-img-path);
@@ -318,8 +316,8 @@ $search-img-path: '../../images/search-01.svg';
   background-size: 90%;
 
   @include utilities.breakpoint(md) {
-    background-position: center;
-    background: url($search-img-path);
+    // background-position: center;
+    background: center url($search-img-path);
   }
 
   .artsci-bar--narrow & {
@@ -338,16 +336,15 @@ $search-img-path: '../../images/search-01.svg';
     }
   }
 
-  &[aria-hidden="false"] {
+  &[aria-hidden='false'] {
     z-index: 1;
     visibility: visible;
-    transition: opacity .3s;
+    transition: opacity 0.3s;
     transition-timing-function: ease;
     transition-timing-function: ease-in-out;
     text-align: left;
   }
 }
-
 
 // color changes for active search - change to focus invisible?
 .search-is-open {
@@ -370,7 +367,6 @@ $search-img-path: '../../images/search-01.svg';
   position: absolute;
   right: 0;
   top: 0;
-
 
   @include utilities.breakpoint(md) {
     position: relative;
@@ -434,14 +430,14 @@ $search-img-path: '../../images/search-01.svg';
     background-color: variables.$white;
   }
 
-  &[aria-hidden="false"] {
+  &[aria-hidden='false'] {
     z-index: 1;
     top: 0;
     display: contents;
     visibility: visible;
     width: 95%;
     transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
-    transition: opacity .3s;
+    transition: opacity 0.3s;
     transition-timing-function: ease;
     transition-timing-function: ease-in-out;
     text-align: left;
@@ -454,7 +450,7 @@ $search-img-path: '../../images/search-01.svg';
 
 // atomic_artsci overrides.
 
-.search-overlay .artsci-search [type="submit"]::before {
+.search-overlay .artsci-search [type='submit']::before {
   background-image: url($search-mobile-img-path);
   background-repeat: no-repeat;
   @include utilities.breakpoint(md) {
@@ -465,7 +461,7 @@ $search-img-path: '../../images/search-01.svg';
   }
 }
 
-.search-overlay[aria-hidden=false] {
+.search-overlay[aria-hidden='false'] {
   .region-search {
     @include utilities.breakpoint(md) {
       width: 100%;
@@ -475,7 +471,7 @@ $search-img-path: '../../images/search-01.svg';
 
 .artsci-bar--full .search-overlay .artsci-search,
 .artsci-bar--narrow .search-overlay .artsci-search {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 // artsci Bar Full adjustments
@@ -518,7 +514,6 @@ $search-img-path: '../../images/search-01.svg';
     display: block !important;
   }
 }
-
 
 @media (max-width: 980px) {
   .search-is-open .search-overlay .artsci-search {

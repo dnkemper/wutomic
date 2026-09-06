@@ -1,0 +1,11 @@
+uuid: 27e9c6fb-4c10-4f45-8738-e456d7f82931
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.full__portrait
+label: 'Full - Portrait'
+description: ''
+targetEntityType: media
+cache: true

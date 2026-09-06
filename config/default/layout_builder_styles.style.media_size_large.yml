@@ -9,12 +9,23 @@ type: component
 group: media_size
 block_restrictions:
   - 'inline_block:artsci_card'
+  - 'inline_block:artsci_slider'
+  - 'inline_block:artsci_events'
   - 'inline_block:artsci_image'
   - 'inline_block:featured_content'
   - 'inline_block:artsci_aggregator'
   - 'views_block:article_list_block-list_article'
+  - 'views_block:article_list_block-list_article_recent'
+  - 'views_block:article_list_block-list_event'
+  - 'views_block:article_list_block-list_book'
+  - 'views_block:article_list_block-list_person'
   - 'views_block:page_list_block-list_page'
   - 'views_block:people_list_block-list_card'
+  - 'views_block:news_list_block-list_card'
+  - 'views_block:book_list_block-list_card'
+  - 'views_block:event_list_block-list_card'
+  - 'views_block:image_list_block-list_card'
+  - 'views_block:events_list_block-card_list'
   - aggregator_feed_block
   - 'views_block:articles_author-articles_author'
   - 'views_block:articles_block-block_articles'

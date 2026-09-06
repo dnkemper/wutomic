@@ -12,8 +12,8 @@ id: block_content.artsci_image.field_artsci_image_image
 field_name: field_artsci_image_image
 entity_type: block_content
 bundle: artsci_image
-label: Image
-description: ''
+label: Media
+description: 'Image or Video. In callout mode (when Title is set), supports both image and video media types.'
 required: true
 translatable: false
 default_value: {  }
@@ -29,5 +29,5 @@ settings:
       field: _none
       direction: ASC
     auto_create: false
-    auto_create_bundle: image
+    auto_create_bundle: ''
 field_type: entity_reference

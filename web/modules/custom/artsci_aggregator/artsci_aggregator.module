@@ -150,7 +150,7 @@ function artsci_aggregator_aggregator_item_view(array &$build, EntityInterface $
     elseif (str_starts_with($style, 'card')) {
       $covered_prefixes['card'] = TRUE;
     }
-    elseif (str_starts_with($style, 'media--widescreen') || str_starts_with($style, 'media--square') || str_starts_with($style, 'media--circle') || str_starts_with($style, 'media--no-crop')) {
+    elseif (str_starts_with($style, 'media--widescreen') || str_starts_with($style, 'media--square') || str_starts_with($style, 'media--circle') || str_starts_with($style, 'media--portrait')|| str_starts_with($style, 'media--no-crop')) {
       $covered_prefixes['media_format'] = TRUE;
     }
     elseif (str_starts_with($style, 'media--small') || str_starts_with($style, 'media--medium') || str_starts_with($style, 'media--large')) {
@@ -244,19 +244,20 @@ function artsci_aggregator_preprocess_block__inline_block__artsci_aggregator(&$v
   $layout_builder_styles = $variables['elements']['#layout_builder_style'] ?? [];
 
   // Get configuration from block fields.
-    $display_type = $block->get('field_artsci_aggregator_display')->getString() ?: 'article_block';
+    $display_type = $block->get('field_artsci_aggregator_display')->getString() ?: 'list_article';
 
   $per_page = (int) $block->get('field_artsci_aggregator_count')->getString() ?: 10;
   $show_pager = (bool) $block->get('field_artsci_aggregator_pager')->getString();
 
   // Map display types to actual view/display combinations that use ListBlock.
   $view_map = [
-    'article_block' => ['view' => 'article_list_block', 'display' => 'list_article'],
-    'people_block' => ['view' => 'people_list_block', 'display' => 'list_card'],
-    'book_block' => ['view' => 'rss_block', 'display' => 'book_block'],
+    'list_article' => ['view' => 'article_list_block', 'display' => 'list_article'],
+    'list_person' => ['view' => 'article_list_block', 'display' => 'list_person'],
+    'list_book' => ['view' => 'article_list_block', 'display' => 'list_book'],
+    'list_event'  => ['view' => 'article_list_block', 'display' => 'list_event'],
   ];
 
-  $view_config = $view_map[$display_type] ?? $view_map['article_block'];
+  $view_config = $view_map[$display_type] ?? $view_map['list_article'];
   $view = \Drupal\views\Views::getView($view_config['view']);
   $view_display = $view_config['display'];
   //   $view = \Drupal\views\Views::getView('aggregator_rss_feed');

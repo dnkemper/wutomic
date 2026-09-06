@@ -12,14 +12,17 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: article_block
+      value: list_article
       label: Articles
     -
-      value: people_block
+      value: list_person
       label: People
     -
-      value: block_1
+      value: list_book
       label: Books
+    -
+      value: list_event
+      label: Events
   allowed_values_function: ''
 module: options
 locked: false

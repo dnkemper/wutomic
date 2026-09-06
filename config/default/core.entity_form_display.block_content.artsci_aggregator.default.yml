@@ -17,15 +17,22 @@ targetEntityType: block_content
 bundle: artsci_aggregator
 mode: default
 content:
+  field_artsci_aggregator_count:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
   field_artsci_aggregator_display:
     type: options_select
-    weight: 2
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   field_artsci_aggregator_text:
     type: text_textarea
-    weight: 3
+    weight: 4
     region: content
     settings:
       rows: 5
@@ -33,7 +40,7 @@ content:
     third_party_settings: {  }
   field_artsci_headline:
     type: artsci_headline_widget
-    weight: 1
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -46,5 +53,4 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  field_artsci_aggregator_count: true
   field_artsci_aggregator_pager: true

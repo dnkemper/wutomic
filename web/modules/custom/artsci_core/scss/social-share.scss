@@ -1,0 +1,40 @@
+.social-share {
+  &__heading {
+    margin-block-end: 0.75rem;
+    color: var(--color-primary, #a51417);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border-radius: 50%;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-primary, #a51417);
+      color: #fff;
+    }
+
+    .fa-brands {
+      font-size: 1rem;
+    }
+  }
+}

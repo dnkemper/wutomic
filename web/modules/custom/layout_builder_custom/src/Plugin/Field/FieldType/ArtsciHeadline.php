@@ -26,6 +26,11 @@ class ArtsciHeadline extends FieldItemBase {
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
     return [
       'columns' => [
+        'pre_headline' => [
+          'type' => 'varchar',
+          'length' => 355,
+          'not null' => FALSE,
+        ],
         'headline' => [
           'type' => 'varchar',
           'length' => 355,
@@ -34,11 +39,11 @@ class ArtsciHeadline extends FieldItemBase {
         'heading_size' => [
           'type' => 'varchar',
           'length' => 355,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
         'hide_headline' => [
           'type' => 'int',
-          'not null' => TRUE,
+          'not null' => FALSE,
           'default' => 0,
         ],
         'headline_style' => [
@@ -49,12 +54,12 @@ class ArtsciHeadline extends FieldItemBase {
         'headline_alignment' => [
           'type' => 'varchar',
           'length' => 355,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
         'child_heading_size' => [
           'type' => 'varchar',
           'length' => 355,
-          'not null' => TRUE,
+          'not null' => FALSE,
         ],
       ],
     ];
@@ -65,8 +70,9 @@ class ArtsciHeadline extends FieldItemBase {
    */
   public function isEmpty() {
     $headline = $this->get('headline')->getValue();
+    $preheadline = $this->get('pre_headline')->getValue();
     $child_heading_size = $this->get('child_heading_size')->getValue();
-    return empty($headline) && empty($child_heading_size);
+    return empty($headline) && empty($preheadline) && empty($child_heading_size);
   }
 
   /**
@@ -74,6 +80,10 @@ class ArtsciHeadline extends FieldItemBase {
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
     $properties = [];
+
+    $properties['pre_headline'] = DataDefinition::create('string')
+      ->setLabel(t('Pre-headline'))
+      ->setDescription(t('Pre-headline text displayed above the main headline.'));
 
     $properties['headline'] = DataDefinition::create('string')
       ->setLabel(t('Headline'))

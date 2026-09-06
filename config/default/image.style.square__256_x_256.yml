@@ -1,0 +1,24 @@
+uuid: 38615a53-f2e3-45d6-983e-2a7e8a7e5256
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: square__256_x_256
+label: 'Square (256 x 256)'
+effects:
+  393b0268-e8ff-47ed-ae21-b99ba6662256:
+    uuid: 393b0268-e8ff-47ed-ae21-b99ba6662256
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 256
+      height: 256
+      crop_type: focal_point
+  95b2e090-0fce-4e7b-bb9e-1448cb326799:
+    uuid: 95b2e090-0fce-4e7b-bb9e-1448cb326799
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

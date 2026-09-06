@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -77,13 +92,13 @@
     width: 100%;
   }
 }
+.bef-form.bef-form--sidebar .bef-exposed-form.form .form-item:not(:last-child).form-item-sort-bef-combine select {
+  width: 100%;
+}
 .bef-form.bef-form--sidebar .bef-exposed-form.form .form-item:not(:last-child).form-item-sort-bef-combine {
   padding: 0 0 1rem;
   grid-column: 1/-1;
   margin: 1rem 0;
-}
-.bef-form.bef-form--sidebar .bef-exposed-form.form .form-item:not(:last-child).form-item-sort-bef-combine select {
-  width: 100%;
 }
 @media (min-width: 768px) {
   .bef-form.bef-form--sidebar .bef-exposed-form.form .form-item:not(:last-child).form-item-sort-bef-combine {
@@ -105,9 +120,21 @@
   }
 }
 
-.bef-form [type=date], .bef-form [type=datetime-local], .bef-form [type=datetime], .bef-form [type=email],
-.bef-form [type=month], .bef-form [type=number], .bef-form [type=password], .bef-form [type=search], .bef-form [type=tel], .bef-form [type=text],
-.bef-form [type=time], .bef-form [type=url], .bef-form [type=week], .bef-form select, .bef-form textarea {
+.bef-form [type=date],
+.bef-form [type=datetime-local],
+.bef-form [type=datetime],
+.bef-form [type=email],
+.bef-form [type=month],
+.bef-form [type=number],
+.bef-form [type=password],
+.bef-form [type=search],
+.bef-form [type=tel],
+.bef-form [type=text],
+.bef-form [type=time],
+.bef-form [type=url],
+.bef-form [type=week],
+.bef-form select,
+.bef-form textarea {
   margin-bottom: 0;
 }
 .bef-form .artsci-content .form-item.form-type-checkbox:first-child {
@@ -120,7 +147,10 @@
   height: 1px;
   width: 1px;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 @media (min-width: 768px) {
   .bef-form .form-type-textfield {
@@ -187,7 +217,7 @@
 .bef-form summary::before {
   padding: 0 0.6rem 0.325rem 0.325rem;
   content: "\f13a";
-  color: #63666A;
+  color: #e8e6e1;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
@@ -209,10 +239,10 @@
   padding: 0.85rem 0.425rem;
   display: block;
   border: none;
-  border-bottom: 1px solid #CACACA;
+  border-bottom: 1px solid #e8e6e1;
   text-decoration: none;
   font-size: 0.8rem;
-  color: #737373;
+  color: #f4f2ed;
 }
 .bef-form .bef-toggle:focus {
   font-weight: bold;
@@ -306,8 +336,9 @@
   .bef-form .bef-exposed-form .form--inline {
     display: grid !important;
     grid-template-columns: minmax(50%, 1fr) 25%;
-    grid-column-gap: 0;
-    grid-row-gap: 0;
+    -moz-column-gap: 0;
+         column-gap: 0;
+    row-gap: 0;
     align-items: center;
   }
 }
@@ -354,4 +385,6 @@
 
 .bef-exposed-form .form--inline .form-item {
   float: none;
-}/*# sourceMappingURL=view-bef.css.map */
+}
+
+/*# sourceMappingURL=view-bef.css.map */

@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the artsci_aggregator module.
+ */
+
+/**
+ * Remap field_artsci_aggregator_display values and refresh aggregator blocks.
+ *
+ * Renames the stored option keys to match the view displays and the renamed
+ * allowed values in field.storage.block_content.field_artsci_aggregator_display:
+ *   article_block -> list_article
+ *   people_block  -> list_person
+ *   block_1       -> list_book
+ *   events_block  -> list_event
+ *
+ * The dedicated field table names are resolved through the entity table
+ * mapping rather than hardcoded, because Drupal hashes/truncates long names
+ * (the revision table here is block_content_r__<hash>, not
+ * block_content_revision__field_artsci_aggregator_display). An earlier version
+ * hardcoded the long revision name, so tableExists() was false and the
+ * revision rows were never remapped. Those revisions are the ones Layout
+ * Builder inline blocks actually render, so they kept their old keys; combined
+ * with the renamed $view_map keys, every block fell back to the list_article
+ * default. Remapping both tables and invalidating the block cache tags fixes
+ * existing blocks.
+ */
+function artsci_aggregator_update_10006() {
+  $entity_type_id = 'block_content';
+  $field_name = 'field_artsci_aggregator_display';
+  $value_column = $field_name . '_value';
+
+  $map = [
+    'article_block' => 'list_article',
+    'people_block' => 'list_person',
+    'block_1' => 'list_book',
+    'events_block' => 'list_event',
+  ];
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $table_mapping = $entity_type_manager->getStorage($entity_type_id)->getTableMapping();
+  $field_definition = \Drupal::service('entity_field.manager')
+    ->getActiveFieldStorageDefinitions($entity_type_id)[$field_name] ?? NULL;
+
+  // Resolve the real (possibly hashed) data and revision table names.
+  $tables = [];
+  if ($field_definition) {
+    $tables[] = $table_mapping->getDedicatedDataTableName($field_definition);
+    if ($field_definition->isRevisionable()) {
+      $tables[] = $table_mapping->getDedicatedRevisionTableName($field_definition);
+    }
+  }
+
+  $database = \Drupal::database();
+  $schema = $database->schema();
+
+  $remapped = 0;
+  foreach ($tables as $table) {
+    if (!$schema->tableExists($table)) {
+      continue;
+    }
+    foreach ($map as $old => $new) {
+      $remapped += (int) $database->update($table)
+        ->fields([$value_column => $new])
+        ->condition($value_column, $old)
+        ->execute();
+    }
+  }
+
+  // Invalidate render caches for every aggregator block so they re-render with
+  // the remapped values and the updated view map, not just the ones whose
+  // stored value changed. The block_content:ID tag bubbles up to the parent
+  // node/layout renders that embed these inline blocks.
+  $storage = $entity_type_manager->getStorage($entity_type_id);
+  $ids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'artsci_aggregator')
+    ->execute();
+
+  if ($ids) {
+    $tags = array_map(static fn($id) => 'block_content:' . $id, $ids);
+    \Drupal\Core\Cache\Cache::invalidateTags($tags);
+    $storage->resetCache($ids);
+  }
+
+  return (string) t('Remapped @remapped value(s) across data and revision tables and refreshed @blocks aggregator block(s).', [
+    '@remapped' => $remapped,
+    '@blocks' => count($ids),
+  ]);
+}

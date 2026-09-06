@@ -3,10 +3,10 @@ langcode: en
 status: true
 dependencies:
   module:
+    - artsci_core
     - editor
     - linkit
-    - artsci_core
-name: 'Basic HTML'
+name: Basic
 format: basic
 weight: -8
 filters:
@@ -34,15 +34,6 @@ filters:
     status: false
     weight: -44
     settings: {  }
-  filter_html:
-    id: filter_html
-    provider: filter
-    status: true
-    weight: -49
-    settings:
-      allowed_html: '<br> <p> <strong> <em>'
-      filter_html_help: true
-      filter_html_nofollow: false
   filter_html_escape:
     id: filter_html_escape
     provider: filter
@@ -67,13 +58,6 @@ filters:
     status: true
     weight: -30
     settings: {  }
-  filter_iframe:
-    id: filter_iframe
-    provider: artsci_core
-    status: false
-    weight: -40
-    settings:
-      allowed_sources: ''
   filter_image_lazy_load:
     id: filter_image_lazy_load
     provider: filter
@@ -94,3 +78,4 @@ filters:
     weight: -50
     settings:
       title: true
+      media_substitution: metadata

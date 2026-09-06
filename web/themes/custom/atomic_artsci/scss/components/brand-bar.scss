@@ -13,8 +13,9 @@
   font-family: variables.$font-family-sans-serif;
 
   a {
-    color: variables.$secondary;
+    color: transparent !important;
     text-decoration: none;
+    font-weight: 500;
   }
 
   @include utilities.breakpoint(md) {
@@ -66,22 +67,20 @@
   background: white;
 
   @include utilities.breakpoint(md) {
-    min-height: 80px;
+    min-height: 75px;
   }
 
   &:not(.artsci-bar--narrow) {
     @include utilities.breakpoint(md) {
-      height: 80px;
+      height: 75px;
     }
   }
 
   .logo--tab {
-    margin-right: 20px;
-
     @include utilities.breakpoint(page-container) {
       margin-left: -12px;
       // More padding on top in this variation.
-      padding: 27px 20px 20px;
+      // padding: 27px 20px 20px;
     }
   }
 
@@ -110,8 +109,8 @@
     @include utilities.breakpoint(md) {
       // justify-content: flex-start;
       display: flex;
-        align-content: space-between;
-        align-items: center;
+      align-content: space-between;
+      align-items: center;
     }
 
     @include utilities.breakpoint(md) {
@@ -122,8 +121,6 @@
 
   // Styles for the narrow version of the artsci bar.
   &--narrow {
-
-
     @include utilities.breakpoint(md) {
       min-height: 50px;
       position: relative;
@@ -132,7 +129,7 @@
     // Overrides the logo tab styles when using
     // the narrow version of the artsci bar.
     .logo--tab {
-      margin-right: 10px;
+      // margin-right: 10px;
 
       @include utilities.breakpoint(md) {
         height: 56px;
@@ -246,7 +243,6 @@
     @include utilities.breakpoint(md) {
       margin: 0;
       text-align: left;
-      font-size: 1.7rem;
       font-size: 2rem;
       flex: 0 1 15%;
       font-weight: 400;
@@ -269,7 +265,6 @@
     }
   }
 }
-
 
 @media screen and (max-width: 1605px) and (min-width: 855px) {
   .artsci-bar--full.mega .site-name,
@@ -297,20 +292,6 @@
 .parent-site-name {
   margin: 0;
 }
-
-// sticky header
-
-.header-sticky .artsci-bar {
-  @include utilities.breakpoint(md) {
-    position: fixed;
-    z-index: 3;
-    top: 0;
-    left: 0;
-    width: 100%;
-    transition: transform 0.4s;
-  }
-}
-
 
 // fixed scroll bar
 

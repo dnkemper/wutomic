@@ -10,7 +10,7 @@ id: node.person.field_person_research_areas
 field_name: field_person_research_areas
 entity_type: node
 bundle: person
-label: 'Research areas'
+label: 'Areas of Study'
 description: ''
 required: false
 translatable: false
@@ -20,7 +20,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      research_areas: research_areas
+      areas_of_study: areas_of_study
     sort:
       field: name
       direction: asc

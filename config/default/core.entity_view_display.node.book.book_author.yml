@@ -1,0 +1,73 @@
+uuid: c7f93e8a-bd9c-4bf4-b485-a0cb89d76d26
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.book_author
+    - field.field.node.book.body
+    - field.field.node.book.book_tags
+    - field.field.node.book.field_book_author
+    - field.field.node.book.field_book_links
+    - field.field.node.book.field_book_publication_date
+    - field.field.node.book.field_book_subtitle
+    - field.field.node.book.field_byline_names
+    - field.field.node.book.field_byline_options
+    - field.field.node.book.field_content_hash
+    - field.field.node.book.field_description
+    - field.field.node.book.field_image
+    - field.field.node.book.field_is_shared
+    - field.field.node.book.field_last_fetch
+    - field.field.node.book.field_meta_tags
+    - field.field.node.book.field_shared_content
+    - field.field.node.book.field_shared_content_xml
+    - field.field.node.book.rabbit_hole__settings
+    - node.type.book
+  module:
+    - field_delimiter
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.book.book_author
+targetEntityType: node
+bundle: book
+mode: book_author
+content:
+  field_book_author:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: book_author
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+    weight: 0
+    region: content
+hidden:
+  body: true
+  book_tags: true
+  content_moderation_control: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_book_afterword_author: true
+  field_book_links: true
+  field_book_publication_date: true
+  field_book_subtitle: true
+  field_byline_names: true
+  field_byline_options: true
+  field_content_hash: true
+  field_description: true
+  field_image: true
+  field_is_shared: true
+  field_last_fetch: true
+  field_meta_tags: true
+  field_shared_content: true
+  field_shared_content_xml: true
+  links: true
+  private: true
+  rabbit_hole__settings: true
+  search_api_excerpt: true

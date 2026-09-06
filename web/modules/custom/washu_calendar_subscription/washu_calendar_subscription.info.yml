@@ -1,0 +1,9 @@
+name: 'WashU Calendar Subscription'
+type: module
+description: 'Provides controllers to facilitate iCal (.ics) feeds for calendar events that can be subscribed to by calendar applications, including academic.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:node
+  - drupal:datetime
+  - drupal:views

@@ -5,6 +5,7 @@ dependencies:
   module:
     - fragments
     - media
+    - node_view_permissions
     - system
 _core:
   default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
@@ -14,6 +15,17 @@ weight: -10
 is_admin: false
 permissions:
   - 'access content'
+  - 'view any academic_calendar_event content'
+  - 'view any article content'
+  - 'view any book content'
+  - 'view any event content'
+  - 'view any page content'
+  - 'view any person content'
   - 'view media'
+  - 'view own article content'
+  - 'view own book content'
+  - 'view own event content'
+  - 'view own page content'
+  - 'view own person content'
   - 'view region_item fragments'
   - 'view region_item_after_content fragments'

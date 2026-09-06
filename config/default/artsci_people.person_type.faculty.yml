@@ -5,5 +5,5 @@ dependencies: {  }
 id: faculty
 label: Faculty
 description: ''
-allow_former: true
+allow_former: false
 allowed_fields: {  }

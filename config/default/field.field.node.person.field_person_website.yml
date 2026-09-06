@@ -11,7 +11,7 @@ id: node.person.field_person_website
 field_name: field_person_website
 entity_type: node
 bundle: person
-label: Website
+label: 'Faculty Links'
 description: 'If adding multiple websites, you can use the "Label" field to distinguish between them. If entering multiple websites, make sure that the one you would like to show up in lists is positioned first.'
 required: false
 translatable: false
@@ -19,5 +19,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   title: 1
-  link_type: 16
+  link_type: 17
 field_type: link

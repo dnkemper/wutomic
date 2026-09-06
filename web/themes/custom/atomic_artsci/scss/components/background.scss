@@ -1,32 +1,26 @@
-
 @use '../abstracts/_variables.scss' with (
   $imgpath: '/themes/custom/atomic_artsci/assets/images/'
 );
 @use '../abstracts/_utilities.scss';
 @use '../abstracts/_background-mixins.scss' as background-mixins;
 
-[class*="bg--"] {
-  a,
-  [class*="bg--"] a {
-    color: inherit;
-  }
-}
-
-[class*="bg--"][class*="--pattern--"] {
-  background-size: auto auto;
-  background-position: center center;
-}
+// [class*="bg--"] {
+//   a,
+//   [class*="bg--"] a {
+//     color: inherit;
+//   }
+// }
 
 // Add background rules
 @include background-mixins.add-backgrounds();
 
-[class*="bg--"] {
+[class*='bg--'] {
   *,
-  & [class*="bg--"] * {
+  & [class*='bg--'] * {
     // border-color: inherit;
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       color: inherit;
       border-color: inherit;
     }
@@ -34,38 +28,44 @@
 }
 
 // border color overrides for certain background colors
-[class*="bg--gray"],
-[class*="bg--white"],
-[class*="bg--red"],
-.bg-pattern--brain-reversed,
-.bg-pattern--brain {
+[class*='bg--gray'],
+[class*='bg--white'],
+[class*='bg--red'] {
   border-color: var(--transparent-border);
 }
 
-.bg--black--pattern--brain,
-.bg-pattern--brain-black,
-[class*="bg--black"] {
-  border-color: rgba(255,255,255,.325);
-}
-
 // override gray link color.
-[class*="bg--white"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg-"] [class*="bg--white"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg--gray"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg-"] [class*="bg--gray"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn) {
+[class*='bg--white']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn),
+[class*='bg-']
+  [class*='bg--white']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn),
+[class*='bg--gray'] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
+[class*='bg-']
+  [class*='bg--gray']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn) {
   color: var(--link-color);
 }
 
 // set link color for black and gold nesting.
-[class*="bg--white"] [class*="bg--red"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg--white"] [class*="bg--black"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg--gray"] [class*="bg--red"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn),
-[class*="bg--gray"] [class*="bg--black"] :where(p, ul, ol, dl, cite, tbody, figcaption) a:not(.bttn) {
+[class*='bg--white']
+  [class*='bg--red']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn),
+[class*='bg--white']
+  [class*='bg--black']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn),
+[class*='bg--gray']
+  [class*='bg--red']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn),
+[class*='bg--gray']
+  [class*='bg--black']
+  :where(p, ul, ol, dl, cite, tbody, figcaption)
+  a:not(.bttn) {
   color: inherit;
-}
-
-
-// @todo remove once https://github.com/artsci/artsci/issues/713 is completed.
-[class*=bg--][class*="--pattern--"], [class*=bg-pattern] {
-  background-position: inherit;
 }

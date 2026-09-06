@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Theme override for the Anchor Links custom block.
+ *
+ * Renders a horizontal tab-style navigation for anchor links on the page.
+ *
+ * Available variables:
+ * - content: Block content containing field_links.
+ * - attributes: HTML attributes for the block wrapper.
+ * - plugin_id: The block plugin ID.
+ * - configuration: Block configuration values.
+ * - label: The block label (admin title).
+ */
+#}
+{%
+  set classes = [
+  'block',
+  'block-anchor-links',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  ]
+%}
+{{ attach_library('atomic_artsci/anchor-links') }}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if content.field_links['#items'] is not empty %}
+    <nav class="anchor-links" aria-label="Page navigation">
+      <ul class="anchor-links__list">
+        {% for key, item in content.field_links['#items'] %}
+          <li class="anchor-links__item">
+            <a href="{{ item.url }}"
+               class="anchor-links__link{% if loop.first %} is-active{% endif %}"
+               {% if item.url.toString starts with '#' %}data-anchor-link{% endif %}>
+              {{- item.title -}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+</div>

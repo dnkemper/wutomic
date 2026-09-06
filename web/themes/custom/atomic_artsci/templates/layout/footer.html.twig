@@ -10,7 +10,9 @@
   <div class="footer__container footer__container--flex">
     <div class="footer__links footer__links--contact">
     {# {% set test = "{{ base_path ~ directory }}/images/logo.svg" %} #}
-<img src="{{ base_path ~ directory }}/images/logo.svg" alt="Washington University in St. Louis">
+    <a href="https://www.washu.edu">
+      <img src="{{ base_path ~ directory }}/images/logo.svg" alt="Washington University in St. Louis">
+    </a>
 
       {% block site_slogan %}
         {% if site_has_parent %}
@@ -34,7 +36,9 @@
         </div>
       {% endif %}
 
-
+    {% if artsci_logo is not empty %}
+    {% include '@atomic_artsci/artsci/footer--socket-menu.twig' %}
+    {% endif %}
 
     </div>
 
@@ -42,11 +46,6 @@
       {{ page.footer_second }}
     {% endif %}
 
-  </div>
-  <div class="footer__container">
-    {% if artsci_logo is not empty %}
-    {% include '@atomic_artsci/artsci/footer--socket-menu.twig' %}
-    {% endif %}
   </div>
 
 </footer>

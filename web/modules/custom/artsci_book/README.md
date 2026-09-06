@@ -1,4 +1,4 @@
-# University of Iowa Book Module
+# Artsci Book Module
 
 ## Maintainers
 

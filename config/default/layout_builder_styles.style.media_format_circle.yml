@@ -9,11 +9,19 @@ type: component
 group: media_format
 block_restrictions:
   - 'inline_block:artsci_card'
-  - 'inline_block:artsci_image'
+  - 'inline_block:artsci_events'
   - 'inline_block:featured_content'
+  - 'inline_block:artsci_image'
   - 'inline_block:artsci_aggregator'
   - 'views_block:article_list_block-list_article'
+  - 'views_block:article_list_block-list_event'
+  - 'views_block:article_list_block-list_book'
+  - 'views_block:article_list_block-list_person'
+  - 'views_block:events_list_block-card_list'
   - 'views_block:page_list_block-list_page'
   - 'views_block:people_list_block-list_card'
+  - 'views_block:rss_block-article_block'
+  - 'views_block:rss_block-block_1'
+  - 'views_block:rss_block-people_block'
 layout_restrictions: {  }
 weight: 42

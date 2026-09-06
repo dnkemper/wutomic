@@ -8,7 +8,12 @@ $Artsci-Placeholders: () !default;
 
 @function artsci-placeholder-set($id) {
   $unique-id: string.unique-id();
-  $Artsci-Placeholders: map.merge($Artsci-Placeholders, ($id: $unique-id)) !global;
+  $Artsci-Placeholders: map.merge(
+    $Artsci-Placeholders,
+    (
+      $id: $unique-id,
+    )
+  ) !global;
   @return $unique-id;
 }
 

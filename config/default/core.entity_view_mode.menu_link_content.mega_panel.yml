@@ -1,0 +1,11 @@
+uuid: e5a1c6d8-7f0b-4c35-9a6e-7b5f2d458c07
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_link_content
+id: menu_link_content.mega_panel
+label: 'Mega menu panel'
+description: ''
+targetEntityType: menu_link_content
+cache: true

@@ -1,0 +1,90 @@
+id: artsci_d10_paragraph_social_media_links
+label: 'D10 social_media_links paragraphs via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/paragraph/social_media_links?page[limit]=50'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    id:
+      type: integer
+
+  fields:
+    - name: id
+      label: 'Original paragraph ID'
+      selector: 'attributes/drupal_internal__id'
+    - name: item_id
+      label: 'Original paragraph ID'
+      selector: 'attributes/drupal_internal__id'
+    - name: revision_id
+      label: 'Original revision ID'
+      selector: 'attributes/drupal_internal__revision_id'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: instagram_url
+      label: 'Instagram URL'
+      selector: 'attributes/field_instagram_url'
+    - name: linkedin_url
+      label: 'LinkedIn URL'
+      selector: 'attributes/field_linkedin_url'
+    - name: twitter_url
+      label: 'Twitter URL'
+      selector: 'attributes/field_twitter_url'
+    - name: youtube_url
+      label: 'YouTube URL'
+      selector: 'attributes/field_youtube_url'
+
+process:
+  # Look up existing paragraph by UUID to avoid duplicate-key errors
+  # when the D11 DB has been seeded from D10.
+  id: item_id
+  item_id:
+    -
+      plugin: get
+      source: item_id
+  revision_id: revision_id
+
+  type:
+    plugin: default_value
+    default_value: social_media_links
+  langcode:
+    plugin: default_value
+    default_value: en
+    source: langcode
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  field_instagram_url: instagram_url
+  field_linkedin_url: linkedin_url
+  field_twitter_url: twitter_url
+  field_youtube_url: youtube_url
+
+# IMPORTANT: use entity_reference_revisions:paragraph (NOT entity:paragraph)
+# so this migration's destination keys include both id AND revision_id.
+# That's what makes migration_lookup return the [target_id, target_revision_id]
+# tuple that entity_reference_revisions fields on the parent node expect.
+destination:
+  plugin: 'entity_reference_revisions:paragraph'
+  default_bundle: social_media_links
+
+migration_dependencies:
+  required: []
+  optional: []

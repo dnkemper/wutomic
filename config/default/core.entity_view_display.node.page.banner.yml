@@ -55,7 +55,7 @@ third_party_settings:
         Restricted: {  }
         Superfish: {  }
         System: {  }
-        'University of Iowa Alerts': {  }
+        'University of Artsci Alerts': {  }
         User: {  }
         Webform:
           - webform_block
@@ -80,7 +80,7 @@ third_party_settings:
       - 'Artsci Dispatch'
       - Superfish
       - System
-      - 'University of Iowa Alerts'
+      - 'University of Artsci Alerts'
       - User
       - Webform
       - core

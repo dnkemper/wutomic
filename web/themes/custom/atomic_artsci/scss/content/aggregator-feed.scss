@@ -8,7 +8,6 @@
 }
 
 .aggregator-feed {
-
   .feed-description {
     margin: 0 0 variables.$sm;
     padding: 0;
@@ -36,13 +35,13 @@
     }
 
     .field__label {
-      &:after {
-        content: ":";
+      &::after {
+        content: ':';
         padding-right: variables.$xsm;
       }
     }
 
-    >* {
+    > * {
       display: inline;
     }
   }

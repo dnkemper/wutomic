@@ -34,15 +34,14 @@
         }
         if (options.behaviour == 2){
           if (parent.children('a.menuparent,span.nolink.menuparent').length > 0 && parent.children('ul').children('.sf-clone-parent').length == 0){
-            var
             // Cloning the hyperlink of the parent menu item.
-            cloneLink = parent.children('a.menuparent,span.nolink.menuparent').clone(),
+            let cloneLink = parent.children('a.menuparent,span.nolink.menuparent').clone();
             // Remove "menuparent" class from cloned parent menu item.
-            cloneLink = cloneLink.removeClass('menuparent'),
+            cloneLink = cloneLink.removeClass('menuparent');
             // Wrapping the hyerplinks in <li>.
             cloneLink = $('<li class="sf-clone-parent" />').html(cloneLink);
             // Removing unnecessary stuff.
-            cloneLink.find('.sf-sub-indicator').remove(),
+            cloneLink.find('.sf-sub-indicator').remove();
             // Adding a helper class and attaching them to the sub-menus.
             parent.children('ul').addClass('sf-has-clone-parent').prepend(cloneLink);
           }
@@ -53,7 +52,7 @@
           if (item.hasClass('sf-clicked')){
             // Depending on the preferred behaviour, either proceed to the URL.
             if (options.behaviour == 0){
-              url = item.attr('href');
+              const url = item.attr('href');
               if (typeof(url) != 'undefined'){
                 window.location = url;
               }

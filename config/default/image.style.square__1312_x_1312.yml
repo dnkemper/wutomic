@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - focal_point
+    - image
 _core:
   default_config_hash: y7WcZTmtxFCrefRm74DTrHJ-VvEEd9hpA7Y6BTkLd_Y
 name: square__1312_x_1312
@@ -17,3 +18,9 @@ effects:
       width: 1312
       height: 1312
       crop_type: focal_point
+  e9ae1b14-3605-43c7-8807-912362d9c97e:
+    uuid: e9ae1b14-3605-43c7-8807-912362d9c97e
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

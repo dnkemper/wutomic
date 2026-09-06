@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.storage.node.field_event_performer
     - field.storage.node.field_event_series_link
     - field.storage.node.field_event_series_link_direct
     - field.storage.node.field_event_when
@@ -17,7 +16,6 @@ dependencies:
     - fullcalendar_view
     - link
     - node
-    - options
     - smart_date
     - taxonomy
     - user
@@ -565,69 +563,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_event_performer:
-          id: field_event_performer
-          table: node__field_event_performer
-          field: field_event_performer
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: Presenter(s)
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: true
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: true
       pager:
         type: some
         options:
@@ -697,7 +632,7 @@ display:
           id: nid
           table: node_field_data
           field: nid
-          relationship: field_event_performer
+          relationship: none
           group_type: group
           admin_label: ''
           entity_type: node
@@ -833,15 +768,6 @@ display:
         filter_groups: false
         header: false
       relationships:
-        field_event_performer:
-          id: field_event_performer
-          table: node__field_event_performer
-          field: field_event_performer
-          relationship: none
-          group_type: group
-          admin_label: 'field_event_performer: Content'
-          plugin_id: standard
-          required: true
         reverse__node__field_event_parent:
           id: reverse__node__field_event_parent
           table: node_field_data
@@ -885,7 +811,6 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_event_performer'
         - 'config:field.storage.node.field_event_when'
         - 'config:field.storage.node.field_image'
         - 'config:field.storage.node.field_teaser'
@@ -1154,69 +1079,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_event_performer:
-          id: field_event_performer
-          table: node__field_event_performer
-          field: field_event_performer
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: Presenter(s)
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: true
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: true
       empty: {  }
       sorts:
         sticky:
@@ -1409,7 +1271,6 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.field_event_performer'
         - 'config:field.storage.node.field_event_when'
         - 'config:field.storage.node.field_image'
         - 'config:field.storage.node.field_teaser'
@@ -2250,45 +2111,12 @@ display:
                   collapsible_disable_automatic_open: false
                   is_secondary: true
                   hide_label: false
-              field_event_performer_target_id_1:
-                plugin_id: default
-                advanced:
-                  placeholder_text: Presenters
-                  rewrite:
-                    filter_rewrite_values: ''
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  is_secondary: true
-                  hide_label: false
-              field_event_attendance_value:
-                plugin_id: default
-                advanced:
-                  sort_options: false
-                  rewrite:
-                    filter_rewrite_values: "- Any -| Attendance\r\nTrue| Attendance required\r\nFalse|Attendance not required"
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  is_secondary: true
-                  hide_label: false
               field_event_category_target_id:
                 plugin_id: default
                 advanced:
                   sort_options: false
                   rewrite:
                     filter_rewrite_values: '- Any -| Category'
-                    filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  is_secondary: true
-                  hide_label: false
-              field_event_attendance_mode_value:
-                plugin_id: default
-                advanced:
-                  sort_options: false
-                  rewrite:
-                    filter_rewrite_values: '- Any -| Attendance mode'
                     filter_rewrite_values_key: false
                   collapsible: false
                   collapsible_disable_automatic_open: false
@@ -2547,91 +2375,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        field_event_performer_target_id_1:
-          id: field_event_performer_target_id_1
-          table: node__field_event_performer
-          field: field_event_performer_target_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: entity_reference
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: field_event_performer_target_id_1_op
-            label: Presenters
-            description: ''
-            use_operator: false
-            operator: field_event_performer_target_id_1_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: field_event_performer_target_id_1
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          widget: autocomplete
-          handler: views
-          handler_settings:
-            view:
-              view_name: event_presenters
-              display_name: entity_reference_1
-              arguments: {  }
-        field_event_attendance_value:
-          id: field_event_attendance_value
-          table: node__field_event_attendance
-          field: field_event_attendance_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: boolean
-          operator: '='
-          value: null
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: Attendance
-            description: ''
-            use_operator: false
-            operator: field_event_attendance_value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: field_event_attendance_value
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         field_event_category_target_id:
           id: field_event_category_target_id
           table: node__field_event_category
@@ -2684,46 +2427,6 @@ display:
           hierarchy_depth: 0
           required_depth: 0
           none_label: Category
-        field_event_attendance_mode_value:
-          id: field_event_attendance_mode_value
-          table: node__field_event_attendance_mode
-          field: field_event_attendance_mode_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: list_field
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: field_event_attendance_mode_value_op
-            label: Attendance
-            description: ''
-            use_operator: false
-            operator: field_event_attendance_mode_value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: field_event_attendance_mode_value
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
       filter_groups:
         operator: AND
         groups:

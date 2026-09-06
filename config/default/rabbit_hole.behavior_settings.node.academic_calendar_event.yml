@@ -1,0 +1,13 @@
+uuid: 77a63353-83f1-4d79-b4d4-ddeb68246240
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.academic_calendar_event
+id: node.academic_calendar_event
+targetEntityType: node
+bundle: academic_calendar_event
+action: display_page
+no_bypass: false
+bypass_message: false
+configuration: {  }

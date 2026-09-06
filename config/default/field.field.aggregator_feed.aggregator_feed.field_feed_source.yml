@@ -1,0 +1,20 @@
+uuid: 3f47c429-8ee1-42b0-b7bb-f6b0eaeb7f12
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.aggregator_feed.field_feed_source
+  module:
+    - aggregator
+id: aggregator_feed.aggregator_feed.field_feed_source
+field_name: field_feed_source
+entity_type: aggregator_feed
+bundle: aggregator_feed
+label: 'Feed Source'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

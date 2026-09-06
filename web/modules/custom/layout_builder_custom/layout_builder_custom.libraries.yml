@@ -20,9 +20,26 @@ card-block-form:
   dependencies:
     - core/jquery
     - core/once
+slider-block-form:
+  js:
+    js/slider-block-form.js: { }
+  dependencies:
+    - core/jquery
+    - core/once
 image-block-form:
   js:
     js/image-block-form.js: { }
   dependencies:
     - core/jquery
     - core/once
+oembed-thumbnail:
+  js:
+    js/oembed-thumbnail.js: {}
+  css:
+    component:
+      css/oembed-thumbnail.css: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - atomic_artsci/video
+    - atomic_artsci/banner

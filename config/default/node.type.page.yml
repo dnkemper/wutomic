@@ -11,8 +11,6 @@ third_party_settings:
   menu_ui:
     available_menus:
       - footer-primary
-      - footer-secondary
-      - footer-tertiary
       - main
     parent: 'main:'
   node_revision_delete:

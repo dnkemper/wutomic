@@ -6,7 +6,6 @@
 @use 'admin/_lb-lock.scss';
 @use 'admin/_toolbar.scss';
 @use 'admin/_claro.scss';
-@use 'admin/_ui_icons.scss';
 
 @import '../../../../../core/themes/claro/css/components/dropbutton.css';
 
@@ -41,7 +40,8 @@
 }
 
 // Override first child margin rule.
-.headline.h2:not(:first-child), h2.headline:not(:first-child) {
+.headline.h2:not(:first-child),
+h2.headline:not(:first-child) {
   margin-top: 0;
 }
 
@@ -67,13 +67,15 @@
 }
 
 // Set a minimum height for smallest height components.
-.layout-builder .layout-builder-block.block-inline-blockartsci-card .card.borderless:not([class*="bg--"]) {
+.layout-builder
+  .layout-builder-block.block-inline-blockartsci-card
+  .card.borderless:not([class*='bg--']) {
   min-height: 120px;
 }
 
 // Set minimum height for edge and chrome browsers.
 .ui-dialog #drupal-modal.ui-dialog-content.ui-widget-content {
-  min-height: 70vh!important;
+  min-height: 70vh !important;
 }
 
 // Overrides for older browsers until https://github.com/w3c/csswg-drafts/issues/10544 is the standard.
@@ -86,11 +88,18 @@
 
 // Container queries.
 // @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
-.layout-builder .layout-builder-block.block-inline-blockartsci-text-area:has(.media--view-mode-vertical),
+.layout-builder
+  .layout-builder-block.block-inline-blockartsci-text-area:has(
+    .media--view-mode-vertical
+  ),
 .layout-builder .layout-builder-block.block-inline-blockartsci-card,
 .layout-builder .layout-builder-block.block-inline-blockartsci-event,
-.layout-builder .layout-builder-block.block-inline-blockfeatured-content .column-container,
-.layout-builder .layout-builder-block.block-inline-blockartsci-events .column-container,
+.layout-builder
+  .layout-builder-block.block-inline-blockfeatured-content
+  .column-container,
+.layout-builder
+  .layout-builder-block.block-inline-blockartsci-events
+  .column-container,
 .layout-builder .layout-builder-block.block-inline-blockartsci-banner {
   container-type: inline-size;
   container-name: column;
@@ -99,7 +108,7 @@
 // @todo remove when https://github.com/artsci/artsci/issues/8617 is ready.
 // This fixes an issue with the banner--stacked not displaying correctly when the container
 // query is applied directly to the banner.
-.layout-builder .layout-builder-block.banner--stacked:not([class*="bg--"]) {
+.layout-builder .layout-builder-block.banner--stacked:not([class*='bg--']) {
   display: block;
 
   @include utilities.container-query() {
@@ -113,5 +122,44 @@
     @include utilities.container-query() {
       background: none;
     }
+  }
+}
+
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-sharing,
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-logout,
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-media-wysiwyg,
+a#toolbar-item-artsci-help {
+  &::before {
+    @include utilities.fas();
+    margin-right: 15px;
+    color: rgba(255, 255, 255, 0.75);
+    background-color: unset !important;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    mask-image: unset !important;
+  }
+}
+a#toolbar-item-artsci-help {
+  display: flex;
+  &::before {
+    content: '\f08e';
+  }
+}
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-sharing {
+  &::before {
+    content: '\f362';
+  }
+}
+
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-content-logout {
+  &::before {
+    content: '\f08b';
+  }
+}
+a.toolbar-item.toolbar-icon.toolbar-icon-olympian-media-wysiwyg {
+  &::before {
+    content: '\f015';
   }
 }

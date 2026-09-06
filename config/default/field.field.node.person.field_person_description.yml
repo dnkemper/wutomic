@@ -1,0 +1,24 @@
+uuid: 4ec91eb8-13c6-403e-9720-7268686b47c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_person_description
+    - filter.format.full_html
+    - node.type.person
+  module:
+    - text
+id: node.person.field_person_description
+field_name: field_person_description
+entity_type: node
+bundle: person
+label: 'Selected Media'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - full_html
+field_type: text_long

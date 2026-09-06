@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Theme override for field_artsci_collection (entity_reference to
+ * artsci_collection block_content), used by image_card nodes and any
+ * other node type that references one of these blocks.
+ *
+ * Why this template exists: the LB inline_block render path picks up
+ * block--inline-block--artsci-collection.html.twig (which builds the
+ * .collection--accordion wrapper). The entity_reference render path
+ * does NOT — it goes through block-content.html.twig, which is just
+ * `{{ content }}`. Without an outer wrapper there's no styling context
+ * for the per-paragraph <details> elements that paragraph--artsci-
+ * collection-item--accordion.html.twig produces, so they render as
+ * bare unstyled markup.
+ *
+ * This template builds the wrapper at the field level instead:
+ *   - .collection--accordion around each referenced block
+ *   - field_artsci_headline rendered above the accordion container
+ *   - .accordion[role="tablist"] containing everything else from the
+ *     block's content (which is the field_artsci_collection_items
+ *     paragraphs, each rendered as a <details> accordion item)
+ *
+ * Earlier rev embedded accordion-item.html.twig per field delta, which
+ * wrapped each block_content as its OWN accordion item — that's what
+ * produced the nested "Accordion (Collection Block)" outer row. The
+ * block's items ARE the accordion items, not the block itself.
+ *
+ * Earlier rev also tried to read field_accordion_type / field_accordion_label_color
+ * from the entity directly in Twig (to honor single-select and white-label
+ * options). Twig's FieldItemList getter chain doesn't resolve cleanly when
+ * those fields are empty, producing
+ *   "Object of class Drupal\Core\Field\FieldItemList could not be
+ *    converted to string"
+ * The defaults below (multi-select, default label color) match the LB
+ * template's default behavior. If you want to honor those per-block
+ * options, compute them in a hook_preprocess_field__field_artsci_collection
+ * implementation and pass them in as scalar variables.
+ */
+#}
+{{ attach_library('atomic_artsci/accordion') }}
+
+{% if items %}
+  {% for item in items %}
+    <div class="collection--accordion">
+      {{ item.content.field_artsci_headline }}
+      <div class="accordion" role="tablist" aria-multiselectable="true" id="accordion-collection-{{ loop.index }}">
+        {{ item.content|without('field_artsci_headline') }}
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}

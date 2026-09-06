@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -39,7 +54,7 @@
   line-height: 1;
   font-weight: bold;
   font-size: 4rem;
-  color: #BA0C2F;
+  color: #ba0c2f;
   font-family: "ivypresto-headline", "Georgia", serif;
   padding: 1.875rem 0 0.625rem 0;
 }
@@ -143,7 +158,7 @@
   .stat--horizontal:not(.element--flex-center) .stat__content {
     padding-top: 0.5rem;
     margin-top: 0.75rem;
-    border-top: 8px solid #BA0C2F;
+    border-top: 8px solid #ba0c2f;
     flex-basis: 100%;
   }
 }
@@ -183,4 +198,30 @@
 }
 .stat__grid.element--flex-center:first-of-type {
   padding-top: 0;
-}/*# sourceMappingURL=stat.css.map */
+}
+
+.stat__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.stat__link:focus-visible {
+  outline: 2px solid #ba0c2f;
+  outline-offset: 4px;
+}
+
+.stat--hover {
+  cursor: default;
+}
+.stat--hover .stat__grid {
+  transform-origin: center;
+}
+.stat--hover:hover, .stat--hover:focus-within {
+  transform: scale(1.15);
+}
+.stat--hover:hover .stat__link .stat__description, .stat--hover:focus-within .stat__link .stat__description {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/*# sourceMappingURL=stat.css.map */

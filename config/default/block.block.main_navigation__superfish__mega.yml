@@ -13,7 +13,7 @@ _core:
 id: main_navigation__superfish__mega
 theme: atomic_artsci
 region: primary_menu
-weight: -6
+weight: -12
 provider: null
 plugin: 'superfish:main'
 settings:

@@ -1,7 +1,9 @@
 uuid: d3113b75-dd4b-421a-928c-7313f637394c
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - image
 _core:
   default_config_hash: vbPSqe3wbFSkaEY0zGy3NVpofBxcTZYrT6N2YPQX7nI
 name: wide

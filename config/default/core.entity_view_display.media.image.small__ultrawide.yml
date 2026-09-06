@@ -39,6 +39,7 @@ hidden:
   entity_print_view_epub: true
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
+  field_lightbox_title: true
   field_media_caption: true
   field_tags: true
   name: true

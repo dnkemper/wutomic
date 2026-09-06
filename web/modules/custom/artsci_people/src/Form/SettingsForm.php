@@ -218,7 +218,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form['global']['artsci_people_filter']['filter_research'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Research Areas'),
+      '#title' => $this->t('Areas of Study'),
       '#description' => $this->t('Allow filtering by Research Areas'),
       '#default_value' => $config->get('filter_display.research'),
       '#size' => 60,

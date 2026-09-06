@@ -110,9 +110,8 @@ class LayoutBuilderStylesHelper {
     $media_formats = [
       'media--circle' => 'square',
       'media--square' => 'square',
-      'media--ultrawide' => 'ultrawide',
       'media--widescreen' => 'widescreen',
-    ];
+      'media--portrait' => 'portrait',];
 
     // Loop through map of class to shape to see if we have a match. If so,
     // change the view mode and unset the cache keys to avoid sharing the change
@@ -131,6 +130,38 @@ class LayoutBuilderStylesHelper {
         break;
       }
     }
+  }
+
+  /**
+   * Whether an enabled media view display exists for a bundle and view mode.
+   *
+   * @param string $bundle
+   *   The media bundle.
+   * @param string $view_mode
+   *   The view mode to check for.
+   *
+   * @return bool
+   *   TRUE when a display exists and is enabled.
+   */
+  public static function mediaViewDisplayExists(string $bundle, string $view_mode): bool {
+    // Rendering a listing can ask the same question many times per request.
+    static $checked = [];
+    $id = "media.$bundle.$view_mode";
+
+    if (!array_key_exists($id, $checked)) {
+      $display = NULL;
+      try {
+        $display = \Drupal::entityTypeManager()
+          ->getStorage('entity_view_display')
+          ->load($id);
+      }
+      catch (InvalidPluginDefinitionException | PluginNotFoundException $e) {
+        // Treat an unavailable storage the same as a missing display.
+      }
+      $checked[$id] = $display !== NULL && $display->status();
+    }
+
+    return $checked[$id];
   }
 
   /**
@@ -173,7 +204,10 @@ class LayoutBuilderStylesHelper {
         'default' => 'button_tertiary_outline',
       ],
       'horizontal_alignment' => [
-        'default' => 'horizontal_alignment_left',
+        'default' => 'horizontal_alignment_center',
+      ],
+      'vertical_align' => [
+        'default' => 'vertical_alignment_center',
       ],
       'vertical_alignment' => [
         'default' => 'vertical_alignment_center',
@@ -185,11 +219,14 @@ class LayoutBuilderStylesHelper {
         'default' => 'card_headline_style_serif',
       ],
       'card_media_position' => [
-        'default' => 'card_media_position_right',
+        'default' => 'card_media_position_stacked',
       ],
       'content_alignment' => [
         'default' => '[empty]',
         'empty_label' => t('Left'),
+      ],
+      'alignment' => [
+        'default' => 'block_alignment_flex_row_left',
       ],
       'grid_columns' => [
         'default' => 'block_grid_threecol_33_34_33',
@@ -211,6 +248,9 @@ class LayoutBuilderStylesHelper {
       ],
       'menu_orientation' => [
         'default' => 'block_menu_vertical',
+      ],
+      'artsci_carousel_size' => [
+        'default' => 'artsci_carousel_one',
       ],
     ];
   }

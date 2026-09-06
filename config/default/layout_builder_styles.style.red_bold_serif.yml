@@ -1,0 +1,13 @@
+uuid: 839c9a1c-33cd-4ae1-9f4c-01fa8bd5cbf4
+langcode: en
+status: true
+dependencies: {  }
+id: red_bold_serif
+label: 'Red Bold Serif'
+classes: "headline\r\nheadline--red\r\nheadline--serif"
+type: component
+group: headline_type
+block_restrictions:
+  - 'inline_block:artsci_banner'
+layout_restrictions: {  }
+weight: 0

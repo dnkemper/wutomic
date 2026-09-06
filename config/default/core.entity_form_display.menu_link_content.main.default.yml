@@ -1,0 +1,87 @@
+uuid: 798e3b8a-74c7-47a4-8a62-50a1bf5b753d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.menu_link_content.main.field_artsci_card_link
+    - field.field.menu_link_content.main.field_artsci_headline
+    - field.field.menu_link_content.main.field_image
+    - system.menu.main
+  module:
+    - field_group
+    - layout_builder_custom
+    - link
+    - link_attributes
+    - media_library
+    - media_library_edit
+    - menu_item_extras
+third_party_settings:
+  field_group:
+    group_image:
+      children:
+        - field_image
+        - field_artsci_headline
+        - field_artsci_card_link
+      label: Image
+      region: content
+      parent_name: ''
+      weight: 6
+      format_type: details_sidebar
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+        weight: 0
+id: menu_link_content.main.default
+targetEntityType: menu_link_content
+bundle: main
+mode: default
+content:
+  field_artsci_card_link:
+    type: link_default
+    weight: 9
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_artsci_headline:
+    type: artsci_headline_widget
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_image:
+    type: media_library_widget
+    weight: 7
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
+  simple_sitemap:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  view_mode:
+    type: menu_item_extras_view_mode_selector_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

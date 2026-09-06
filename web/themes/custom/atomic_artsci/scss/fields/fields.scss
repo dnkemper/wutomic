@@ -6,19 +6,19 @@
   .field--label-inline,
   .field__label {
     &::after {
-      content: ":";
+      content: ' ';
     }
 
     &.headline {
       &::after {
-        content: "";
+        content: '';
       }
     }
   }
 }
 
 .field--separator {
-  &:after {
+  &::after {
     content: '-';
     color: variables.$gray;
     margin: 0 variables.$xsm 0 variables.$sm;
@@ -43,8 +43,8 @@
     line-height: 1;
   }
 
-  [class*="card__"] &,
-  [class*="bttn"] & {
+  [class*='card__'] &,
+  [class*='bttn'] & {
     font-size: inherit;
     line-height: inherit;
   }
@@ -52,7 +52,7 @@
 
 .field--label-inline {
   margin-bottom: variables.$sm;
-  [class*="card__"] &,
+  [class*='card__'] &,
   .block-margin__default--removed & {
     margin-bottom: 0;
   }
@@ -86,8 +86,8 @@
     line-height: inherit;
   }
 
-  [class*="card__"] &,
-  [class*="bttn"] & {
+  [class*='card__'] &,
+  [class*='bttn'] & {
     font-size: inherit;
     line-height: inherit;
   }
@@ -184,7 +184,11 @@
 .field--label-visually_hidden + .field--label-above {
   margin-top: variables.$md;
 }
-
+.wysiwyg {
+  img {
+    margin-bottom: 30px;
+  }
+}
 .text-formatted.field--type-text {
   div {
     margin-bottom: variables.$sm;
@@ -196,7 +200,10 @@
 }
 // Wrap long links by allow them to break mid-word. Global is too-scoped.
 .field--type-link {
-  word-break: break-word;
+  // "word-break:break-word" is deprecated, so use "overflow-wrap"+"word-break"+"line-break" combo as recommended in https://deku.posstree.com/en/web/css-overflow-wrap/
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: strict;
 }
 // Address styling.
 .field--type-address--inline {
@@ -205,7 +212,7 @@
   }
 }
 .field p.address {
-  [class*="card__"] & {
+  [class*='card__'] & {
     font-size: 1.1rem;
   }
   .organization {
@@ -213,5 +220,10 @@
   }
 }
 .field--name-private {
-    display: none;
+  display: none;
+}
+.field.field--name-field-media-image.field--type-image.field--label-hidden.field__item,
+.field.field--name-field-artsci-slide-image.field--type-entity-reference.field--label-hidden.field__item,
+.media.media--type-image {
+  height: 100%;
 }

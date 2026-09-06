@@ -1,0 +1,103 @@
+id: artsci_d10_remote_video_thumbnail
+label: 'D10 remote_video thumbnails from fullscreen_video paragraphs'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# SECOND PASS over remote_video media. artsci_d10_media_remote_video creates
+# each remote_video media (and core fetches the provider thumbnail onto the
+# base `thumbnail` field on that first save). This pass attaches the editorial
+# poster as field_video_thumbnail — an entity_reference to an image media that
+# the OembedThumbnailFormatter prefers over the provider thumbnail. Because
+# field_video_thumbnail is a custom field (not the base `thumbnail`), it is not
+# subject to Media::shouldUpdateThumbnail(), so no second-save dance is needed;
+# the reference set here simply persists on the existing media.
+#
+# Driver: the D10 fullscreen_video paragraphs (field_video_p on articles). Each
+# paragraph pairs a remote_video (field_spotlight_video_url) with a poster image
+# media (field_fullscreen_video_image). We resolve the paragraph's remote_video
+# to its migrated D11 mid (so this row UPDATEs that media), resolve the poster
+# image media to its migrated D11 image media, and reference that from
+# field_video_thumbnail.
+#
+# Run order matters: this must run AFTER artsci_d10_media_remote_video and
+# artsci_d10_media_image (see migration_dependencies). A group import
+# (drush migrate:import --group=artsci_d10) sequences it correctly. The
+# field_video_thumbnail field must already be the media reference (deployed
+# from config) before this runs.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # All fullscreen_video paragraphs fit well under one page, so links.next is
+  # never followed and no sort is needed (the media-style broken-sort pager
+  # caveat never applies here). Bump the limit if that count nears 500.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/paragraph/fullscreen_video?page[limit]=500'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    pid:
+      type: integer
+
+  fields:
+    - name: pid
+      label: 'Paragraph ID'
+      selector: 'attributes/drupal_internal__id'
+    # D10 remote_video media MID referenced by this paragraph.
+    - name: video_mid
+      label: 'D10 remote_video MID'
+      selector: 'relationships/field_spotlight_video_url/data/meta/drupal_internal__target_id'
+    # The poster image media's D10 mid; resolved in process to the migrated
+    # D11 image media referenced from field_video_thumbnail.
+    - name: fullscreen_image_mid
+      label: 'D10 field_fullscreen_video_image media MID'
+      selector: 'relationships/field_fullscreen_video_image/data/meta/drupal_internal__target_id'
+
+process:
+  # Resolve the paragraph's remote_video to the migrated D11 media id and use it
+  # as THIS row's destination id, so the entity:media destination loads and
+  # UPDATEs that existing media instead of creating a new one. Skip if the
+  # remote_video has no reference or hasn't migrated.
+  mid:
+    - plugin: skip_on_empty
+      method: row
+      source: video_mid
+      message: 'Thumbnail skipped: paragraph has no remote_video reference.'
+    - plugin: migration_lookup
+      migration: artsci_d10_media_remote_video
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+      message: 'Thumbnail skipped: remote_video media not yet migrated.'
+
+  # Resolve the poster image media to its migrated D11 image media and
+  # reference it from field_video_thumbnail. skip_on_empty (row) leaves the
+  # provider-fetched base thumbnail in place when there is no usable poster.
+  'field_video_thumbnail/target_id':
+    - plugin: skip_on_empty
+      method: row
+      source: fullscreen_image_mid
+      message: 'Thumbnail skipped: paragraph has no poster image media.'
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+      message: 'Thumbnail skipped: poster image media not yet migrated.'
+
+destination:
+  plugin: 'entity:media'
+  default_bundle: remote_video
+
+migration_dependencies:
+  required:
+    - artsci_d10_media_remote_video
+    - artsci_d10_media_image
+  optional: []

@@ -11,7 +11,7 @@ id: node.event.field_event_virtual
 field_name: field_event_virtual
 entity_type: node
 bundle: event
-label: 'Virtual Event'
+label: 'Optional Button URL'
 description: ''
 required: false
 translatable: false

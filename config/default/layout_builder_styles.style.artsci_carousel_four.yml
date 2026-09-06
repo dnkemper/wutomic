@@ -1,0 +1,13 @@
+uuid: 2cfd3152-8e5f-45aa-9ec2-c6e418330986
+langcode: en
+status: true
+dependencies: {  }
+id: artsci_carousel_four
+label: '4 Slides'
+classes: carousel--four
+type: component
+group: artsci_carousel_size
+block_restrictions:
+  - 'inline_block:artsci_slider'
+layout_restrictions: {  }
+weight: 0

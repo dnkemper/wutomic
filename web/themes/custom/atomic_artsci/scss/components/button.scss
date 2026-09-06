@@ -1,167 +1,340 @@
 @use '../abstracts/variables';
 @use '../abstracts/_utilities.scss';
 
-.bttn {
-  @include utilities.bttn;
-  @include utilities.border;
+// ===========================================================
+// BUTTON SYSTEM
+//
+// Buttons consume a contract of CSS custom properties for color,
+// background, and border (default + hover). Each variant assigns
+// its own values. Background contexts (`bg--teal`, `bg--white`,
+// etc.) redefine those values higher in the cascade so a button
+// automatically adapts to the section it sits in.
+//
+// Adding a new background:  extend the "Background contexts" block.
+// Adding a new variant:     define `--bttn-*` properties on the variant.
+// Tweaking a combo:          override the variable for that bg+variant pair.
+// ===========================================================
 
-  [class*="bg--"] &,
-  [class*="bg--"] [class*="bg--"] & {
-    border-color: rgba(0, 0, 0, .425);
-    color: variables.$secondary;
+// Internal helper. Applies the variable contract as concrete declarations.
+// Wrapped in `& {}` to play nice with the mixed-decls deprecation rules.
+@mixin _apply-bttn-vars {
+  & {
+    color: var(--bttn-color);
+    background: var(--bttn-bg);
+    border-color: var(--bttn-border);
   }
 
-  [class*="bg--teal"] & {
-    border-color: white;
+  &:hover,
+  &:focus {
+    color: var(--bttn-color-hover);
+    background: var(--bttn-bg-hover);
+    border-color: var(--bttn-border-hover);
   }
 }
-// Options.
+
+// -----------------------------------------------------------
+// Base
+// -----------------------------------------------------------
+
+.bttn {
+  // Defaults. Variants override.
+  --bttn-color: #{variables.$secondary};
+  --bttn-bg: transparent;
+  --bttn-border: #{variables.$primary};
+  --bttn-color-hover: #{variables.$white};
+  --bttn-bg-hover: #{variables.$primary};
+  --bttn-border-hover: #{variables.$primary};
+
+  @include utilities.bttn;
+  @include utilities.border;
+  @include _apply-bttn-vars;
+
+  // Icons inherit text color so they swap with the variant + bg context.
+  i,
+  svg,
+  span[class*='fa-'] {
+    color: inherit;
+    fill: currentColor;
+  }
+}
+
+// -----------------------------------------------------------
+// Variants
+// -----------------------------------------------------------
+
+// Solid primary (white text on red).
 .bttn--primary {
   @include utilities.bttn--primary;
   @include utilities.bttn--focus;
 
-  & {
-    border-color: variables.$primary;
-  }
+  --bttn-color: #{variables.$white};
+  --bttn-bg: #{variables.$primary};
+  --bttn-border: #{variables.$primary};
+  --bttn-color-hover: #{variables.$white};
+  --bttn-bg-hover: #{variables.$primary};
+  --bttn-border-hover: #{variables.$primary};
 
-  [class*="bg--"] [class*="bg--gray"] &,
-  [class*="bg--gray"] &,
-  [class*="bg--"] [class*="bg--white"] &,
-  [class*="bg--white"] & {
-    border-color: variables.$primary;
-  }
-
-  // &:after {
-  //   background-color: variables.$secondary;
-  // }
+  @include _apply-bttn-vars;
 }
 
+// Reverse primary (white outline that fills white on hover).
+.bttn--primary--reverse {
+  @include utilities.bttn--primary--reverse;
+
+  --bttn-color: #{variables.$white};
+  --bttn-bg: #{variables.$primary};
+  --bttn-border: #{variables.$white};
+  --bttn-color-hover: #000000;
+  --bttn-bg-hover: transparent;
+  --bttn-border-hover: #{variables.$primary};
+
+  @include _apply-bttn-vars;
+}
+
+// Secondary (dark filled).
 .bttn--secondary {
   @include utilities.bttn--secondary;
-  @include utilities.bttn--focus;
+
+  --bttn-color: #{variables.$white};
+  --bttn-bg: #{variables.$secondary};
+  --bttn-border: #{variables.$secondary};
+  --bttn-color-hover: #{variables.$secondary};
+  --bttn-bg-hover: transparent;
+  --bttn-border-hover: #{variables.$secondary};
+
+  @include _apply-bttn-vars;
 
   &__light {
     @include utilities.bttn--secondary__light;
   }
+}
 
-  [class*="bg--"] &,
-  [class*="bg--"] [class*="bg--"] & {
-    border-color: rgba(255,255,255,.425);
-    color: #fff;
+.bttn--secondary--reverse {
+  @include utilities.bttn--secondary--reverse;
+
+  --bttn-color: black;
+  --bttn-bg: #d4f1e7;
+  --bttn-border: #{variables.$secondary};
+  --bttn-color-hover: #d4f1e7;
+  --bttn-bg-hover: #007d8a;
+  --bttn-border-hover: #d4f1e7;
+
+  @include _apply-bttn-vars;
+
+  &__light {
+    @include utilities.bttn--secondary__light;
   }
 }
 
+// Tertiary (white fill, dark text).
 .bttn--tertiary {
   @include utilities.bttn--tertiary;
   @include utilities.bttn--focus;
-  & {
-    background: #fff;
-  }
-    [class*="bg--teal"] &,
-  [class*="bg--"] [class*="bg--teal"] & {
-    color: var(--bg-teal);
-    border: white;
-    svg {
-      color: var(--bg-teal);
-    }
+
+  --bttn-color: #{variables.$secondary};
+  --bttn-bg: #{variables.$white};
+  --bttn-border: #{variables.$primary};
+  --bttn-color-hover: #{variables.$primary};
+  --bttn-bg-hover: #{variables.$white};
+  --bttn-border-hover: #{variables.$primary};
+
+  @include _apply-bttn-vars;
+
+  i,
+  span[class*='fa-'],
+  svg {
+    color: #{variables.$secondary};
   }
 }
 
-// Modifiers.
+// Transparent (outline button — the variant most affected by bg context).
 .bttn--transparent {
   @include utilities.bttn--transparent;
   @include utilities.bttn--focus;
 
-  [class*="bg--teal"] &,
-  [class*="bg--white"] [class*="bg--teal"] & {
-    color: #fff;
-  }
+  --bttn-color: #{variables.$secondary};
+  --bttn-bg: transparent;
+  --bttn-border: #{variables.$primary};
+  --bttn-color-hover: #{variables.$white};
+  --bttn-bg-hover: #{variables.$primary};
+  --bttn-border-hover: #{variables.$primary};
+
+  @include _apply-bttn-vars;
 
   i,
-  span[class*="fa-"],
+  span[class*='fa-'],
   svg {
-    [class*="bg--red"] &,
-    [class*="bg--white"] [class*="bg--red"] & {
-      color: #fff;
-    }
-  [class*="bg--teal"] &,
-  [class*="bg--white"] [class*="bg--teal"] & {
-    color: #fff;
-  }
-    [class*="bg--white"] &,
-    [class*="bg--red"] [class*="bg--white"] &,
-    [class*="bg--red"] [class*="bg--gray"] & {
-      color: variables.$primary;
+    color: #{variables.$secondary};
+
+    &:hover {
+      color: #{variables.$secondary};
     }
   }
 
-  [class*="bg--black"] [class*="bg--white"] &,
-  [class*="bg--black"] [class*="bg--gray"] &,
-  [class*="bg--black"] [class*="bg--red"] & {
-    color: variables.$secondary;
+  &:hover {
+    i,
+    span[class*='fa-'],
+    svg {
+      color: #{variables.$secondary};
+    }
   }
 }
 
-.bttn.borderless {
-  &.bttn--transparent {
-    &:focus,
+.page__container--normal .bttn--transparent:hover,
+.block-superfish .menu ul.sf-multicolumn .bttn--transparent:hover,
+.page__container--normal .bttn--primary--reverse:hover {
+  text-decoration: none;
+}
+
+.block-superfish .menu ul.sf-multicolumn .bttn--transparent:hover {
+  color: #{variables.$white};
+}
+
+// -----------------------------------------------------------
+// Background contexts
+//
+// Buttons sitting inside a `bg--*` section pick up surface
+// appropriate styling here. Add new surfaces or new variant
+// reactions by extending this block.
+// -----------------------------------------------------------
+
+// Dark surfaces: white ink, white borders for outline buttons.
+[class*='bg--red'],
+[class*='bg--black'] {
+  .bttn--transparent {
+    --bttn-color: #{variables.$white};
+    --bttn-border: #{variables.$white};
+    --bttn-color-hover: #{variables.$secondary};
+    --bttn-bg-hover: #{variables.$white};
+    --bttn-border-hover: #{variables.$white};
+
+    i,
+    span[class*='fa-'],
+    svg {
+      color: #{variables.$white};
+    }
+
     &:hover {
-      text-decoration: underline;
+      background: variables.$white;
+      color: variables.$secondary;
+      i,
+      span[class*='fa-'],
+      svg {
+        color: #{variables.$secondary};
+      }
     }
   }
 
-  &.bttn--transparent:after {
+  .bttn--secondary {
+    --bttn-color: #{variables.$white};
+    --bttn-bg: transparent;
+    --bttn-border: rgba(255, 255, 255, 0.425);
+    --bttn-color-hover: #{variables.$secondary};
+    --bttn-bg-hover: #{variables.$white};
+    --bttn-border-hover: #{variables.$white};
+
+    i,
+    span[class*='fa-'],
+    svg {
+      color: #{variables.$white};
+    }
+  }
+}
+
+// Light surfaces: dark text, brand red border for outline buttons.
+[class*='bg--white'],
+[class*='bg--gray'],
+[class*='bg--tan'] {
+  .bttn--transparent {
+    --bttn-color: #{variables.$secondary};
+    --bttn-border: #{variables.$primary};
+    // Hover defaults already work: white text on red fill.
+  }
+}
+
+[class*='bg--white'] {
+  .bttn--transparent:hover {
+    color: variables.$white;
+    background: variables.$primary;
+  }
+}
+
+// Teal-specific: tertiary stays white-filled but ink switches to teal.
+[class*='bg--teal'] {
+  .bttn--tertiary {
+    --bttn-color: var(--bg--teal);
+    --bttn-color-hover: var(--bg--teal);
+    --bttn-border: var(--bg--teal);
+
+    i,
+    span[class*='fa-'],
+    svg {
+      color: var(--bg--teal);
+    }
+  }
+
+  .bttn--transparent {
+    --bttn-color: #{variables.$white};
+    --bttn-border: #{variables.$white};
+    --bttn-color-hover: black;
+    --bttn-bg-hover: #{variables.$white};
+    --bttn-border-hover: #{variables.$white};
+
+    i,
+    span[class*='fa-'],
+    svg {
+      color: #{variables.$white};
+    }
+
+    &:hover {
+      i,
+      span[class*='fa-'],
+      svg {
+        color: black;
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------
+// Modifiers (size, shape, layout — color is variant-driven)
+// -----------------------------------------------------------
+
+.bttn.borderless.bttn--transparent {
+  &:focus,
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &::after {
     display: none;
   }
 }
 
 .bttn--no-text {
-
   i,
-  span[class*="fa-"],
+  span[class*='fa-'],
   svg {
     margin-left: 0;
-  }
-  &:not([class*="bttn--secondary"]) {
-    i,
-    span[class*="fa-"],
-    svg {
-      color: variables.$secondary;
-      [class*="bg--"] [class*="bg--teal"] &,
-      [class*="bg--teal"] &,
-      [class*="bg--"] [class*="bg--red"] & {
-        color: #fff;
-      }
-      [class*="bg--"] [class*="bg--white"] &,
-      [class*="bg--white"] &,
-      [class*="bg--"] [class*="bg--gray"] &,
-       {
-        color: variables.$secondary;
-      }
-    }
-  }
-  &.bttn--transparent.bttn--secondary {
-    i,
-    span[class*="fa-"],
-    svg {
-      color: variables.$secondary;
-    }
   }
 }
 
 .bttn--large {
-  padding: 1.5rem 2.5rem 1.7rem;
   // @todo Change this to use css variables, calc the size.
+  padding: 1.5rem 2.5rem 1.7rem;
   font-size: 1.45rem;
 }
+
 .bttn--small {
-  padding: 0.6rem 1rem 0.8rem;
   // @todo Change this to use css variables, calc the size.
+  padding: 0.6rem 1rem 0.8rem;
   font-size: 1.05rem;
 }
 
 .bttn--full {
   display: flex;
+  flex-basis: 100%;
+  height: min-content;
 }
 
 .bttn--caps {
@@ -176,18 +349,18 @@
 }
 
 .bttn--light-font {
+  display: inline-block;
   font-family: variables.$font-family-sans-serif;
   font-weight: variables.$font-weight-bold;
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
-  display: inline-block;
 
   &:focus {
     text-decoration: underline;
   }
 
   i,
-  span[class*="fa-"] {
+  span[class*='fa-'] {
     font-size: 0.9rem;
   }
 
@@ -198,25 +371,23 @@
 }
 
 .bttn--circle {
-  padding: .55rem .7em;
+  padding: 0.55rem 0.7em;
   border-radius: 50%;
   transform: none;
   line-height: 1;
 
-  &:after {
+  &::after {
     left: 0;
     top: 0;
     height: 100%;
-    // width: 100%;
     border-radius: 50%;
     background-color: transparent;
-    transition: border-color .3s ease-in-out;
+    transition: border-color 0.3s ease-in-out;
     transform: none;
-    // position: absolute;
   }
 
-  &:hover:after,
-  &:focus:after {
+  &:hover::after,
+  &:focus::after {
     transform: none;
     transition: none;
     border: 3px solid;
@@ -225,6 +396,9 @@
   }
 }
 
+// -----------------------------------------------------------
+// Layout (button groups and content blocks)
+// -----------------------------------------------------------
 
 .block-inline-blockartsci-text-area,
 .block-field-blocknodepagebody {
@@ -235,7 +409,7 @@
       margin: inherit;
     }
 
-    +.bttn {
+    + .bttn {
       @include utilities.breakpoint(sm) {
         margin: inherit;
       }
@@ -243,21 +417,16 @@
   }
 }
 
-.bttn--full {
-  flex-basis: 100%;
-  height: min-content;
-}
-
 .more-link {
   margin-top: variables.$mobile-height-gutter;
 }
 
 .block.bttn--row {
-  flex-direction: column;
   display: flex;
+  flex-direction: column;
   gap: 1.5rem;
 
-  // Fixed modifier to avoid buttons stacking on mobile.
+  // Force horizontal layout regardless of breakpoint.
   &.bttn--row--horizontal {
     flex-direction: row;
   }
@@ -267,18 +436,19 @@
   }
 
   &.bttn--full {
-
     @include utilities.breakpoint(sm) {
-      flex-direction: row;
       display: flex;
+      flex-direction: row;
       gap: 1.5rem;
     }
 
     a.bttn {
       width: 100%;
     }
+
     .bttn {
       margin: 0;
+
       & + .bttn {
         margin: 0;
       }
@@ -286,12 +456,11 @@
   }
 
   .bttn {
-
     @include utilities.breakpoint(sm) {
       margin: 0 1.5rem 1.5rem 0;
     }
 
-    +.bttn {
+    + .bttn {
       @include utilities.breakpoint(sm) {
         margin: 0 1.5rem 1.5rem 0;
       }
@@ -313,5 +482,23 @@
 .layout--page--left-sidebar.layout--has-sidebar {
   .block.bttn--row.bttn--full {
     flex-direction: column;
+  }
+}
+
+/* Video Play Button */
+.oembed-thumbnail__cta:hover {
+  background-color: #{variables.$primary};
+  color: #{variables.$white};
+
+  .oembed-thumbnail__cta-icon {
+    background-color: #{variables.$white};
+
+    svg {
+      background-color: #{variables.$white};
+
+      path {
+        fill: #{variables.$primary};
+      }
+    }
   }
 }

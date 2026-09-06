@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Title field override for academic_calendar_event.
+ *
+ * In the teaser (used by the academic calendar list), the title links to the
+ * event's external URL when one is set, opening in a new window if the event
+ * requests it. Events without an external URL render as plain text, matching
+ * the academic calendar design where only some rows are linked. Any other
+ * view mode falls back to the standard page title markup.
+ */
+#}
+{% set node = element['#object'] %}
+{% set external = node.field_external_url.0.uri ?? null %}
+{% set new_window = node.field_new_window.value ?? false %}
+
+{% if view_mode == 'teaser' %}
+  {%- for item in items -%}
+    {# {% if external %}
+      <a href="{{ external }}" class="academic-calendar__event-link"{% if new_window %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ item.content }}</a>
+    {% else %}
+      <span class="academic-calendar__event-text">{{ item.content }}</span>
+    {% endif %} #}
+  {%- endfor -%}
+{% else %}
+  {%- for item in items -%}
+    {% if external %}
+      <a href="{{ external }}" class="academic-calendar__event-link"{% if new_window %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ item.content }}</a>
+    {% else %}
+      <span class="academic-calendar__event-text">{{ item.content }}</span>
+    {% endif %}
+  {%- endfor -%}
+{% endif %}

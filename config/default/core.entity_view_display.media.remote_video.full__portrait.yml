@@ -1,0 +1,44 @@
+uuid: 3abf0c6e-1f2f-403a-8477-9c94f4d504d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.full__portrait
+    - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_tags
+    - field.field.media.remote_video.field_video_thumbnail
+    - media.type.remote_video
+    - responsive_image.styles.full__portrait
+  module:
+    - layout_builder_custom
+id: media.remote_video.full__portrait
+targetEntityType: media
+bundle: remote_video
+mode: full__portrait
+content:
+  field_media_oembed_video:
+    type: oembed_thumbnail
+    label: hidden
+    settings:
+      max_width: 0
+      max_height: 0
+      loading:
+        attribute: lazy
+      autoplay: true
+      thumbnail_responsive_image_style: full__portrait
+      thumbnail_sizes: '(min-width: 73.75em) 71.25rem, calc(100vw - 2.5rem)'
+      play_label: Watch
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_tags: true
+  field_video_thumbnail: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

@@ -1,0 +1,44 @@
+uuid: 9dbfee84-cb61-429f-adb4-9ebe6270f44d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.small__no_crop
+    - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_tags
+    - field.field.media.remote_video.field_video_thumbnail
+    - media.type.remote_video
+    - responsive_image.styles.small__no_crop
+  module:
+    - layout_builder_custom
+id: media.remote_video.small__no_crop
+targetEntityType: media
+bundle: remote_video
+mode: small__no_crop
+content:
+  field_media_oembed_video:
+    type: oembed_thumbnail
+    label: hidden
+    settings:
+      max_width: 0
+      max_height: 0
+      loading:
+        attribute: lazy
+      autoplay: true
+      thumbnail_responsive_image_style: small__no_crop
+      thumbnail_sizes: '(min-width: 73.75em) 20.5625rem, (min-width: 980px) calc(28.86vw - 0.7215rem), calc(100vw - 2.5rem)'
+      play_label: Watch
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_tags: true
+  field_video_thumbnail: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

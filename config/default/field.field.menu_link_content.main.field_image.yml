@@ -1,0 +1,29 @@
+uuid: dfbabee5-2d3a-49f3-9688-e3993ca88611
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.menu_link_content.field_image
+    - media.type.image
+    - system.menu.main
+id: menu_link_content.main.field_image
+field_name: field_image
+entity_type: menu_link_content
+bundle: main
+label: Image
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

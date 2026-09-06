@@ -1,0 +1,204 @@
+id: artsci_d10_academic_calendar_event
+label: 'D10 academic_calendar_event nodes to D11 via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # filter[status]=1 restricts the source to published nodes only.
+  # Unpublished academic_calendar_event entries never enter the migration.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/academic_calendar_event'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+
+    # ---- Publish state + workflow + timestamps ----
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Bundle fields ----
+    # field_season / field_semester_year are list_string; JSON:API emits the
+    # stored value verbatim ("fall", "2026"). The destination storage only
+    # accepts values present in its allowed_values list, so any D10 value
+    # outside fall/spring/summer or 2015-2030 will fail validation on save.
+    - name: season
+      label: 'Season (field_season)'
+      selector: 'attributes/field_season'
+    - name: semester_year
+      label: 'Semester year (field_semester_year)'
+      selector: 'attributes/field_semester_year'
+    # field_start_date is a date-only datetime field (datetime_type: date).
+    # JSON:API emits these as 'Y-m-d', which the datetime destination accepts
+    # as-is, so no reformatting is needed. If a row ever arrives with a full
+    # ISO 8601 timestamp instead, add a format_date process step here.
+    - name: start_date
+      label: 'Start date (field_start_date)'
+      selector: 'attributes/field_start_date'
+    # field_new_window is a boolean; JSON:API emits true/false.
+    - name: new_window
+      label: 'New window (field_new_window)'
+      selector: 'attributes/field_new_window'
+    # NOTE: field_external_url was a plain string (max 255) on D10, but the
+    # D11 node storage for field_external_url is a LINK field (shared with
+    # node.person). We map the raw D10 string into the link 'uri' subproperty
+    # below. See the warning in the process section.
+    - name: external_url
+      label: 'External URL (field_external_url, D10 string)'
+      selector: 'attributes/field_external_url'
+
+    # ---- Rabbit Hole ----
+    - name: rh_action
+      label: 'Rabbit hole action'
+      selector: 'attributes/rh_action'
+    - name: rh_redirect
+      label: 'Rabbit hole redirect URL'
+      selector: 'attributes/rh_redirect'
+    - name: rh_redirect_response
+      label: 'Rabbit hole redirect HTTP code'
+      selector: 'attributes/rh_redirect_response'
+    - name: rh_redirect_fallback_action
+      label: 'Rabbit hole fallback action'
+      selector: 'attributes/rh_redirect_fallback_action'
+
+process:
+  # ---- Identity ----
+  # Preserve the D10 nid verbatim. If a node with this nid already exists on
+  # D11 (seeded DB or prior run), migrate UPDATEs it; otherwise it creates a
+  # new node with this exact nid. UUID is carried over so cross-site
+  # references stay stable.
+  nid: nid
+  uuid: uuid
+
+  # ---- Bundle ----
+  type:
+    plugin: default_value
+    default_value: academic_calendar_event
+
+  langcode: langcode
+
+  # ---- Authorship ----
+  # Everything is owned by user 1 (consistent with the other artsci_d10
+  # node migrations). Swap in a migration_lookup against a user migration
+  # if one is ever built.
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps ----
+  # JSON:API emits ISO 8601; Drupal stores Unix timestamps.
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title ----
+  title: title
+
+  # ---- Bundle fields ----
+  field_season: season
+  field_semester_year: semester_year
+  field_start_date: start_date
+  field_new_window: new_window
+
+  # ---- External URL (D10 string -> D11 link) ----
+  # The D10 source is a plain string with no URI validation. The D11 link
+  # field will reject any value that isn't a parseable URI on save (e.g. a
+  # bare "example.com" with no scheme, or free text). We map the raw value
+  # straight into uri and skip empty rows. We deliberately do NOT silently
+  # rewrite the values. If the source contains scheme-less strings and you
+  # want them coerced to external links, uncomment the str_replace-free
+  # normalization step below (or write a dedicated process plugin) AFTER
+  # confirming what the D10 data actually looks like.
+  'field_external_url/uri':
+    - plugin: skip_on_empty
+      method: process
+      source: external_url
+    # - plugin: callback
+    #   callable: '\Drupal\artsci_migration\LinkHelpers::ensureScheme'  # build this if needed
+  # No title was stored on D10 (it was a plain string), so uri only.
+
+  # ---- Rabbit Hole ----
+  # rabbit_hole stores everything in one field with sub-properties whose
+  # column names match the D10 attribute names. Mirrors artsci_d10_article.
+  'rabbit_hole__settings/rh_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_action
+  'rabbit_hole__settings/rh_redirect': rh_redirect
+  'rabbit_hole__settings/rh_redirect_response':
+    plugin: default_value
+    default_value: 301
+    source: rh_redirect_response
+  'rabbit_hole__settings/rh_redirect_fallback_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_redirect_fallback_action
+
+  # ---- Path alias ----
+  # Disable pathauto so the migrated alias is preserved exactly as it was on
+  # D10 instead of being regenerated from the bundle's pattern.
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: academic_calendar_event
+
+migration_dependencies:
+  required: []
+  optional: []

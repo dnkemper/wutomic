@@ -1,0 +1,24 @@
+uuid: 3f501d0f-4055-46db-bdde-19cabf7c4772
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: landscape__1920_x_1440
+label: 'Landscape (1920 x 1440)'
+effects:
+  f22d5335-7b55-4a93-b83b-a77824572e63:
+    uuid: f22d5335-7b55-4a93-b83b-a77824572e63
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1920
+      height: 1440
+      crop_type: focal_point
+  05680959-37d0-4f5a-953d-1a6b9296a06e:
+    uuid: 05680959-37d0-4f5a-953d-1a6b9296a06e
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

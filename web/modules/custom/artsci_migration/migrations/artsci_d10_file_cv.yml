@@ -1,0 +1,112 @@
+id: artsci_d10_file_cv
+label: 'D10 CV / document files via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # Filter to application/* mime types (PDFs, Word docs, etc.) to avoid
+  # downloading every file on the source. STARTS_WITH application/ catches
+  # all common CV formats without needing an exhaustive IN list. If your
+  # source has lots of non-CV application/* files (zips, json, etc.) and
+  # you want to narrow further, switch to an `IN` filter with explicit
+  # mime values (application/pdf, application/msword, etc.).
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/file/file?filter[mime][condition][path]=filemime&filter[mime][condition][operator]=STARTS_WITH&filter[mime][condition][value]=application/&page[limit]=50&sort=drupal_internal__fid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  constants:
+    source_base_url: 'https://artsci.washu.edu'
+
+  ids:
+    fid:
+      type: integer
+
+  fields:
+    - name: fid
+      label: 'Original FID'
+      selector: 'attributes/drupal_internal__fid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: filename
+      label: Filename
+      selector: 'attributes/filename'
+    - name: filemime
+      label: 'MIME type'
+      selector: 'attributes/filemime'
+    - name: filesize
+      label: 'File size'
+      selector: 'attributes/filesize'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: dest_uri
+      label: 'Destination URI (public://...)'
+      selector: 'attributes/uri/value'
+    - name: file_url_path
+      label: 'Source URL path'
+      selector: 'attributes/uri/url'
+
+process:
+  # Look up existing file by UUID — see image file migration for context.
+  fid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: file
+    value_key: uuid
+
+  uuid: uuid
+  filename: filename
+  filemime: filemime
+  filesize: filesize
+  status: status
+  langcode:
+    plugin: default_value
+    default_value: en
+  uid:
+    plugin: default_value
+    default_value: 1
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  _source_url:
+    plugin: concat
+    source:
+      - constants/source_base_url
+      - file_url_path
+    delimiter: ''
+
+  uri:
+    plugin: file_copy
+    source:
+      - '@_source_url'
+      - dest_uri
+    file_exists: 'use existing'
+
+destination:
+  plugin: 'entity:file'
+
+migration_dependencies:
+  required: []
+  optional: []

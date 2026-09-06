@@ -5,7 +5,7 @@ import { applyAccordion } from '../../assets/js/accordion.js';
 
   Drupal.behaviors.initAccordions = {
     attach: function (context, settings) {
-      applyAccordion('.accordion');
+      applyAccordion('.accordion, .dotted-line');
     }
   };
 })(jQuery, Drupal);

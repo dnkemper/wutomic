@@ -1,7 +1,9 @@
 uuid: 0508db7e-611d-4835-b922-c2eecafdd9ca
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - image
 name: image_gallery
 label: 'Image gallery'
 effects:
@@ -13,3 +15,9 @@ effects:
       width: 768
       height: null
       upscale: true
+  ff2f5ee5-90ba-4045-a577-e101a0e84ac1:
+    uuid: ff2f5ee5-90ba-4045-a577-e101a0e84ac1
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

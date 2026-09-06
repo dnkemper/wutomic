@@ -1,0 +1,24 @@
+uuid: 8d4f2c51-ae67-4a4b-8d9f-4b5c6d7e8f94
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__768_x_1152
+label: 'Portrait (768 x 1152)'
+effects:
+  7c3e1b40-9d56-4f3a-9c8e-3a4b5c6d7e83:
+    uuid: 7c3e1b40-9d56-4f3a-9c8e-3a4b5c6d7e83
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 768
+      height: 1152
+      crop_type: focal_point
+  964c8541-a9c4-439e-a74c-ffdede07b814:
+    uuid: 964c8541-a9c4-439e-a74c-ffdede07b814
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

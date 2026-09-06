@@ -1,0 +1,87 @@
+.pretitle--red-caps {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--brand-red, #ba0c2f);
+}
+
+.pretitle--subtle {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--color-gray-700, #555);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.artsci-carousel--four {
+  text-align: center;
+}
+.artsci-carousel--four .artsci-carousel__header {
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.artsci-carousel--four .artsci-carousel__header-text {
+  text-align: center;
+}
+.artsci-carousel--four .artsci-carousel__title {
+  font-size: var(--text-2xl, 2rem);
+  font-weight: 700;
+  line-height: var(--leading-tight, 1.15);
+  color: #1a1a1a;
+  margin: 0;
+  margin-bottom: 0;
+}
+.artsci-carousel--four .artsci-carousel__nav {
+  justify-content: center;
+}
+
+.artsci-carousel--four .artsci-carousel__track > [data-carousel-slide],
+.artsci-carousel--four .artsci-carousel__track > .field > [data-carousel-slide],
+.artsci-carousel--four .artsci-carousel__track > .paragraph {
+  flex: 0 0 calc((100% - 1.25rem * 3) / 4);
+}
+@media (max-width: 980px) {
+  .artsci-carousel--four .artsci-carousel__track > [data-carousel-slide],
+  .artsci-carousel--four .artsci-carousel__track > .field > [data-carousel-slide],
+  .artsci-carousel--four .artsci-carousel__track > .paragraph {
+    flex: 0 0 calc((100% - 1.25rem) / 2);
+  }
+}
+@media (max-width: 600px) {
+  .artsci-carousel--four .artsci-carousel__track > [data-carousel-slide],
+  .artsci-carousel--four .artsci-carousel__track > .field > [data-carousel-slide],
+  .artsci-carousel--four .artsci-carousel__track > .paragraph {
+    flex: 0 0 100%;
+  }
+}
+.artsci-carousel--four .artsci-carousel__dots {
+  margin-top: var(--space-4, 1rem);
+}
+
+.artsci-carousel--four .paragraph--stat-card .stat__number,
+.artsci-carousel--four .paragraph--stat-card .stat__title {
+  font-size: 7.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%; /* 9rem */
+  letter-spacing: -0.0375rem;
+  font-family: var(--font-serif);
+  color: var(--brand-red, #ba0c2f);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.artsci-carousel--four .paragraph--stat-card .stat__description {
+  font-size: 1.5rem;
+  font-family: var(--font-sans-serif);
+  font-weight: 700;
+  color: var(--color-gray-700, #555);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/*# sourceMappingURL=carousel-four.css.map */

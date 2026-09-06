@@ -6,10 +6,47 @@
   .field--name-body {
     margin: variables.$gutter 0;
   }
+  .field--display-entity_reference_label.field.field--name-field-article-author.field--type-entity-reference.field--label-inline::after {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 2px;
+    margin-top: 2rem;
+    background: #ba0c2f;
+  }
 
+  .media--view-mode-full__ultrawide {
+    img {
+      width: 100%;
+    }
+  }
+  .node--view-mode-video
+    div.element--flex-left.headline.headline--serif.headline--underline.block.block-layout-builder.block-field-blocknodearticletitle::after {
+    margin-top: 0;
+  }
+  .field--display-entity_reference_entity_view.field.field--name-field-article-author.field--type-entity-reference.field--label-above
+    > div.field__item {
+    margin-top: 1rem;
+  }
+  .field--display-entity_reference_entity_view.field.field--name-field-article-author.field--type-entity-reference.field--label-above {
+    border-top: 2px solid #ba0c2f;
+    margin-bottom: 1rem;
+    .field__label {
+      color: #ba0c2f;
+      padding-top: 2rem;
+      border: none;
+      font-family: var(--font-family-sans-serif);
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 150%;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      display: flex;
+    }
+  }
   .article-created-date {
     display: block;
-    opacity: .7;
+    opacity: 0.7;
     font-family: variables.$font-family-serif;
     font-size: 1.3rem;
     font-weight: variables.$font-weight-medium;
@@ -17,22 +54,24 @@
   }
 
   // Remove colon being added by field.css.
-  .field--label-above .field--label-inline:after {
-    content: "";
+  .field--label-above .field--label-inline::after {
+    content: '';
   }
 
   .block-extra-field-blocknodearticlearticle-created-date {
     margin: 0 0 0.7rem;
   }
 
-  .block-field-blocknodearticlefield-article-source-org+.block-field-blocknodearticlefield-article-source-link:before {
-    content: "| ";
+  .block-field-blocknodearticlefield-article-source-org
+    + .block-field-blocknodearticlefield-article-source-link::before {
+    content: '| ';
     color: #737373;
     margin: 0 0.325rem;
   }
 
-  .block-field-blocknodearticlefield-article-author+.block-field-blocknodearticlefield-article-source-org {
-    &:before {
+  .block-field-blocknodearticlefield-article-author
+    + .block-field-blocknodearticlefield-article-source-org {
+    &::before {
       content: '- ';
       color: variables.$gray;
       margin: 0 variables.$xsm;
@@ -70,15 +109,16 @@
   }
 }
 
-
 .article--meta {
   display: inline-block;
-  font-family: variables.$font-family-serif;
+  font-family: variables.$font-family-sans-serif;
   font-size: 1.2rem;
   line-height: 1.7;
 
   a {
     text-decoration: none;
+    color: #000000;
+    font-weight: 600;
 
     &:focus,
     &:hover {
@@ -86,7 +126,7 @@
     }
   }
 
-  &:after {
+  &::after {
     display: inline-block;
   }
 
@@ -109,7 +149,6 @@
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   box-sizing: border-box;
-  -webkit-transform: translateX(calc(50vw - 50%));
   transform: translateX(calc(50vw - 50%));
 }
 
@@ -122,8 +161,8 @@
       display: inline-block;
     }
 
-    .article--meta+.bttn,
-    .field--name-body+.bttn {
+    .article--meta + .bttn,
+    .field--name-body + .bttn {
       margin-top: 1.05rem;
     }
   }
@@ -147,11 +186,13 @@
     margin: variables.$gutter 0;
   }
 
-  .block-field-blocknodearticlefield-article-author+.block-field-blocknodearticlefield-article-source-org:before {
+  .block-field-blocknodearticlefield-article-author
+    + .block-field-blocknodearticlefield-article-source-org::before {
     content: none;
   }
 
-  .block-field-blocknodearticlefield-article-source-org+.block-field-blocknodearticlefield-article-source-link:before {
+  .block-field-blocknodearticlefield-article-source-org
+    + .block-field-blocknodearticlefield-article-source-link::before {
     content: none;
   }
 
@@ -163,22 +204,56 @@
     }
   }
 }
-
+.node--type-article.node--view-mode-full {
+  .field--name-field-tags {
+    .field__item {
+      margin: 0 10px;
+    }
+    .field__label {
+      color: #ba0c2f;
+      padding-top: 2rem;
+      border: none;
+      font-family: var(--font-family-sans-serif);
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 150%;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      display: flex;
+    }
+  }
+}
+.view-id-article_list_block {
+  .field--name-field-tags {
+    .field__item {
+      color: #ba0c2f;
+      padding-top: 0rem !important;
+      border: none;
+      font-family: var(--font-family-sans-serif);
+      font-weight: 700;
+      line-height: 150%;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      display: flex;
+      margin: 0px 0px 10px !important;
+    }
+  }
+}
 // Styles for article lists.
 .field--name-field-article-author {
   .field__label {
     display: inline;
+    font-weight: normal;
     margin-right: variables.$xsm;
   }
 
   &.field--label-above {
-    margin-bottom: 0;
-    margin-top: 0.125rem;
+    margin-top: 1.125rem;
   }
 
   .field__items {
     padding-right: 0;
-    display: inline-block;
+    display: inline-flex;
   }
   display: inline-block;
 }
@@ -197,15 +272,16 @@
     }
   }
 
-  &:after {
+  &::after {
     display: inline-block;
   }
 }
 
 .field--name-field-article-author + .field--name-field-article-source-link,
 .field--name-field-article-author + .field--article-byline,
-.block-field-blocknodearticlefield-article-author + .block-field-blocknodearticlefield-article-source-link {
-  &:before {
+.block-field-blocknodearticlefield-article-author
+  + .block-field-blocknodearticlefield-article-source-link {
+  &::before {
     content: '- ';
     color: variables.$gray;
     margin: 0 variables.$xsm;
@@ -215,8 +291,8 @@
 // V2 Styles.
 .paragraph--type--articles.list {
   .field--name-body {
-    margin-bottom: 0;
-    margin-top: 0;
+    // margin-bottom: 0;
+    // margin-top: 0;
     font-size: 1rem;
     line-height: 1.7;
     margin: 0.5rem 0 0;
@@ -241,4 +317,3 @@
     }
   }
 }
-

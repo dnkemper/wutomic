@@ -2,50 +2,52 @@
 
 // Utility color variables
 // Primary brand
-$artsci-gold: #BA0C2F;        // Primary red (legacy name kept for compat)
 $artsci-black: #000000;
 
 // Mapped aliases (used throughout components)
-$primary: #BA0C2F;
+$primary: #ba0c2f;
 $secondary: #000000;
-$white: #FFFFFF;
-$blk: #000000;
-$light: #F3F3F3;
-$gray: #737373;
-$gray-light: #CACACA;
-$brand-cool-gray: #63666A;
-$dark-gray: color.scale($blk, $lightness: 20%);
-$med-gray: color.scale($blk, $lightness: 40%);
-$light-gray: color.scale($blk, $lightness: 70%);
-$lighter-gray: color.scale($blk, $lightness: 90%);
+$white: #ffffff;
+$bg--teal: #007d8a;
+$bg--red: #ba0c2f;
+$bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+$bg--gray: #f4f2ed;
+$bg--dark-gray: #eae8e4;
+$light: #edeae1;
+$gray: #f4f2ed;
+$gray-dark: #e8e6e1;
+$dark-gray: color.scale($artsci-black, $lightness: 20%);
+$med-gray: color.scale($artsci-black, $lightness: 40%);
+$light-gray: color.scale($artsci-black, $lightness: 70%);
+$lighter-gray: color.scale($artsci-black, $lightness: 90%);
 $dark: #343a40;
 
 // Extended palette (Figma tokens)
 
-$color-red:         #BA0C2F;
-$color-red-dark:    #971B2F;
-$color-teal:        #367B88;
-$color-teal-dark:   #00573F;
-$color-gold:        #F1BE48;
-$color-black:       #1A1A1A;
-$color-gray-900:    #2D2D2D;
-$color-gray-700:    #555555;
-$color-gray-500:    #888888;
-$color-gray-300:    #B5B5B5;
-$color-cool-gray:   #D7D2CB;
-$color-warm-gray:   #E8E3DB;
-$color-tan:         #F5F1EB;
-$color-light:       #F9F7F4;
-$color-white:       #FFFFFF;
+$color-red: #ba0c2f;
+$color-red-dark: #971b2f;
+$color-teal: #007d8a;
+$color-teal-dark: #00573f;
+$color-gold: #f1be48;
+$color-black: #1a1a1a;
+$color-gray-900: #2d2d2d;
+$color-gray-700: #555555;
+$color-gray-500: #888888;
+$color-gray-300: #b5b5b5;
+$color-cool-gray: #d7d2cb;
+$color-warm-gray: #e8e3db;
+$color-tan: #f5f1eb;
+$color-light: #f9f7f4;
+$color-white: #ffffff;
 
-$success: #00664F;
-$orange: #BD472A;
+$success: #00664f;
+$orange: #bd472a;
 $success-light: color.scale($success, $lightness: 95%);
-$info: #00558C;
+$info: #00558c;
 $info-light: color.scale($info, $lightness: 95%);
-$warning: #FFCD00;
+$warning: #ffcd00;
 $warning-light: color.scale($warning, $lightness: 85%);
-$danger: #BD472A;
+$danger: #bd472a;
 $danger-light: color.scale($danger, $lightness: 85%);
 
 // Links
@@ -56,12 +58,11 @@ $imgpath: '../../assets/images' !default;
 
 // Additional Colors
 $white: #fff;
-$blk: #000;
-$dark-gray: color.scale($blk, $lightness: 20%);
-$med-gray: color.scale($blk, $lightness: 40%);
-$light-gray: color.scale($blk, $lightness: 70%);
-$lighter-gray: color.scale($blk, $lightness: 90%);
-//$off-white: color.scale($blk, $lightness: 97%);
+$dark-gray: color.scale($artsci-black, $lightness: 20%);
+$med-gray: color.scale($artsci-black, $lightness: 40%);
+$light-gray: color.scale($artsci-black, $lightness: 70%);
+$lighter-gray: color.scale($artsci-black, $lightness: 90%);
+//$off-white: color.scale($artsci-black, $lightness: 97%);
 $dark: #343a40;
 
 // Borders
@@ -71,13 +72,13 @@ $border-radius-sm: 0;
 $border-width: 1px;
 
 // Typography
-$font-family-sans-serif: "ivystyle-sans", "Calibri", sans-serif;
-$font-family-serif: "ivypresto-headline", "Georgia", serif;
-$font-family-serif-alt: "ivypresto-headline", "Georgia", serif;
-$font-family-caps: "ivystyle-sans", "Calibri", sans-serif;
-$font-family-caps-light: "ivystyle-sans", "Calibri", sans-serif;
-$font-family-caps-bold: "ivystyle-sans", "Calibri", sans-serif;
-$font-family-script: "amnestyscript";
+$font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+$font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+$font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+$font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+$font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+$font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
+$font-family-script: 'amnestyscript';
 $font-weight-light: 300;
 $font-weight-normal: 400;
 $font-weight-medium: 500;
@@ -91,10 +92,10 @@ $h3-font-size: 1.9125rem;
 $h4-font-size: 1.6rem;
 $h5-font-size: 1.4rem;
 $h6-font-size: 1.2rem;
-$content-font-size: 1.2rem;
+$content-font-size: 1rem;
 $label-font-size: 0.9rem;
 $base-font-size: 1rem;
-$small-font-size: .8rem;
+$small-font-size: 0.8rem;
 $text-muted: $gray;
 
 // Container
@@ -107,7 +108,7 @@ $mobile-height-gutter: 2rem; // 20px
 $desktop-height-gutter: 8rem; // 20px
 $gutter: 1.25rem; // 20px
 $xsm: 0.325rem; // 5px
-$xsm-sm: .425rem;
+$xsm-sm: 0.425rem;
 $sm: 0.625rem; // 10px
 $sm-md: 0.9rem; // 15px
 $md: 1.05rem;
@@ -128,23 +129,38 @@ $break-xlg: 106em;
 // Drop shadow.
 $soft-drop-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
 :root {
-    font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
+  font-size: 16px;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
   // Colors - Brand official
-  --artsci-gold: #BA0C2F;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
 
   // Colors - Unofficial
-  --artsci-light: #F3F3F3;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
 
   // Margin/Padding

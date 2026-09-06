@@ -1,0 +1,19 @@
+uuid: 13a38083-3a04-46ab-8bae-f28b46dda000
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shared_content
+    - node.type.event
+id: node.event.field_shared_content
+field_name: field_shared_content
+entity_type: node
+bundle: event
+label: 'Shared Content'
+description: 'Shared Content decoded field'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

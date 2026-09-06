@@ -10,7 +10,16 @@ classes: 'element--flex-center '
 type: component
 group: alignment
 block_restrictions:
-  - 'inline_block:artsci_cta'
+  - 'field_block:node:article:created'
+  - 'extra_field_block:node:article:article_created_date'
+  - 'field_block:node:article:field_article_subhead'
+  - 'field_block:node:academic_calendar_event:title'
+  - 'field_block:node:article:title'
+  - 'field_block:node:book:title'
+  - 'field_block:node:event:title'
+  - 'field_block:node:image_card:title'
+  - 'field_block:node:page:title'
+  - 'field_block:node:person:title'
   - 'inline_block:artsci_statistic'
 layout_restrictions: {  }
 weight: -67

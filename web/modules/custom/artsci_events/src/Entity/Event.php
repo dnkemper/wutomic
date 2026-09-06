@@ -29,24 +29,49 @@ class Event extends NodeBundleBase implements RendersAsCardInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildCard(array &$build) {
+public function buildCard(array &$build) {
+      if ($this->get('field_image')->isEmpty()) {
+      $build['field_image'] = [
+        [
+          '#type' => 'image_empty_article',
+          '#alt' => $this->getTitle(),
+        ],
+      ];
+    }
     parent::buildCard($build);
 
-    // Process additional card mappings.
-    $this->mapFieldsToCardBuild($build, [
-      '#meta' => [
-        'field_event_when',
-        'field_event_status',
-        'field_event_attendance',
-        'field_event_virtual',
-        'field_event_performer',
-      ],
-    ]);
 
-    // Handle link directly to source functionality.
-    $build['#url'] = $this->getNodeUrl();
+  // Check for hidden fields
+  $hide_fields = $build['#hide_fields'] ?? [];
+
+  // Map image field if not hidden
+  if (!in_array('field_image', $hide_fields)) {
+    $this->mapFieldsToCardBuild($build, [
+      '#media' => 'field_image',
+    ]);
   }
 
+  // Map event-specific meta fields
+  $meta_fields = [];
+  
+  if (!in_array('field_event_when', $hide_fields)) {
+    $meta_fields[] = 'field_event_when';
+  }
+  if (!in_array('field_event_location', $hide_fields)) {
+    $meta_fields[] = 'field_event_location';
+  }
+  if (!in_array('field_event_category', $hide_fields)) {
+    $meta_fields[] = 'field_event_category';
+  }
+  
+  if (!empty($meta_fields)) {
+    $this->mapFieldsToCardBuild($build, [
+      '#meta' => $meta_fields,
+    ]);
+  }
+
+  $build['#url'] = $this->getNodeUrl();
+}
   /**
    * {@inheritdoc}
    */
@@ -54,9 +79,9 @@ class Event extends NodeBundleBase implements RendersAsCardInterface {
     return array_merge(
       parent::getDefaultCardStyles(),
       [
-        'card_media_position' => 'card--layout-left',
-        'media_format' => 'media--circle media--border',
-        'media_size' => 'media--small',
+        'card_media_position' => 'card--layout-stacked',
+        'media_format' => 'media--widescreen media--border',
+        'media_size' => 'media--large',
       ]
     );
   }

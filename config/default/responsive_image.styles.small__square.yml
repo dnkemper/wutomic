@@ -7,6 +7,8 @@ dependencies:
     - image.style.square__1312_x_1312
     - image.style.square__1920_x_1920
     - image.style.square__2592_x_2592
+    - image.style.square__192_x_192
+    - image.style.square__256_x_256
     - image.style.square__384_x_384
     - image.style.square__768_x_768
 _core:
@@ -17,12 +19,14 @@ image_style_mappings:
   -
     image_mapping_type: sizes
     image_mapping:
-      sizes: '(min-width: 1024px) calc(25vw - 5em), (min-width: 768px) calc(50vw - 3.75em), 100vw'
+      sizes: '(min-width: 73.75em) 20.5625rem, (min-width: 980px) calc(28.86vw - 0.7215rem), calc(100vw - 2.5rem)'
       sizes_image_styles:
         - square__1024_x_1024
         - square__1312_x_1312
         - square__1920_x_1920
         - square__2592_x_2592
+        - square__192_x_192
+        - square__256_x_256
         - square__384_x_384
         - square__768_x_768
     breakpoint_id: responsive_image.viewport_sizing

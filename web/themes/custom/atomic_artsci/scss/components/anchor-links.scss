@@ -1,0 +1,85 @@
+@use '../abstracts/variables';
+
+/**
+ * @file
+ * Styles for the Anchor Links block.
+ *
+ * Tab-style horizontal navigation for page anchor links.
+ */
+
+.block-anchor-links {
+  margin-block: var(--spacing-lg, 2rem);
+}
+
+.anchor-links__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-white, #fff);
+  border-radius: var(--border-radius-md, 0.5rem);
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  li.anchor-links__item a.anchor-links__link {
+    color: #{variables.$secondary};
+  }
+
+  li.anchor-links__item a.anchor-links__link.is-active {
+    color: #{variables.$primary};
+  }
+}
+
+.anchor-links__item {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  color: #{variables.$secondary};
+
+  @media (max-width: 768px) {
+    flex: none;
+    width: 100%;
+  }
+}
+
+a.anchor-links__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--spacing-md, 1rem) var(--spacing-lg, 1.5rem);
+  font-family: var(--font-family-sans, sans-serif);
+  font-size: var(--font-size-base, 1rem);
+  font-weight: var(--font-weight-semibold, 600);
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-gray-700, #4a4a4a);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus {
+    color: var(--color-primary, #ba0c2f);
+    background-color: var(--color-white, #fff);
+    text-decoration: none;
+  }
+
+  &.is-active {
+    color: var(--color-primary, #ba0c2f);
+    background-color: var(--color-gray-100, #e8e3de);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: var(--border-radius-md, 0.5rem);
+    margin: 2px 0;
+  }
+}

@@ -37,7 +37,8 @@ class ArtsciHeadlineFormatter extends FormatterBase {
 
       $element[$delta] = [
         '#theme' => 'artsci_headline_field_type',
-        '#text' => strip_tags($item->get('headline')->getValue()),
+        '#pre_headline' => strip_tags($item->get('pre_headline')->getValue() ?? ''),
+        '#text' => strip_tags($item->get('headline')->getValue() ?? ''),
         '#size' => $item->get('heading_size')->getValue(),
         '#styles' => $item_style,
         '#alignment' => $item_alignment,

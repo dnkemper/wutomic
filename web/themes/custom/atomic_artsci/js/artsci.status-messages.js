@@ -1,6 +1,6 @@
 /**
  * @file
- * UIDS status messages behaviors.
+ * ARTSCI status messages behaviors.
  */
 (function (Drupal, once) {
   "use strict";

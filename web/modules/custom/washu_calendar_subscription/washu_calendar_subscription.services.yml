@@ -1,0 +1,6 @@
+services:
+  washu_calendar_subscription.manager:
+    class: Drupal\washu_calendar_subscription\AcademicCalendarManager
+    arguments:
+      - '@config.factory'
+      - '@database'

@@ -10,7 +10,13 @@ classes: block-margin__left
 type: component
 group: margin
 block_restrictions:
-  - 'inline_block:artsci_spacer_separator'
+  - 'field_block:node:image_card:field_link'
+  - 'field_block:node:article:title'
+  - 'field_block:node:book:title'
+  - 'field_block:node:event:title'
+  - 'field_block:node:image_card:title'
+  - 'field_block:node:page:title'
+  - 'field_block:node:person:title'
   - 'inline_block:artsci_text_area'
   - webform_block
 layout_restrictions: {  }

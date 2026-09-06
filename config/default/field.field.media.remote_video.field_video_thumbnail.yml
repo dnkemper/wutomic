@@ -1,0 +1,32 @@
+uuid: 776aecdc-79f7-46de-9e63-2e6907b505d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_video_thumbnail
+    - media.type.image
+    - media.type.remote_video
+  enforced:
+    module:
+      - media
+id: media.remote_video.field_video_thumbnail
+field_name: field_video_thumbnail
+entity_type: media
+bundle: remote_video
+label: 'Custom thumbnail'
+description: 'Optional. If provided, this image is used as the video thumbnail instead of the auto-generated thumbnail from YouTube or Vimeo.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

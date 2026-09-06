@@ -1,0 +1,22 @@
+uuid: 2fa4de36-b868-4114-b0d7-69e7649b3c84
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sidebar_text
+    - node.type.image_card
+  module:
+    - text
+id: node.image_card.field_sidebar_text
+field_name: field_sidebar_text
+entity_type: node
+bundle: image_card
+label: 'Sidebar Text'
+description: 'Body text for the second sidebar section.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

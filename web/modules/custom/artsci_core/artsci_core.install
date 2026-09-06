@@ -6,6 +6,8 @@
  */
 
 use Drupal\webform\Entity\Webform;
+use Drupal\Core\Database\Database;
+
 
 /**
  * Remove permissions from previously configured access configuration.
@@ -107,4 +109,277 @@ function artsci_core_update_10001() {
       ->setAccessRules($access)
       ->save();
   }
+}
+
+/**
+ * Add allowed replicate content entities.
+ */
+function artsci_core_update_10002() {
+  /** @var \Drupal\Core\Plugin\DefaultPluginManager $filters */
+
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('artsci_core.settings');
+
+  // This site has the 'artsci_v2' split in config,
+  // and it is enabled.
+    // Don't allow for any content types to be replicated.
+
+    // If it's not v2, then allow page and article.
+    $config
+      ->set('artsci_core.replicate_allowed', ['page', 'article'])
+      ->save();
+}
+
+/**
+ * Add pre_headline column to artsci_headline field storage tables.
+ */
+function artsci_core_update_10003() {
+  $database = Database::getConnection();
+  $schema = $database->schema();
+
+  // Define the new column specification.
+  $spec = [
+    'type' => 'varchar',
+    'length' => 355,
+    'not null' => FALSE,
+    'description' => 'Pre-headline text displayed above the main headline.',
+  ];
+
+  // Get all field storage definitions for artsci_headline fields.
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+
+  // Find all entity types that might have the artsci_headline field.
+  $entity_types = ['block_content', 'node', 'paragraph'];
+
+  foreach ($entity_types as $entity_type_id) {
+    try {
+      $field_definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
+
+      foreach ($field_definitions as $field_name => $field_definition) {
+        if ($field_definition->getType() === 'artsci_headline') {
+          // Build table names for this field.
+          $table_name = $entity_type_id . '__' . $field_name;
+          $revision_table_name = $entity_type_id . '_revision__' . $field_name;
+          $column_name = $field_name . '_pre_headline';
+
+          // Add column to main table if it exists and column doesn't.
+          if ($schema->tableExists($table_name) && !$schema->fieldExists($table_name, $column_name)) {
+            $schema->addField($table_name, $column_name, $spec);
+            \Drupal::messenger()->addMessage(t('Added pre_headline column to @table', ['@table' => $table_name]));
+          }
+
+          // Add column to revision table if it exists and column doesn't.
+          if ($schema->tableExists($revision_table_name) && !$schema->fieldExists($revision_table_name, $column_name)) {
+            $schema->addField($revision_table_name, $column_name, $spec);
+            \Drupal::messenger()->addMessage(t('Added pre_headline column to @table', ['@table' => $revision_table_name]));
+          }
+        }
+      }
+    }
+    catch (\Exception $e) {
+      // Entity type might not exist, continue to next.
+      continue;
+    }
+  }
+
+  // Clear caches to pick up the schema changes.
+  drupal_flush_all_caches();
+
+  return t('Added pre_headline column to artsci_headline field storage tables.');
+}
+
+/**
+ * Update headline_bold_serif style to default for all artsci_headline fields.
+ */
+function artsci_core_update_10004() {
+  $database = Database::getConnection();
+  $schema = $database->schema();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
+
+  // Find all entity types that might have the artsci_headline field.
+  $entity_types = ['block_content', 'node', 'paragraph'];
+  $updated_count = 0;
+
+  foreach ($entity_types as $entity_type_id) {
+    try {
+      $field_definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
+
+      foreach ($field_definitions as $field_name => $field_definition) {
+        if ($field_definition->getType() === 'artsci_headline') {
+          // Build table names for this field.
+          $table_name = $entity_type_id . '__' . $field_name;
+          $revision_table_name = $entity_type_id . '_revision__' . $field_name;
+          $style_column = $field_name . '_headline_style';
+
+          // Update main table.
+          if ($schema->tableExists($table_name) && $schema->fieldExists($table_name, $style_column)) {
+            $count = $database->update($table_name)
+              ->fields([$style_column => 'default'])
+              ->condition($style_column, 'headline_bold_serif')
+              ->execute();
+            $updated_count += $count;
+            if ($count > 0) {
+              \Drupal::messenger()->addMessage(t('Updated @count rows in @table', [
+                '@count' => $count,
+                '@table' => $table_name,
+              ]));
+            }
+          }
+
+          // Update revision table.
+          if ($schema->tableExists($revision_table_name) && $schema->fieldExists($revision_table_name, $style_column)) {
+            $count = $database->update($revision_table_name)
+              ->fields([$style_column => 'default'])
+              ->condition($style_column, 'headline_bold_serif')
+              ->execute();
+            $updated_count += $count;
+            if ($count > 0) {
+              \Drupal::messenger()->addMessage(t('Updated @count rows in @table', [
+                '@count' => $count,
+                '@table' => $revision_table_name,
+              ]));
+            }
+          }
+        }
+      }
+    }
+    catch (\Exception $e) {
+      // Entity type might not exist, continue to next.
+      continue;
+    }
+  }
+
+  // Clear caches.
+  drupal_flush_all_caches();
+
+  return t('Updated @count headline_bold_serif values to default.', ['@count' => $updated_count]);
+}
+
+/**
+ * Migrate old pre_title field values to new pre_headline column.
+ *
+ * This migrates data from standalone pre_title fields into the pre_headline
+ * column of the artsci_headline compound field.
+ */
+function artsci_core_update_10005() {
+  $database = Database::getConnection();
+  $schema = $database->schema();
+  $migrated_count = 0;
+
+  // Map of bundle => [old_pre_title_field, headline_field].
+  // These are the known pre_title fields that need migration.
+  $migration_map = [
+    // artsci_aggregator had field_pre_title.
+    'artsci_aggregator' => [
+      'old_field' => 'field_pre_title',
+      'headline_field' => 'field_artsci_headline',
+    ],
+    // artsci_image had field_artsci_image_pre_title.
+    'artsci_image' => [
+      'old_field' => 'field_artsci_image_pre_title',
+      'headline_field' => 'field_artsci_headline',
+    ],
+    // artsci_text_area had field_pre_title.
+    'artsci_text_area' => [
+      'old_field' => 'field_pre_title',
+      'headline_field' => 'field_artsci_headline',
+    ],
+    // artsci_collection had field_pre_title.
+    'artsci_collection' => [
+      'old_field' => 'field_pre_title',
+      'headline_field' => 'field_artsci_headline',
+    ],
+    // artsci_image_gallery had field_pre_title.
+    'artsci_image_gallery' => [
+      'old_field' => 'field_pre_title',
+      'headline_field' => 'field_artsci_headline',
+    ],
+    // featured_content had field_pre_title.
+    'featured_content' => [
+      'old_field' => 'field_pre_title',
+      'headline_field' => 'field_artsci_headline',
+    ],
+  ];
+
+  foreach ($migration_map as $bundle => $fields) {
+    $old_field = $fields['old_field'];
+    $headline_field = $fields['headline_field'];
+
+    // Table names.
+    $old_table = 'block_content__' . $old_field;
+    $old_revision_table = 'block_content_revision__' . $old_field;
+    $headline_table = 'block_content__' . $headline_field;
+    $headline_revision_table = 'block_content_revision__' . $headline_field;
+
+    // Column names.
+    $old_value_column = $old_field . '_value';
+    $pre_headline_column = $headline_field . '_pre_headline';
+
+    // Check if old table exists and has data.
+    if (!$schema->tableExists($old_table)) {
+      \Drupal::messenger()->addMessage(t('Skipping @bundle: old table @table does not exist.', [
+        '@bundle' => $bundle,
+        '@table' => $old_table,
+      ]));
+      continue;
+    }
+
+    // Check if headline table exists and has pre_headline column.
+    if (!$schema->tableExists($headline_table) || !$schema->fieldExists($headline_table, $pre_headline_column)) {
+      \Drupal::messenger()->addMessage(t('Skipping @bundle: headline table or pre_headline column does not exist.', [
+        '@bundle' => $bundle,
+      ]));
+      continue;
+    }
+
+    // Migrate main table data.
+    // Join old pre_title data with headline data by entity_id and update.
+    $query = $database->select($old_table, 'old');
+    $query->fields('old', ['entity_id', 'revision_id', $old_value_column]);
+    $query->condition('old.bundle', $bundle);
+    $results = $query->execute()->fetchAll();
+
+    foreach ($results as $row) {
+      $old_value = $row->{$old_value_column};
+      if (!empty($old_value)) {
+        // Update the headline table with the pre_title value.
+        $updated = $database->update($headline_table)
+          ->fields([$pre_headline_column => $old_value])
+          ->condition('entity_id', $row->entity_id)
+          ->condition('bundle', $bundle)
+          ->execute();
+
+        if ($updated) {
+          $migrated_count++;
+        }
+      }
+    }
+
+    // Migrate revision table data if both tables exist.
+    if ($schema->tableExists($old_revision_table) && $schema->tableExists($headline_revision_table)) {
+      $query = $database->select($old_revision_table, 'old');
+      $query->fields('old', ['entity_id', 'revision_id', $old_value_column]);
+      $query->condition('old.bundle', $bundle);
+      $results = $query->execute()->fetchAll();
+
+      foreach ($results as $row) {
+        $old_value = $row->{$old_value_column};
+        if (!empty($old_value)) {
+          $database->update($headline_revision_table)
+            ->fields([$pre_headline_column => $old_value])
+            ->condition('entity_id', $row->entity_id)
+            ->condition('revision_id', $row->revision_id)
+            ->condition('bundle', $bundle)
+            ->execute();
+        }
+      }
+    }
+
+    \Drupal::messenger()->addMessage(t('Migrated pre_title data for @bundle.', ['@bundle' => $bundle]));
+  }
+
+  // Clear caches.
+  drupal_flush_all_caches();
+
+  return t('Migrated @count pre_title values to pre_headline.', ['@count' => $migrated_count]);
 }

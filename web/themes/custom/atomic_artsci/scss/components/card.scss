@@ -6,24 +6,22 @@
 }
 
 .borderless {
-  border: none!important;
+  border: none !important;
 }
-
 
 @mixin container-query() {
   @supports (contain: inline-size) {
     @container column (min-width: #{variables.$break-xxsm}) {
-      @content
+      @content;
     }
   }
   @supports not (contain: inline-size) {
     @include utilities.breakpoint(sm) {
-      @content
+      @content;
     }
   }
 }
 
-// === Card === //
 .card {
   position: relative;
   padding: 2rem;
@@ -41,6 +39,10 @@
   h6 {
     &:not(:first-child) {
       margin-top: 0;
+    }
+    a {
+      text-decoration: none;
+      color: black;
     }
   }
 
@@ -61,15 +63,23 @@
     a {
       position: relative;
       z-index: 1;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
     }
   }
 
   header {
     margin: 0 0 1rem;
     padding: 0;
-    font-size: 1.5rem;
-    font-weight: variables.$font-weight-medium;
-    line-height: 1.2;
+    color: #000;
+    font-family: variables.$font-family-serif;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
 
     a {
       text-decoration: none;
@@ -80,14 +90,20 @@
       }
     }
 
-    .headline {
+    .headline,
+    .headline a {
       // font-size: 1.5rem;
-      font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
       font-family: variables.$font-family-serif;
-      line-height: 120%;
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%;
       @include utilities.container-query() {
-        font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
+        font-size: clamp(1.25rem, calc(0.563vw + 1.039rem), 1.5rem);
       }
+    }
+    .headline a {
+      color: #ffffff;
     }
 
     &:focus-within ~ .bttn {
@@ -111,72 +127,157 @@
     }
   }
 }
-// === End: Card === //
 
-// === Elements === //
-// === Media === //
 .card {
-// === Video Controls === //
-// Extract this to a partial like _video-controls.scss for reuse
-
-.video-controls {
-  position: absolute;
-  z-index: 2;
-  right: var(--gutter, 2rem);
-  bottom: var(--gutter, 2rem);
-
-  @include utilities.container-query {
-    right: var(--mobile-height-gutter, 1rem);
-    bottom: var(--mobile-height-gutter, 1rem);
-  }
-}
-
-.video-btn {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  color: var(--color-secondary, #1d1d1b);
-  border: 2px solid white;
-  border-radius: 50%;
-  background: white;
-  font-size: 1rem;
-  padding: 0;
-
-  @include utilities.container-query() {
-    display: block;
+  .media--square {
+    img,
+    iframe,
+    video {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+    }
   }
 
-  &::after {
-    content: "\f04b"; // play icon
-    @include utilities.fas();
-    font-size: 1rem;
+  // Images already carry the 4:3 crop from the landscape__* derivatives; this
+  // is what gives iframe and video the same ratio, since neither can be
+  // cropped server side.
+  .media--landscape {
+    img,
+    iframe,
+    video {
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
   }
 
-  &.video-btn__play::after {
-    margin-left: 3px; // optical centering for play triangle
+  .media--widescreen {
+    img,
+    iframe,
+    video {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    &:has([src$='.svg']) {
+      .media__inner {
+        background: #fff;
+      }
+      img[src$='.svg'] {
+        object-fit: contain;
+      }
+    }
   }
 
-  &.video-btn__pause::after {
-    content: "\f04c"; // pause icon
-  }
-}
+  .media--portrait {
+    img,
+    iframe,
+    video {
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      // width keeps the box driven by the container (height comes from
+      // aspect-ratio); object-position is the only crop lever for video.
+      // For images the focal point is baked into the full__portrait
+      // derivative server-side, but remote_video (oembed thumbnail) and video
+      // (<video>) can only be center-cropped here — override per-block if a
+      // subject sits off-centre.
+      width: 100%;
+      object-position: center;
+    }
 
-// Light overlay variant (dark button)
-.banner--overlay-light:not([class*="bg--"]) {
+    // Size variants drive the portrait box. Previously media--small / medium /
+    // large were inert for portrait because the image was always width: 100%,
+    // so the box was sized by the column instead of the size class. Widths
+    // follow the book (small) and Student Stories (large) Figma specs;
+    // aspect-ratio gives each its target height. max-width keeps them from
+    // overflowing a narrow column.
+    &.media--small {
+      max-width: 11rem;
+
+      img,
+      iframe,
+      video {
+        aspect-ratio: 14.1875 / 19;
+      }
+    }
+
+    &.media--medium {
+      max-width: 15.5rem;
+
+      img,
+      iframe,
+      video {
+        aspect-ratio: 3 / 4;
+      }
+    }
+
+    // &.media--large {
+    //   max-width: 16.375rem;
+
+    //   img,
+    //   iframe,
+    //   video {
+    //     aspect-ratio: 16.375 / 23.25;
+    //   }
+    // }
+  }
+
+  .video-controls {
+    position: absolute;
+    z-index: 20;
+    right: 5%;
+    bottom: 10%;
+
+    @include utilities.container-query {
+      right: 5%;
+      bottom: 5%;
+    }
+  }
+
   .video-btn {
-    border: 2px solid var(--color-secondary, #1d1d1b);
-  }
-}
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: var(--color-secondary, #1d1d1b);
+    border: 2px solid white;
+    border-radius: 50%;
+    background: white;
+    font-size: 1rem;
+    padding: 0;
 
-// Video element styling
-video {
-  display: block;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  top: 0;
-  overflow: visible;
-}
+    @include utilities.container-query() {
+      display: block;
+    }
+
+    &::after {
+      content: '\f04b'; // play icon
+      @include utilities.fas();
+      font-size: 1rem;
+    }
+
+    &.video-btn__play::after {
+      margin-left: 3px; // optical centering for play triangle
+    }
+
+    &.video-btn__pause::after {
+      content: '\f04c'; // pause icon
+    }
+  }
+
+  // Light overlay variant (dark button)
+  .banner--overlay-light:not([class*='bg--']) {
+    .video-btn {
+      border: 2px solid var(--color-secondary, #1d1d1b);
+    }
+  }
+
+  // Video element styling
+  video {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    top: 0;
+    overflow: visible;
+  }
 
   > .media {
     margin-top: 0;
@@ -210,7 +311,7 @@ video {
     &.media--medium.media--circle {
       margin-left: auto;
       margin-right: auto;
-      img[src$=".svg"] {
+      img[src$='.svg'] {
         width: revert-layer;
       }
     }
@@ -222,6 +323,7 @@ video {
     margin-right: -2rem;
     margin-top: -2rem;
     margin-bottom: 2rem;
+    overflow: hidden;
   }
 
   .media--circle {
@@ -251,32 +353,10 @@ video {
     // TODO: add borders, padding, etc.
   }
 
-  .media--square {
-    img,
-    iframe {
-      aspect-ratio: 1 / 1;
-    }
-  }
-
-  .media--widescreen {
-    img,
-    iframe {
-      aspect-ratio: 16 / 9;
-    }
-    &:has([src$=".svg"]) {
-      .media__inner {
-        background: #fff;
-      }
-      img[src$=".svg"] {
-        object-fit: contain;
-      }
-    }
-  }
-
   .media--date {
     position: relative;
     padding-top: variables.$gutter;
-    border: 1px solid variables.$artsci-gold;
+    border: 1px solid variables.$primary;
     text-align: center;
     width: 6rem;
     height: 6rem;
@@ -303,7 +383,7 @@ video {
     }
   }
   // We should revisit to have appropriate color/styling for each background color option.
-  &[class*="bg--red"]{
+  &[class*='bg--red'] {
     .media--date {
       border: 1px solid variables.$artsci-black;
     }
@@ -314,18 +394,17 @@ video {
 
 // === Pre-Title === //
 .card__pre-title {
-    color: #971b2f;
-    font-family: IvyStyle Sans;
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 5%;
-    line-height: 150%;
-    margin: 10px 0;
-    text-transform: uppercase;
+  color: #ba0c2f;
+  font-family: var(--font-family-sans-serif);
+  font-weight: 600;
+  letter-spacing: 5%;
+  margin: 10px 0;
+  text-transform: uppercase;
+  font-size: var(--content-font-size);
   i,
-  span[class*="fa-"],
+  span[class*='fa-'],
   svg {
-    margin-right: .2rem;
+    margin-right: 0.2rem;
   }
 }
 .bg--red,
@@ -338,12 +417,16 @@ video {
 
 // === Subtitle === //
 .card__subtitle {
-  opacity: .7;
-  font-family: variables.$font-family-serif;
-  font-size: 1.3rem;
-  font-weight: variables.$font-weight-medium;
-  line-height: 1.4;
+  opacity: 0.7;
+  color: #ba0c2f;
+  font-family: variables.$font-family-sans-serif;
   margin-top: -0.4rem;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
 }
 // === End: Subtitle === //
 
@@ -360,7 +443,7 @@ video {
   line-height: 1.4;
   font-weight: variables.$font-weight-normal;
   .fas {
-    margin-right: .3rem;
+    margin-right: 0.3rem;
   }
 }
 // === End: Meta === //
@@ -368,8 +451,8 @@ video {
 // === Body === //
 .card__body {
   line-height: 1.7;
-  word-wrap: anywhere;
   overflow-wrap: anywhere;
+  height: auto;
 }
 // === End: Body === //
 
@@ -379,15 +462,13 @@ video {
 // === Borderless === //
 // Remove the outline from a card.
 .card.borderless {
-
   // When the card has no background, we remove padding and reset our .media margins.
-  &:not([class*="bg--"]){
+  &:not([class*='bg--']) {
     padding: 0;
 
     .media--date {
       margin-top: 0;
     }
-
 
     .media__inner {
       margin-left: 0;
@@ -420,7 +501,7 @@ video {
 }
 
 .card--button-align-bottom {
-  &:not([class*="card--layout"]){
+  &:not([class*='card--layout']) {
     .card__body {
       @include utilities.breakpoint(sm) {
         flex: 1;
@@ -439,9 +520,7 @@ video {
     }
   }
 }
-// === End: Centered === //
 
-// === Media padded === //
 .card--media-padded {
   .media__inner {
     margin-left: 0;
@@ -449,9 +528,7 @@ video {
     margin-right: 0;
   }
 }
-// === End: Media padded === //
 
-// === Layout left and layout right shared === //
 .card--layout-left,
 .card--layout-right {
   @include container-query() {
@@ -516,6 +593,14 @@ video {
     }
   }
 
+  // Without this, small landscape falls through to the 100% flex-basis above
+  // and renders wider than medium and large.
+  .media--small.media--landscape {
+    @include container-query() {
+      max-width: 15.625rem;
+    }
+  }
+
   .media--medium {
     &.media--circle {
       @supports not (contain: inline-size) {
@@ -543,34 +628,30 @@ video {
     flex-direction: row;
 
     .media__inner,
-      // Add margin back in for media--circle since we removed it before.
+    // Add margin back in for media--circle since we removed it before.
     .media--circle .media__inner {
       margin-right: 2rem;
     }
   }
 }
-// === End: Layout left === //
 
-// === Layout right === //
 .card--layout-right {
   @include container-query() {
     flex-direction: row-reverse;
     .media__inner,
-      // Add margin back in for media--circle since we removed it before.
+    // Add margin back in for media--circle since we removed it before.
     .media--circle .media__inner {
       margin-left: 2rem;
     }
   }
 }
-// === End: Layout right === //
 
-// === Background colors === //
 // Remove padding if container background matches card background with borderless.
-$bg-colors: "white", "gray", "black", "gold";
+$bg-colors: 'white', 'gray', 'black', 'gold';
 
 @each $color in $bg-colors {
   .bg--#{$color} {
-    .card.bg--#{$color}[class*="borderless"] {
+    .card.bg--#{$color}[class*='borderless'] {
       padding: 0;
       .media__inner {
         margin-left: 0;
@@ -597,48 +678,40 @@ $bg-colors: "white", "gray", "black", "gold";
   }
 }
 
-// === End: Background colors === //
-/* === End: Card modifiers === */
-
-
-// @todo move back to ARTSCI
-// https://github.com/artsci/artsci/issues/6295
-
 .card {
   p + p {
     margin-top: variables.$sm;
   }
 
   // set font weight to normal if intro classes are used
-  p[class*="element-"],
-  p[class*="artsci-component-"] {
+  p[class*='element-'],
+  p[class*='artsci-component-'] {
     font-weight: normal;
   }
 }
 
-
 // Circle button.
 .card {
   .bttn--transparent.bttn--circle {
-    padding: .55rem .7em;
+    padding: 0.55rem 0.7em;
     border-radius: 50%;
     transform: none;
     line-height: 1;
 
-    &:after {
+    &::after {
       left: 0;
       top: 0;
       height: 100%;
       width: 100%;
       border-radius: 50%;
       background-color: transparent;
-      transition: border-color .3s ease-in-out;
+      transition: border-color 0.3s ease-in-out;
       transform: none;
       position: absolute;
     }
 
-    &:hover:after,
-    &:focus:after {
+    &:hover::after,
+    &:focus::after {
       transform: none;
       transition: none;
       border: 3px solid;
@@ -651,7 +724,7 @@ $bg-colors: "white", "gray", "black", "gold";
 .card__meta {
   margin-top: 0.3rem;
   .field + .field {
-    margin-top: .3rem;
+    margin-top: 0.3rem;
   }
 }
 
@@ -662,7 +735,7 @@ $bg-colors: "white", "gray", "black", "gold";
     padding: 2px;
     border-radius: 50%;
   }
-  svg[class*="fa-"] {
+  svg[class*='fa-'] {
     left: 0;
     position: relative;
   }
@@ -673,8 +746,8 @@ $bg-colors: "white", "gray", "black", "gold";
   .card__meta {
     .fa-field-item {
       margin-left: 0;
-      svg[class*="fa-"],
-      span[class*="fa-"] {
+      svg[class*='fa-'],
+      span[class*='fa-'] {
         position: relative;
         left: unset;
         top: unset;
@@ -684,8 +757,8 @@ $bg-colors: "white", "gray", "black", "gold";
 }
 
 .card__meta {
-  svg[class*="fa-"],
-  span[class*="fa-"] {
+  svg[class*='fa-'],
+  span[class*='fa-'] {
     .card--centered & {
       top: 0;
     }
@@ -695,8 +768,8 @@ $bg-colors: "white", "gray", "black", "gold";
       line-height: 1.4;
       margin-bottom: variables.$sm;
     }
-    svg[class*="fa-"],
-    span[class*="fa-"] {
+    svg[class*='fa-'],
+    span[class*='fa-'] {
       top: 0.25em;
     }
   }
@@ -705,24 +778,24 @@ $bg-colors: "white", "gray", "black", "gold";
     > li {
       line-height: inherit;
     }
-    svg[class*="fa-"],
-    span[class*="fa-"] {
+    svg[class*='fa-'],
+    span[class*='fa-'] {
       top: 0.25em;
     }
   }
   .svg-inline--fa {
     font-size: 1rem;
-    margin-right: .3rem;
+    margin-right: 0.625rem;
     margin-left: 0;
   }
   .fa-stack {
     position: absolute;
     width: 1.5rem;
     height: 1.5rem;
-    svg[class*=fa-] {
+    svg[class*='fa-'] {
       top: 0;
     }
-    &svg[class*="fa-"] {
+    &svg[class*='fa-'] {
       position: absolute;
       margin-left: 0.3rem;
       top: -2px;
@@ -733,65 +806,78 @@ $bg-colors: "white", "gray", "black", "gold";
     }
     .svg-inline--fa.fa-stack-1x {
       height: 0.6rem;
-      font-size: .8rem;
-      width: .6rem;
+      font-size: 0.8rem;
+      width: 0.6rem;
     }
   }
 }
 
-  // Allow cards to be stacked within layouts.
-  .layout--fourcol,
-  .layout--threecol,
-  .layout--twocol {
-    .card {
-      flex: 1 1 100%;
-    }
-  }
-
-  // Remove text decoration.
+// Allow cards to be stacked within layouts.
+.layout--fourcol,
+.layout--threecol,
+.layout--twocol {
   .card {
-    .card__meta,
-    .card__subtitle {
-      a {
-        text-decoration: none;
-      }
+    flex: 1 1 100%;
+  }
+}
+
+// Remove text decoration.
+.card {
+  .card__meta,
+  .card__subtitle {
+    a {
+      text-decoration: none;
     }
   }
+}
 
+// Hide styles used in events list block and featured content block.
+.card {
+  &.hide-descriptions {
+    .card__description,
+    .item-description,
+    .field--name-body,
+    .card__meta {
+      display: none;
+    }
+  }
+  &.hide-images {
+    .media__inner {
+      display: none;
+    }
+  }
+  &.hide-details {
+    .card__details {
+      display: none;
+    }
+  }
+  .card__meta .field--name-field-tags,
+  .card__subtitle {
+    color: #ba0c2f;
+    padding-top: 0rem !important;
+    border: none;
+    font-family: var(--font-family-sans-serif);
+    font-weight: 700;
+    line-height: 150%;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    display: flex;
+    margin: 0px 0px 10px !important;
+  }
+}
 
-  // Hide styles used in events list block and featured content block.
+// V2 - Set background for all v2 cards.
+.paragraph--type--section {
   .card {
-    &.hide-descriptions {
-      .card__description,
-      .item-description,
-      .field--name-body {
-        display: none;
-      }
-    }
-    &.hide-images {
-      .media__inner {
-        display: none;
-      }
-    }
-    &.hide-details {
-      .card__details {
-        display: none;
-      }
-    }
+    background: #fff;
   }
 
-  // V2 - Set background for all v2 cards.
-  .paragraph--type--section {
+  .paragraph--type--card {
     .card {
-      background: #fff;
-    }
-
-    .paragraph--type--card {
-      .card {
-        border: 1px solid rgba(0, 0, 0, .125);
-      }
+      border: 1px solid rgba(0, 0, 0, 0.125);
     }
   }
+}
 
 // Event block
 .card {
@@ -804,8 +890,8 @@ $bg-colors: "white", "gray", "black", "gold";
 }
 
 // Remove padding if no section background and bg--white is set on card.
-.layout__container:not([class*="bg--"]) {
-  .card[class*="bg--white"][class*="borderless"] {
+.layout__container:not([class*='bg--']) {
+  .card[class*='bg--white'][class*='borderless'] {
     padding: 0;
     .media__inner {
       margin-left: 0;
@@ -839,7 +925,7 @@ $bg-colors: "white", "gray", "black", "gold";
     background: variables.$light;
     padding: 0.5rem 1.2rem 0.5rem calc(20px + 0.5rem);
     border-radius: 2px;
-    transition: background .15s ease-in-out;
+    transition: background 0.15s ease-in-out;
     width: fit-content;
 
     &:hover {
@@ -848,13 +934,13 @@ $bg-colors: "white", "gray", "black", "gold";
 
     &::-webkit-details-marker,
     &::marker {
-      display:none;
+      display: none;
     }
   }
 
   summary::before {
-    padding: variables.$xsm .9rem variables.$xsm .625rem;
-    content: "\f0da";
+    // padding: variables.$xsm 0.9rem variables.$xsm 0.625rem;
+    content: '\f0da';
     color: variables.$secondary;
     @include utilities.fas();
     line-height: 9px;
@@ -864,7 +950,7 @@ $bg-colors: "white", "gray", "black", "gold";
     height: 10px;
     left: 0;
     transform: rotate(0);
-    transition: .15s transform ease;
+    transition: 0.15s transform ease;
   }
 
   &[open] {
@@ -872,13 +958,322 @@ $bg-colors: "white", "gray", "black", "gold";
       transform: rotate(90deg);
     }
     > summary {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
   }
 }
 
 // Hide card pre-title for people lists.
-[class*="view-people"] .card__pre-title,
+[class*='view-people'] .card__pre-title,
 .view-counselors .card__pre-title {
   @include utilities.element-invisible;
+}
+
+// === Layout Overlay (text over media) === //
+// Displays text content overlaid on top of the media (image or video).
+// Similar to banner styling but for card components.
+.card--layout-overlay {
+  --card-overlay-color-rgb: 0, 0, 0;
+  --card-overlay-opacity: 0.5;
+  --card-overlay-gradient-midpoint: 50%;
+  --card-text-color: #fff;
+
+  position: relative;
+  min-height: 18rem;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  // Ensure card establishes stacking context
+  isolation: isolate;
+
+  // Media positioned as background
+  > .media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    z-index: 0;
+
+    .media__inner {
+      position: relative;
+      z-index: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+
+      img,
+      video {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      // Handle linked media
+      a {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    // Overlay gradient (bottom to top by default)
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        0deg,
+        rgba(var(--card-overlay-color-rgb), 0.85) 0%,
+        rgba(var(--card-overlay-color-rgb), 0.6)
+          var(--card-overlay-gradient-midpoint),
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  // Full card click target for overlay layout
+  .card__click-target {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    // Transparent but clickable
+    background: transparent;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // Body content on top
+  .card__body {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    color: var(--card-text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: inherit;
+    height: 100%;
+    // Allow clicks to pass through to .card__click-target except on interactive elements
+    pointer-events: none;
+
+    // Re-enable pointer events for interactive elements
+    a,
+    button,
+    .bttn,
+    input,
+    select,
+    textarea {
+      pointer-events: auto;
+    }
+  }
+
+  // Override text colors for overlay
+  .card__pre-title {
+    color: var(--card-text-color);
+  }
+
+  header,
+  .headline,
+  .headline a {
+    color: var(--card-text-color);
+
+    &:hover,
+    &:focus {
+      color: var(--card-text-color);
+    }
+  }
+
+  .card__subtitle {
+    color: var(--card-text-color);
+    opacity: 0.9;
+  }
+
+  .card__meta,
+  .card__meta a,
+  .card__details {
+    color: var(--card-text-color);
+  }
+
+  p,
+  p a {
+    color: var(--card-text-color);
+  }
+
+  // Button styling for overlay
+  .bttn {
+    color: var(--card-text-color);
+    border-color: var(--card-text-color);
+
+    &:hover,
+    &:focus {
+      background-color: var(--card-text-color);
+      color: rgb(var(--card-overlay-color-rgb));
+    }
+  }
+
+  // Video controls positioning
+  .video-controls {
+    z-index: 3;
+    pointer-events: auto;
+  }
+
+  // Overlay media is a full-bleed background, so neither the format aspect
+  // ratios nor the size caps apply here. Both selectors are weighted to beat
+  // the `.card .media--portrait.media--small` rules earlier in this file,
+  // which are not scoped to a layout and otherwise shrink the background to a
+  // thumbnail and expose the card behind it.
+  > .media.media--small,
+  > .media.media--medium,
+  > .media.media--large,
+  > .media.media--full {
+    max-width: none;
+    flex: none;
+  }
+
+  > .media .media__inner {
+    // media.html.twig wraps every media entity in its own div, so the
+    // percentage heights above have an auto-height parent to resolve against
+    // unless that wrapper is stretched too. An <img> gets away with it because
+    // it has an intrinsic ratio to fall back on; a <video> carries width and
+    // height attributes and falls back to those instead, which is why video
+    // slides leave the card showing through while image slides look fine.
+    > a,
+    .media {
+      display: block;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  > .media .media__inner {
+    img,
+    iframe,
+    video {
+      aspect-ratio: auto;
+    }
+  }
+
+  // Hover effect for clickable overlay cards
+  &:hover > .media::after {
+    opacity: 0.9;
+  }
+}
+
+// Light overlay variant
+.card--layout-overlay.card--overlay-light {
+  --card-overlay-color-rgb: 255, 255, 255;
+  --card-overlay-opacity: 0.7;
+  --card-text-color: #{variables.$secondary};
+
+  .video-btn {
+    border-color: variables.$secondary;
+    color: variables.$secondary;
+  }
+}
+
+// Centered text variant for overlay
+.card--layout-overlay.card--centered {
+  .card__body {
+    justify-content: center;
+    text-align: center;
+  }
+
+  // Use solid overlay instead of gradient when centered
+  > .media::after {
+    background: rgba(
+      var(--card-overlay-color-rgb),
+      var(--card-overlay-opacity)
+    );
+  }
+}
+
+// Vertical alignment options for overlay
+.card--layout-overlay.card--vertical-top {
+  .card__body {
+    justify-content: flex-start;
+  }
+
+  // Flip gradient direction for top alignment
+  > .media::after {
+    background: linear-gradient(
+      180deg,
+      rgba(var(--card-overlay-color-rgb), 0.85) 0%,
+      rgba(var(--card-overlay-color-rgb), 0.6)
+        var(--card-overlay-gradient-midpoint),
+      transparent 100%
+    );
+  }
+}
+
+.card--layout-overlay.card--vertical-center {
+  .card__body {
+    justify-content: center;
+  }
+
+  // Use solid overlay for center alignment
+  > .media::after {
+    background: rgba(
+      var(--card-overlay-color-rgb),
+      var(--card-overlay-opacity)
+    );
+  }
+}
+
+// Size variants for overlay cards
+.card--layout-overlay.card--overlay-small {
+  min-height: 12rem;
+}
+
+.card--layout-overlay.card--overlay-medium {
+  min-height: 18rem;
+}
+
+.card--layout-overlay.card--overlay-large {
+  min-height: 24rem;
+}
+
+// Ensure overlay cards in grids maintain full height
+.layout--fourcol,
+.layout--threecol,
+.layout--twocol {
+  .card--layout-overlay {
+    height: 100%;
+
+    > .media,
+    .card__body {
+      height: 100%;
+    }
+  }
+}
+// === End: Layout Overlay === //
+.artsci-aggregator .card header .headline {
+  font-size: clamp(1.125rem, 1vw + 0.875rem, 1.5rem);
+}
+
+// === Portrait media_format (Student Stories cards) === //
+// When the portrait format is combined with the overlay position, size the
+// whole card to a 2:3 box so the caption sits over a tall portrait image
+// (matches the Student Stories design). Without overlay, the `.media img`
+// aspect-ratio rule inside `.card` handles the crop and the text flows below.
+.card--layout-overlay:has(.media--portrait) {
+  aspect-ratio: 2 / 3;
+  min-height: 0;
+}
+// === End: Portrait media_format === //
+.bg--dark-gray .card {
+  background: var(--bg--dark-gray);
 }

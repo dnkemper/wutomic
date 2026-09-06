@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - block_content.type.featured_content
-    - field.field.block_content.featured_content.field_featured_content_item
     - field.field.block_content.featured_content.field_artsci_headline
+    - field.field.block_content.featured_content.field_featured_content_item
   module:
     - layout_builder_custom
 id: block_content.featured_content.default
@@ -18,7 +18,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_featured_content_item:
     type: entity_reference_entity_view
@@ -27,7 +27,7 @@ content:
       view_mode: teaser
       link: false
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
 hidden:
   entity_print_view_epub: true

@@ -1,0 +1,19 @@
+uuid: e9e3f57d-592d-4ea7-b8aa-f51d21ae7d82
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shared_content
+    - node.type.article
+id: node.article.field_shared_content
+field_name: field_shared_content
+entity_type: node
+bundle: article
+label: shared_content
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -10,12 +10,14 @@ dependencies:
     - field.field.block_content.artsci_banner.field_artsci_banner_link
     - field.field.block_content.artsci_banner.field_artsci_banner_pre_title
     - field.field.block_content.artsci_banner.field_artsci_banner_title
+    - field.field.block_content.artsci_banner.field_options_list_title
     - field.field.block_content.artsci_banner.field_styles_gradient_midpoint
   module:
     - allowed_formats
     - heading
     - linkit
     - media_library
+    - media_library_edit
     - text
 _core:
   default_config_hash: 04dOI4hIsG4LKoCi433TTlv60gSkLNYRBit19n_G-kM
@@ -47,8 +49,14 @@ content:
     weight: 5
     region: content
     settings:
-      media_types: {  }
-    third_party_settings: {  }
+      media_types:
+        - image
+        - remote_video
+        - video
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: default
   field_artsci_banner_link:
     type: linkit
     weight: 4
@@ -73,9 +81,17 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_options_list_title:
+    type: string_textfield
+    weight: 8
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_styles_gradient_midpoint:
     type: options_buttons
-    weight: 26
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }

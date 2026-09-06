@@ -1,0 +1,9 @@
+uuid: 451ade04-2680-4dd7-85a5-bdd10c2873a8
+langcode: en
+status: true
+dependencies: {  }
+id: college_registrar
+label: 'College Registrar'
+description: ''
+allow_former: false
+allowed_fields: {  }

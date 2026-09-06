@@ -1,0 +1,257 @@
+@use '../abstracts/variables.scss';
+
+// Academic Calendar of Events.
+// Toolbar (subscribe / print / semester stepper / search) plus the event list.
+// Brand tokens come from the :root custom properties in abstracts/_variables.
+
+.academic-calendar {
+  --ac-red: var(--artsci-red, #ba0c2f);
+  --ac-rule: #d7d2cb;
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: variables.$sm-md;
+    flex-wrap: wrap;
+  }
+
+  &__bar--top {
+    justify-content: flex-start;
+    margin-bottom: variables.$md;
+  }
+
+  &__bar--controls {
+    justify-content: space-between;
+    padding: variables.$sm 0;
+  }
+
+  // Uppercase red action (Subscribe, Print).
+  &__action {
+    display: inline-flex;
+    align-items: center;
+    gap: variables.$xsm-sm;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: var(--ac-red);
+    font-family: var(--font-family-caps);
+    font-weight: variables.$font-weight-medium-bold;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    line-height: 1;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  &__icon {
+    width: 1em;
+    height: 1em;
+    flex: 0 0 auto;
+  }
+
+  // Semester stepper.
+  &__semester {
+    display: inline-flex;
+    align-items: center;
+    gap: variables.$sm;
+  }
+
+  &__semester-prompt {
+    font-family: var(--font-family-caps);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--artsci-black, #000);
+  }
+
+  &__semester-current {
+    min-width: 9em;
+    text-align: center;
+    font-family: var(--font-family-caps);
+    font-weight: variables.$font-weight-medium-bold;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--artsci-black, #000);
+  }
+
+  &__step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--ac-red);
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+
+    &:hover,
+    &:focus {
+      opacity: 0.7;
+    }
+
+    &.is-disabled {
+      color: var(--artsci-gray-light, #cacaca);
+      pointer-events: none;
+    }
+  }
+
+  &__chevron {
+    width: 0.7rem;
+    height: 0.9rem;
+  }
+
+  // Search.
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: variables.$sm;
+    margin: variables.$md 0 3rem;
+  }
+
+  &__search-input {
+    flex: 1 1 auto;
+    border: 0;
+    border-bottom: 2px solid var(--ac-rule);
+    background: transparent;
+    padding: variables.$xsm-sm 0;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--ac-red);
+    }
+  }
+
+  &__search-submit {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    color: var(--ac-red);
+    cursor: pointer;
+    padding: variables.$xsm;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  span.add-to-calendar {
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 50%;
+    grid-column: 3;
+    grid-row: 1;
+    padding: 5px 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.075em;
+    line-height: 1.2;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    justify-items: start;
+  }
+  span.add-to-calendar:nth-child(2) {
+    padding: 20px 15px;
+  }
+  .event-details svg {
+    font-size: 30px;
+  }
+  // Event list rows. Each row is an academic_calendar_event teaser rendered
+  // through Layout Builder (three columns: date / title / add to calendar).
+  // The grey row background comes from the teaser's section background style.
+  // &__list {
+  .views-row {
+    margin-bottom: variables.$sm;
+  }
+
+  .layout--threecol {
+    align-items: center;
+  }
+
+  // Date column.
+  .layout__region--first {
+    .field--name-field-start-date,
+    time {
+      font-family: var(--font-family-serif);
+      color: var(--ac-red);
+      font-size: 26px;
+      line-height: 1.15;
+      padding: 10px 20px;
+      margin-right: 10px;
+      width: 100%;
+    }
+  }
+
+  // Title column.
+  .layout__region--second {
+    .academic-calendar__event-link {
+      color: var(--ac-red);
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+      font-family: var(--font-family-caps);
+      font-weight: variables.$font-weight-medium-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      width: 100%;
+      flex-wrap: nowrap;
+
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+
+    .academic-calendar__event-text {
+      color: var(--artsci-black, #000);
+      font-family: var(--font-family-caps);
+      font-weight: variables.$font-weight-medium-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      width: 100%;
+    }
+  }
+
+  // Add to calendar column.
+  .layout__region--third {
+    text-align: right;
+  }
+  // }
+
+  .layout__spacing_container {
+    gap: 0rem !important;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    padding: 10px 20px !important;
+  }
+  .layout__container.section-padding__top-restored {
+    padding: 0 !important;
+  }
+  // Print: the Print Semester button prints the view in isolation via JS.
+  // Keep Subscribe and the Add to Calendar column (matching production); only
+  // drop the interactive controls and the search.
+  @media print {
+    .academic-calendar__bar--controls,
+    .academic-calendar__search,
+    .add-to-cal svg {
+      display: none !important;
+    }
+    .layout__spacing_container {
+      gap: 10rem !important;
+      justify-items: center;
+      align-items: center;
+    }
+    width: 100%;
+  }
+}

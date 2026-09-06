@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Theme override for a Photoswipe image formatter.
+ *
+ * Renders an optional `caption` next to the image so blocks like
+ * artsci_image_gallery can display a per-thumbnail label without
+ * touching contrib markup. The caption variable is populated in
+ * atomic_artsci_preprocess_photoswipe_image_formatter() (and the
+ * responsive twin) when the formatter is rendered for that bundle.
+ *
+ * Available variables:
+ * - image: image item.
+ * - path: The path of the image that should be displayed in Photoswipe.
+ * - attributes: Link attributes.
+ * - item: An ImageItem object.
+ * - display_settings: optional image styles.
+ * - third_party_settings: optional third party settings.
+ * - caption: Optional string label shown over the thumbnail.
+ *
+ * @see template_preprocess_photoswipe_image_formatter()
+ */
+#}
+{% if path is not empty %}
+  <a href="{{ path }}" {{ attributes }}>
+    {{ image }}
+    {% if caption %}
+      <span class="artsci-image-gallery__caption">{{ caption }}</span>
+    {% endif %}
+  </a>
+{% else %}
+  <!-- Broken image detected in photoswipe-image-formatter.html.twig. Please check the source field values. -->
+{% endif %}

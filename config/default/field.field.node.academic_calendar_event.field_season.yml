@@ -1,0 +1,21 @@
+uuid: 47064b32-51c3-4571-94b3-e0b180c1a8b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_season
+    - node.type.academic_calendar_event
+  module:
+    - options
+id: node.academic_calendar_event.field_season
+field_name: field_season
+entity_type: node
+bundle: academic_calendar_event
+label: Semester
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

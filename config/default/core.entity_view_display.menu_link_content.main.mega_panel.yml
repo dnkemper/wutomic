@@ -1,0 +1,52 @@
+uuid: f6b2d7e9-8a1c-4d46-8b7f-6c5a3e569d18
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.menu_link_content.mega_panel
+    - field.field.menu_link_content.main.field_artsci_card_link
+    - field.field.menu_link_content.main.field_artsci_headline
+    - field.field.menu_link_content.main.field_image
+    - system.menu.main
+  module:
+    - layout_builder_custom
+    - shared_content
+id: menu_link_content.main.mega_panel
+targetEntityType: menu_link_content
+bundle: main
+mode: mega_panel
+content:
+  field_artsci_card_link:
+    type: shared_content_link_button
+    label: hidden
+    settings:
+      button_style: transparent
+      fallback_to_url: 0
+      trim_length: ''
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_artsci_headline:
+    type: artsci_headline_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: small__portrait
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  children: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  search_api_excerpt: true

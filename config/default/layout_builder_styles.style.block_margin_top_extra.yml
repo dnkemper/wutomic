@@ -8,7 +8,16 @@ classes: block-margin__top--extra
 type: component
 group: margin
 block_restrictions:
+  - artsci_core_backtolink
+  - artsci_social_share
+  - academic_addtocal_block
+  - addtocal_block
   - 'inline_block:artsci_collection'
   - 'inline_block:artsci_text_area'
+  - artsci_core_ampersand_subscribe_block
+  - artsci_core_sidebar_block
+  - artsci_block
+  - artsci_core_search_block
+  - artsci_core_subscribe_block
 layout_restrictions: {  }
 weight: -34

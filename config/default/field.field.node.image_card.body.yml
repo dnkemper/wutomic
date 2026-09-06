@@ -1,0 +1,24 @@
+uuid: c62a0d0e-d9dc-404b-b3f9-b15a36872ea4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.image_card
+  module:
+    - text
+id: node.image_card.body
+field_name: body
+entity_type: node
+bundle: image_card
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

@@ -8,9 +8,21 @@
 
 // === BEF Form === //
 .bef-form {
-  [type=date], [type=datetime-local], [type=datetime], [type=email],
-  [type=month], [type=number], [type=password], [type=search],  [type=tel],  [type=text],
-  [type=time], [type=url], [type=week],  select, textarea {
+  [type='date'],
+  [type='datetime-local'],
+  [type='datetime'],
+  [type='email'],
+  [type='month'],
+  [type='number'],
+  [type='password'],
+  [type='search'],
+  [type='tel'],
+  [type='text'],
+  [type='time'],
+  [type='url'],
+  [type='week'],
+  select,
+  textarea {
     margin-bottom: 0;
   }
   .artsci-content {
@@ -46,11 +58,10 @@
 
 // === BEF Summary & Details === //
 .bef-form {
-
   .bef-exposed-form {
     details:not(.form__details--multi-select) {
       &[open] > summary::before {
-        content: "\f139";
+        content: '\f139';
       }
     }
   }
@@ -98,7 +109,12 @@
 
     span.summary {
       margin-left: 1rem;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0) calc(50% - 1px), rgba(192, 192, 192, 1) calc(50%), rgba(0, 0, 0, 0) calc(50% + 1px));
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0) calc(50% - 1px),
+        rgba(192, 192, 192, 1) calc(50%),
+        rgba(0, 0, 0, 0) calc(50% + 1px)
+      );
       flex-grow: 1;
     }
 
@@ -110,13 +126,13 @@
 
   summary::before {
     padding: 0 0.6rem variables.$xsm variables.$xsm;
-    content: "\f13a";
-    color: variables.$brand-cool-gray;
+    content: '\f13a';
+    color: variables.$gray-dark;
     @include utilities.fas();
   }
 
   &[open] > summary::before {
-    content: "\f139";
+    content: '\f139';
   }
 
   > .details-wrapper {
@@ -131,7 +147,7 @@
     padding: #{2 * variables.$xsm-sm} variables.$xsm-sm;
     display: block;
     border: none;
-    border-bottom: 1px solid variables.$gray-light;
+    border-bottom: 1px solid variables.$gray-dark;
     text-decoration: none;
     font-size: 0.8rem;
     color: variables.$gray;
@@ -181,7 +197,7 @@
   }
 
   &:not(.bef-form--sidebar) {
-    .bef-exposed-form[data-drupal-form-fields*="edit-reset-"]{
+    .bef-exposed-form[data-drupal-form-fields*='edit-reset-'] {
       .bef--secondary {
         @include utilities.breakpoint(sm) {
           width: calc(100% + 173px);
@@ -196,10 +212,9 @@
   .bef-exposed-form {
     padding: 1.5rem;
 
-
     .button {
       flex: 1;
-      &[id*="edit-submit"] {
+      &[id*='edit-submit'] {
         @include utilities.breakpoint(sm) {
           min-width: 5rem;
         }
@@ -207,9 +222,7 @@
           min-width: 5.7rem;
         }
       }
-
     }
-
 
     .form-item:not(.form-type-checkbox) {
       margin-top: 0;
@@ -233,8 +246,8 @@
       @include utilities.breakpoint(sm) {
         display: grid !important;
         grid-template-columns: minmax(50%, 1fr) 25%;
-        grid-column-gap: 0;
-        grid-row-gap: 0;
+        column-gap: 0;
+        row-gap: 0;
         align-items: center;
       }
     }

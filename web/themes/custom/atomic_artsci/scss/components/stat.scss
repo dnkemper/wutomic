@@ -9,7 +9,7 @@
 .stat__grid {
   margin: 0;
   width: 100%;
-  transition: all .55s cubic-bezier(.95, 1.25, .375, 1.15);
+  transition: all 0.55s cubic-bezier(0.95, 1.25, 0.375, 1.15);
 }
 
 .stat {
@@ -73,7 +73,6 @@
     width: 85%;
     margin: variables.$sm 0;
 
-
     @include utilities.breakpoint(md) {
       font-size: 1.5rem;
     }
@@ -92,9 +91,8 @@
   }
 }
 
-
 .headline__prefix,
-.headline__suffix{
+.headline__suffix {
   font-size: 3.5rem;
   vertical-align: middle;
 }
@@ -108,8 +106,6 @@
 }
 
 .stat--horizontal:not(.element--flex-center) {
-
-
   .stat__title {
     font-size: 3.1rem;
 
@@ -121,7 +117,6 @@
     @include utilities.breakpoint(page-container) {
       flex-basis: 50%;
     }
-
   }
 
   &.element--flex-left {
@@ -132,16 +127,15 @@
     font-size: 1.1rem;
 
     @include utilities.breakpoint(md) {
-      padding-top: .5rem;
-      margin-top: .75rem;
+      padding-top: 0.5rem;
+      margin-top: 0.75rem;
       border-top: 8px solid variables.$primary;
       flex-basis: 100%;
     }
-
   }
 
   .headline__prefix,
-  .headline__suffix{
+  .headline__suffix {
     font-size: 2.1rem;
     vertical-align: middle;
   }
@@ -150,10 +144,9 @@
     margin-right: -3px;
   }
 
-  .headline__suffix{
+  .headline__suffix {
     margin-left: -3px;
   }
-
 
   .stat__description {
     width: 100%;
@@ -165,7 +158,6 @@
       margin: 0;
     }
   }
-
 }
 
 .stat__grid.stat--horizontal {
@@ -173,14 +165,48 @@
   display: flex;
   flex-wrap: wrap;
   cursor: inherit;
-  transition: all .55s cubic-bezier(.95, 1.25, .375, 1.15);
+  transition: all 0.55s cubic-bezier(0.95, 1.25, 0.375, 1.15);
 }
-
 
 .stat__grid.element--flex-center {
   padding: 1.5rem 0;
 
   &:first-of-type {
     padding-top: 0;
+  }
+}
+
+.stat__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid variables.$primary;
+    outline-offset: 4px;
+  }
+}
+
+// Hover effect (driven by the stat_hover_effect LB style on the wrapper).
+.stat--hover {
+  cursor: default;
+
+  .stat__grid {
+    transform-origin: center;
+  }
+
+  // Whole-card scale on hover. Uses the existing .stat__grid transition
+  // (`all 0.55s cubic-bezier(...)`) defined above.
+  &:hover,
+  &:focus-within {
+    transform: scale(1.15);
+  }
+
+  // Underline the excerpt only when the stat is actually linked.
+  // Scoped via .stat__link so unlinked stats don't get an underline cue.
+  &:hover .stat__link .stat__description,
+  &:focus-within .stat__link .stat__description {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }

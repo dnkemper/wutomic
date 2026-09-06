@@ -242,6 +242,12 @@ display:
         configure_filters: '0'
         disable_filters: disable_filters
         configure_sorts: configure_sorts
+        configure_filters_custom: configure_filters_custom
+        use_more: 0
+      general_help_text: ''
+      more_link_help_text: ''
+      restrict_fields:
+        title: 0
     cache_metadata:
       max-age: -1
       contexts:
@@ -334,6 +340,12 @@ display:
         configure_filters: '0'
         disable_filters: disable_filters
         configure_sorts: configure_sorts
+        configure_filters_custom: configure_filters_custom
+        use_more: 0
+      general_help_text: ''
+      more_link_help_text: ''
+      restrict_fields:
+        title: 0
     cache_metadata:
       max-age: -1
       contexts:
@@ -424,6 +436,12 @@ display:
         configure_filters: '0'
         disable_filters: disable_filters
         configure_sorts: configure_sorts
+        configure_filters_custom: configure_filters_custom
+        use_more: 0
+      general_help_text: ''
+      more_link_help_text: ''
+      restrict_fields:
+        title: 0
     cache_metadata:
       max-age: -1
       contexts:

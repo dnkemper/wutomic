@@ -1,0 +1,25 @@
+uuid: be2181e8-ee62-463c-8e89-70b8b05c8c8f
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.article_list_block
+  module:
+    - views
+  theme:
+    - atomic_artsci
+id: atomic_artsci_views_block__article_list_block_list_article
+theme: atomic_artsci
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:article_list_block-list_article'
+settings:
+  id: 'views_block:article_list_block-list_article'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: null
+  exposed: {  }
+visibility: {  }

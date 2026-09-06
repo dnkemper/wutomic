@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - node.type.person
-    - taxonomy.vocabulary.research_areas
+    - taxonomy.vocabulary.areas_of_study
   module:
     - draggableviews
     - node
@@ -432,7 +432,7 @@ display:
           exposed: true
           expose:
             operator_id: field_person_research_areas_target_id_op
-            label: 'Research areas'
+            label: 'Areas of Study'
             description: ''
             use_operator: false
             operator: field_person_research_areas_target_id_op
@@ -458,7 +458,7 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          vid: research_areas
+          vid: areas_of_study
           type: select
           hierarchy: true
           limit: true

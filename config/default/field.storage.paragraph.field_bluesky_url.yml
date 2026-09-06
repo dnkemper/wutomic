@@ -1,0 +1,19 @@
+uuid: cfa0bc3f-a301-40ed-b72a-362e0be22c1e
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - paragraphs
+id: paragraph.field_bluesky_url
+field_name: field_bluesky_url
+entity_type: paragraph
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

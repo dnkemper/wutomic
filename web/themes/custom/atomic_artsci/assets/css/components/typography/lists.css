@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -21,7 +36,7 @@
 
 ol {
   list-style-position: outside;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 1.05rem;
   margin-bottom: 1.05rem;
   margin-left: 1.875rem;
@@ -49,7 +64,7 @@ ol:not([type]).is-upper-roman {
 
 ul {
   list-style: disc outside;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 1.05rem;
   margin-bottom: 1.05rem;
   margin-left: 1.875rem;
@@ -69,7 +84,10 @@ ul ul ul {
   list-style-type: square;
 }
 
-ol ol, ol ul, ul ol, ul ul {
+ol ol,
+ol ul,
+ul ol,
+ul ul {
   margin-top: 0;
   margin-block-start: 0.75rem;
   margin-bottom: 0;
@@ -116,8 +134,8 @@ dd {
     margin-left: 115px;
   }
 }
-.artsci-component--circle-list > li:before,
-.element--circle-list > li:before {
+.artsci-component--circle-list > li::before,
+.element--circle-list > li::before {
   display: block;
   margin: 0 auto;
   top: 0px;
@@ -127,11 +145,10 @@ dd {
   padding-top: 35px;
   content: counter(circle-counter);
   text-align: center;
-  text-transform: uppercase;
   color: black;
-  border: 1px solid #BA0C2F;
+  border: 1px solid #ba0c2f;
   border-radius: 50%;
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   box-shadow: inset 0px 0px 0px 10px white;
   text-transform: uppercase;
   font-family: "ivystyle-sans", "Calibri", sans-serif;
@@ -143,17 +160,17 @@ dd {
   box-sizing: border-box;
 }
 @media (min-width: 768px) {
-  .artsci-component--circle-list > li:before,
-  .element--circle-list > li:before {
+  .artsci-component--circle-list > li::before,
+  .element--circle-list > li::before {
     position: absolute;
     display: inline-block;
     margin: 0 0.5rem 0;
   }
 }
-.artsci-component--gray .artsci-component--circle-list > li:before, .bg--gray .artsci-component--circle-list > li:before,
-.artsci-component--gray .element--circle-list > li:before,
-.bg--gray .element--circle-list > li:before {
-  box-shadow: inset 0px 0px 0px 10px #F3F3F3;
+.artsci-component--gray .artsci-component--circle-list > li::before, .bg--gray .artsci-component--circle-list > li::before,
+.artsci-component--gray .element--circle-list > li::before,
+.bg--gray .element--circle-list > li::before {
+  box-shadow: inset 0px 0px 0px 10px #edeae1;
 }
 
 .element--circle-list > li,
@@ -197,13 +214,13 @@ dd {
   margin: 0;
 }
 
+.fa-field-item > li {
+  position: relative;
+}
 .fa-field-item {
   position: relative;
   margin-left: 2.5rem;
   padding-left: 0;
-}
-.fa-field-item > li {
-  position: relative;
 }
 .fa-field-item svg[class*=fa-],
 .fa-field-item span[class*=fa-] {
@@ -235,4 +252,6 @@ ul[type=disc] {
 
 ul[type=square] {
   list-style-type: square;
-}/*# sourceMappingURL=lists.css.map */
+}
+
+/*# sourceMappingURL=lists.css.map */

@@ -4,10 +4,20 @@
 .footer {
   position: relative;
   background: variables.$secondary;
-  @include utilities.padding($top: variables.$xlg, $right: 0, $bottom: variables.$xlg, $left: 0);
+  @include utilities.padding(
+    $top: variables.$xlg,
+    $right: 0,
+    $bottom: variables.$xlg,
+    $left: 0
+  );
 
   @include utilities.breakpoint(md) {
-    @include utilities.padding($top: variables.$xlg, $right: 0, $bottom: 0, $left: 0);
+    @include utilities.padding(
+      $top: variables.$xlg,
+      $right: 0,
+      $bottom: 0,
+      $left: 0
+    );
   }
   img {
     max-width: 50% !important;
@@ -16,16 +26,19 @@
     color: variables.$primary;
     text-decoration: none;
     font-weight: variables.$font-weight-normal;
-    &:hover,
-    &:focus {
-      text-decoration: underline;
-    }
   }
-
+  a.bttn--footer-primary {
+    background: var(--artsci-red);
+    border-radius: 85px;
+    padding: 0.851rem 1.2rem !important;
+  }
+  .socket {
+    margin-top: 1rem;
+  }
   p {
-    color: #ccc;
+    color: variables.$white;
     line-height: 1.5;
-    font-weight: 100;
+    font-weight: 400;
     margin-top: variables.$sm-md;
 
     a {
@@ -37,12 +50,13 @@
         text-decoration: underline;
       }
 
-      i, svg, span {
+      i,
+      svg,
+      span {
         margin-right: variables.$sm;
         font-size: variables.$small-font-size;
         color: #999;
       }
-
     }
   }
 
@@ -69,22 +83,22 @@
     font-size: 1.4rem;
     margin-top: 0;
     font-weight: 300;
-    margin-bottom: .625rem;
+    margin-bottom: 0.625rem;
     display: block;
     background: variables.$secondary;
     padding: 0;
     a {
       color: #ccc;
       text-decoration: none;
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         text-decoration: underline;
       }
     }
   }
 
-
   &__container {
-    @include utilities.container-width;;
+    @include utilities.container-width;
 
     //padding: 0 $gutter;
     @include utilities.breakpoint(page-container) {
@@ -121,12 +135,13 @@
       a {
         font-weight: variables.$font-weight-light;
         text-decoration: none;
-        color: white;
+        text-transform: uppercase;
+        color: variables.$white;
         font-size: 1.1rem;
-        &:hover,
-        &:focus {
-          text-decoration: underline;
-        }
+        // &:hover,
+        // &:focus {
+        //   text-decoration: underline;
+        // }
       }
 
       ul {
@@ -134,7 +149,6 @@
 
         li {
           @extend %no-ul-list;
-
         }
       }
     }
@@ -150,7 +164,7 @@
 
   &__links--contact {
     @include utilities.breakpoint(md) {
-      flex-grow: 2;
+      flex-grow: 1;
     }
   }
 
@@ -192,7 +206,7 @@
 
 .socket {
   &__container {
-    @include utilities.container-width;;
+    @include utilities.container-width;
 
     @include utilities.breakpoint(page-container) {
       padding: 0;
@@ -209,7 +223,11 @@
       font-size: variables.$small-font-size;
       border-right: 1px solid #5d5656;
       margin-bottom: variables.$xsm;
-      @include utilities.padding($top: 0, $right: variables.$sm, $left: variables.$sm);
+      @include utilities.padding(
+        $top: 0,
+        $right: variables.$sm,
+        $left: variables.$sm
+      );
 
       &:first-child {
         flex-basis: 100%;
@@ -230,7 +248,7 @@
 
       a {
         text-decoration: none;
-        color: variables.$primary;
+        color: #ffffff99;
         &:hover,
         &:focus {
           text-decoration: underline;
@@ -269,8 +287,7 @@
 
   &__container {
     justify-content: space-between;
-    @include utilities.container-width;;
-
+    @include utilities.container-width;
 
     div:first-of-type,
     nav:first-of-type {
@@ -309,7 +326,7 @@
       margin: 0 variables.$md;
     }
 
-    &:before {
+    &::before {
       content: ' ';
       background-repeat: no-repeat;
       background-size: 90%;
@@ -322,11 +339,11 @@
   }
 }
 
-.footer-cta__container>a:first-child {
+.footer-cta__container > a:first-child {
   margin-left: 0;
 }
 
-.footer-cta__container>a:last-child {
+.footer-cta__container > a:last-child {
   margin-right: 0;
 }
 
@@ -336,23 +353,28 @@
   width: 128px;
 
   @include utilities.breakpoint(md) {
-    width: 145px
+    width: 145px;
   }
 
   @include utilities.breakpoint(page-container) {
-    width: 176px
+    width: 176px;
   }
 }
 
 .footer {
-  h2, h3, h4, h5, h6 {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: variables.$white;
     font-weight: variables.$font-weight-normal;
   }
   a.site-name-link {
     color: variables.$white;
     text-decoration: none;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       text-decoration: underline;
     }
   }
@@ -361,7 +383,7 @@
     font-size: 1.4rem;
     margin-top: 0;
     font-weight: 300;
-    margin-bottom: .625rem;
+    margin-bottom: 0.625rem;
     display: block;
     background: variables.$secondary;
     padding: 0;
@@ -376,10 +398,10 @@
 
 .artsci-footer--login-link {
   a {
-    &:before {
+    &::before {
       @include utilities.fas();
-      content: "\f2f6";
-      font-size: 0.8rem;
+      content: '\f2f6';
+      font-size: 0.875rem;
       padding-right: variables.$sm;
       color: #999;
     }
@@ -406,18 +428,14 @@
 
   .menu a:hover,
   .menu a:focus {
-    color: variables.$primary;
+    color: variables.$primary !important;
   }
 
   .menu a.fa-icon .menu-link-title {
+    @include utilities.element-invisible;
     border: 0;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
     margin: -1px;
-    overflow: hidden;
     padding: 0;
-    position: absolute;
-    width: 1px;
     margin-right: 0.5rem;
   }
 }
@@ -431,5 +449,30 @@
   }
   > * {
     flex-basis: 100%;
+  }
+}
+
+/* Footer menu */
+
+ul.sf-menu.sf-footer-primary.sf-horizontal > li a::after {
+  content: none;
+}
+
+ul.sf-menu.sf-footer-primary {
+  li a:hover {
+    text-decoration: underline;
+    color: variables.$white;
+  }
+}
+
+.block-superfish .menu.sf-footer-primary {
+  li a {
+    color: variables.$white;
+  }
+
+  li a.bttn--footer-primary:hover {
+    text-decoration: none;
+    background: variables.$white;
+    color: variables.$color-black;
   }
 }

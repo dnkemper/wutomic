@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies: {  }
 id: section_shield
-label: 'Shield Section'
-classes: section-shield
+label: 'Left Shield Section'
+classes: section-shield--left
 type: section
 group: default
 block_restrictions: {  }

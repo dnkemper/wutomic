@@ -1,0 +1,114 @@
+uuid: 093e58f3-d852-4cf5-9ff8-a9e15e576967
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.social_media_links.field_bluesky_url
+    - field.field.paragraph.social_media_links.field_google_scholar_url
+    - field.field.paragraph.social_media_links.field_instagram_url
+    - field.field.paragraph.social_media_links.field_linkedin_url
+    - field.field.paragraph.social_media_links.field_twitter_url
+    - field.field.paragraph.social_media_links.field_youtube_url
+    - paragraphs.paragraphs_type.social_media_links
+  module:
+    - artsci
+id: paragraph.social_media_links.default
+targetEntityType: paragraph
+bundle: social_media_links
+mode: default
+content:
+  field_bluesky_url:
+    type: fa_icon_link
+    label: visually_hidden
+    settings:
+      fa_icon: 'fa-brands fa-bluesky'
+      aria_label: bluesky
+      open_in_new_tab: '1'
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_google_scholar_url:
+    type: fa_icon_link
+    label: visually_hidden
+    settings:
+      fa_icon: 'fa-brands fa-google-scholar'
+      aria_label: google_scholar
+      open_in_new_tab: '1'
+      trim_length: 80
+      url_only: ''
+      url_plain: ''
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_instagram_url:
+    type: fa_icon_link
+    label: visually_hidden
+    settings:
+      fa_icon: 'fa-brands fa-instagram'
+      aria_label: instagram
+      open_in_new_tab: '1'
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_linkedin_url:
+    type: fa_icon_link
+    label: visually_hidden
+    settings:
+      fa_icon: 'fa-brands fa-linkedin'
+      aria_label: linkedIn
+      open_in_new_tab: '1'
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_twitter_url:
+    type: fa_icon_link
+    label: visually_hidden
+    settings:
+      fa_icon: 'fa-brands fa-twitter'
+      aria_label: twitter
+      open_in_new_tab: '1'
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_youtube_url:
+    type: fa_icon_link
+    label: visually_hidden
+    settings:
+      fa_icon: 'fa-brands fa-square-youtube'
+      aria_label: youtube
+      open_in_new_tab: '1'
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  search_api_excerpt: true

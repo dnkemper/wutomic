@@ -1,0 +1,21 @@
+uuid: 32e7d51c-eff2-4cde-a185-1eefd85f0e48
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.field_lightbox_title
+field_name: field_lightbox_title
+entity_type: media
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

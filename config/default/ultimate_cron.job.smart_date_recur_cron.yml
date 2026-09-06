@@ -1,0 +1,17 @@
+uuid: 195269bf-de32-4a4a-8b60-8539a6040e17
+langcode: en
+status: true
+dependencies:
+  module:
+    - smart_date_recur
+title: 'Default cron handler'
+id: smart_date_recur_cron
+weight: 0
+module: smart_date_recur
+callback: 'smart_date_recur#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

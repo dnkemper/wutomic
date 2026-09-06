@@ -115,7 +115,7 @@ class FilterIframe extends FilterBase {
     $text = Html::serialize($dom);
     $result = new FilterProcessResult($text);
     $result->setAttachments([
-      'library' => ['atomic_artsci/embed'],
+      'library' => ['atomic_artsci/embed', 'atomic_artsci/admin'],
     ]);
     return $result;
   }

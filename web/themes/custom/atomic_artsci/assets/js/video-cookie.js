@@ -22,7 +22,7 @@
             const videoCookieId = video.getAttribute('data-video-cookie-id');
 
             // Check cookie id entry to see if the video was paused previously.
-            if (videoCookieCollection !== {} && videoCookieCollection[videoCookieId] === 'paused') {
+            if (Object.keys(videoCookieCollection).length > 0 && videoCookieCollection[videoCookieId] === 'paused') {
               // If they did, pause the video.
               // video.removeAttribute('autoplay');
               video.pause();

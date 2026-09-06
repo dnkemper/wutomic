@@ -1,0 +1,24 @@
+uuid: e3a582b7-0ecd-4b01-83f4-a012a3b4e5fa
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__1920_x_2880
+label: 'Portrait (1920 x 2880)'
+effects:
+  d29471a6-fdbc-4a90-92e3-9012a3b4d4e9:
+    uuid: d29471a6-fdbc-4a90-92e3-9012a3b4d4e9
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1920
+      height: 2880
+      crop_type: focal_point
+  144feacc-7b8d-44ac-be5e-5d61f7b61d11:
+    uuid: 144feacc-7b8d-44ac-be5e-5d61f7b61d11
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

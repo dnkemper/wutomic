@@ -1,17 +1,18 @@
-uuid: 80480f29-93ba-47d1-a571-a3feb571a2e6
+uuid: 3263de05-853a-41b5-be87-827d8b4cb958
 langcode: en
 status: true
 dependencies:
   module:
-    - geofield
     - node
 id: node.field_event_geolocation
 field_name: field_event_geolocation
 entity_type: node
-type: geofield
+type: string
 settings:
-  backend: geofield_backend_default
-module: geofield
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
 locked: false
 cardinality: 1
 translatable: true

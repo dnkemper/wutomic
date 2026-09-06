@@ -1,0 +1,17 @@
+uuid: 981997ed-134b-4608-88e3-ea22dcf9ebef
+langcode: en
+status: true
+dependencies:
+  module:
+    - shared_content
+title: 'Default cron handler'
+id: shared_content_cron
+weight: 0
+module: shared_content
+callback: 'shared_content#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

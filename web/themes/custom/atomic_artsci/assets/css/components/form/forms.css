@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -39,12 +54,12 @@
   display: block;
   box-sizing: border-box;
   width: 100%;
-  height: 3.5rem;
-  margin: 0 0 1rem;
+  height: 2.5rem;
+  margin: 1rem 0 1rem;
   padding: 0.5rem;
   transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
   color: var(--brand-secondary);
-  border: 1px solid #CACACA;
+  border: 1px solid #e8e6e1;
   background-color: #fefefe;
   box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   font-family: inherit;
@@ -76,7 +91,7 @@
   border: 2px solid #8a8a8a;
   outline: none;
   background-color: #fefefe;
-  box-shadow: 0 0 5px 2px #CACACA;
+  box-shadow: 0 0 5px 2px #e8e6e1;
 }
 .form [type=text].error,
 .form [type=password].error,
@@ -95,7 +110,7 @@
 .form textarea.error,
 .form select.error,
 .form details.form__details--multi-select summary.error {
-  border: 1px solid #BD472A;
+  border: 1px solid #bd472a;
   background-color: rgb(247.3909090909, 226.012987013, 220.7590909091);
 }
 .form [type=text].error:focus,
@@ -115,7 +130,7 @@
 .form textarea.error:focus,
 .form select.error:focus,
 .form details.form__details--multi-select summary.error:focus {
-  border: 2px solid #BD472A;
+  border: 2px solid #bd472a;
   box-shadow: 0 0 5px 2px rgb(247.3909090909, 226.012987013, 220.7590909091);
 }
 .form details.form__details--multi-select summary {
@@ -124,8 +139,8 @@
 }
 .form .form-item,
 .form .form-actions {
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .form label {
   display: block;
@@ -134,15 +149,15 @@
   font-weight: 500;
   line-height: 1.8;
 }
-.form label.form-required:after {
+.form label.form-required::after {
   margin-left: 0.325rem;
   content: "*";
-  color: #BD472A;
+  color: #bd472a;
   vertical-align: middle;
 }
 .form abbr.req {
   font-size: 150%;
-  color: #BD472A;
+  color: #bd472a;
 }
 .form [type=checkbox] + label,
 .form [type=radio] + label {
@@ -162,15 +177,14 @@
   box-sizing: border-box;
 }
 .form input[id^=edit-submit][type=submit], .form input[id^=edit-actions-submit] {
-  color: #BA0C2F;
-  background: #fff;
+  color: black;
 }
 .form input[id^=edit-submit][type=submit] i,
 .form input[id^=edit-submit][type=submit] svg,
 .form input[id^=edit-submit][type=submit] span[class*=fa-], .form input[id^=edit-actions-submit] i,
 .form input[id^=edit-actions-submit] svg,
 .form input[id^=edit-actions-submit] span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 .form input + .description,
 .form input + .field-prefix,
@@ -197,11 +211,11 @@
 .form textarea:disabled,
 .form textarea[readonly] {
   cursor: not-allowed;
-  color: #63666A;
+  color: #63666a;
   border-color: #bababf;
-  background-color: #f3f3f3 !important;
+  background-color: #edeae1 !important;
   box-shadow: none;
-  -webkit-text-fill-color: #63666A;
+  -webkit-text-fill-color: #63666a;
 }
 .form [type=number]::-webkit-inner-spin-button, .form [type=number]::-webkit-outer-spin-button {
   height: auto;
@@ -220,7 +234,6 @@
   -moz-appearance: none;
   appearance: none;
   border: none;
-  display: inline-block;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -234,10 +247,9 @@
   line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  font-family: "ivystyle-sans", "Calibri", sans-serif;
 }
 .form [type=submit] i,
 .form [type=submit] span[class*=fa-],
@@ -246,6 +258,10 @@
 .form [type=button] span[class*=fa-],
 .form [type=button] svg {
   margin-left: 0.625rem;
+}
+.form [type=submit],
+.form [type=button] {
+  font-family: "ivystyle-sans", "Calibri", sans-serif;
 }
 .form [type=submit].button--small,
 .form [type=button].button--small {
@@ -277,10 +293,9 @@
 }
 .form [type=checkbox],
 .form [type=radio] {
-  height: 1.2rem;
-  min-width: 1.2rem;
+  height: 0.875rem;
+  min-width: 0.875rem;
   margin: 0.25rem 0.35rem 0 0.25rem;
-  -webkit-transform: scale(1.3, 1.3);
   box-sizing: border-box;
   padding: 0;
 }
@@ -291,8 +306,7 @@
   display: inline-block;
   vertical-align: baseline;
   margin-bottom: 0;
-  margin-left: 0.625rem;
-  margin-right: 1rem;
+  margin-left: 0.25rem;
 }
 .form [type=checkbox] + label[for], .form [type=checkbox] + label[for],
 .form [type=radio] + label[for],
@@ -336,7 +350,7 @@
   background-image: none;
 }
 .form select[multiple] {
-  border: 1px solid #737373;
+  border: 1px solid #f4f2ed;
   padding: 0.5rem;
   font-size: 1.25rem;
   cursor: pointer;
@@ -367,6 +381,8 @@
   font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.6;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .form__checkbox--switch [type=checkbox] {
@@ -382,15 +398,15 @@
   outline: none;
   border: none;
   cursor: pointer;
-  background-color: #CACACA;
+  background-color: #e8e6e1;
   transition: background-color ease 0.3s;
   margin-top: 0;
 }
 .form__checkbox--switch [type=checkbox]:focus-visible {
-  background: #F3F3F3;
+  background: #edeae1;
   outline: 1px solid #000000;
 }
-.form__checkbox--switch [type=checkbox]:before {
+.form__checkbox--switch [type=checkbox]::before {
   content: "on off";
   display: block;
   position: absolute;
@@ -401,7 +417,7 @@
   left: 2px;
   top: 2px;
   border-radius: 50%;
-  font: 10px/28px Arial, sans-serif;
+  font: 10px/28px "Arial", sans-serif;
   text-transform: uppercase;
   font-weight: bold;
   text-indent: -22px;
@@ -412,9 +428,9 @@
   transition: all cubic-bezier(0.3, 1.5, 0.7, 1) 0.3s;
 }
 .form__checkbox--switch [type=checkbox]:checked {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
 }
-.form__checkbox--switch [type=checkbox]:checked:before {
+.form__checkbox--switch [type=checkbox]:checked::before {
   left: 32px;
 }
 
@@ -423,12 +439,12 @@ details.form__details--multi-select {
 }
 details.form__details--multi-select summary {
   cursor: pointer;
-  color: #737373;
+  color: #f4f2ed;
   align-items: center;
   background-image: none;
   transition: border-color 0.25s ease-in-out;
 }
-details.form__details--multi-select summary:before {
+details.form__details--multi-select summary::before {
   position: absolute;
   right: 0;
   content: "";
@@ -445,14 +461,14 @@ details.form__details--multi-select summary:before {
 details.form__details--multi-select summary:focus + .details-wrapper {
   border-top: 1px solid #8a8a8a;
 }
-details.form__details--multi-select[open] summary:before {
+details.form__details--multi-select[open] summary::before {
   transform: rotate(180deg);
 }
 details.form__details--multi-select fieldset {
   margin-top: 0;
 }
 details.form__details--multi-select .details-wrapper {
-  border: 1px solid #CACACA;
+  border: 1px solid #e8e6e1;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -469,12 +485,12 @@ details.form__details--multi-select .details-wrapper .form-item {
   padding: 0 0.5rem;
 }
 
-[class*=bg--gray] .form .button--primary, [class*=bg--white] .form .button--primary, .bg-pattern--brain .form .button--primary, .bg--white--pattern--brain .form .button--primary {
-  background: #BA0C2F;
+[class*=bg--gray] .form .button--primary, [class*=bg--white] .form .button--primary {
+  background: #ba0c2f;
 }
 .form fieldset {
   padding: 1.11111rem;
-  border: 1px solid #CACACA;
+  border: 1px solid #e8e6e1;
 }
 .form legend {
   display: table;
@@ -495,7 +511,7 @@ details.form__details--multi-select .details-wrapper .form-item {
   margin: 0.325rem 0;
 }
 .form .form-item--error-message * {
-  color: #BD472A !important;
+  color: #bd472a !important;
 }
 .form ::-webkit-file-upload-button {
   font: inherit;
@@ -521,10 +537,20 @@ details.form__details--multi-select .details-wrapper .form-item {
   overflow: auto;
 }
 .form ::-moz-placeholder {
-  color: #63666A;
+  color: #000000;
+  font-family: "ivystyle-sans", "Calibri", sans-serif;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
 }
 .form ::placeholder {
-  color: #63666A;
+  color: #000000;
+  font-family: "ivystyle-sans", "Calibri", sans-serif;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
 }
 .form .help-text {
   margin-top: -0.5rem;
@@ -626,13 +652,12 @@ details.form__details--multi-select .details-wrapper .form-item {
   display: flex;
 }
 .form .form-type-webform-multiple .webform-multiple-add .button {
-  color: #BA0C2F;
-  background: #fff;
+  color: black;
 }
 .form .form-type-webform-multiple .webform-multiple-add .button i,
 .form .form-type-webform-multiple .webform-multiple-add .button svg,
 .form .form-type-webform-multiple .webform-multiple-add .button span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 .form .form-type-webform-multiple .webform-multiple-add div[class*=-add-more-items] {
   display: flex;
@@ -650,7 +675,6 @@ details.form__details--multi-select .details-wrapper .form-item {
   display: inline-block;
 }
 .form .form-type-webform-multiple .webform-multiple-add .field-suffix {
-  display: inline-block;
   color: #666666;
   line-height: 1.4;
   font-size: 1.25rem;
@@ -698,14 +722,15 @@ details.form__details--multi-select .details-wrapper .form-item {
   background-color: #fff;
 }
 .form .form-managed-file .button {
-  color: #BA0C2F;
-  background: #fff;
-  display: block;
+  color: black;
 }
 .form .form-managed-file .button i,
 .form .form-managed-file .button svg,
 .form .form-managed-file .button span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
+}
+.form .form-managed-file .button {
+  display: block;
 }
 .form .form-managed-file input[multiple=multiple].button {
   margin: 0 0 1rem 0;
@@ -713,7 +738,6 @@ details.form__details--multi-select .details-wrapper .form-item {
 
 .button {
   border: none;
-  display: inline-block;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -727,17 +751,19 @@ details.form__details--multi-select .details-wrapper .form-item {
   line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  text-transform: uppercase;
-  font-family: "ivystyle-sans", "Calibri", sans-serif;
-  border: 1px solid #BA0C2F;
 }
 .button i,
 .button span[class*=fa-],
 .button svg {
   margin-left: 0.625rem;
+}
+.button {
+  text-transform: uppercase;
+  font-family: "ivystyle-sans", "Calibri", sans-serif;
+  border: 1px solid #ba0c2f;
 }
 
 .form .help-text,
@@ -748,25 +774,9 @@ details.form__details--multi-select .details-wrapper .form-item {
 [class*=bg--red] .block-webform input[id^=edit-actions-submit],
 [class*=bg--red] .block-webform input[id^=edit-actions],
 [class*=bg--red] .block-webform input[id^=edit-submit],
-[class*=bg--red] .block-webform input#edit-actions-submit,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit],
-.bg--brain-reversed .block-webform input[id^=edit-actions],
-.bg--brain-reversed .block-webform input[id^=edit-submit],
-.bg--brain-reversed .block-webform input#edit-actions-submit,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit],
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions],
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit],
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit,
-.bg-yellow .block-webform input[id^=edit-actions-submit],
-.bg-yellow .block-webform input[id^=edit-actions],
-.bg-yellow .block-webform input[id^=edit-submit],
-.bg-yellow .block-webform input#edit-actions-submit {
+[class*=bg--red] .block-webform input#edit-actions-submit {
   color: #fff;
-  background: #000000;
-  border: 1px solid #000000;
-  transition: filter 0.2s ease-in-out;
-  color: #fff !important;
-  background-color: #000000 !important;
+  background: var(--bg--teal);
 }
 [class*=bg--red] .block-webform input[id^=edit-actions-submit] i,
 [class*=bg--red] .block-webform input[id^=edit-actions-submit] svg,
@@ -779,44 +789,35 @@ details.form__details--multi-select .details-wrapper .form-item {
 [class*=bg--red] .block-webform input[id^=edit-submit] span[class*=fa-],
 [class*=bg--red] .block-webform input#edit-actions-submit i,
 [class*=bg--red] .block-webform input#edit-actions-submit svg,
-[class*=bg--red] .block-webform input#edit-actions-submit span[class*=fa-],
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit] i,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit] svg,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit] span[class*=fa-],
-.bg--brain-reversed .block-webform input[id^=edit-actions] i,
-.bg--brain-reversed .block-webform input[id^=edit-actions] svg,
-.bg--brain-reversed .block-webform input[id^=edit-actions] span[class*=fa-],
-.bg--brain-reversed .block-webform input[id^=edit-submit] i,
-.bg--brain-reversed .block-webform input[id^=edit-submit] svg,
-.bg--brain-reversed .block-webform input[id^=edit-submit] span[class*=fa-],
-.bg--brain-reversed .block-webform input#edit-actions-submit i,
-.bg--brain-reversed .block-webform input#edit-actions-submit svg,
-.bg--brain-reversed .block-webform input#edit-actions-submit span[class*=fa-],
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit] i,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit] svg,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit] span[class*=fa-],
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions] i,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions] svg,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions] span[class*=fa-],
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit] i,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit] svg,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit] span[class*=fa-],
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit i,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit svg,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit span[class*=fa-],
-.bg-yellow .block-webform input[id^=edit-actions-submit] i,
-.bg-yellow .block-webform input[id^=edit-actions-submit] svg,
-.bg-yellow .block-webform input[id^=edit-actions-submit] span[class*=fa-],
-.bg-yellow .block-webform input[id^=edit-actions] i,
-.bg-yellow .block-webform input[id^=edit-actions] svg,
-.bg-yellow .block-webform input[id^=edit-actions] span[class*=fa-],
-.bg-yellow .block-webform input[id^=edit-submit] i,
-.bg-yellow .block-webform input[id^=edit-submit] svg,
-.bg-yellow .block-webform input[id^=edit-submit] span[class*=fa-],
-.bg-yellow .block-webform input#edit-actions-submit i,
-.bg-yellow .block-webform input#edit-actions-submit svg,
-.bg-yellow .block-webform input#edit-actions-submit span[class*=fa-] {
-  color: #BA0C2F;
+[class*=bg--red] .block-webform input#edit-actions-submit span[class*=fa-] {
+  color: #fff;
+}
+[class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover,
+[class*=bg--red] .block-webform input[id^=edit-actions]:hover,
+[class*=bg--red] .block-webform input[id^=edit-submit]:hover,
+[class*=bg--red] .block-webform input#edit-actions-submit:hover {
+  background: #d4f1e7;
+  color: black;
+}
+[class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover i,
+[class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover svg,
+[class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover span[class*=fa-],
+[class*=bg--red] .block-webform input[id^=edit-actions]:hover i,
+[class*=bg--red] .block-webform input[id^=edit-actions]:hover svg,
+[class*=bg--red] .block-webform input[id^=edit-actions]:hover span[class*=fa-],
+[class*=bg--red] .block-webform input[id^=edit-submit]:hover i,
+[class*=bg--red] .block-webform input[id^=edit-submit]:hover svg,
+[class*=bg--red] .block-webform input[id^=edit-submit]:hover span[class*=fa-],
+[class*=bg--red] .block-webform input#edit-actions-submit:hover i,
+[class*=bg--red] .block-webform input#edit-actions-submit:hover svg,
+[class*=bg--red] .block-webform input#edit-actions-submit:hover span[class*=fa-] {
+  color: black;
+}
+[class*=bg--red] .block-webform input[id^=edit-actions-submit],
+[class*=bg--red] .block-webform input[id^=edit-actions],
+[class*=bg--red] .block-webform input[id^=edit-submit],
+[class*=bg--red] .block-webform input#edit-actions-submit {
+  border: 1px solid #000000;
 }
 [class*=bg--red] .block-webform input[id^=edit-actions-submit]:hover a, [class*=bg--red] .block-webform input[id^=edit-actions-submit]:focus a,
 [class*=bg--red] .block-webform input[id^=edit-actions]:hover a,
@@ -824,95 +825,46 @@ details.form__details--multi-select .details-wrapper .form-item {
 [class*=bg--red] .block-webform input[id^=edit-submit]:hover a,
 [class*=bg--red] .block-webform input[id^=edit-submit]:focus a,
 [class*=bg--red] .block-webform input#edit-actions-submit:hover a,
-[class*=bg--red] .block-webform input#edit-actions-submit:focus a,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:hover a,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:focus a,
-.bg--brain-reversed .block-webform input[id^=edit-actions]:hover a,
-.bg--brain-reversed .block-webform input[id^=edit-actions]:focus a,
-.bg--brain-reversed .block-webform input[id^=edit-submit]:hover a,
-.bg--brain-reversed .block-webform input[id^=edit-submit]:focus a,
-.bg--brain-reversed .block-webform input#edit-actions-submit:hover a,
-.bg--brain-reversed .block-webform input#edit-actions-submit:focus a,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:hover a,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:focus a,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:hover a,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:focus a,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:hover a,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:focus a,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:hover a,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:focus a,
-.bg-yellow .block-webform input[id^=edit-actions-submit]:hover a,
-.bg-yellow .block-webform input[id^=edit-actions-submit]:focus a,
-.bg-yellow .block-webform input[id^=edit-actions]:hover a,
-.bg-yellow .block-webform input[id^=edit-actions]:focus a,
-.bg-yellow .block-webform input[id^=edit-submit]:hover a,
-.bg-yellow .block-webform input[id^=edit-submit]:focus a,
-.bg-yellow .block-webform input#edit-actions-submit:hover a,
-.bg-yellow .block-webform input#edit-actions-submit:focus a {
+[class*=bg--red] .block-webform input#edit-actions-submit:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
-[class*=bg--red] .block-webform input[id^=edit-actions-submit]:after,
-[class*=bg--red] .block-webform input[id^=edit-actions]:after,
-[class*=bg--red] .block-webform input[id^=edit-submit]:after,
-[class*=bg--red] .block-webform input#edit-actions-submit:after,
-.bg--brain-reversed .block-webform input[id^=edit-actions-submit]:after,
-.bg--brain-reversed .block-webform input[id^=edit-actions]:after,
-.bg--brain-reversed .block-webform input[id^=edit-submit]:after,
-.bg--brain-reversed .block-webform input#edit-actions-submit:after,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions-submit]:after,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-actions]:after,
-.bg-pattern--brain-reversed .block-webform input[id^=edit-submit]:after,
-.bg-pattern--brain-reversed .block-webform input#edit-actions-submit:after,
-.bg-yellow .block-webform input[id^=edit-actions-submit]:after,
-.bg-yellow .block-webform input[id^=edit-actions]:after,
-.bg-yellow .block-webform input[id^=edit-submit]:after,
-.bg-yellow .block-webform input#edit-actions-submit:after {
-  background-color: #BA0C2F;
+[class*=bg--red] .block-webform input[id^=edit-actions-submit],
+[class*=bg--red] .block-webform input[id^=edit-actions],
+[class*=bg--red] .block-webform input[id^=edit-submit],
+[class*=bg--red] .block-webform input#edit-actions-submit {
+  color: #fff !important;
+  background-color: #000000 !important;
+}
+[class*=bg--red] .block-webform input[id^=edit-actions-submit]::after,
+[class*=bg--red] .block-webform input[id^=edit-actions]::after,
+[class*=bg--red] .block-webform input[id^=edit-submit]::after,
+[class*=bg--red] .block-webform input#edit-actions-submit::after {
+  background-color: #ba0c2f;
 }
 
-[class*=bg--black] .block-webform input[id^=edit-actions-submit],
-[class*=bg--black] .block-webform input[id^=edit-actions],
-[class*=bg--black] .block-webform input[id^=edit-submit],
-[class*=bg--black] .block-webform input#edit-actions-submit,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit],
-.bg-pattern--brain-black .block-webform input[id^=edit-actions],
-.bg-pattern--brain-black .block-webform input[id^=edit-submit],
-.bg-pattern--brain-black .block-webform input#edit-actions-submit,
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit],
+[class*=bg--teal] .block-webform input[id^=edit-actions],
+[class*=bg--teal] .block-webform input[id^=edit-submit],
+[class*=bg--teal] .block-webform input#edit-actions-submit,
 .bg-dark .block-webform input[id^=edit-actions-submit],
 .bg-dark .block-webform input[id^=edit-actions],
 .bg-dark .block-webform input[id^=edit-submit],
 .bg-dark .block-webform input#edit-actions-submit {
-  color: #BA0C2F;
-  background: #fff;
-  border: 1px solid #BA0C2F;
-  transition: filter 0.2s ease-in-out;
-  color: #000000 !important;
+  color: black;
 }
-[class*=bg--black] .block-webform input[id^=edit-actions-submit] i,
-[class*=bg--black] .block-webform input[id^=edit-actions-submit] svg,
-[class*=bg--black] .block-webform input[id^=edit-actions-submit] span[class*=fa-],
-[class*=bg--black] .block-webform input[id^=edit-actions] i,
-[class*=bg--black] .block-webform input[id^=edit-actions] svg,
-[class*=bg--black] .block-webform input[id^=edit-actions] span[class*=fa-],
-[class*=bg--black] .block-webform input[id^=edit-submit] i,
-[class*=bg--black] .block-webform input[id^=edit-submit] svg,
-[class*=bg--black] .block-webform input[id^=edit-submit] span[class*=fa-],
-[class*=bg--black] .block-webform input#edit-actions-submit i,
-[class*=bg--black] .block-webform input#edit-actions-submit svg,
-[class*=bg--black] .block-webform input#edit-actions-submit span[class*=fa-],
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit] i,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit] svg,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit] span[class*=fa-],
-.bg-pattern--brain-black .block-webform input[id^=edit-actions] i,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions] svg,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions] span[class*=fa-],
-.bg-pattern--brain-black .block-webform input[id^=edit-submit] i,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit] svg,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit] span[class*=fa-],
-.bg-pattern--brain-black .block-webform input#edit-actions-submit i,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit svg,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit span[class*=fa-],
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit] i,
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit] svg,
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit] span[class*=fa-],
+[class*=bg--teal] .block-webform input[id^=edit-actions] i,
+[class*=bg--teal] .block-webform input[id^=edit-actions] svg,
+[class*=bg--teal] .block-webform input[id^=edit-actions] span[class*=fa-],
+[class*=bg--teal] .block-webform input[id^=edit-submit] i,
+[class*=bg--teal] .block-webform input[id^=edit-submit] svg,
+[class*=bg--teal] .block-webform input[id^=edit-submit] span[class*=fa-],
+[class*=bg--teal] .block-webform input#edit-actions-submit i,
+[class*=bg--teal] .block-webform input#edit-actions-submit svg,
+[class*=bg--teal] .block-webform input#edit-actions-submit span[class*=fa-],
 .bg-dark .block-webform input[id^=edit-actions-submit] i,
 .bg-dark .block-webform input[id^=edit-actions-submit] svg,
 .bg-dark .block-webform input[id^=edit-actions-submit] span[class*=fa-],
@@ -925,23 +877,25 @@ details.form__details--multi-select .details-wrapper .form-item {
 .bg-dark .block-webform input#edit-actions-submit i,
 .bg-dark .block-webform input#edit-actions-submit svg,
 .bg-dark .block-webform input#edit-actions-submit span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
-[class*=bg--black] .block-webform input[id^=edit-actions-submit]:hover a, [class*=bg--black] .block-webform input[id^=edit-actions-submit]:focus a,
-[class*=bg--black] .block-webform input[id^=edit-actions]:hover a,
-[class*=bg--black] .block-webform input[id^=edit-actions]:focus a,
-[class*=bg--black] .block-webform input[id^=edit-submit]:hover a,
-[class*=bg--black] .block-webform input[id^=edit-submit]:focus a,
-[class*=bg--black] .block-webform input#edit-actions-submit:hover a,
-[class*=bg--black] .block-webform input#edit-actions-submit:focus a,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:hover a,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:focus a,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions]:hover a,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions]:focus a,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit]:hover a,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit]:focus a,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit:hover a,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit:focus a,
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit],
+[class*=bg--teal] .block-webform input[id^=edit-actions],
+[class*=bg--teal] .block-webform input[id^=edit-submit],
+[class*=bg--teal] .block-webform input#edit-actions-submit,
+.bg-dark .block-webform input[id^=edit-actions-submit],
+.bg-dark .block-webform input[id^=edit-actions],
+.bg-dark .block-webform input[id^=edit-submit],
+.bg-dark .block-webform input#edit-actions-submit {
+  border: 1px solid #ba0c2f;
+}
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit]:hover a, [class*=bg--teal] .block-webform input[id^=edit-actions-submit]:focus a,
+[class*=bg--teal] .block-webform input[id^=edit-actions]:hover a,
+[class*=bg--teal] .block-webform input[id^=edit-actions]:focus a,
+[class*=bg--teal] .block-webform input[id^=edit-submit]:hover a,
+[class*=bg--teal] .block-webform input[id^=edit-submit]:focus a,
+[class*=bg--teal] .block-webform input#edit-actions-submit:hover a,
+[class*=bg--teal] .block-webform input#edit-actions-submit:focus a,
 .bg-dark .block-webform input[id^=edit-actions-submit]:hover a,
 .bg-dark .block-webform input[id^=edit-actions-submit]:focus a,
 .bg-dark .block-webform input[id^=edit-actions]:hover a,
@@ -953,22 +907,27 @@ details.form__details--multi-select .details-wrapper .form-item {
   filter: brightness(0.75);
   text-decoration: underline;
 }
-[class*=bg--black] .block-webform input[id^=edit-actions-submit]:after,
-[class*=bg--black] .block-webform input[id^=edit-actions]:after,
-[class*=bg--black] .block-webform input[id^=edit-submit]:after,
-[class*=bg--black] .block-webform input#edit-actions-submit:after,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions-submit]:after,
-.bg-pattern--brain-black .block-webform input[id^=edit-actions]:after,
-.bg-pattern--brain-black .block-webform input[id^=edit-submit]:after,
-.bg-pattern--brain-black .block-webform input#edit-actions-submit:after,
-.bg-dark .block-webform input[id^=edit-actions-submit]:after,
-.bg-dark .block-webform input[id^=edit-actions]:after,
-.bg-dark .block-webform input[id^=edit-submit]:after,
-.bg-dark .block-webform input#edit-actions-submit:after {
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit],
+[class*=bg--teal] .block-webform input[id^=edit-actions],
+[class*=bg--teal] .block-webform input[id^=edit-submit],
+[class*=bg--teal] .block-webform input#edit-actions-submit,
+.bg-dark .block-webform input[id^=edit-actions-submit],
+.bg-dark .block-webform input[id^=edit-actions],
+.bg-dark .block-webform input[id^=edit-submit],
+.bg-dark .block-webform input#edit-actions-submit {
+  color: #000000 !important;
+}
+[class*=bg--teal] .block-webform input[id^=edit-actions-submit]::after,
+[class*=bg--teal] .block-webform input[id^=edit-actions]::after,
+[class*=bg--teal] .block-webform input[id^=edit-submit]::after,
+[class*=bg--teal] .block-webform input#edit-actions-submit::after,
+.bg-dark .block-webform input[id^=edit-actions-submit]::after,
+.bg-dark .block-webform input[id^=edit-actions]::after,
+.bg-dark .block-webform input[id^=edit-submit]::after,
+.bg-dark .block-webform input#edit-actions-submit::after {
   background-color: #000000;
 }
-[class*=bg--black] .block-webform .description,
-.bg-pattern--brain-black .block-webform .description,
+[class*=bg--teal] .block-webform .description,
 .bg-dark .block-webform .description {
   color: #fff;
 }
@@ -989,15 +948,6 @@ details.form__details--multi-select .details-wrapper .form-item {
 .form--horizontal .form--horizontal-flex {
   flex: 1;
 }
-.form--horizontal.form:not(.artsci-search) .button {
-  padding: 0.9rem 1.25rem 1.1rem;
-  max-height: 3.45rem;
-}
-@media (min-width: 768px) {
-  .form--horizontal.form:not(.artsci-search) .button {
-    margin-block-start: 0.75rem;
-  }
-}
 .form--horizontal label {
   font-size: 0.9rem;
 }
@@ -1006,4 +956,6 @@ details.form__details--multi-select .details-wrapper .form-item {
   -moz-column-gap: 1rem;
        column-gap: 1rem;
   align-self: center;
-}/*# sourceMappingURL=forms.css.map */
+}
+
+/*# sourceMappingURL=forms.css.map */

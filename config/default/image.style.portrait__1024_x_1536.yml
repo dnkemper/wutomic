@@ -1,0 +1,24 @@
+uuid: af614e73-ca89-4c6d-8fb0-6d7e8f901ab6
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__1024_x_1536
+label: 'Portrait (1024 x 1536)'
+effects:
+  9e503d62-bf78-4b5c-9eaf-5c6d7e8f90a5:
+    uuid: 9e503d62-bf78-4b5c-9eaf-5c6d7e8f90a5
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1024
+      height: 1536
+      crop_type: focal_point
+  f9d337de-861c-43a1-9d08-450c55bbad08:
+    uuid: f9d337de-861c-43a1-9d08-450c55bbad08
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

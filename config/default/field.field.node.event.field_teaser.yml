@@ -9,7 +9,7 @@ id: node.event.field_teaser
 field_name: field_teaser
 entity_type: node
 bundle: event
-label: 'Short Description'
+label: 'Intro Text'
 description: ''
 required: false
 translatable: true

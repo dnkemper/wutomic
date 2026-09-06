@@ -1,0 +1,116 @@
+{#
+/**
+ * @file
+ * Template for the person contact sidebar block.
+ *
+ * Variables:
+ * - contact: Contact information (email, phone, fax).
+ * - office: Office information (location, hours, directions).
+ * - mailing_address: Mailing address from paragraph.
+ * - faculty_links: Array of faculty website links.
+ */
+#}
+
+<div class="person-sidebar">
+
+  {# Contact Section #}
+  {% if contact %}
+    <div class="person-sidebar__section person-sidebar__contact">
+      <h3 class="person-sidebar__heading">{{ 'Contact'|t }}</h3>
+
+      {% if contact.email %}
+        <a href="{{ contact.email.link }}" class="person-sidebar__email">
+          {{ contact.email.value|upper }}
+        </a>
+      {% endif %}
+
+      {% if contact.phone %}
+        <div class="person-sidebar__phone">
+          <span class="person-sidebar__label">{{ contact.phone.label }}</span>
+         {{ contact.phone.value }}
+        </div>
+      {% endif %}
+
+      {% if contact.fax %}
+        <div class="person-sidebar__fax">
+          <span class="person-sidebar__label">{{ contact.fax.label }}</span>
+          {{ contact.fax.value }}
+        </div>
+      {% endif %}
+
+      {% if contact.social %}
+        <div class="person-sidebar__social">
+          {{ contact.social }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {# Office Section #}
+  {% if office %}
+    <div class="person-sidebar__section person-sidebar__office">
+      <h3 class="person-sidebar__heading">{{ 'Office'|t }}</h3>
+
+      {% if office.location %}
+        <div class="person-sidebar__location">
+          {{ office.location.value }}
+        </div>
+      {% endif %}
+
+      {% if office.hours %}
+        <div class="person-sidebar__hours">
+          {{ office.hours.value|raw }}
+        </div>
+      {% endif %}
+
+      {% if office.directions %}
+        <a href="{{ office.directions.link }}" class="person-sidebar__directions" target="_blank" rel="noopener">
+          {{ office.directions.label }}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {# Mailing Address Section #}
+  {% if mailing_address.address %}
+    <div class="person-sidebar__section person-sidebar__mailing">
+      <h3 class="person-sidebar__heading">{{ 'Mailing Address'|t }}</h3>
+
+      <address class="person-sidebar__address">
+        {% if mailing_address.address.organization %}
+          <span class="address-line">{{ mailing_address.address.organization|raw }}</span>
+        {% endif %}
+        {% if mailing_address.address.address_line1 %}
+          <span class="address-line">{{ mailing_address.address.address_line1|raw }}</span>
+        {% endif %}
+        {% if mailing_address.address.address_line2 %}
+          <span class="address-line">{{ mailing_address.address.address_line2|raw }}</span>
+        {% endif %}
+        {% if mailing_address.address.locality %}
+          <span class="address-line">
+            {{ mailing_address.address.locality }}{% if mailing_address.address.administrative_area %}, {{ mailing_address.address.administrative_area }}{% endif %}
+            {% if mailing_address.address.postal_code %} {{ mailing_address.address.postal_code }}{% endif %}
+          </span>
+        {% endif %}
+      </address>
+    </div>
+  {% endif %}
+
+  {# Faculty Links Section #}
+  {% if faculty_links %}
+    <div class="person-sidebar__section person-sidebar__links">
+      <h3 class="person-sidebar__heading">{{ 'Faculty Links'|t }}</h3>
+
+      <ul class="person-sidebar__link-list">
+        {% for link in faculty_links %}
+          <li>
+            <a href="{{ link.url }}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>
+              {{ link.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+</div>

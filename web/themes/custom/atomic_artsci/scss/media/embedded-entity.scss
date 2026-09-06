@@ -14,8 +14,7 @@
   }
 }
 
-
-.embedded-entity+p {
+.embedded-entity + p {
   margin-top: variables.$md !important;
 }
 
@@ -30,7 +29,7 @@
 figure.caption {
   display: block;
   margin: 0;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   &.align-center {
     margin-right: auto;
@@ -42,12 +41,18 @@ figure.caption {
   }
 
   figcaption {
-    display: block;
-    max-width: none;
+    margin: auto;
+    max-width: 90%;
     caption-side: bottom;
-    font-size: 95%;
-    margin-block-start: .5rem;
+    margin-block-start: 0.5rem;
     margin-block-end: 1.5rem;
+    contain: inline-size;
+    font-family: var(--as-font-sans-serif);
+    color: var(--as-color--as-color-dark-gray);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.4;
+    width: 100%;
 
     p {
       font-size: 95%;
@@ -68,7 +73,7 @@ figure.align-left,
 
   @include utilities.breakpoint(sm) {
     margin-right: 1.5rem;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
     float: left;
   }
 }
@@ -82,26 +87,26 @@ figure.align-right,
 
   @include utilities.breakpoint(sm) {
     margin-left: 1.5rem;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
     float: right;
   }
 }
 
-figure.caption .embedded-entity+figcaption {
+figure.caption .embedded-entity + figcaption {
   font-size: 90%;
   color: variables.$gray;
   margin-top: variables.$sm;
   margin-bottom: variables.$sm;
 }
 
-figure.caption.align-right .embedded-entity+figcaption {
+figure.caption.align-right .embedded-entity + figcaption {
   @include utilities.breakpoint(sm) {
     text-align: right;
   }
 }
 
 .alert {
-  figure.caption .embedded-entity+figcaption {
+  figure.caption .embedded-entity + figcaption {
     color: variables.$gray;
   }
 }

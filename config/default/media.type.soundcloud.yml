@@ -1,0 +1,30 @@
+uuid: a2b3b687-100d-44d0-8aec-c9819c9bad73
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_entity_soundcloud
+    - scheduler
+third_party_settings:
+  scheduler:
+    expand_fieldset: when_required
+    fields_display_mode: vertical_tab
+    publish_enable: false
+    publish_past_date: error
+    publish_past_date_created: false
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    show_message_after_update: true
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
+id: soundcloud
+label: Soundcloud
+description: ''
+source: soundcloud
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_media_soundcloud
+field_map: {  }

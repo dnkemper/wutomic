@@ -1,0 +1,23 @@
+uuid: b24c0647-b691-4e54-a308-c9aa83f140a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.anchor_links
+    - field.storage.block_content.field_links
+  module:
+    - link
+id: block_content.anchor_links.field_links
+field_name: field_links
+entity_type: block_content
+bundle: anchor_links
+label: Links
+description: 'Add anchor links. Use fragment URLs like #section-id to link to anchors on the page.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 2
+  link_type: 1
+field_type: link

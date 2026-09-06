@@ -1,0 +1,387 @@
+id: artsci_d10_event
+label: 'D10 events nodes to D11 event nodes via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# D10 bundle "events" -> D11 bundle "event". Field-by-field mapping notes
+# live next to each process step below. Anything in the D10 "events"
+# bundle not mentioned here has no destination on the D11 "event" bundle
+# and is intentionally dropped (e.g. field_header_image, field_external_url,
+# field_additional_location_inform, field_event_geolocation [string ->
+# geofield, not carried], field_show_end_date, field_event_date_tbd,
+# field_introduction_excerpt, field_rsvp_form_link, the date_repeat_* and
+# field_search/subscriber bookkeeping fields).
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # PAGINATION WORKAROUND: the events JSON:API resource on the source site
+  # rejects EVERY `page[...]` query param with a 400 ("Input value 'page'
+  # contains a non-scalar value"), so the normal cursor pager (following
+  # links.next, which is page[offset]/page[limit] based) cannot be used --
+  # it would 400 after the first ~50 of 203 rows. `sort` and `filter` DO
+  # work, so we seek-paginate by drupal_internal__nid instead: each URL
+  # below selects a bounded nid range (BETWEEN) sorted ascending, with each
+  # bucket holding 40 nids -- safely under the server's ~50 default page
+  # size so nothing is truncated. The migrate url source fetches every URL
+  # in this list and concatenates their `data`, so NO pager is needed.
+  #
+  # These buckets were generated and validated against the live source
+  # (each returns exactly its expected nids; 198 published rows total --
+  # unpublished events are not reachable anonymously, same as the other
+  # artsci_d10 node migrations). If the source set changes materially,
+  # regenerate the ranges. Covers nids 24231..28840.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/events'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity / system ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: moderation_state
+      label: 'Moderation state'
+      selector: 'attributes/moderation_state'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Body ----
+    - name: body_value
+      label: 'Body value'
+      selector: 'attributes/body/value'
+    - name: body_format
+      label: 'Body format'
+      selector: 'attributes/body/format'
+    - name: body_summary
+      label: 'Body summary'
+      selector: 'attributes/body/summary'
+
+    # ---- Call to action (two D10 strings -> one D11 link) ----
+    - name: cta_text
+      label: 'CTA button text (field_call_to_action_button_text)'
+      selector: 'attributes/field_call_to_action_button_text'
+    - name: cta_url
+      label: 'CTA button url (field_call_to_action_button_url)'
+      selector: 'attributes/field_call_to_action_button_url'
+
+    # ---- Smart date (leaf selectors -> normalized in the process plugin)
+    # The migrate_plus JSON parser only returns scalar leaves reliably, not
+    # whole nested objects, so we pull each subproperty separately and feed
+    # them to smart_date_from_jsonapi as a positional list.
+    - name: sd_value
+      label: 'Smart date start (field_event_smart_date/value)'
+      selector: 'attributes/field_event_smart_date/value'
+    - name: sd_end
+      label: 'Smart date end (field_event_smart_date/end_value)'
+      selector: 'attributes/field_event_smart_date/end_value'
+    - name: sd_duration
+      label: 'Smart date duration (field_event_smart_date/duration)'
+      selector: 'attributes/field_event_smart_date/duration'
+    - name: sd_timezone
+      label: 'Smart date timezone (field_event_smart_date/timezone)'
+      selector: 'attributes/field_event_smart_date/timezone'
+
+    # ---- External link (D10 link -> D11 link) ----
+    - name: ext_link_uri
+      label: 'field_external_link URI'
+      selector: 'attributes/field_external_link/uri'
+    - name: ext_link_title
+      label: 'field_external_link title'
+      selector: 'attributes/field_external_link/title'
+
+    # ---- Location (D10 string -> D11 address) ----
+    - name: location
+      label: 'field_location (free-text venue string)'
+      selector: 'attributes/field_location'
+    # D10 field_additional_location_inform (string) -> address organization.
+    - name: additional_location_inform
+      label: 'field_additional_location_inform (D10 string)'
+      selector: 'attributes/field_additional_location_inform'
+
+    # ---- Teaser (D10 string_long -> D11 string_long) ----
+    - name: introduction_excerpt
+      label: 'field_introduction_excerpt (D10 string_long)'
+      selector: 'attributes/field_introduction_excerpt'
+
+    # ---- Contact (D10 string -> D11 email) ----
+    - name: event_contact
+      label: 'field_event_contact (D10 string)'
+      selector: 'attributes/field_event_contact'
+
+    # ---- RSVP webform ----
+    # Webform fields serialize the referenced webform machine name under
+    # target_id. NOTE: every events row in the source set had a NULL
+    # field_rsvp_form at build time, so this selector is unverified against
+    # a populated row. If a populated webform import comes back empty,
+    # re-check the JSON:API shape and adjust this selector.
+    - name: rsvp_form_target_id
+      label: 'field_rsvp_form webform machine name'
+      selector: 'attributes/field_rsvp_form/target_id'
+
+    # ---- Shared content bookkeeping (parity with artsci_d10_article) ----
+    - name: is_shared
+      label: 'Is shared'
+      selector: 'attributes/field_is_shared'
+    - name: shared_content
+      label: 'Shared content payload'
+      selector: 'attributes/field_shared_content'
+    - name: shared_content_xml
+      label: 'Shared content XML URL'
+      selector: 'attributes/field_shared_content_xml'
+    - name: content_hash
+      label: 'Content hash'
+      selector: 'attributes/field_content_hash'
+
+    # ---- Rabbit Hole ----
+    - name: rh_action
+      label: 'Rabbit hole action'
+      selector: 'attributes/rh_action'
+    - name: rh_redirect
+      label: 'Rabbit hole redirect URL'
+      selector: 'attributes/rh_redirect'
+    - name: rh_redirect_response
+      label: 'Rabbit hole redirect HTTP code'
+      selector: 'attributes/rh_redirect_response'
+    - name: rh_redirect_fallback_action
+      label: 'Rabbit hole fallback action'
+      selector: 'attributes/rh_redirect_fallback_action'
+
+    # ---- Relationships ----
+    # field_event_category (multi taxonomy ref) and field_thumbnail (single
+    # media image ref). The whole category array feeds a sub_process; the
+    # thumbnail mid is read straight off the relationship meta.
+    - name: source_categories
+      label: 'D10 field_event_category data array'
+      selector: 'relationships/field_event_category/data'
+    - name: source_thumbnail_id
+      label: 'D10 field_thumbnail media MID'
+      selector: 'relationships/field_thumbnail/data/meta/drupal_internal__target_id'
+
+process:
+  # ---- Identity ----
+  nid: nid
+  uuid: uuid
+  type:
+    plugin: default_value
+    default_value: event
+  langcode: langcode
+
+  # ---- Authorship (parity with the other artsci_d10 node migrations) ----
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+
+  # ---- Status / workflow ----
+  status: status
+  moderation_state:
+    plugin: default_value
+    default_value: published
+    source: moderation_state
+
+  # ---- Timestamps (ISO 8601 -> UNIX) ----
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Title ----
+  title: title
+
+  # ---- Body (strip the D10 <html> wrapper, mirror article handling) ----
+  'body/value':
+    - plugin: str_replace
+      source: body_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+    source: body_format
+  'body/summary': introduction_excerpt
+
+  # ---- Path alias (preserve D10 alias, disable pathauto) ----
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  # ---- When: field_event_smart_date -> field_event_when ----
+  # Custom plugin converts the JSON:API smartdate object to a stored value
+  # (timestamps + computed duration). REQUIRED field: rows with no start
+  # date will fail to save (intentional surfacing of bad source data).
+  # Recurring events are flattened — see SmartDateFromJsonapi docblock.
+  field_event_when:
+    plugin: smart_date_from_jsonapi
+    source:
+      - sd_value
+      - sd_end
+      - sd_duration
+      - sd_timezone
+
+  # ---- Virtual link: CTA text + url -> field_event_virtual ----
+  # uri uses skip_on_empty so the link item stays empty when there's no
+  # url. Title is mapped plainly: a link item with an empty uri is treated
+  # as empty by Drupal regardless of title, so a title-only row produces no
+  # value. The D10 url is a plain string with no scheme validation; the
+  # D11 link field will reject a scheme-less/garbage value on save. We do
+  # NOT silently rewrite it — fix bad source urls upstream if save fails.
+  'field_event_virtual/uri':
+    plugin: skip_on_empty
+    method: process
+    source: cta_url
+  'field_event_virtual/title': cta_text
+
+  # ---- Series link: field_external_link -> field_event_series_link ----
+  'field_event_series_link/uri': ext_link_uri
+  'field_event_series_link/title': ext_link_title
+
+  # ---- Location: field_location (string) -> field_event_location (address)
+  # INTERPRETATION: the original mapping said "field_thumbnail text field",
+  # but field_thumbnail is a media reference with no text component, so the
+  # only sensible string source for the address field is field_location.
+  # parse_mailing_address tries to split a trailing "City, ST ZIP" line;
+  # these source values are short venue strings ("Louderman 458", "Zoom"),
+  # which don't match that pattern and therefore land in address_line1
+  # (an available/optional subfield on this address field). country_code
+  # defaults to US. Change the source field or the plugin if a different
+  # slot is wanted.
+  #
+  # field_additional_location_inform (D10 string, e.g. "Livestream
+  # available") is passed as the second positional source and lands on the
+  # address `organization` subproperty. When the address string is empty
+  # but additional info is present, the field is still populated (org only).
+  field_event_location:
+    plugin: parse_mailing_address
+    source:
+      - location
+      - additional_location_inform
+    country_code: US
+
+  # ---- Teaser: field_introduction_excerpt -> field_teaser ----
+  # Both are string_long; direct copy (mirrors the article migration, which
+  # maps the same D10 field onto field_teaser / field_article_subhead).
+  field_teaser: introduction_excerpt
+
+  # ---- Contact: field_event_contact (string) -> (email) ----
+  # TYPE CHANGE: D10 string -> D11 email. Was not in the original mapping
+  # list but the field exists on both bundles with the same machine name,
+  # so it is carried over. Migration bypasses form validation, so we run
+  # the free-text source through extractEmailOrEmpty: it pulls the first
+  # valid email token (handling "Name | a@b.edu") and drops anything with
+  # no valid email (e.g. "[site:mail]"), leaving the field empty rather
+  # than storing an invalid address. Remove this block to skip contact.
+  field_event_contact:
+    - plugin: callback
+      callable:
+        - 'Drupal\artsci_migration\LinkHelpers'
+        - 'extractEmailOrEmpty'
+      source: event_contact
+    - plugin: skip_on_empty
+      method: process
+
+  # ---- Image: field_thumbnail (media image) -> field_image ----
+  field_image:
+    - plugin: skip_on_empty
+      method: process
+      source: source_thumbnail_id
+    - plugin: migration_lookup
+      migration: artsci_d10_media_image
+      no_stub: true
+
+  # ---- Categories: field_event_category -> field_event_category ----
+  # D10 event_categories terms migrate into the D11 event_categories vocab
+  # via artsci_d10_taxonomy_event_categories_native (NOT the research_areas
+  # consolidation migration). Each ref is resolved through that migration
+  # so the correct D11 tids land here.
+  field_event_category:
+    plugin: sub_process
+    source: source_categories
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration: artsci_d10_taxonomy_event_categories_native
+          source: meta/drupal_internal__target_id
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+
+  # ---- RSVP webform (same machine name on both sides) ----
+  # Only the target_id (webform machine name) is mapped; status/open/close
+  # fall back to the field's defaults. Unverified against a populated row
+  # (see source field note above).
+  'field_rsvp_form/target_id':
+    plugin: skip_on_empty
+    method: process
+    source: rsvp_form_target_id
+
+  # ---- Shared content bookkeeping (parity with artsci_d10_article) ----
+  field_is_shared: is_shared
+  field_shared_content: shared_content
+  field_shared_content_xml: shared_content_xml
+  field_content_hash: content_hash
+
+  # ---- Rabbit Hole ----
+  'rabbit_hole__settings/rh_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_action
+  'rabbit_hole__settings/rh_redirect': rh_redirect
+  'rabbit_hole__settings/rh_redirect_response':
+    plugin: default_value
+    default_value: 301
+    source: rh_redirect_response
+  'rabbit_hole__settings/rh_redirect_fallback_action':
+    plugin: default_value
+    default_value: 'bundle_default'
+    source: rh_redirect_fallback_action
+
+  # ----------------------------------------------------------------
+  # DEFERRED — needs a prerequisite that does not exist yet.
+  # ----------------------------------------------------------------
+  # field_meta_tags: requires the metatag-from-jsonapi plugin that the
+  #   article migration also leaves deferred. Wire up once that exists.
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: event
+
+migration_dependencies:
+  required:
+    - artsci_d10_media_image
+    - artsci_d10_taxonomy_event_categories_native
+  optional: []

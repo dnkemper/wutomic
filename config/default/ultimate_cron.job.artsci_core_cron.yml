@@ -1,0 +1,17 @@
+uuid: 993b3c7b-1707-4487-8bcb-ebeba3120f21
+langcode: en
+status: true
+dependencies:
+  module:
+    - artsci_core
+title: 'Default cron handler'
+id: artsci_core_cron
+weight: 0
+module: artsci_core
+callback: 'artsci_core#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

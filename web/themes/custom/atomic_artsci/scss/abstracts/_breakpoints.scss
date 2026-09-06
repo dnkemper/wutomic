@@ -2,49 +2,35 @@
 
 // Media Queries ///////////////
 @mixin breakpoint($class) {
-  @if $class==xxsm {
+  @if $class == xxsm {
     @media (min-width: variables.$break-xxsm) {
       @content;
     }
-  }
-
-  @else if $class==xsm {
+  } @else if $class == xsm {
     @media (min-width: variables.$break-xsm) {
       @content;
     }
-  }
-
-  @else if $class==sm {
+  } @else if $class == sm {
     @media (min-width: variables.$break-sm) {
       @content;
     }
-  }
-
-  @else if $class==md {
+  } @else if $class == md {
     @media (min-width: variables.$break-md) {
       @content;
     }
-  }
-
-  @else if $class==lg {
+  } @else if $class == lg {
     @media (min-width: variables.$break-lg) {
       @content;
     }
-  }
-
-  @else if $class==xlg {
+  } @else if $class == xlg {
     @media (min-width: variables.$break-xlg) {
       @content;
     }
-  }
-
-  @else if $class==page-container {
+  } @else if $class == page-container {
     @media (min-width: variables.$break-page-container) {
       @content;
     }
-  }
-
-  @else {
+  } @else {
     @warn "Breakpoint mixin supports: xs, xsm, sm, md, lg, page-container, xlg";
   }
 }
@@ -52,12 +38,12 @@
 @mixin container-query($size: variables.$break-sm, $type: min) {
   @supports (contain: inline-size) {
     @container column (#{$type}-width: #{$size}) {
-      @content
+      @content;
     }
   }
   @supports not (contain: inline-size) {
     @media (#{$type}-width: #{$size}) {
-      @content
+      @content;
     }
   }
 }

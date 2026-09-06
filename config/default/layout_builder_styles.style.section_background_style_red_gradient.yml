@@ -1,0 +1,20 @@
+uuid: 5ddcd2cc-988a-488f-ba18-0b897b432fda
+langcode: en
+status: true
+dependencies: {  }
+id: section_background_style_red_gradient
+label: 'Red Gradient'
+classes: "bg--red\r\ngradient"
+type: section
+group: background
+block_restrictions: {  }
+layout_restrictions:
+  - layout_onecol
+  - layout_twocol
+  - layout_threecol
+  - layout_fourcol
+  - layout_onecol_fixed
+  - layout_header
+  - layout_page
+  - layout_twocol_card_sidebar
+weight: 0

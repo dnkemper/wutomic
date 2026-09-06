@@ -1,7 +1,6 @@
 @use '../abstracts/variables';
 @use '../abstracts/_utilities.scss';
 
-
 .tabs-collection {
   margin: 0;
   list-style-type: none;
@@ -12,17 +11,17 @@
     content: ' ';
   }
 
-  [role="tablist"] {
+  [role='tablist'] {
     margin: 0;
     display: flex;
     background-color: variables.$lighter-gray;
-    border: 1px solid variables.$gray-light;
+    border: 1px solid variables.$gray-dark;
     border-radius: 0;
     overflow: visible;
     padding: 0.3rem;
   }
 
-  [role="tab"] {
+  [role='tab'] {
     position: relative;
     flex: 1 1 0%;
     margin: 0;
@@ -36,39 +35,42 @@
     text-align: center;
     background: transparent;
     color: variables.$secondary;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
     cursor: pointer;
 
-    [class*="bg--black"] & {
+    [class*='bg--black'] & {
       color: variables.$light;
     }
 
     // ── Selected tab: white card ──
-    &[aria-selected="true"] {
+    &[aria-selected='true'] {
       background: variables.$white;
-      border-color: variables.$gray-light;
+      border-color: variables.$gray-dark;
       color: variables.$primary;
       font-weight: variables.$font-weight-medium-bold;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       outline: 0;
 
-      [class*="bg--black"] & {
+      [class*='bg--black'] & {
         background: variables.$secondary;
         border-color: variables.$med-gray;
         color: variables.$primary;
       }
 
-      [class*="bg--red"] & {
+      [class*='bg--red'] & {
         background: variables.$white;
         color: variables.$secondary;
       }
     }
 
     // ── Unselected tab ──
-    &[aria-selected="false"] {
+    &[aria-selected='false'] {
       color: variables.$dark-gray;
 
-      [class*="bg--black"] & {
+      [class*='bg--black'] & {
         color: variables.$light;
       }
     }
@@ -96,7 +98,7 @@
   }
 
   // ── Tab panels ──
-  [role="tabpanel"] {
+  [role='tabpanel'] {
     position: relative;
     z-index: 2;
     padding: variables.$mobile-height-gutter 0;
@@ -106,7 +108,7 @@
     }
   }
 
-  [role="tabpanel"] * + p {
+  [role='tabpanel'] * + p {
     margin-top: 1rem;
   }
 }

@@ -1,0 +1,119 @@
+id: artsci_d10_generic_page
+label: 'D10 generic_page nodes to D11 page via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# Minimal migration: NID, title, and path alias only. Body, fields,
+# media references, and workflow state are intentionally NOT mapped.
+# If you need any of those later, expand source.fields and process below
+# using artsci_d10_article.yml as a template.
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # filter[status]=1 restricts the source to published nodes only;
+  # unpublished generic_page entries never enter the migration.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/generic_page?filter[status]=1&page[limit]=50&sort=drupal_internal__nid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    # ---- Identity ----
+    - name: nid
+      label: 'Original NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+
+    # ---- The three fields requested ----
+    - name: title
+      label: Title
+      selector: 'attributes/title'
+    - name: path_alias
+      label: 'Path alias'
+      selector: 'attributes/path/alias'
+
+    # ---- Publish state + timestamps ----
+    - name: status
+      label: Published
+      selector: 'attributes/status'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+
+process:
+  # ---- Identity ----
+  # Preserve the D10 nid verbatim. If a node with this nid already exists
+  # on D11 (seeded DB or prior run), migrate UPDATEs it; otherwise it
+  # creates a new node with this exact nid. UUID is carried over so
+  # cross-site references stay stable.
+  nid: nid
+  uuid: uuid
+
+  # ---- Bundle ----
+  # D10 generic_page -> D11 page.
+  type:
+    plugin: default_value
+    default_value: page
+
+  # ---- Required base properties (NOT in the original request) ----
+  # These three are added because the destination row won't save without
+  # them. Everything else (promote, sticky, moderation_state, body, etc.)
+  # is intentionally omitted; Drupal will fall back to its defaults.
+  uid:
+    plugin: default_value
+    default_value: 1
+  revision_uid:
+    plugin: default_value
+    default_value: 1
+  langcode:
+    plugin: default_value
+    default_value: en
+
+  # ---- Title ----
+  title: title
+
+  # ---- Publish state ----
+  status: status
+
+  # ---- Timestamps ----
+  # JSON:API emits ISO 8601; Drupal stores Unix timestamps.
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # ---- Path alias ----
+  # Disable pathauto so the migrated alias is preserved exactly as it
+  # was on D10 instead of being regenerated from the page's pattern.
+  'path/alias': path_alias
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: page
+
+migration_dependencies:
+  required: []
+  optional: []

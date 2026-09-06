@@ -10,12 +10,11 @@
   background: #fff;
 }
 
-.block-superfish .menu>li:first-child>a {
+.block-superfish .menu > li:first-child > a {
   padding-left: 0;
 }
 
 .artsci-bar.artsci-bar--narrow {
-
   .toggle-nav__bttn {
     display: flex;
     height: 60px;
@@ -82,7 +81,7 @@ body {
     overflow: hidden !important;
   }
 
-  &:before {
+  &::before {
     position: fixed;
     z-index: 2;
     top: 0;
@@ -90,8 +89,8 @@ body {
     visibility: hidden;
     width: 100%;
     height: 100%;
-    content: "";
-    transition: opacity .35s;
+    content: '';
+    transition: opacity 0.35s;
     pointer-events: none;
     opacity: 0;
     background: rgba(0, 0, 0, 0.55);
@@ -138,11 +137,11 @@ body {
     background: #fff;
   }
 
-  &:before {
+  &::before {
     margin-right: 10px;
     padding: variables.$xsm;
     padding-right: 7px;
-    content: "\f0c9";
+    content: '\f0c9';
     color: variables.$secondary;
     font-size: 1.5rem;
     @include utilities.fas();
@@ -168,9 +167,12 @@ body {
     }
   }
 
-  &:focus {}
-  &:focus:not(:focus-visible) {}
-  &:focus-visible {}
+  &:focus {
+  }
+  &:focus:not(:focus-visible) {
+  }
+  &:focus-visible {
+  }
 
   span {
     @include utilities.breakpoint(md) {
@@ -182,17 +184,17 @@ body {
     color: variables.$secondary;
   }
 
-  &:before {
+  &::before {
     margin-right: 0;
     margin-top: -2px;
-    padding: 1rem .9rem 1rem .7rem;
+    padding: 1rem 0.9rem 1rem 0.7rem;
     color: variables.$secondary;
     font-size: variables.$base-font-size;
     @include utilities.fas();
 
     @include utilities.breakpoint(md) {
       margin-right: 5px;
-      padding: .8rem 1rem;
+      padding: 0.8rem 1rem;
     }
 
     .o-canvas--open & {
@@ -200,12 +202,12 @@ body {
       height: 25px;
       margin-right: 10px;
       padding: 7px;
-      content: "\f00d";
+      content: '\f00d';
       color: variables.$white;
       border-radius: 50%;
       background: #999;
       font-size: 1rem;
-      line-height: .8;
+      line-height: 0.8;
 
       @include utilities.breakpoint(md) {
         width: 35px;
@@ -236,7 +238,7 @@ body {
 .o-canvas__wrapper {
   width: 100%;
 
-  button>* {
+  button > * {
     pointer-events: none;
   }
 }
@@ -268,10 +270,10 @@ body {
     height: 100%;
     transform: scale(1);
     opacity: 1;
-    box-shadow: 0 8px 8px 0 rgba(63, 63, 70, .25);
+    box-shadow: 0 8px 8px 0 rgba(63, 63, 70, 0.25);
   }
 
-  &[aria-hidden="false"]:not(:focus-within) {
+  &[aria-hidden='false']:not(:focus-within) {
     background-color: rgb(255, 255, 254);
   }
 }
@@ -297,7 +299,11 @@ body {
 
 #superfish-main-accordion {
   position: unset !important;
+
+  /* stylelint-disable-next-line property-no-deprecated -- Added clip-path equivalent; keep clip here to override any 3rd-party stylesheets. */
   clip: auto !important;
+  clip-path: none !important;
+
   height: auto !important;
   width: 100% !important;
   overflow: hidden !important;

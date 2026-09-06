@@ -11,5 +11,18 @@ block_restrictions:
   - 'inline_block:featured_content'
   - 'inline_block:artsci_events'
   - 'inline_block:artsci_aggregator'
+  - 'views_block:article_list_block-list_article'
+  - 'views_block:article_list_block-list_article_recent'
+  - 'views_block:article_list_block-list_event'
+  - 'views_block:article_list_block-list_book'
+  - 'views_block:article_list_block-list_person'
+  - 'views_block:page_list_block-list_page'
+  - 'views_block:people_list_block-list_card'
+  - 'views_block:news_list_block-list_card'
+  - 'views_block:book_list_block-list_card'
+  - 'views_block:event_list_block-list_card'
+  - 'views_block:image_list_block-list_card'
+  - 'views_block:events_list_block-card_list'
+  - 'views_block:image_card_list_block-list_image_card'
 layout_restrictions: {  }
 weight: 47

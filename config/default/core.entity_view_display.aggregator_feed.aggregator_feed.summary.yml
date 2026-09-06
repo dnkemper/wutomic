@@ -1,39 +1,108 @@
-uuid: f9825591-38fa-4344-81cc-9baa33d27b3a
+uuid: cf475d53-7710-41fc-88b4-d9bd3987e471
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.aggregator_feed.summary
-    - field.field.aggregator_feed.aggregator_feed.field_aggregator_feed_image
     - field.field.aggregator_feed.aggregator_feed.field_aggregator_purge_items
+    - field.field.aggregator_feed.aggregator_feed.field_feed_source
+    - field.field.aggregator_feed.aggregator_feed.field_feed_type
+    - field.field.aggregator_feed.aggregator_feed.field_last_modified
   module:
     - aggregator
+    - datetime
 _core:
-  default_config_hash: OCl6AtoDUvFAsnvg1fosqsjFuoUvnIWQ28b_0Nc14Cg
+  default_config_hash: ORtH44CMbYMb3_0zumUPwVhPmaLBiImWpZa_hO3qmhU
 id: aggregator_feed.aggregator_feed.summary
 targetEntityType: aggregator_feed
 bundle: aggregator_feed
 mode: summary
 content:
-  items:
+  checked:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  description:
     settings: {  }
     third_party_settings: {  }
     weight: 1
     region: content
+  feed_icon:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_aggregator_purge_items:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_feed_source:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_feed_type:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_last_modified:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  items:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  link:
+    type: uri_link
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
   more_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 7
     region: content
 hidden:
-  checked: true
-  description: true
   entity_print_view_epub: true
   entity_print_view_pdf: true
   entity_print_view_word_docx: true
-  feed_icon: true
   field_aggregator_feed_image: true
-  field_aggregator_purge_items: true
   image: true
-  link: true
   search_api_excerpt: true

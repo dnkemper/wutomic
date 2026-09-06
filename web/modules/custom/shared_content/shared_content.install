@@ -1,0 +1,620 @@
+<?php
+
+/**
+ * @file
+ * Shared content install and update hooks.
+ */
+
+use Drupal\node\Entity\Node;
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_schema().
+ */
+function shared_content_schema() {
+  return [
+    'shared_content_items' => [
+      'description' => 'Stores items imported for shared content.',
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'not null' => TRUE,
+          'description' => 'Primary Key: Unique ID.',
+        ],
+        'iid' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'The Aggregator item ID.',
+        ],
+        'nid' => [
+          'type' => 'int',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'The node ID in the current site.',
+        ],
+        'url' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'description' => 'The URL of the original node.',
+        ],
+        'orig_nid' => [
+          'type' => 'int',
+          'description' => 'The node ID of the original node.',
+        ],
+      ],
+      'primary key' => ['id'],
+    ],
+  ];
+}
+
+/**
+ * Lazy way to force run all cron jobs.
+ */
+function shared_content_update_9000() {
+  shared_content_cron();
+  aggregator_cron();
+  feeds_cron();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function shared_content_update_9001() {
+  // Query for nodes of the "webform" content type.
+  $entity_ids = \Drupal::entityQuery('node')
+  // Replace 'webform' with your content type machine name.
+    ->condition('type', 'shared_item')
+    ->accessCheck(FALSE)
+    ->execute();
+
+  if ($entity_ids) {
+    // Load and delete the nodes.
+    $nodes = Node::loadMultiple($entity_ids);
+    foreach ($nodes as $node) {
+      $node->delete();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function shared_content_update_9002() {
+  // Load the storage handler for feeds.
+  $feed_storage = \Drupal::entityTypeManager()->getStorage('feeds_feed');
+
+  // Query all feeds of type 'aggregated_shared_item_importer'.
+  $feed_ids = \Drupal::entityQuery('feeds_feed')
+    ->condition('type', 'aggregated_shared_item_importer')
+    ->accessCheck(FALSE)
+    ->execute();
+
+  // Check if there are any feeds to delete.
+  if (!empty($feed_ids)) {
+    // Load and delete the feeds.
+    $feeds = $feed_storage->loadMultiple($feed_ids);
+    foreach ($feeds as $feed) {
+      $feed->delete();
+    }
+    \Drupal::logger('shared_content')->info('Deleted @count feeds of type "aggregated_shared_item_importer".', ['@count' => count($feed_ids)]);
+  }
+  else {
+    \Drupal::logger('shared_content')->info('No feeds of type "aggregated_shared_item_importer" were found to delete.');
+  }
+}
+
+/**
+ * Lazy way to force run all cron jobs.
+ */
+function shared_content_update_9003() {
+  shared_content_cron();
+  aggregator_cron();
+  feeds_cron();
+}
+
+/**
+ * Copies the rsvpLink url over to the new field rsvp_form_link.
+ *
+ * Uses rsvp_form_link instead of the link from the form since we do not have
+ * access in shared content to that value given permissions.
+ */
+function shared_content_update_10001() {
+
+  $config_path = DRUPAL_ROOT . '/../config/default';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+
+  // Check if field storage already exists before creating it.
+  $field_storage = \Drupal::entityTypeManager()
+    ->getStorage('field_storage_config')
+    ->load('node.field_rsvp_form');
+
+  if (!$field_storage) {
+    \Drupal::entityTypeManager()
+      ->getStorage('field_storage_config')
+      ->create($source->read('field.storage.node.field_rsvp_form'))
+      ->save();
+  }
+
+  // Check if field instance already exists before creating it.
+  $field_config = \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->load('node.event.field_rsvp_form');
+
+  if (!$field_config) {
+    \Drupal::entityTypeManager()->getStorage('field_config')
+      ->create($source->read('field.field.node.event.field_rsvp_form'))
+      ->save();
+  }
+
+  // Write configs to config storage.
+  $config_names = [
+    'field.storage.node.field_rsvp_form',
+    'field.field.node.event.field_rsvp_form',
+  ];
+
+  foreach ($config_names as $config_name) {
+    $config_storage->write($config_name, $source->read($config_name));
+  }
+
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $query = $node_storage->getQuery()
+    ->condition('type', 'event')
+    ->accessCheck(FALSE);
+
+  $nodeIds = $query->execute();
+
+  if (empty($nodeIds)) {
+    return t('There are no event to update');
+  }
+
+  $nodes = $node_storage->loadMultiple($nodeIds);
+  $updated_count = 0;
+
+  foreach ($nodes as $node) {
+    if ($node->hasField('field_rsvp_form') && !$node->get('field_rsvp_form')->isEmpty()) {
+      $query_params = [
+        'source_entity_type' => $node->getEntityTypeId(),
+        'source_entity_id' => $node->id(),
+      ];
+
+      $rsvpFormId = $node->get('field_rsvp_form')->target_id;
+      if (!empty($rsvpFormId)) {
+        $rsvpForm = \Drupal::entityTypeManager()->getStorage('webform')->load($rsvpFormId);
+        if ($rsvpForm) {
+          $rsvpLink = $rsvpForm->toUrl('canonical', ['query' => $query_params])->setAbsolute()->toString();
+          $node->set('field_rsvp_form', $rsvpLink);
+          $node->save();
+          $updated_count++;
+        }
+      }
+    }
+  }
+
+  return t('Updated @count event nodes with RSVP form links', ['@count' => $updated_count]);
+}
+
+/**
+ * Enable purge items field for all existing aggregator feeds.
+ */
+function shared_content_update_10002() {
+  $feed_storage = \Drupal::entityTypeManager()->getStorage('aggregator_feed');
+  $fids = \Drupal::entityQuery('aggregator_feed')
+    ->accessCheck(FALSE)
+    ->execute();
+
+  if (empty($fids)) {
+    return t('No aggregator feeds found to update.');
+  }
+
+  $feeds = $feed_storage->loadMultiple($fids);
+  $count = 0;
+
+  foreach ($feeds as $feed) {
+    if ($feed->hasField('field_aggregator_purge_items')) {
+      $feed->set('field_aggregator_purge_items', 1);
+      $feed->save();
+      $count++;
+    }
+  }
+
+  return t('Enabled purge items on @count aggregator feeds.', ['@count' => $count]);
+}
+
+/**
+ * Backfill field_aggregator_purge_items on any feeds added since 10002 ran.
+ */
+function shared_content_update_10003() {
+  $feed_storage = \Drupal::entityTypeManager()->getStorage('aggregator_feed');
+  $fids = \Drupal::entityQuery('aggregator_feed')
+    ->accessCheck(FALSE)
+    ->execute();
+
+  if (empty($fids)) {
+    return t('No aggregator feeds found to update.');
+  }
+
+  $feeds = $feed_storage->loadMultiple($fids);
+  $count = 0;
+
+  foreach ($feeds as $feed) {
+    if ($feed->hasField('field_aggregator_purge_items') && !$feed->get('field_aggregator_purge_items')->value) {
+      $feed->set('field_aggregator_purge_items', 1);
+      $feed->save();
+      $count++;
+    }
+  }
+
+  return t('Backfilled purge items flag on @count aggregator feeds.', ['@count' => $count]);
+}
+
+// /**
+//  * Lost install command.
+//  */
+// function shared_content_update_11004() {
+//   drupal_flush_all_caches();
+// }
+// /**
+//  * Update shared content URLs from wustl.edu to washu.edu for domain rebrand.
+//  */
+// function shared_content_update_11005(): string {
+//   $database = \Drupal::database();
+//   $counts = [];
+// // Pause cron processing during migration.
+//   \Drupal::state()->set('shared_content.migration_pause', TRUE);
+// // SHARED CONTENT / AGGREGATOR (CRITICAL).
+//   $critical_tables = [
+//     ['node__field_shared_content_xml', 'field_shared_content_xml_value'],
+//     ['node_revision__field_shared_content_xml', 'field_shared_content_xml_value'],
+//     ['node__field_shared_content', 'field_shared_content_value'],
+//     ['aggregator_feed', 'url'],
+//     ['aggregator_feed__field_feed_source', 'field_feed_source_value'],
+//     ['aggregator_item', 'link'],
+//     ['aggregator_item', 'guid'],
+//     ['shared_content_items', 'url'],
+//     ['aggregator_feed', 'link'],
+//   ];
+// foreach ($critical_tables as [$table, $column]) {
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // NODE LINK FIELDS (uri column).
+//   $node_link_fields = [
+//     'field_advisor_url',
+//     'field_button_url',
+//     'field_call_to_action_butto',
+//     'field_call_to_action_button_url',
+//     'field_contact_us_link',
+//     'field_direct_link',
+//     'field_external_profile_link',
+//     'field_external_url',
+//     'field_field_advisor_url',
+//     'field_video_url',
+//   ];
+// foreach ($node_link_fields as $field) {
+//     $table = "node__$field";
+//     $column = "{$field}_uri";
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // NODE TEXT FIELDS (value column).
+//   $node_text_fields = [
+//     ['node__body', 'body_value'],
+//     ['node__field_additional_location_inform', 'field_additional_location_inform_value'],
+//     ['node__field_additional_resources', 'field_additional_resources_value'],
+//     ['node__field_additional_titles', 'field_additional_titles_value'],
+//     ['node__field_article_author_description', 'field_article_author_description_value'],
+//     ['node__body', 'body_value'],
+//     ['node__field_building_name_and_room_num', 'field_building_name_and_room_num_value'],
+//     ['node__field_description', 'field_description_value'],
+//     ['node__field_person_education', 'field_person_education_value'],
+//     ['node__field_interests', 'field_interests_value'],
+//     ['node__field_introduction_excerpt', 'field_introduction_excerpt_value'],
+//     ['node__field_intro_text', 'field_intro_text_value'],
+//     ['node__field_teaser', 'field_teaser_value'],
+//     ['node__field_mailing_address', 'field_mailing_address_value'],
+//     ['node__field_office_directions', 'field_office_directions_value'],
+//     ['node__field_search', 'field_search_value'],
+//     ['node__field_shared_content_subscribers', 'field_shared_content_subscribers_value'],
+//   ];
+// foreach ($node_text_fields as [$table, $column]) {
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // PARAGRAPH LINK FIELDS (uri column)
+//   $paragraph_link_fields = [
+//     'field_bluesky_link',
+//     'field_button',
+//     'field_button_link',
+//     'field_button_url',
+//     'field_callout_button',
+//     'field_callout_button_url',
+//     'field_call_to_action_button',
+//     'field_custom_button',
+//     'field_custom_button_',
+//     'field_facebook_link',
+//     'field_feat_article_button',
+//     'field_flickr_link',
+//     'field_full_video_url',
+//     'field_google_scholar_link',
+//     'field_instagram_link',
+//     'field_link_title_url',
+//     'field_linkedin_link',
+//     'field_optional_link_url',
+//     'field_publication_button',
+//     'field_read_more_link_url',
+//     'field_read_the_story_link_url',
+//     'field_related_links',
+//     'field_related_links_',
+//     'field_spotlight_video_url',
+//     'field_title_link',
+//     'field_twitter_link',
+//     'field_youtube_link',
+//   ];
+// foreach ($paragraph_link_fields as $field) {
+//     $table = "paragraph__$field";
+//     $column = "{$field}_uri";
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // PARAGRAPH TEXT FIELDS (value column)
+//   $paragraph_text_fields = [
+//     'field_additional_information',
+//     'field_article_body',
+//     'field_awards_description',
+//     'field_call_to_action_description',
+//     'field_caption',
+//     'field_cta_description',
+//     'field_custom_caption',
+//     'field_custom_section_text',
+//     'field_description',
+//     'field_description_formatted',
+//     'field_footer_callout_content',
+//     'field_full_description',
+//     'field_gallery_caption',
+//     'field_generic_intro',
+//     'field_half_image_description',
+//     'field_half_text_body',
+//     'field_home_caption',
+//     'field_infographic_description',
+//     'field_introduction_excerpt',
+//     'field_introduction_exerpt',
+//     'field_main_content',
+//     'field_optional_text',
+//     'field_quote',
+//     'field_single_column',
+//     'field_spotlight_description',
+//     'field_story',
+//     'field_testimonial',
+//     'field_title_and_body',
+//     'field_twitter_description',
+//     'field_two_col_wysiwyg',
+//     'field_spotlight_video_short',
+//   ];
+// foreach ($paragraph_text_fields as $field) {
+//     $table = "paragraph__$field";
+//     $column = "{$field}_value";
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // MENU LINKS.
+//   $menu_tables = [
+//     ['menu_link_content_data', 'link__uri'],
+//     ['menu_link_content_field_revision', 'link__uri'],
+//     ['menu_link_content_revision', 'link__uri'],
+//     ['menu_tree', 'url'],
+//     ['menu_links', 'link_path'],
+//   ];
+// foreach ($menu_tables as [$table, $column]) {
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }
+//   // BLOCK CONTENT.
+//   _shared_content_update_column($database, 'block_content__body', 'body_value', $counts);.
+// // FILE MANAGED (external file references)
+//   _shared_content_update_column($database, 'file_managed', 'uri', $counts);
+// // CLEANUP.
+//   // Clear menu cache so changes are visible.
+//   if ($database->schema()->tableExists('cache_menu')) {
+//     $database->truncate('cache_menu')->execute();
+//   }
+// // Also clear via Cache API (works for Redis/Memcache too).
+//   \Drupal::cache('menu')->deleteAll();
+// // Clear render cache for good measure.
+//   \Drupal::cache('render')->deleteAll();
+// // Re-enable cron processing.
+//   // \Drupal::state()->delete('shared_content.migration_pause');
+//   // Build summary message.
+//   $summary = [];
+//   foreach ($counts as $table => $count) {
+//     if ($count > 0) {
+//       $summary[] = "$table: $count";
+//     }
+//   }
+// $message = empty($summary)
+//     ? 'No wustl.edu URLs found to update.'
+//     : 'Updated URLs from .wustl.edu to .washu.edu — ' . implode(', ', $summary);
+// \Drupal::logger('shared_content')->notice($message);
+// return $message;
+// }.
+// /**
+//  * Update revision tables from wustl.edu to washu.edu.
+//  */
+// function shared_content_update_11006(): string {
+//   $database = \Drupal::database();
+//   $counts = [];
+// // Paragraph revision link fields (uri column).
+//   $paragraph_link_fields = [
+//     'field_bluesky_link',
+//     'field_button',
+//     'field_button_link',
+//     'field_button_url',
+//     'field_callout_button',
+//     'field_callout_button_url',
+//     'field_call_to_action_button',
+//     'field_custom_button',
+//     'field_custom_button_',
+//     'field_facebook_link',
+//     'field_feat_article_button',
+//     'field_flickr_link',
+//     'field_full_video_url',
+//     'field_google_scholar_link',
+//     'field_instagram_link',
+//     'field_link_title_url',
+//     'field_linkedin_link',
+//     'field_optional_link_url',
+//     'field_publication_button',
+//     'field_read_more_link_url',
+//     'field_read_the_story_link_url',
+//     'field_related_links',
+//     'field_related_links_',
+//     'field_spotlight_video_url',
+//     'field_title_link',
+//     'field_twitter_link',
+//     'field_youtube_link',
+//   ];
+// foreach ($paragraph_link_fields as $field) {
+//     $table = "paragraph_revision__$field";
+//     $column = "{$field}_uri";
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // Paragraph revision text fields (value column).
+//   $paragraph_text_fields = [
+//     'field_additional_information',
+//     'field_article_body',
+//     'field_awards_description',
+//     'field_call_to_action_description',
+//     'field_caption',
+//     'field_cta_description',
+//     'field_custom_caption',
+//     'field_custom_section_text',
+//     'field_description',
+//     'field_description_formatted',
+//     'field_footer_callout_content',
+//     'field_full_description',
+//     'field_gallery_caption',
+//     'field_generic_intro',
+//     'field_half_image_description',
+//     'field_half_text_body',
+//     'field_home_caption',
+//     'field_infographic_description',
+//     'field_introduction_excerpt',
+//     'field_introduction_exerpt',
+//     'field_main_content',
+//     'field_optional_text',
+//     'field_quote',
+//     'field_single_column',
+//     'field_spotlight_description',
+//     'field_story',
+//     'field_testimonial',
+//     'field_title_and_body',
+//     'field_twitter_description',
+//     'field_two_col_wysiwyg',
+//     'field_spotlight_video_short',
+//   ];
+// foreach ($paragraph_text_fields as $field) {
+//     $table = "paragraph_revision__$field";
+//     $column = "{$field}_value";
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // Node revision tables.
+//   $node_revision_tables = [
+//     // Text fields.
+//     ['node_revision__body', 'body_value'],
+//     ['node_revision__field_additional_location_inform', 'field_additional_location_inform_value'],
+//     ['node_revision__field_additional_resources', 'field_additional_resources_value'],
+//     ['node_revision__field_additional_titles', 'field_additional_titles_value'],
+//     ['node_revision__field_article_author_description', 'field_article_author_description_value'],
+//     ['node_revision__body', 'body_value'],
+//     ['node_revision__field_building_name_and_room_num', 'field_building_name_and_room_num_value'],
+//     ['node_revision__field_description', 'field_description_value'],
+//     ['node_revision__field_person_education', 'field_person_education_value'],
+//     ['node_revision__field_interests', 'field_interests_value'],
+//     ['node_revision__field_introduction_excerpt', 'field_introduction_excerpt_value'],
+//     ['node_revision__field_intro_text', 'field_intro_text_value'],
+//     ['node_revision__field_teaser', 'field_teaser_value'],
+//     ['node_revision__field_mailing_address', 'field_mailing_address_value'],
+//     ['node_revision__field_office_directions', 'field_office_directions_value'],
+//     ['node_revision__field_search', 'field_search_value'],
+//     ['node_revision__field_shared_content', 'field_shared_content_value'],
+//     ['node_revision__field_shared_content_subscribers', 'field_shared_content_subscribers_value'],
+//     // Link fields.
+//     ['node_revision__field_advisor_url', 'field_advisor_url_uri'],
+//     ['node_revision__field_button_url', 'field_button_url_uri'],
+//     ['node_revision__field_call_to_action_butto', 'field_call_to_action_butto_uri'],
+//     ['node_revision__field_call_to_action_button_url', 'field_call_to_action_button_url_uri'],
+//     ['node_revision__field_contact_us_link', 'field_contact_us_link_uri'],
+//     ['node_revision__field_direct_link', 'field_direct_link_uri'],
+//     ['node_revision__field_external_profile_link', 'field_external_profile_link_uri'],
+//     ['node_revision__field_external_url', 'field_external_url_uri'],
+//     ['node_revision__field_field_advisor_url', 'field_field_advisor_url_uri'],
+//     ['node_revision__field_video_url', 'field_video_url_uri'],
+//   ];
+// foreach ($node_revision_tables as [$table, $column]) {
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // Clear caches.
+//   if ($database->schema()->tableExists('cache_menu')) {
+//     $database->truncate('cache_menu')->execute();
+//   }
+//   \Drupal::cache('menu')->deleteAll();
+//   \Drupal::cache('render')->deleteAll();
+//   // Build summary message.
+//   $summary = [];
+//   foreach ($counts as $table => $count) {
+//     if ($count > 0) {
+//       $summary[] = "$table: $count";
+//     }
+//   }
+// $message = empty($summary)
+//     ? 'No wustl.edu URLs found in revision tables.'
+//     : 'Updated revision table URLs from .wustl.edu to .washu.edu — ' . implode(', ', $summary);
+// \Drupal::logger('shared_content')->notice($message);
+// return $message;
+// }.
+// /**
+//  * Helper function to update a single table/column.
+//  */
+// function _shared_content_update_column($database, string $table, string $column, array &$counts): void {
+//   if (!$database->schema()->tableExists($table)) {
+//     return;
+//   }
+// if (!$database->schema()->fieldExists($table, $column)) {
+//     return;
+//   }.
+// try {
+//     $count = $database->update($table)
+//       ->expression($column, "REPLACE($column, '.wustl.edu', '.washu.edu')")
+//       ->condition($column, '%.wustl.edu%', 'LIKE')
+//       ->execute();
+// if ($count > 0) {
+//       $counts[$table] = $count;
+//     }
+//   }
+//   catch (\Exception $e) {
+//     \Drupal::logger('shared_content')->warning("Failed to update $table.$column: @message", [
+//       '@message' => $e->getMessage(),
+//     ]);
+//   }
+// }
+// /**
+//  * Update redirect tables from wustl.edu to washu.edu.
+//  */
+// function shared_content_update_11007(): string {
+//   $database = \Drupal::database();
+//   $counts = [];
+// $redirect_tables = [
+//     ['redirect', 'redirect_source__path'],
+//     ['redirect', 'redirect_redirect__uri'],
+//   ];
+// foreach ($redirect_tables as [$table, $column]) {
+//     _shared_content_update_column($database, $table, $column, $counts);
+//   }.
+// // Build summary message.
+//   $summary = [];
+//   foreach ($counts as $table => $count) {
+//     if ($count > 0) {
+//       $summary[] = "$table: $count";
+//     }
+//   }
+// $message = empty($summary)
+//     ? 'No wustl.edu URLs found in redirect tables.'
+//     : 'Updated redirect table URLs from .wustl.edu to .washu.edu — ' . implode(', ', $summary);
+// \Drupal::logger('shared_content')->notice($message);
+// return $message;
+// }.

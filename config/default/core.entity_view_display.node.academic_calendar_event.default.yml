@@ -1,0 +1,117 @@
+uuid: 89d2b3e1-6093-4ef9-a6ea-b59a7caaf953
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.academic_calendar_event.field_external_url
+    - field.field.node.academic_calendar_event.field_new_window
+    - field.field.node.academic_calendar_event.field_season
+    - field.field.node.academic_calendar_event.field_semester_year
+    - field.field.node.academic_calendar_event.field_start_date
+    - field.field.node.academic_calendar_event.rabbit_hole__settings
+    - node.type.academic_calendar_event
+  module:
+    - artsci_core
+    - layout_builder
+    - layout_builder_restrictions
+    - user
+  theme:
+    - atomic_artsci
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_threecol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          column_widths: 25-50-25
+          layout_builder_styles_style:
+            - section_background_style_gray
+            - section_margin_fixed_width_container
+        components:
+          -
+            uuid: e5703d8a-2594-431f-adc1-6f61ccb0cd10
+            region: second
+            configuration:
+              id: 'field_block:node:academic_calendar_event:title'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+            third_party_settings: {  }
+          -
+            uuid: 57c9f63f-373a-4d32-ad0b-0ccdaf81e5c6
+            region: first
+            configuration:
+              id: 'field_block:node:academic_calendar_event:field_start_date'
+              label: null
+              label_display: null
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: datetime_custom
+                label: hidden
+                settings:
+                  timezone_override: ''
+                  date_format: 'F j, Y'
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+            third_party_settings: {  }
+          -
+            uuid: f4e59e42-10f0-454d-81f6-30dd7b7d41a5
+            region: third
+            configuration:
+              id: academic_addtocal_block
+              label: null
+              label_display: null
+              provider: artsci_core
+              context_mapping:
+                node: layout_builder.entity
+            weight: 2
+            additional: {  }
+            third_party_settings: {  }
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts: {  }
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories: {  }
+    entity_view_mode_restriction_by_region:
+      allowed_layouts: {  }
+id: node.academic_calendar_event.default
+targetEntityType: node
+bundle: academic_calendar_event
+mode: default
+content: {  }
+hidden:
+  content_moderation_control: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
+  field_external_url: true
+  field_new_window: true
+  field_season: true
+  field_semester_year: true
+  field_start_date: true
+  links: true
+  private: true
+  rabbit_hole__settings: true
+  search_api_excerpt: true

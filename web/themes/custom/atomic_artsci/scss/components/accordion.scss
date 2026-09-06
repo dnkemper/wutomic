@@ -6,14 +6,16 @@
 .accordion {
   --trans-time: 0.2s;
   --accordion-label-color: var(--artsci-light);
-  --accordion-label-color-hover: #{variables.$lighter-gray};
+  --accordion-label-color-hover: #{variables.$gray-dark};
   --accordion-outline-color: var(--artsci-gray-cool);
-  --accordion-border-color: var(--artsci-gray-light);
+  --accordion-border-color: #00000033;
+  --accordion-content-bg: #{variables.$light};
 
   details {
     &[open] {
       summary {
-        i, svg {
+        i,
+        svg {
           transform: rotate(0deg) translate(0px, 0.1em);
         }
       }
@@ -25,8 +27,11 @@
     background-color: var(--accordion-label-color);
     display: flex;
     cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: var(--accordion-label-color-hover);
       outline: 1px solid var(--accordion-outline-color);
     }
@@ -35,19 +40,20 @@
       visibility: hidden;
     }
 
-    i, svg {
+    i,
+    svg {
       transition: all var(--trans-time) ease-in-out;
       width: variables.$h5-font-size;
       height: variables.$h5-font-size;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: -0.3rem .7rem 0 0;
+      margin: -0.3rem 0.7rem 0 0;
       border-radius: 50%;
       transition-property: transform, background-color;
       background-color: transparent;
       transform: rotate(-180deg) translate(0px, -0.1em);
-      color: #BA0C2F;
+      color: #971b2f;
     }
   }
 
@@ -62,14 +68,13 @@
     align-items: center;
     cursor: pointer;
 
-
     &:focus {
       outline: 2px auto -webkit-focus-ring-color;
     }
   }
 
   .accordion__content {
-    background-color: variables.$white;
+    background-color: var(--accordion-content-bg);
     padding: variables.$md;
     border-top: 1px solid var(--accordion-border-color);
 
@@ -106,13 +111,12 @@
   --accordion-label-color-hover: var(--artsci-light);
   --accordion-outline-color: var(--artsci-gray-mid);
   --accordion-border-color: var(--artsci-gray-light);
+  --accordion-content-bg: #{variables.$white};
 }
 // === End: Accordion modifiers === //
 
-
-
 .collection--accordion .accordion__content {
-  background-color: variables.$white;
+  background-color: var(--accordion-content-bg);
   &:not([hidden]) {
     display: flow-root;
   }
@@ -137,7 +141,6 @@ details.accordion__item summary {
   color: variables.$secondary;
 }
 
-// @todo remove when https://github.com/artsci/artsci/issues/714 is complete.
 .accordion .accordion__heading button.border {
   border: 1px solid rgba(0, 0, 0, 0.25);
 }

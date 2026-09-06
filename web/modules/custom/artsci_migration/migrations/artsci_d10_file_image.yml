@@ -1,0 +1,123 @@
+id: artsci_d10_file_image
+label: 'D10 image files via JSON:API'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  # JSON:API file endpoint, filtered to image mimetypes only.
+  # If you'd rather migrate every file regardless of mime, drop the filter.
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/file/file?filter[mime][condition][path]=filemime&filter[mime][condition][operator]=STARTS_WITH&filter[mime][condition][value]=image/&page[limit]=50&sort=drupal_internal__fid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  # Use migrate_plus's 'urls' pager: the selector value IS the next URL
+  # (which is exactly what JSON:API's links.next.href gives us). Do NOT
+  # use 'cursor' — that one appends ?cursor=VALUE to the base URL and
+  # double-encodes things into oblivion.
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  constants:
+    # Source site, used to resolve relative file URLs into fetchable ones.
+    source_base_url: 'https://artsci.washu.edu'
+
+  ids:
+    fid:
+      type: integer
+
+  fields:
+    - name: fid
+      label: 'Original FID'
+      selector: 'attributes/drupal_internal__fid'
+    - name: uuid
+      label: 'Original UUID'
+      selector: 'id'
+    - name: filename
+      label: Filename
+      selector: 'attributes/filename'
+    - name: filemime
+      label: 'MIME type'
+      selector: 'attributes/filemime'
+    - name: filesize
+      label: 'File size'
+      selector: 'attributes/filesize'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    - name: created
+      label: Created
+      selector: 'attributes/created'
+    - name: changed
+      label: Changed
+      selector: 'attributes/changed'
+    # Destination URI on D11. We reuse the D10 stream wrapper path so
+    # in-body image src attributes (which point to /sites/.../files/...)
+    # keep working without rewriting body content.
+    - name: dest_uri
+      label: 'Destination URI (public://...)'
+      selector: 'attributes/uri/value'
+    # Relative URL on the source site, e.g. /sites/.../files/2020-01/foo.jpg
+    - name: file_url_path
+      label: 'Source URL path'
+      selector: 'attributes/uri/url'
+
+process:
+  # Look up existing file by UUID (see media migration for why).
+  fid:
+    plugin: entity_lookup
+    source: uuid
+    entity_type: file
+    value_key: uuid
+
+  uuid: uuid
+  filename: filename
+  filemime: filemime
+  filesize: filesize
+  status: status
+  langcode:
+    plugin: default_value
+    default_value: en
+  uid:
+    plugin: default_value
+    default_value: 1
+  created:
+    plugin: callback
+    callable: strtotime
+    source: created
+  changed:
+    plugin: callback
+    callable: strtotime
+    source: changed
+
+  # Build the absolute source URL into a temporary pseudo-field.
+  _source_url:
+    plugin: concat
+    source:
+      - constants/source_base_url
+      - file_url_path
+    delimiter: ''
+
+  # Copy the binary from the D10 site into D11's public files dir at the
+  # same path. file_copy returns the final destination URI, which becomes
+  # the value of the uri field.
+  uri:
+    plugin: file_copy
+    source:
+      - '@_source_url'
+      - dest_uri
+    # Don't re-download if the destination already exists. Change to
+    # 'replace' if you want to force fresh copies on every run.
+    file_exists: 'use existing'
+
+destination:
+  plugin: 'entity:file'
+
+migration_dependencies:
+  required: []
+  optional: []

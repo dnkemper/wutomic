@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -80,7 +95,6 @@
   flex-basis: 100%;
 }
 .menu-wrapper .menu li {
-  display: block;
   margin-bottom: 0;
   line-height: 1.3;
   border-bottom: 1px solid var(--transparent-border);
@@ -102,7 +116,8 @@
   font-size: 1.1rem;
   display: list-item;
 }
-.menu-wrapper .menu li li a, .menu-wrapper .menu li li span {
+.menu-wrapper .menu li li a,
+.menu-wrapper .menu li li span {
   color: #333;
   border-bottom: none;
   display: block;
@@ -112,7 +127,9 @@
   padding-bottom: 1.05rem;
   padding-left: 0;
 }
-.menu-wrapper .menu li li a:focus, .menu-wrapper .menu li li a:hover, .menu-wrapper .menu li li span:focus, .menu-wrapper .menu li li span:hover {
+.menu-wrapper .menu li li a:focus, .menu-wrapper .menu li li a:hover,
+.menu-wrapper .menu li li span:focus,
+.menu-wrapper .menu li li span:hover {
   text-decoration: underline;
 }
 .menu-wrapper .menu li:last-child {
@@ -131,15 +148,17 @@
   transition: background 0.8s ease-out;
   text-decoration: none;
   color: #000000;
-  word-break: break-word;
   padding-top: 1.05rem;
   padding-right: 1.05rem;
   padding-bottom: 1.05rem;
   padding-left: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: strict;
 }
 [class*=bg--black] .menu-wrapper .menu li a,
 [class*=bg--black] .menu-wrapper .menu li span {
-  color: #F3F3F3;
+  color: #edeae1;
 }
 .menu-wrapper .menu li a.is-active,
 .menu-wrapper .menu li span.is-active {
@@ -162,10 +181,10 @@
 .menu-wrapper .menu li span:hover {
   text-decoration: underline;
 }
-[class*=bg--black] .menu-wrapper .menu li, .bg-pattern--brain-black .menu-wrapper .menu li {
+[class*=bg--tan] .menu-wrapper .menu li {
   border-color: rgba(255, 255, 255, 0.225);
 }
-[class*=bg--black] .menu-wrapper .menu li a, .bg-pattern--brain-black .menu-wrapper .menu li a {
+[class*=bg--tan] .menu-wrapper .menu li a {
   color: #fff;
 }
 .menu-wrapper .menu ul.menu {
@@ -215,7 +234,8 @@
     font-weight: 900;
   }
 }
-.menu-wrapper .menu ul.menu li li a, .menu-wrapper .menu ul.menu li li span {
+.menu-wrapper .menu ul.menu li li a,
+.menu-wrapper .menu ul.menu li li span {
   opacity: 0.8;
 }
 .menu-wrapper .menu ul.menu ul.menu {
@@ -293,9 +313,14 @@
   .layout--onecol .menu-wrapper--horizontal > .menu > li:last-of-type a {
     margin-right: 0;
   }
+  .layout--onecol .menu-wrapper--horizontal > .menu > li > a:hover a, .layout--onecol .menu-wrapper--horizontal > .menu > li > a:focus a,
+  .layout--onecol .menu-wrapper--horizontal > .menu > li > span:hover a,
+  .layout--onecol .menu-wrapper--horizontal > .menu > li > span:focus a {
+    filter: brightness(0.75);
+    text-decoration: underline;
+  }
   .layout--onecol .menu-wrapper--horizontal > .menu > li > a,
   .layout--onecol .menu-wrapper--horizontal > .menu > li > span {
-    transition: filter 0.2s ease-in-out;
     position: relative;
     width: auto;
     text-align: center;
@@ -306,35 +331,29 @@
     align-items: center;
     word-break: unset;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li > a:hover a, .layout--onecol .menu-wrapper--horizontal > .menu > li > a:focus a,
-  .layout--onecol .menu-wrapper--horizontal > .menu > li > span:hover a,
-  .layout--onecol .menu-wrapper--horizontal > .menu > li > span:focus a {
-    filter: brightness(0.75);
-    text-decoration: underline;
-  }
   .layout--onecol .menu-wrapper--horizontal > .menu > li > a:focus, .layout--onecol .menu-wrapper--horizontal > .menu > li > a:hover,
   .layout--onecol .menu-wrapper--horizontal > .menu > li > span:focus,
   .layout--onecol .menu-wrapper--horizontal > .menu > li > span:hover {
     text-decoration: none;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li::before {
     position: absolute;
     bottom: 35%;
     width: 1px;
     height: 25%;
     content: "";
-    background: #BA0C2F;
+    background: #ba0c2f;
     right: -1px;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li:last-child:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li:last-child::before {
     background: transparent;
   }
   .layout--onecol .menu-wrapper--horizontal > .menu > li > a.is-active {
-    background-color: #F3F3F3;
+    background-color: #edeae1;
     margin: 0;
     padding-bottom: 1.475rem;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li > a.is-active:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li > a.is-active::before {
     width: 20px;
     height: 20px;
     content: "";
@@ -342,14 +361,14 @@
     left: calc(50% - 10px);
     top: calc(100% - 1px);
     background-color: transparent;
-    border-top: 10px solid #BA0C2F;
+    border-top: 10px solid #ba0c2f;
     border-right: 10px solid transparent;
     border-left: 10px solid transparent;
     border-bottom: 10px solid transparent;
     z-index: 1;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li > a.is-active:after {
-    background: #BA0C2F;
+  .layout--onecol .menu-wrapper--horizontal > .menu > li > a.is-active::after {
+    background: #ba0c2f;
     content: "";
     position: absolute;
     left: 50%;
@@ -360,17 +379,17 @@
     transition: transform 0.3s ease-in-out;
     transform: translate(-50%, 0) scaleX(1);
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail::before {
     background: transparent;
   }
   .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a,
   .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span {
-    background-color: #F3F3F3;
+    background-color: #edeae1;
     margin: 0;
     padding-bottom: 1.475rem;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a:before,
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a::before,
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span::before {
     width: 20px;
     height: 20px;
     content: "";
@@ -378,15 +397,15 @@
     left: calc(50% - 10px);
     top: calc(100% - 1px);
     background-color: transparent;
-    border-top: 10px solid #BA0C2F;
+    border-top: 10px solid #ba0c2f;
     border-right: 10px solid transparent;
     border-left: 10px solid transparent;
     border-bottom: 10px solid transparent;
     z-index: 1;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a:after,
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span:after {
-    background: #BA0C2F;
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a::after,
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span::after {
+    background: #ba0c2f;
     content: "";
     position: absolute;
     left: 50%;
@@ -397,10 +416,10 @@
     transition: transform 0.3s ease-in-out;
     transform: translate(-50%, 0) scaleX(1);
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item.menu-item--expanded > a.is-active:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item.menu-item--expanded > a.is-active::before {
     left: calc(64% - 10px);
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded.menu-item--active-trail > span:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded.menu-item--active-trail > span::before {
     width: 20px;
     height: 20px;
     content: "";
@@ -408,21 +427,21 @@
     left: calc(50% - 10px);
     top: calc(100% - 1px);
     background-color: transparent;
-    border-top: 10px solid #BA0C2F;
+    border-top: 10px solid #ba0c2f;
     border-right: 10px solid transparent;
     border-left: 10px solid transparent;
     border-bottom: 10px solid transparent;
     z-index: 1;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded.menu-item--active-trail > a:before,
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded.menu-item--active-trail > span:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded.menu-item--active-trail > a::before,
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded.menu-item--active-trail > span::before {
     left: calc(64% - 10px);
   }
   .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded {
     background-color: transparent;
     align-items: center;
   }
-  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded:before {
+  .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded::before {
     right: -6px;
   }
   .layout--onecol .menu-wrapper--horizontal > .menu > li.menu-item--expanded > span,
@@ -461,7 +480,7 @@
     padding-left: 2.2rem;
     font-size: 0.9rem;
   }
-  .layout--onecol .menu-wrapper--horizontal .menu ul ul.menu li > a:after {
+  .layout--onecol .menu-wrapper--horizontal .menu ul ul.menu li > a::after {
     height: 1px;
   }
   .layout--onecol .menu-wrapper--horizontal .menu ul ul.menu li > a::before {
@@ -479,13 +498,13 @@
     line-height: 1;
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    color: #63666A;
+    color: #e8e6e1;
   }
   .layout--onecol .menu-wrapper--horizontal .menu li {
     position: relative;
   }
-  .layout--onecol .menu-wrapper--horizontal .menu li a:after {
-    background-color: #63666A;
+  .layout--onecol .menu-wrapper--horizontal .menu li a::after {
+    background-color: #e8e6e1;
   }
   .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li a,
   .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li span {
@@ -495,8 +514,8 @@
   .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li span::before {
     content: "";
   }
-  .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li a:after,
-  .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li span:after {
+  .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li a::after,
+  .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li span::after {
     content: "";
   }
   .layout--onecol .menu-wrapper--horizontal .menu li.menu-item--expanded li.menu-item--expanded {
@@ -513,10 +532,10 @@
   .layout--onecol .menu-wrapper--horizontal .menu li li a:focus, .layout--onecol .menu-wrapper--horizontal .menu li li a:hover,
   .layout--onecol .menu-wrapper--horizontal .menu li li span:focus,
   .layout--onecol .menu-wrapper--horizontal .menu li li span:hover {
-    background: #F3F3F3;
+    background: #edeae1;
   }
-  .layout--onecol .menu-wrapper--horizontal .menu li li a:after,
-  .layout--onecol .menu-wrapper--horizontal .menu li li span:after {
+  .layout--onecol .menu-wrapper--horizontal .menu li li a::after,
+  .layout--onecol .menu-wrapper--horizontal .menu li li span::after {
     height: 2px;
     background-color: rgb(178.5, 178.5, 178.5);
   }
@@ -531,7 +550,7 @@
     background: #fff;
     color: #000000;
   }
-  .layout--onecol[class*=bg--black] .menu-wrapper--horizontal > .menu li a:after {
+  .layout--onecol[class*=bg--black] .menu-wrapper--horizontal > .menu li a::after {
     bottom: 0;
   }
   .layout--onecol[class*=bg--black] .menu-wrapper--horizontal > .menu li.menu-item--active-trail a {
@@ -541,33 +560,33 @@
   .layout--onecol[class*=bg--black] .menu-wrapper--horizontal > .menu li.menu-item--expanded ul li span {
     color: #000000;
   }
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li:before {
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li::before {
     background: #fff;
     width: 2px;
   }
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li:last-child:before {
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li:last-child::before {
     background: transparent;
   }
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a:before,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > span:before {
-    background-color: #63666A;
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a::before,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > span::before {
+    background-color: #e8e6e1;
   }
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a.is-active:before,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a:before,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > span:before,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a.is-active:before,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a:before,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span:before {
-    border-top-color: #63666A;
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a.is-active::before,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a::before,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > span::before,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a.is-active::before,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a::before,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span::before {
+    border-top-color: #e8e6e1;
     background-color: transparent;
   }
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a.is-active:after,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a:after,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > span:after,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a.is-active:after,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a:after,
-  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span:after {
-    background-color: #63666A;
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a.is-active::after,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > a::after,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li > span::after,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a.is-active::after,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > a::after,
+  .layout--onecol[class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > span::after {
+    background-color: #e8e6e1;
   }
 }
 @media (min-width: 768px) {
@@ -610,16 +629,16 @@
 }
 @media (min-width: 768px) {
   .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button {
-    background: #F3F3F3;
+    background: #edeae1;
   }
   [class*=bg--black] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button, [class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button, [class*=bg--gray] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button {
     background: #fff;
   }
-  .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button:focus:before, .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button:hover:before, .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button[aria-expanded=true]:before {
-    background-color: #63666A;
+  .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button:focus::before, .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button:hover::before, .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button[aria-expanded=true]::before {
+    background-color: #e8e6e1;
   }
-  .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button:before {
-    background: #BA0C2F;
+  .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button::before {
+    background: #ba0c2f;
     content: "";
     position: absolute;
     left: 48%;
@@ -630,8 +649,8 @@
     transition: transform 0.3s ease-in-out;
     transform: translate(-50%) scaleX(1);
   }
-  [class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button:before {
-    background-color: #63666A;
+  [class*=bg--red] .menu-wrapper--horizontal > .menu > li.menu-item--active-trail > button::before {
+    background-color: #e8e6e1;
   }
 }
 @media (min-width: 768px) {
@@ -642,16 +661,16 @@
     color: #000000;
   }
   .menu-wrapper--horizontal > .menu > li > .is-active + button {
-    background: #F3F3F3;
+    background: #edeae1;
   }
   [class*=bg--black] .menu-wrapper--horizontal > .menu > li > .is-active + button, [class*=bg--red] .menu-wrapper--horizontal > .menu > li > .is-active + button, [class*=bg--gray] .menu-wrapper--horizontal > .menu > li > .is-active + button {
     background: #fff;
   }
-  .menu-wrapper--horizontal > .menu > li > .is-active + button:focus:before, .menu-wrapper--horizontal > .menu > li > .is-active + button:hover:before, .menu-wrapper--horizontal > .menu > li > .is-active + button[aria-expanded=true]:before {
-    background-color: #63666A;
+  .menu-wrapper--horizontal > .menu > li > .is-active + button:focus::before, .menu-wrapper--horizontal > .menu > li > .is-active + button:hover::before, .menu-wrapper--horizontal > .menu > li > .is-active + button[aria-expanded=true]::before {
+    background-color: #e8e6e1;
   }
-  .menu-wrapper--horizontal > .menu > li > .is-active + button:before {
-    background: #BA0C2F;
+  .menu-wrapper--horizontal > .menu > li > .is-active + button::before {
+    background: #ba0c2f;
     content: "";
     position: absolute;
     left: 48%;
@@ -662,8 +681,8 @@
     transition: transform 0.3s ease-in-out;
     transform: translate(-50%) scaleX(1);
   }
-  [class*=bg--red] .menu-wrapper--horizontal > .menu > li > .is-active + button:before {
-    background-color: #63666A;
+  [class*=bg--red] .menu-wrapper--horizontal > .menu > li > .is-active + button::before {
+    background-color: #e8e6e1;
   }
 }
 .menu-wrapper--horizontal > .menu button {
@@ -694,26 +713,26 @@
   }
 }
 @media (min-width: 768px) {
-  .menu-wrapper--horizontal > .menu button:before {
+  .menu-wrapper--horizontal > .menu button::before {
     content: "";
     position: absolute;
     left: 50%;
     bottom: 0;
     width: 100%;
     height: 4px;
-    background-color: #63666A;
+    background-color: #e8e6e1;
     transform-origin: center;
     transform: translate(-50%, 0) scaleX(0);
     transition: transform 0.3s ease-in-out;
   }
 }
-.menu-wrapper--horizontal > .menu button:focus:after, .menu-wrapper--horizontal > .menu button:hover:after, .menu-wrapper--horizontal > .menu button[aria-expanded=true]:after {
-  background: color-mix(in srgb, #F3F3F3 75%, black);
+.menu-wrapper--horizontal > .menu button:focus::after, .menu-wrapper--horizontal > .menu button:hover::after, .menu-wrapper--horizontal > .menu button[aria-expanded=true]::after {
+  background: color-mix(in srgb, #edeae1 75%, black);
 }
-[class*=bg--black] .menu-wrapper--horizontal > .menu button:focus:after, [class*=bg--black] .menu-wrapper--horizontal > .menu button:hover:after, [class*=bg--black] .menu-wrapper--horizontal > .menu button[aria-expanded=true]:after {
+[class*=bg--black] .menu-wrapper--horizontal > .menu button:focus::after, [class*=bg--black] .menu-wrapper--horizontal > .menu button:hover::after, [class*=bg--black] .menu-wrapper--horizontal > .menu button[aria-expanded=true]::after {
   color: #000000;
 }
-.menu-wrapper--horizontal > .menu button:focus:before, .menu-wrapper--horizontal > .menu button:hover:before, .menu-wrapper--horizontal > .menu button[aria-expanded=true]:before {
+.menu-wrapper--horizontal > .menu button:focus::before, .menu-wrapper--horizontal > .menu button:hover::before, .menu-wrapper--horizontal > .menu button[aria-expanded=true]::before {
   transform: translate(-50%, 0) scaleX(1);
 }
 .menu-wrapper--horizontal > .menu button[aria-expanded=true]::after {
@@ -739,7 +758,7 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: color-mix(in srgb, #F3F3F3 92%, black);
+  background: color-mix(in srgb, #edeae1 92%, black);
 }
 .menu-wrapper--horizontal > .menu .menu-item--expanded a + button::after {
   margin-left: 0;
@@ -755,7 +774,7 @@
   width: 20px;
   height: 20px;
 }
-.menu-wrapper--horizontal > .menu .menu button:before {
+.menu-wrapper--horizontal > .menu .menu button::before {
   height: 0;
 }
 [class*=bg--black] .menu-wrapper--horizontal li.menu-item--expanded {
@@ -781,27 +800,11 @@
   text-align: inherit;
 }
 
-button[id^=main-menu-toggle-] {
-  width: 100%;
-  text-align: left;
-  min-height: 60px;
-  border: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  letter-spacing: 0.03rem;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: bold;
-  background: none;
-  padding: 1rem 0;
-  display: flex;
-}
 button[id^=main-menu-toggle-] span {
   display: inline-block;
   line-height: 1.6;
 }
-button[id^=main-menu-toggle-]:before {
+button[id^=main-menu-toggle-]::before {
   content: "\f0c9";
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -818,7 +821,7 @@ button[id^=main-menu-toggle-]:before {
   width: 25px;
   height: 25px;
 }
-button[id^=main-menu-toggle-][aria-expanded=true]:before {
+button[id^=main-menu-toggle-][aria-expanded=true]::before {
   content: "\f00d";
   color: #fff;
   border-radius: 50%;
@@ -826,8 +829,26 @@ button[id^=main-menu-toggle-][aria-expanded=true]:before {
   line-height: 0.9;
   padding: 5px 7px;
 }
+button[id^=main-menu-toggle-] {
+  width: 100%;
+  text-align: left;
+  min-height: 60px;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  letter-spacing: 0.03rem;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: bold;
+  background: none;
+  padding: 1rem 0;
+  display: flex;
+}
 @media (min-width: 768px) {
   button[id^=main-menu-toggle-] {
     display: none;
   }
-}/*# sourceMappingURL=main-menu.css.map */
+}
+
+/*# sourceMappingURL=main-menu.css.map */

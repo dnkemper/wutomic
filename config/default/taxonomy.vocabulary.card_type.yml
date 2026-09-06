@@ -1,0 +1,9 @@
+uuid: 129f66af-dbae-470d-b5c7-9078aa1137ef
+langcode: en
+status: true
+dependencies: {  }
+name: 'Card Type'
+vid: card_type
+description: 'Taxonomy for the Image Card content type. Terms: Departments & Programs, Majors & Minors.'
+weight: 0
+new_revision: true

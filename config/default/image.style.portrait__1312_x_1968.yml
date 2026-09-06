@@ -1,0 +1,24 @@
+uuid: c1836095-ecab-4e8f-81d2-8f9012a3c3d8
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__1312_x_1968
+label: 'Portrait (1312 x 1968)'
+effects:
+  b0725f84-db9a-4d7e-90c1-7e8f9012b2c7:
+    uuid: b0725f84-db9a-4d7e-90c1-7e8f9012b2c7
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 1312
+      height: 1968
+      crop_type: focal_point
+  0da4b575-8607-4db0-a396-046403b45dd3:
+    uuid: 0da4b575-8607-4db0-a396-046403b45dd3
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

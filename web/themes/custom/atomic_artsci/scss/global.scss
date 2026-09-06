@@ -2,50 +2,138 @@
 @use 'abstracts/_utilities.scss';
 
 a.link--arrow.arrow.bttn.bttn--primary {
-  &:after {
+  &::after {
     position: unset !important;
     transform: unset !important;
     width: unset !important;
     background-color: unset !important;
   }
 }
-a.arrow, a.link--arrow {
-  color: black;
-    &::after {
-
-    content: "\f061";
-    // position: absolute;
+a.link--external-arrow {
+  color: #000;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 140%;
+  text-transform: unset !important;
+  &::after {
+    content: '\f08e';
+    font: var(--fa-font-thin);
     -webkit-font-smoothing: antialiased;
-    color: #971B2F;
+    color: #000 !important;
     display: inline-block;
-    font-family: Font Awesome\ 5 Free;
-    font-size: 18px;
-    font-style: normal;
-    font-variant: normal;
     font-weight: 900;
-    line-height: 1;
     margin-right: 15px;
-    text-rendering: auto;
-    margin-left: .625rem;
-    }
+    font-size: 1rem;
+    margin-left: 0.625rem;
+  }
 }
-.section-shield {
+
+p.pre-title {
+  color: #ba0c2f;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 130%;
+  text-transform: uppercase;
+}
+a.arrow,
+a.link--arrow,
+a.link--arrow--red,
+.bttn--arrow--red,
+.bttn--arrow {
+  color: #000000 !important;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 150%;
+  border: unset !important;
+  text-decoration: unset !important;
+  text-transform: unset !important;
+  &:hover {
+    text-decoration: underline !important;
+  }
+  &::after {
+    content: '\f061';
+    -webkit-font-smoothing: antialiased;
+    color: #ba0c2f !important;
+    display: inline-block;
+    font: var(--fa-font-thin);
+    margin-right: 15px;
+    margin-left: 0.625rem;
+  }
+}
+a.link--arrow--red,
+.bttn--arrow--red {
+  color: #ba0c2f !important;
+  font-size: 1rem;
+  font-weight: 600 !important;
+  line-height: 150%;
+  text-decoration: unset !important;
+  border: unset !important;
+  text-transform: unset !important;
+  &:hover {
+    text-decoration: underline !important;
+    background: unset !important;
+  }
+  [class*='bg--teal'] &,
+  [class*='bg--red'] &,
+  [class*='bg--'] [class*='bg--teal'] &,
+  [class*='bg--'] [class*='bg--red'] & {
+    color: white !important;
+  }
+  [class*='bg--gray'] &,
+  [class*='bg--white'] &,
+  [class*='bg--'] [class*='bg--gray'] &,
+  [class*='bg--'] [class*='bg--white'] & {
+    color: #ba0c2f !important;
+  }
+}
+// === Decorative lines — LB "Horizontal Line" / "Vertical Line" groups ===
+.horizontal-line {
+  &--red {
+    border-top: 1px solid variables.$primary;
+    padding-top: variables.$gutter;
+  }
+  &--black {
+    border-top: 1px solid variables.$secondary;
+    padding-top: variables.$gutter;
+  }
+  &--blue-bottom {
+    border-bottom: 3px solid variables.$info;
+  }
+}
+
+.vertical-line {
+  &--white-left {
+    border-left: 2px solid variables.$white;
+    padding-left: variables.$gutter;
+  }
+  &--red-center {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 64px; // adjustable
+      background: variables.$primary;
+    }
+  }
+}
+.section-shield,
+.section-shield--left,
+.section-shield--right {
   position: relative;
   overflow: hidden;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
-    right: -5%;
     top: 50%;
     transform: translateY(-50%);
     width: 450px;
     height: 450px;
-    background-color: rgba(255, 255, 255, 0.15);
-    -webkit-mask-image: url('/themes/custom/atomic_artsci/images/wustl-shield.png');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
+    background-color: hsla(0, 0%, 100%, 0.35);
     mask-image: url('/themes/custom/atomic_artsci/images/wustl-shield.png');
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -54,28 +142,35 @@ a.arrow, a.link--arrow {
     pointer-events: none;
   }
 }
+.section-shield--left {
+  &::after {
+    left: -5%;
+  }
+}
+.section-shield--right,
+.section-shield {
+  &::after {
+    right: -5%;
+  }
+}
 .section-ampersand {
   position: relative;
   overflow: hidden;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     right: -5%;
     top: 50%;
     transform: translateY(-50%);
     width: 450px;
     height: 450px;
-    background-color: rgba(255, 255, 255, 0.15);
-    -webkit-mask-image: url('/themes/custom/atomic_artsci/images/ampersand.svg');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
+    background-color: hsla(0, 0%, 100%, 0.35);
     mask-image: url('/themes/custom/atomic_artsci/images/ampersand.svg');
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-position: center;
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
   }
 }
@@ -109,8 +204,9 @@ a.arrow, a.link--arrow {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background var(--duration-fast) var(--ease-default),
-                transform var(--duration-fast) var(--ease-default);
+    transition:
+      background var(--duration-fast) var(--ease-default),
+      transform var(--duration-fast) var(--ease-default);
 
     &:hover,
     &:focus-visible {
@@ -141,34 +237,34 @@ h3 {
   &::before {
     display: none !important;
   }
-.media {
-  position: relative !important;
-  height: auto !important;
-  max-height: 500px;
-
-  img,
-  video,
-  iframe,
-  .media__video-wrapper {
+  .media {
+    position: relative !important;
+    height: auto !important;
     max-height: 500px;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
 
-  // For videos that need aspect ratio preservation
-  video {
-    display: block;
-  }
-      &::after {
+    img,
+    video,
+    iframe,
+    .media__video-wrapper {
+      max-height: 500px;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    // For videos that need aspect ratio preservation
+    video {
+      display: block;
+    }
+    &::after {
       display: none !important;
     }
-}
+  }
 
   .banner__content {
     position: relative !important;
     z-index: 2;
-    margin-top: -5%;
+    margin-top: -10%;
     margin-bottom: 2rem;
     margin-inline: auto;
     max-width: var(--container-max, 80rem);
@@ -187,23 +283,18 @@ h3 {
   }
 
   // Card background options
-  &.card-bg--teal .banner__content {
+  &.bg--teal .banner__content {
     background: var(--bg--teal);
     --banner-text-color: #fff;
   }
 
-  &.card-bg--red .banner__content {
+  &.bg--red .banner__content {
     background: var(--bg--red);
     --banner-text-color: #fff;
   }
 
-  &.card-bg--black .banner__content {
-    background: var(--color-black, #1d1d1b);
-    --banner-text-color: #fff;
-  }
-
-  &.card-bg--red .banner__content {
-    background: var(--brand-gold, #ffd700);
+  &.bg--tan .banner__content {
+    background: var(--bg--tan);
     --banner-text-color: var(--color-black, #1d1d1b);
   }
 
@@ -253,7 +344,7 @@ h3 {
     z-index: 1;
     margin-top: -10rem;
     padding-top: calc(8rem + var(--section-padding-top, 3rem));
-    
+
     // Reset if this section is also an overlap trigger
     &.section-overlap--next {
       padding-top: var(--section-padding-top, 3rem);
@@ -280,7 +371,7 @@ h3 {
     border-radius: 1rem;
     overflow: hidden;
   }
-  
+
   + .layout__container {
     position: relative;
     z-index: 1;
@@ -292,20 +383,20 @@ h3 {
   font-size: 16px;
 
   // Colors - Brand
-  --artsci-gold: #BA0C2F;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #00558C;
-  --bg--teal: #367B88;
+  --artsci-gray-cool: #63666a;
+  --link-color: #00558c;
+  --bg--teal: #007d8a;
 
   // Colors - Neutral
-  --artsci-light: #F3F3F3;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
-  --transparent-border: rgb(0, 0, 0, .125);
+  --artsci-gray-light: #cacaca;
+  --transparent-border: rgb(0, 0, 0, 0.125);
 
   // Spacing
   --space-lg-width-gutter: 3rem;
@@ -365,6 +456,7 @@ header,
 nav,
 section {
   display: block;
+  z-index: 1;
 }
 
 /* Grouping content
@@ -578,7 +670,7 @@ select {
  */
 button,
 html [type='button'],
-  /* 1 */
+/* 1 */
 [type='reset'],
 [type='submit'] {
   -webkit-appearance: button;
@@ -712,7 +804,7 @@ textarea {
  * 1. Add the correct display in Edge, IE, and Firefox.
  */
 details,
-  /* 1 */
+/* 1 */
 menu {
   display: block;
 }
@@ -783,14 +875,14 @@ aside .region,
 }
 
 .layout-container {
-  @include utilities.container-width;;
+  @include utilities.container-width;
 }
 
 .page__container {
-  @include utilities.container-width;;
+  @include utilities.container-width;
 
   &--mixed {
-    @include utilities.container-width;;
+    @include utilities.container-width;
   }
 }
 
@@ -800,7 +892,6 @@ aside .region,
     display: flex;
   }
 }
-
 
 .element-invisible,
 .visually-hidden {
@@ -826,7 +917,9 @@ aside .region,
 .element--left {
   @extend %artsci-component--left;
 }
-
+.heading-small {
+  @include utilities.heading-small();
+}
 
 // Block Margins / Padding
 
@@ -888,11 +981,11 @@ aside .region,
   padding-inline-start: 1rem;
 }
 
-.padding--inline-end--sm  {
+.padding--inline-end--sm {
   padding-inline-end: 0.5rem;
 }
 
-.padding--inline-end--md  {
+.padding--inline-end--md {
   padding-inline-end: 1rem;
 }
 
@@ -951,7 +1044,6 @@ aside .region,
   src: local('Georgia');
 }
 
-
 h1,
 h2,
 h3,
@@ -964,7 +1056,8 @@ h6 {
   font-family: variables.$font-family-serif;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   @include utilities.h1;
 }
 
@@ -976,52 +1069,60 @@ h1, .h1 {
   }
 }
 
-h2, .h2 {
+h2,
+.h2 {
   @include utilities.h2;
   // Overriding the size for Zilla so that the size is equal to Roboto.
   &.bold-headline--serif,
-  &.headline--serif  {
+  &.headline--serif {
     font-size: clamp(1.75rem, calc(1.7465vw + 1.0951rem), 2.525rem);
   }
 }
 
-h3, .h3 {
+h3,
+.h3 {
   @include utilities.h3;
   &.bold-headline--serif,
-  &.headline--serif  {
+  &.headline--serif {
     font-size: clamp(1.65rem, calc(1.0986vw + 1.238rem), 2.1375rem);
   }
 }
 
-h4, .h4 {
+h4,
+.h4 {
   @include utilities.h4;
   &.bold-headline--serif,
-  &.headline--serif  {
+  &.headline--serif {
     font-size: clamp(1.45rem, calc(0.8451vw + 1.1331rem), 1.825rem);
   }
 }
 
-h5, .h5 {
+h5,
+.h5 {
   @include utilities.h5;
   &.bold-headline--serif,
-  &.headline--serif  {
+  &.headline--serif {
     font-size: clamp(1.3rem, calc(0.7324vw + 1.0254rem), 1.625rem);
   }
 }
 
-h6, .h6 {
+h6,
+.h6 {
   @include utilities.h6;
   &.bold-headline--serif,
-  &.headline--serif  {
+  &.headline--serif {
     font-size: clamp(1.2rem, calc(0.507vw + 1.0099rem), 1.425rem);
   }
 }
 
-
 ol {
   list-style-position: outside;
   font-size: variables.$content-font-size;
-  @include utilities.margin($top: variables.$md, $left: variables.$lg, $bottom: variables.$md);
+  @include utilities.margin(
+    $top: variables.$md,
+    $left: variables.$lg,
+    $bottom: variables.$md
+  );
 }
 
 ol:not([type]) {
@@ -1066,11 +1167,14 @@ ul ul ul {
   list-style-type: square;
 }
 
-ol ol, ol ul, ul ol, ul ul {
+ol ol,
+ol ul,
+ul ol,
+ul ul {
   margin-top: 0;
-  margin-block-start: .75rem;
+  margin-block-start: 0.75rem;
   margin-bottom: 0;
-  margin-block-end: .75rem;
+  margin-block-end: 0.75rem;
 }
 
 .element--list-none {
@@ -1084,7 +1188,6 @@ dd {
   @include utilities.margin($left: variables.$lg);
 }
 
-
 .artsci-component--circle-list,
 .element--circle-list {
   margin: 0 0 0 -13px;
@@ -1097,7 +1200,7 @@ dd {
     display: list-item;
   }
 
-  >li {
+  > li {
     position: relative;
     min-height: 90px;
     margin-bottom: 0.25rem;
@@ -1111,7 +1214,7 @@ dd {
       margin-left: 115px;
     }
 
-    &:before {
+    &::before {
       display: block;
       margin: 0 auto;
       top: 0px;
@@ -1121,7 +1224,6 @@ dd {
       padding-top: 35px;
       content: counter(circle-counter);
       text-align: center;
-      text-transform: uppercase;
       color: black;
       border: 1px solid variables.$primary;
       border-radius: 50%;
@@ -1150,8 +1252,8 @@ dd {
   }
 }
 
-.element--circle-list>li,
-.artsci-component--circle-list>li {
+.element--circle-list > li,
+.artsci-component--circle-list > li {
   display: block;
   align-items: start;
   padding-top: 1.275rem;
@@ -1175,7 +1277,6 @@ dd {
   display: inline-block;
 }
 
-
 p,
 dl,
 ol,
@@ -1194,6 +1295,11 @@ p {
 
 a {
   color: variables.$link-color;
+  text-decoration: none;
+}
+
+.block-field-blocknodearticlebody a:hover,
+.page__container--normal a:hover {
   text-decoration: underline;
 }
 
@@ -1212,7 +1318,7 @@ pre {
   -webkit-overflow-scrolling: touch;
   padding: variables.$md;
   white-space: pre;
-  word-wrap: normal;
+  overflow-wrap: normal;
 }
 
 small {
@@ -1316,8 +1422,8 @@ hr {
   height: 0;
   border: 1px solid transparent;
   margin: 1.25rem 0;
-  &:after {
-    content: "";
+  &::after {
+    content: '';
     display: block;
     width: 33%;
     height: 6px;
@@ -1325,17 +1431,15 @@ hr {
     background: variables.$primary;
   }
   &--centered {
-    &:after {
+    &::after {
       margin: 0 auto;
     }
   }
-  [class*="bg-"] & {
+  [class*='bg-'] & {
     border: none;
   }
-  .bg-pattern--brain-reversed &,
-  .bg--red--pattern--brain &,
   .bg--red & {
-    &:after {
+    &::after {
       background: #fff;
     }
   }
@@ -1388,11 +1492,11 @@ mark {
   }
 
   &::before {
-    content: " [highlight start] ";
+    content: ' [highlight start] ';
   }
 
   &::after {
-    content: " [highlight end] ";
+    content: ' [highlight end] ';
   }
 
   .bg--red & {
@@ -1401,16 +1505,16 @@ mark {
 
     &.deletion {
       background-color: variables.$artsci-black;
-      color: variables.$artsci-gold;
+      color: variables.$primary;
     }
   }
 }
 
-.list-container--list {
-  .media {
-    display: none !important;
-  }
-}
+// .list-container--list {
+//   .media {
+//     display: none !important;
+//   }
+// }
 .grid--onecol {
   .list-container__inner {
     max-width: 81.875em;
@@ -1425,7 +1529,7 @@ mark {
   }
 }
 
-[class*="grid"].grid--gap__sm {
+[class*='grid'].grid--gap__sm {
   .list-container__inner {
     @include utilities.breakpoint(sm) {
       column-gap: var(--space-sm-width-gutter);
@@ -1489,19 +1593,19 @@ mark {
 @supports (contain: inline-size) {
   .grid__column,
   .column-container,
-  .layout-container{
+  .layout-container {
     container-type: inline-size;
     container-name: column;
   }
 }
-
 
 .element--flex-left,
 .flex--left {
   flex-flow: column nowrap;
   text-align: left;
   width: 100%;
-  padding: 1.5rem 0;
+  height: 100%;
+  padding: 12.25rem 1.25rem 1.25rem 1.25rem;
 }
 
 .element--flex-center,
@@ -1513,14 +1617,14 @@ mark {
   text-align: center;
 
   @include utilities.breakpoint(sm) {
-    padding: 1.5rem 0;
+    padding: 1.5rem;
   }
 }
 
 .flex--gap__sm {
-    @include utilities.breakpoint(sm) {
-      column-gap: var(--space-sm-width-gutter);
-    }
+  @include utilities.breakpoint(sm) {
+    column-gap: var(--space-sm-width-gutter);
+  }
 }
 
 .flex--gap__md {
@@ -1591,22 +1695,21 @@ mark {
   flex: 12;
 }
 
-
 :root {
   // Colors - Brand official
-  --artsci-gold: #BA0C2F;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #00558C;
+  --artsci-gray-cool: #63666a;
+  --link-color: #00558c;
 
   // Colors - Unofficial
-  --artsci-light: #F3F3F3;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
-  --transparent-border: rgb(0, 0, 0, .125);
+  --artsci-gray-light: #cacaca;
+  --transparent-border: rgb(0, 0, 0, 0.125);
 
   // Margin/Padding
   --space-lg-width-gutter: 3rem;
@@ -1619,12 +1722,13 @@ html {
 }
 
 :focus:not(:focus-visible) {
-  outline: none
+  outline: none;
 }
 
 /* Remove all animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
-  :after, :before {
+  ::after,
+  ::before {
     transition-duration: 0.01ms !important;
   }
   * {
@@ -1653,18 +1757,32 @@ html {
 .list-container__inner .views-row {
   container-type: inline-size;
   container-name: column;
+  height: 100%;
 }
-
+.block__content {
+  height: 100%;
+}
+.block.block-layout-builder.block-field-blocknodepagebody p {
+  color: white;
+}
+.field--name-field-tags.field--type-entity-reference.field--label-hidden.field__items {
+  display: inline-block;
+}
 // Word break classes.
 .block--word-break,
 .block-inline-blockartsci-text-area,
 .block-field-blocknodepagebody {
   a {
-    word-break: break-word;
+    // "word-break:break-word" is deprecated, so use "overflow-wrap"+"word-break"+"line-break" combo as recommended in https://deku.posstree.com/en/web/css-overflow-wrap/
+    overflow-wrap: anywhere;
+    word-break: normal;
+    line-break: strict;
   }
   .headline {
     a {
+      overflow-wrap: unset;
       word-break: unset;
+      line-break: unset;
     }
   }
 }
@@ -1733,10 +1851,9 @@ details {
   }
 }
 
-
 // Containers within a background color useful for views blocks.
 .block--bg-container {
-  .block__headline  {
+  .block__headline {
     @extend %container;
     //hack to prevent a change in container width (which is in em) when font size isn't 1em
     max-width: 1310px;
@@ -1754,12 +1871,10 @@ details {
 // Flex basis for all blocks and views
 
 .layout__region {
-
   .block,
   .view,
   .card,
   .banner,
-  .cta__wrapper,
   .stat {
     flex-basis: 100%;
     min-width: 0;
@@ -1789,7 +1904,8 @@ details {
 
 // Unset equal height columns
 .section-alignment__start {
-  .layout__spacing_container {
+  .layout__spacing_container,
+  .layout__section_container {
     align-items: flex-start;
   }
 }
@@ -1826,23 +1942,15 @@ details {
     }
   }
 
-  &.layout--title + &:not([class*="bg-"]) {
+  &.layout--title + &:not([class*='bg-']) {
     padding-top: 0;
   }
 
   // Define a list of background treatments.
-  $backgrounds:
-    ':not([class*="bg-"])',
-    '.bg--red',
-    '.bg--black',
-    '.bg--gray',
-    '.bg-pattern--brain',
-    '.bg-pattern--brain-reversed',
-    '.bg-pattern--brain-black';
+  $backgrounds: ':not([class*="bg-"])', '.bg--red', '.bg--teal', '.bg--gray';
 
   // Loop through each background.
   @each $background in $backgrounds {
-
     // When an element follows a previous element
     // with the same background treatment, remove the
     // top padding of the target element.
@@ -1863,7 +1971,7 @@ details {
   }
 
   // Add default padding if page title is hidden
-  &.layout--title--hidden + &:not([class*="bg-"]) {
+  &.layout--title--hidden + &:not([class*='bg-']) {
     padding-top: variables.$desktop-width-gutter;
 
     &.section-padding {
@@ -1908,18 +2016,18 @@ details {
     min-width: 0;
 
     &.border,
-    &[class*="bg--"],
-    &[class*="bg-pattern--"] {
+    &[class*='bg--'],
+    &[class*='bg-pattern--'] {
       padding: variables.$desktop-width-gutter;
     }
     &.border.block-padding__all--minimal,
-    &[class*="bg--"].block-padding__all--minimal,
-    &[class*="bg-pattern--"].block-padding__all--minimal {
+    &[class*='bg--'].block-padding__all--minimal,
+    &[class*='bg-pattern--'].block-padding__all--minimal {
       padding: 2rem;
     }
     &.border.block-padding__all--extra,
-    &[class*="bg--"].block-padding__all--extra,
-    &[class*="bg-pattern--"].block-padding__all--extra {
+    &[class*='bg--'].block-padding__all--extra,
+    &[class*='bg-pattern--'].block-padding__all--extra {
       padding: 6rem;
     }
   }
@@ -1940,13 +2048,14 @@ details {
   &--left {
     border-left: 1px solid rgba(0, 0, 0, 0.25);
     &.borderless.card {
-      border-left: 1px solid rgba(0, 0, 0, 0.25)!important;
+      border-left: 1px solid rgba(0, 0, 0, 0.25) !important;
     }
   }
 }
 
 // For sidebars: remove padding from adjacent blocks if they are the same and don't have a margin top set
-.block[class*="bg--gray"].block-padding__all + .block[class*="bg--gray"].block-padding__all:not(.block-margin__top) {
+.block[class*='bg--gray'].block-padding__all
+  + .block[class*='bg--gray'].block-padding__all:not(.block-margin__top) {
   margin-top: -1.5rem;
   padding-top: 0;
 }
@@ -1954,7 +2063,8 @@ details {
 // default spacing for pages without layout builder
 
 // Neither Paragraphs or Layout Builder.
-body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled main.page__container {
+body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled
+  main.page__container {
   margin-bottom: 1.25rem;
 }
 
@@ -1994,14 +2104,16 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 // default spacing for layout builder pages with container set in theme settings
 
 .content__container {
-  .layout__spacing_container {
+  .layout__spacing_container,
+  .layout__section_container {
     @include utilities.container-width;
   }
 
   .page__container--extended,
   .page__container--extended.layout--has-sidebar,
   .page__container--extended.sidebar-invisible {
-    .layout__spacing_container {
+    .layout__spacing_container,
+    .layout__section_container {
       @include utilities.breakpoint(page-container) {
         max-width: 100em;
         padding-right: variables.$lg;
@@ -2013,7 +2125,8 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
   .page__container--narrow,
   .page__container--narrow.layout--has-sidebar,
   .page__container--narrow.sidebar-invisible {
-    .layout__spacing_container {
+    .layout__spacing_container,
+    .layout__section_container {
       @include utilities.breakpoint(md) {
         max-width: 63.75em;
         margin: 0 auto;
@@ -2034,7 +2147,8 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 .page__container--full.layout__container,
 .page__container--full.layout--has-sidebar,
 .page__container--full.sidebar-invisible {
-  .layout__spacing_container {
+  .layout__spacing_container,
+  .layout__section_container {
     margin-right: variables.$mobile-width-gutter;
     margin-left: variables.$mobile-width-gutter;
     max-width: 100%;
@@ -2049,7 +2163,8 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 .page__container--edge,
 .page__container--edge.layout--has-sidebar,
 .page__container--edge.sidebar-invisible {
-  .layout__spacing_container {
+  .layout__spacing_container,
+  .layout__section_container {
     max-width: 100%;
     margin-right: 0;
     margin-left: 0;
@@ -2085,13 +2200,14 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 
 // Container fix for responsive tables
 
-.layout__spacing_container {
+.layout__spacing_container,
+.layout__section_container {
   min-width: 0;
 }
 
 // Set spacing as the default for mobile.
 .layout__container {
-  &:not([class*="grid-"]):not([class*="layout--title"]) {
+  &:not([class*='grid-']):not([class*='layout--title']) {
     .layout__region {
       .block + .block {
         margin-top: 1.6rem;
@@ -2131,9 +2247,9 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 // Override default for blocks adjacent to page title/breadcrumbs.
 .layout__container {
   .layout__region {
-    .block.block-system-breadcrumb-block + .block[class*="block-field-"],
-    .block.block-field-blocknodepagetitle + .block[class*="block-field-"],
-    .block.block-field-blocknodepersontitle + .block[class*="block-field-"] {
+    .block.block-system-breadcrumb-block + .block[class*='block-field-'],
+    .block.block-field-blocknodepagetitle + .block[class*='block-field-'],
+    .block.block-field-blocknodepersontitle + .block[class*='block-field-'] {
       margin-top: 0;
     }
   }
@@ -2149,7 +2265,7 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 }
 
 // mobile search
-.search-button[aria-expanded="true"] {
+.search-button[aria-expanded='true'] {
   margin-left: auto;
 }
 
@@ -2227,13 +2343,17 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 .view-display-id-attachment_a_z_list,
 .view-display-id-attachment_book_a_z_list,
 .view-display-id-attachment_services {
-  >div {
+  > div {
     display: flex;
-    @include utilities.margin(variables.$top: 0, variables.$left: 0, variables.$bottom: variables.$xlg);
+    @include utilities.margin(
+      variables.$top: 0,
+      variables.$left: 0,
+      variables.$bottom: variables.$xlg
+    );
     flex-wrap: wrap;
 
     span {
-      border: 1px solid variables.$gray-light;
+      border: 1px solid variables.$gray-dark;
       display: flex;
       text-align: center;
       margin: 0 variables.$sm variables.$sm 0;
@@ -2266,8 +2386,8 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
       }
 
       &:last-child {
-          @include utilities.breakpoint(page-container) {
-            border-right: 1px solid variables.$gray-light;
+        @include utilities.breakpoint(page-container) {
+          border-right: 1px solid variables.$gray-dark;
         }
       }
     }
@@ -2298,7 +2418,7 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 }
 
 @media all and (min-width: 0px) and (max-width: 855px) and (-ms-high-contrast: none),
-(-ms-high-contrast: active) {
+  (-ms-high-contrast: active) {
   .o-canvas__group {
     -ms-flex-preferred-size: 100% !important;
     flex-basis: 100% !important;
@@ -2311,7 +2431,6 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 }
 
 .layout--onecol {
-
   .feature,
   .banner {
     flex-basis: 100%;
@@ -2332,8 +2451,12 @@ body:not(.page-node-type-article, .page-node-type-page).layout-builder-disabled 
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 img.lazyload {
@@ -2347,4 +2470,19 @@ img.lazyload.loaded {
 
 * + small {
   margin-top: variables.$md;
+}
+
+// Reset overlap styles when in Layout Builder edit mode
+// Prevents negative margins from making sections inaccessible.
+.layout-builder {
+  .section-overlap--next + .layout__container,
+  .layout__container:has(.section-overlap--next) + .layout__container,
+  .layout__container:has(.banner--offset-content) + .layout__container {
+    margin-top: 0;
+    padding-top: var(--section-padding-top, 3rem);
+  }
+}
+.pswp__dynamic-caption--aside {
+  max-width: 500px;
+  margin-top: 0px;
 }

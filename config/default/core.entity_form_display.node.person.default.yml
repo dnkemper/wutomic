@@ -4,15 +4,28 @@ status: true
 dependencies:
   config:
     - field.field.node.person.body
+    - field.field.node.person.field_building_name_and_room_num
+    - field.field.node.person.field_content_hash
+    - field.field.node.person.field_external_link
+    - field.field.node.person.field_external_url
     - field.field.node.person.field_image
+    - field.field.node.person.field_is_shared
+    - field.field.node.person.field_last_fetch
+    - field.field.node.person.field_mailing_address
     - field.field.node.person.field_meta_tags
+    - field.field.node.person.field_office_hours
     - field.field.node.person.field_person_contact_information
     - field.field.node.person.field_person_credential
+    - field.field.node.person.field_person_department
+    - field.field.node.person.field_person_description
+    - field.field.node.person.field_person_description_label
     - field.field.node.person.field_person_education
     - field.field.node.person.field_person_email
+    - field.field.node.person.field_person_fax
+    - field.field.node.person.field_person_file_upload
     - field.field.node.person.field_person_first_name
     - field.field.node.person.field_person_hide
-    - field.field.node.person.field_person_hometown
+    - field.field.node.person.field_person_interests
     - field.field.node.person.field_person_last_name
     - field.field.node.person.field_person_phone
     - field.field.node.person.field_person_position
@@ -21,6 +34,9 @@ dependencies:
     - field.field.node.person.field_person_types
     - field.field.node.person.field_person_website
     - field.field.node.person.field_person_website_link_direct
+    - field.field.node.person.field_shared_content
+    - field.field.node.person.field_shared_content_xml
+    - field.field.node.person.field_social_media_links_p
     - field.field.node.person.field_tags
     - field.field.node.person.field_teaser
     - field.field.node.person.rabbit_hole__settings
@@ -34,6 +50,7 @@ dependencies:
     - metatag
     - paragraphs
     - path
+    - private_content
     - rabbit_hole
     - telephone
     - text
@@ -44,7 +61,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 10
+    weight: 14
     region: content
     settings:
       rows: 9
@@ -53,49 +70,23 @@ content:
       show_summary: true
     third_party_settings:
       allowed_formats:
-        hide_help: '0'
-        hide_guidelines: '0'
+        hide_help: '1'
+        hide_guidelines: '1'
   created:
     type: datetime_timestamp
-    weight: 17
+    weight: 34
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_image:
-    type: media_library_widget
-    weight: 5
+  field_building_name_and_room_num:
+    type: string_textarea
+    weight: 20
     region: content
     settings:
-      media_types: {  }
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
-  field_meta_tags:
-    type: metatag_firehose
-    weight: 28
-    region: content
-    settings:
-      sidebar: true
-      use_details: true
-    third_party_settings: {  }
-  field_person_contact_information:
-    type: paragraphs
-    weight: 27
-    region: content
-    settings:
-      title: 'Contact Information'
-      title_plural: 'Contact Information'
-      edit_mode: open
-      closed_mode: summary
-      autocollapse: none
-      closed_mode_threshold: 0
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: _none
-      features:
-        add_above: '0'
-        collapse_edit_all: collapse_edit_all
-        duplicate: duplicate
-    third_party_settings: {  }
-  field_person_credential:
+  field_content_hash:
     type: string_textfield
     weight: 4
     region: content
@@ -103,63 +94,90 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_person_education:
-    type: string_textarea
-    weight: 11
+  field_external_link:
+    type: link_default
+    weight: 42
     region: content
     settings:
-      rows: 2
-      placeholder: ''
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
-  field_person_email:
-    type: email_default
-    weight: 7
+  field_external_url:
+    type: link_default
+    weight: 22
     region: content
     settings:
-      placeholder: ''
-      size: 60
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
-  field_person_first_name:
-    type: string_textfield
-    weight: 0
+  field_image:
+    type: media_library_widget
+    weight: 31
     region: content
     settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_person_hide:
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: default
+  field_is_shared:
     type: boolean_checkbox
-    weight: 26
+    weight: 43
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
-  field_person_last_name:
+  field_last_fetch:
+    type: datetime_timestamp
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_meta_tags:
+    type: metatag_firehose
+    weight: 40
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
+    third_party_settings: {  }
+  field_office_hours:
+    type: text_textarea
+    weight: 21
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_contact_information:
+    type: paragraphs
+    weight: 23
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+      features:
+        collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
+    third_party_settings: {  }
+  field_person_credential:
     type: string_textfield
-    weight: 1
+    weight: -7
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_person_phone:
-    type: telephone_default
-    weight: 8
-    region: content
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-  field_person_position:
-    type: string_textfield
-    weight: 6
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_person_research_areas:
-    type: entity_reference_autocomplete
-    weight: 13
+  field_person_department:
+    type: entity_reference_autocomplete_tags
+    weight: 28
     region: content
     settings:
       match_operator: CONTAINS
@@ -167,36 +185,161 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_person_description:
+    type: text_textarea
+    weight: 25
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_description_label:
+    type: string_textfield
+    weight: 24
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_education:
+    type: string_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 2
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_email:
+    type: email_default
+    weight: 17
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
+  field_person_fax:
+    type: telephone_default
+    weight: 19
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_file_upload:
+    type: media_library_widget
+    weight: 11
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  field_person_first_name:
+    type: string_textfield
+    weight: -9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_hide:
+    type: boolean_checkbox
+    weight: 39
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_person_interests:
+    type: string_textarea
+    weight: 12
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_last_name:
+    type: string_textfield
+    weight: -8
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_phone:
+    type: telephone_default
+    weight: 18
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_position:
+    type: string_textfield
+    weight: 9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_person_research_areas:
+    type: options_buttons
+    weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_person_type_status:
     type: options_buttons
-    weight: 3
+    weight: 30
     region: content
     settings: {  }
     third_party_settings: {  }
   field_person_types:
     type: options_buttons
-    weight: 2
+    weight: 27
     region: content
     settings: {  }
     third_party_settings: {  }
   field_person_website:
     type: link_default
-    weight: 14
+    weight: 15
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_person_website_link_direct:
-    type: boolean_checkbox
-    weight: 15
+  field_shared_content:
+    type: string_textarea
+    weight: 2
     region: content
     settings:
-      display_label: true
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_shared_content_xml:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_social_media_links_p:
+    type: paragraphs
+    weight: 16
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+      features:
+        collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
     third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete
-    weight: 18
+    weight: 35
     region: content
     settings:
       match_operator: CONTAINS
@@ -206,7 +349,7 @@ content:
     third_party_settings: {  }
   field_teaser:
     type: string_textarea
-    weight: 25
+    weight: 13
     region: content
     settings:
       rows: 5
@@ -214,58 +357,37 @@ content:
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 24
+    weight: 38
     region: content
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 21
+    weight: 36
     region: content
     settings: {  }
     third_party_settings: {  }
   private:
     type: private
-    weight: 1
+    weight: 28
     region: content
     settings: {  }
     third_party_settings: {  }
-  promote:
-    type: boolean_checkbox
-    weight: 19
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
   rabbit_hole__settings:
     type: rabbit_hole_default
-    weight: 100
+    weight: 41
     region: content
     settings:
       advanced: true
     third_party_settings: {  }
   simple_sitemap:
-    weight: 12
+    weight: 32
     region: content
     settings: {  }
     third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 23
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  sticky:
-    type: boolean_checkbox
-    weight: 20
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 16
+    weight: 33
     region: content
     settings:
       match_operator: CONTAINS
@@ -274,14 +396,18 @@ content:
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 22
+    weight: 37
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
-  field_person_hometown: true
+  field_mailing_address: true
+  field_person_website_link_direct: true
+  promote: true
   publish_on: true
   publish_state: true
+  status: true
+  sticky: true
   title: true
   unpublish_on: true
   unpublish_state: true

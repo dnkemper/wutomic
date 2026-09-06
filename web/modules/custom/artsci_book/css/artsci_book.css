@@ -20,6 +20,7 @@
 
 .node--type-book .field--name-book-tags a {
   text-decoration: none;
+  color: black !important;
 }
 .layout.layout--twocol.layout--twocol--67-33.bg--red.page__container--normal.layout__container h2.book-authors__title {
     display: none;

@@ -1,0 +1,24 @@
+uuid: 0b23d6a7-f9d5-44e9-b447-78b168e9a0b8
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: landscape__192_x_144
+label: 'Landscape (192 x 144)'
+effects:
+  46b648c4-785e-4fbb-8cc1-93fa7f102c05:
+    uuid: 46b648c4-785e-4fbb-8cc1-93fa7f102c05
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 192
+      height: 144
+      crop_type: focal_point
+  1ad3283a-5c14-4cb1-8166-d7096d53023a:
+    uuid: 1ad3283a-5c14-4cb1-8166-d7096d53023a
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

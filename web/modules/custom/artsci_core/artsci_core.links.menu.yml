@@ -19,15 +19,7 @@ node.add_page:
   weight: 50
 
 system.admin_config_artsci:
-  title: 'Artsci'
+  title: 'Arts & Sciences'
   parent: system.admin_config
   route_name: system.admin_config_artsci
   weight: -100
-
-# Move the 'Find Text' menu to the top-level admin
-find_text.search_form:
-  title: 'Find Text'
-  description: Perform a content search.
-  parent: system.admin
-  route_name: find_text.search_form
-  weight: 100

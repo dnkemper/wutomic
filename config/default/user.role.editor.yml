@@ -7,7 +7,6 @@ dependencies:
     - block_content.type.artsci_banner
     - block_content.type.artsci_card
     - block_content.type.artsci_collection
-    - block_content.type.artsci_cta
     - block_content.type.artsci_image
     - block_content.type.artsci_statistic
     - block_content.type.artsci_text_area
@@ -37,7 +36,6 @@ dependencies:
     - entity_usage
     - file
     - filter
-    - find_text
     - fontawesome
     - fragments
     - layout_builder
@@ -67,7 +65,6 @@ permissions:
   - 'access entity usage statistics'
   - 'access featured_content_browser entity browser pages'
   - 'access files overview'
-  - 'access find text'
   - 'access fontawesome additional settings'
   - 'access layout builder direct add more options'
   - 'access media overview'
@@ -112,7 +109,6 @@ permissions:
   - 'create artsci_banner block content'
   - 'create artsci_card block content'
   - 'create artsci_collection block content'
-  - 'create artsci_cta block content'
   - 'create artsci_image block content'
   - 'create artsci_statistic block content'
   - 'create artsci_text_area block content'
@@ -128,7 +124,6 @@ permissions:
   - 'delete any artsci_banner block content'
   - 'delete any artsci_card block content'
   - 'delete any artsci_collection block content'
-  - 'delete any artsci_cta block content'
   - 'delete any artsci_image block content'
   - 'delete any artsci_statistic block content'
   - 'delete any artsci_text_area block content'
@@ -151,7 +146,6 @@ permissions:
   - 'edit any artsci_banner block content'
   - 'edit any artsci_card block content'
   - 'edit any artsci_collection block content'
-  - 'edit any artsci_cta block content'
   - 'edit any artsci_image block content'
   - 'edit any artsci_statistic block content'
   - 'edit any artsci_text_area block content'

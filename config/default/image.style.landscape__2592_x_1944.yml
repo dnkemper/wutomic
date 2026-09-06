@@ -1,0 +1,24 @@
+uuid: a8b9b418-c4ab-481d-b51e-45e9359e8765
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: landscape__2592_x_1944
+label: 'Landscape (2592 x 1944)'
+effects:
+  cf302057-5a54-45c5-ac70-453a6a9b5118:
+    uuid: cf302057-5a54-45c5-ac70-453a6a9b5118
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 2592
+      height: 1944
+      crop_type: focal_point
+  a0bed26a-f046-4e42-98ab-255c47d9b889:
+    uuid: a0bed26a-f046-4e42-98ab-255c47d9b889
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

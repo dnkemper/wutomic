@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Theme implementation for the Arts & Sciences "Back to" link block.
+ *
+ * Available variables:
+ * - link_text: The visible label for the link.
+ * - url: A Drupal\Core\Url object for the destination page.
+ */
+#}
+<a href="{{ url }}" class="artsci-backtolink">
+  <span class="artsci-backtolink__icon" aria-hidden="true">&#8592;</span>
+  <span class="artsci-backtolink__label">{{ link_text }}</span>
+</a>

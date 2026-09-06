@@ -15,7 +15,7 @@
   }
 }
 
-[class*="grid"].grid--gap__sm {
+[class*='grid'].grid--gap__sm {
   .list-container__inner {
     @include utilities.breakpoint(sm) {
       column-gap: var(--space-sm-width-gutter);
@@ -79,15 +79,14 @@
 @supports (contain: inline-size) {
   .grid__column,
   .column-container,
-  .layout-container{
+  .layout-container {
     container-type: inline-size;
     container-name: column;
   }
 }
 
-
 // List container spacing.
-.list-container.list-container--list:not([class*="grid-"]) {
+.list-container.list-container--list:not([class*='grid-']) {
   .list-container__inner {
     > div + div {
       margin-top: 2rem;
@@ -96,7 +95,7 @@
 }
 
 .list-container__inner {
-  [class*="grid--"].view & {
+  [class*='grid--'].view & {
     margin-bottom: variables.$mobile-height-gutter;
   }
   .card,
@@ -131,8 +130,10 @@
 
 // These lines help the inner-grid mixin.
 .list-container--list.grid--threecol--33-34-33 .list-container__inner,
-.list-container--list.grid--twocol--50-50 .list-container__inner
-.list-container--grid.grid--threecol--33-34-33 .list-container__inner,
+.list-container--list.grid--twocol--50-50
+  .list-container__inner
+  .list-container--grid.grid--threecol--33-34-33
+  .list-container__inner,
 .list-container--grid.grid--twocol--50-50 .list-container__inner {
   grid-template-columns: inherit;
   gap: variables.$mobile-height-gutter;

@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.node.book_tags
     - node.type.book
-    - taxonomy.vocabulary.book_tags
+    - taxonomy.vocabulary.tags
 _core:
   default_config_hash: uREPXBTtDyhXAeApHoChVZAh2XdM7n_mMFhGsLHQY9k
 id: node.book.book_tags
@@ -22,7 +22,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      book_tags: book_tags
+      tags: tags
     sort:
       field: name
       direction: asc

@@ -2,26 +2,38 @@
   "name": "atomic_artsci",
   "version": "1.0.0",
   "license": "ISC",
-  "dependencies": {
-    "autoprefixer": "^9.8.8",
-    "cssnano": "^7.0.7",
-    "postcss": "^8.5.3",
-    "del": "^8.0.0",
-    "gulp": "^5.0.0",
-    "gulp-mode": "^1.0.2",
-    "gulp-postcss": "^10.0.0",
-    "gulp-sass": "^6.0.1",
-    "gulp-sass-glob": "^1.0.9",
-    "gulp-sourcemaps": "^3.0.0",
-    "sass": "^1.89.0"
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "autoprefixer": "^10.5.0",
+    "chokidar-cli": "^3.0.0",
+    "copy-folder-util": "^1.2.3",
+    "cssnano": "^8.0.1",
+    "del": "^8.0.1",
+    "del-cli": "^7.0.0",
+    "eslint": "10.4.0",
+    "globals": "^17.6.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.5.14",
+    "postcss-cli": "^11.0.1",
+    "prettier": "^3.8.3",
+    "sass": "^1.99.0",
+    "stylelint": "^17.11.1",
+    "stylelint-config-standard-scss": "^17.0.0"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "scripts": {
-    "build": "gulp --production",
-    "copy": "gulp copy",
-    "copyScss": "gulp copyScss",
-    "copyArtsci": "gulp copyArtsci",
-    "css": "gulp css",
-    "icons": "gulp icons",
-    "watch": "gulp watch --development"
+    "start": "yarn run watch",
+    "//__LINT": "---------- Lint ----------",
+    "lint-sass": "stylelint \"scss/**/*.scss\"",
+    "//__BUILD": "---------- Build ----------",
+    "build-js": "./build-js.sh",
+    "build-sass": "./build-sass.sh",
+    "build": "npm-run-all build-sass build-js",
+    "//__WATCH": "---------- Watch ----------",
+    "watch-js": "chokidar \"js/**/*.js\" --command \"yarn run build-js\"",
+    "watch-sass": "chokidar \"scss/**/*.scss\" --command \"yarn run build-sass\"",
+    "watch": "npm-run-all build-sass build-js --parallel --race watch-sass watch-js  --continue-on-error"
   }
 }

@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -28,10 +43,10 @@
 .webform-submission-form span.form-required {
   position: relative;
 }
-.webform-submission-form span.form-required:after {
+.webform-submission-form span.form-required::after {
   margin: 0 0.325rem;
   content: "*";
-  color: #BD472A;
+  color: #bd472a;
   vertical-align: middle;
 }
 .webform-submission-form .webform-options-display-two-columns div.form-item,
@@ -55,12 +70,12 @@
   padding: 0;
 }
 .webform-submission-form .webform-element-help {
-  background: #63666A;
-  border: 2px solid #63666A;
+  background: #e8e6e1;
+  border: 2px solid #e8e6e1;
 }
 .webform-submission-form .webform-element-help:hover, .webform-submission-form .webform-element-help:focus {
-  border: 2px solid #00558C;
-  background: #00558C;
+  border: 2px solid #00558c;
+  background: #00558c;
 }
 .webform-submission-form .help-text,
 .webform-submission-form .field-prefix,
@@ -115,11 +130,8 @@
 }
 [class*=bg--red] .webform-submission-form .webform-scale input:checked + label {
   border-color: #000000;
-  background-color: #F3F3F3;
+  background-color: #edeae1;
   color: #000000;
-}
-[class*=bg--black] .webform-submission-form .webform-scale input:checked + label {
-  background-color: #ffe166;
 }
 .webform-submission-form .webform-scale input:checked:focus + label {
   box-shadow: 0 0 5px #cacaca;
@@ -127,7 +139,7 @@
 .webform-submission-form .webform-button--next,
 .webform-submission-form .webform-button--previous {
   color: #fff;
-  background: #000000;
+  background: var(--bg--teal);
 }
 .webform-submission-form .webform-button--next i,
 .webform-submission-form .webform-button--next svg,
@@ -135,33 +147,41 @@
 .webform-submission-form .webform-button--previous i,
 .webform-submission-form .webform-button--previous svg,
 .webform-submission-form .webform-button--previous span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
-[class*=bg--black] .webform-submission-form .webform-button--next,
-[class*=bg--black] .webform-submission-form .webform-button--previous {
-  background: #F3F3F3;
-  color: #000000;
+.webform-submission-form .webform-button--next:hover,
+.webform-submission-form .webform-button--previous:hover {
+  background: #d4f1e7;
+  color: black;
+}
+.webform-submission-form .webform-button--next:hover i,
+.webform-submission-form .webform-button--next:hover svg,
+.webform-submission-form .webform-button--next:hover span[class*=fa-],
+.webform-submission-form .webform-button--previous:hover i,
+.webform-submission-form .webform-button--previous:hover svg,
+.webform-submission-form .webform-button--previous:hover span[class*=fa-] {
+  color: black;
 }
 .webform-submission-form .webform-progress-tracker .progress-text,
 .webform-submission-form .webform-progress-tracker .progress-step.is-active .progress-text,
 .webform-submission-form .webform-progress-tracker .progress-step.is-complete .progress-text {
   color: currentColor;
 }
-.webform-submission-form .webform-progress-tracker .progress-step .progress-marker:before {
+.webform-submission-form .webform-progress-tracker .progress-step .progress-marker::before {
   padding: 1rem;
 }
-.webform-submission-form .webform-progress-tracker .progress-step .progress-marker:after {
+.webform-submission-form .webform-progress-tracker .progress-step .progress-marker::after {
   top: 0.8rem;
 }
 .webform-submission-form .webform-progress-tracker .progress-step.is-active .progress-marker::before {
-  background-color: #BA0C2F;
+  background-color: #ba0c2f;
   color: #000000;
 }
 [class*=bg--red] .webform-submission-form .webform-progress-tracker .progress-step.is-active .progress-marker::before {
   background: #000000;
   color: #fff;
 }
-.webform-submission-form .webform-horizontal-rule--thin, .webform-submission-form .webform-horizontal-rule--thick {
+.webform-submission-form .webform-horizontal-rule--thick, .webform-submission-form .webform-horizontal-rule--thin {
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
   border-block-start: 1px solid rgba(0, 0, 0, 0.2);
@@ -171,18 +191,14 @@
 .webform-submission-form .webform-horizontal-rule--thick {
   border-top-width: 4px;
 }
-[class*=bg--black] .webform-submission-form .webform-horizontal-rule--thick {
-  border-top-color: rgba(255, 255, 255, 0.8);
-  border-block-start-color: rgba(255, 255, 255, 0.8);
+[class*=bg--gray] .webform-submission-form .webform-horizontal-rule--glyph::after {
+  background-color: #edeae1;
 }
-[class*=bg--gray] .webform-submission-form .webform-horizontal-rule--glyph:after {
-  background-color: #F3F3F3;
+[class*=bg--red] .webform-submission-form .webform-horizontal-rule--glyph::after {
+  background-color: #ba0c2f;
 }
-[class*=bg--red] .webform-submission-form .webform-horizontal-rule--glyph:after {
-  background-color: #BA0C2F;
-}
-[class*=bg--black] .webform-submission-form .webform-horizontal-rule--glyph:after {
-  background-color: #000000;
+[class*=bg--teal] .webform-submission-form .webform-horizontal-rule--glyph::after {
+  background-color: #007d8a;
 }
 
 .node-preview-container {
@@ -209,4 +225,6 @@
 }
 .webform-message .webform-message__link {
   display: none !important;
-}/*# sourceMappingURL=webforms.css.map */
+}
+
+/*# sourceMappingURL=webforms.css.map */

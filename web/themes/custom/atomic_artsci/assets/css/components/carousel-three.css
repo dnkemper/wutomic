@@ -1,0 +1,208 @@
+.pretitle--red-caps {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--brand-red, #ba0c2f);
+}
+
+.pretitle--subtle {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--color-gray-700, #555);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.artsci-carousel--three {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-12, 3rem) 0 var(--space-section, 3.5rem);
+}
+.artsci-carousel--three .artsci-carousel__shield {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='240' viewBox='0 0 200 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 10 L180 50 L180 140 Q180 200 100 230 Q20 200 20 140 L20 50 Z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+  background-position: center -20px;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+.artsci-carousel--three .artsci-carousel__pre-title {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  opacity: 0.85;
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.artsci-carousel--three .artsci-carousel__title {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-size: var(--text-2xl, 2rem);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  margin: 0 0 var(--space-8, 2rem);
+  line-height: var(--leading-tight, 1.15);
+}
+.artsci-carousel--three .artsci-carousel__track {
+  position: relative;
+  height: 300px;
+  margin: 0 auto;
+  z-index: 2;
+}
+.artsci-carousel--three .artsci-carousel__slide--three,
+.artsci-carousel--three .paragraph--carousel-slide {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  transform: translateY(-50%) scale(0.82);
+  opacity: 0.7;
+  z-index: 1;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+.artsci-carousel--three .artsci-carousel__slide--three[data-slide-position=center],
+.artsci-carousel--three .paragraph--carousel-slide[data-slide-position=center] {
+  transform: translateY(-50%) scale(1);
+  opacity: 1;
+  z-index: 3;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+.artsci-carousel--three .artsci-carousel__slide--three[data-slide-position=hidden],
+.artsci-carousel--three .paragraph--carousel-slide[data-slide-position=hidden] {
+  opacity: 0;
+  pointer-events: none;
+}
+.artsci-carousel--three .artsci-carousel__slide-image,
+.artsci-carousel--three .carousel-slide__image {
+  width: 100%;
+}
+.artsci-carousel--three .artsci-carousel__slide-image img,
+.artsci-carousel--three .artsci-carousel__slide-image .media,
+.artsci-carousel--three .artsci-carousel__slide-image .media__inner,
+.artsci-carousel--three .carousel-slide__image img,
+.artsci-carousel--three .carousel-slide__image .media,
+.artsci-carousel--three .carousel-slide__image .media__inner {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  display: block;
+}
+.artsci-carousel--three .artsci-carousel__slide-overlay {
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  z-index: 1;
+  padding: 2.5rem 1rem 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.artsci-carousel--three [data-slide-position=center] .artsci-carousel__slide-overlay {
+  opacity: 1;
+}
+.artsci-carousel--three .artsci-carousel__slide-caption {
+  color: #fff;
+  font-size: var(--text-sm, 0.8125rem);
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+}
+.artsci-carousel--three .artsci-carousel__slide-caption a {
+  color: inherit;
+  text-decoration: none;
+}
+.artsci-carousel--three .artsci-carousel__slide-caption a:hover, .artsci-carousel--three .artsci-carousel__slide-caption a:focus {
+  text-decoration: underline;
+}
+.artsci-carousel--three .artsci-carousel__nav {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: center;
+  margin-top: var(--space-5, 1.25rem);
+  position: relative;
+  z-index: 2;
+}
+.artsci-carousel--three .artsci-carousel__arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+  color: #1a1a1a;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+.artsci-carousel--three .artsci-carousel__arrow:hover, .artsci-carousel--three .artsci-carousel__arrow:focus-visible {
+  border-color: var(--brand-red, #ba0c2f);
+  color: var(--brand-red, #ba0c2f);
+}
+.artsci-carousel--three .artsci-carousel__arrow:focus-visible {
+  outline: 2px solid var(--brand-red, #ba0c2f);
+  outline-offset: 2px;
+}
+.artsci-carousel--three .artsci-carousel__arrow:disabled, .artsci-carousel--three .artsci-carousel__arrow[aria-disabled=true] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.artsci-carousel--three .artsci-carousel__arrow {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+.artsci-carousel--three .artsci-carousel__arrow:hover, .artsci-carousel--three .artsci-carousel__arrow:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.9);
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .artsci-carousel--three {
+    padding: var(--space-8, 2rem) 0 var(--space-10, 2.5rem);
+  }
+  .artsci-carousel--three .artsci-carousel__title {
+    font-size: 1.625rem;
+  }
+  .artsci-carousel--three .artsci-carousel__track {
+    height: 260px;
+  }
+}
+.artsci-carousel--three .paragraph--carousel-slide > .card {
+  margin: 0;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+.artsci-carousel--three .paragraph--carousel-slide > .card.card--layout-overlay {
+  min-height: 0;
+}
+.artsci-carousel--three .paragraph--carousel-slide .card--layout-overlay .card__body,
+.artsci-carousel--three .paragraph--carousel-slide .card--layout-overlay > .media::after {
+  transition: opacity 0.3s ease;
+}
+.artsci-carousel--three .paragraph--carousel-slide:not([data-slide-position=center]) .card--layout-overlay .card__body {
+  opacity: 0;
+}
+.artsci-carousel--three .paragraph--carousel-slide:not([data-slide-position=center]) .card--layout-overlay > .media::after {
+  opacity: 0;
+}
+
+/*# sourceMappingURL=carousel-three.css.map */

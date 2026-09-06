@@ -1,0 +1,19 @@
+uuid: a1c7e2f4-3b6d-4e81-9c2a-7f5b8d014e63
+langcode: en
+status: true
+dependencies:
+  module:
+    - layout_builder_custom
+    - menu_link_content
+id: menu_link_content.field_artsci_headline
+field_name: field_artsci_headline
+entity_type: menu_link_content
+type: artsci_headline
+settings: {  }
+module: layout_builder_custom
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,6 +1,6 @@
 {
-  "name": "uartsci/uartsci_book",
-  "description": "Provides updated book module for the University of Iowa.",
+  "name": "atomic_artsci/artsci_book",
+  "description": "Book module for the Atomic ArtSci theme.",
   "type": "drupal-custom-module",
   "require": {
     "drupal/search_api_autocomplete": "^1.2"

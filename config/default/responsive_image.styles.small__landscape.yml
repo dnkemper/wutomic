@@ -1,0 +1,31 @@
+uuid: 34aaf326-5d07-43d0-8888-7d007bf3e228
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.landscape__192_x_144
+    - image.style.landscape__384_x_288
+    - image.style.landscape__768_x_576
+    - image.style.landscape__1024_x_768
+    - image.style.landscape__1312_x_984
+    - image.style.landscape__1920_x_1440
+    - image.style.landscape__2592_x_1944
+id: small__landscape
+label: 'Small - Landscape'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '(min-width: 73.75em) 20.5625rem, (min-width: 980px) calc(28.86vw - 0.7215rem), calc(100vw - 2.5rem)'
+      sizes_image_styles:
+        - landscape__192_x_144
+        - landscape__384_x_288
+        - landscape__768_x_576
+        - landscape__1024_x_768
+        - landscape__1312_x_984
+        - landscape__1920_x_1440
+        - landscape__2592_x_1944
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: landscape__384_x_288

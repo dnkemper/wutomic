@@ -3,6 +3,6 @@ langcode: en
 status: true
 dependencies: {  }
 id: artsci_collection
-label: Collection
+label: Accordion
 revision: true
 description: 'A container for multiple items styled as an accordion or a descriptive list.'

@@ -28,6 +28,7 @@
         );
       };
 
+      // eslint-disable-next-line no-unused-vars
       const elementOutofView = (el) => {
         const elementTop = el.getBoundingClientRect().top;
         return (

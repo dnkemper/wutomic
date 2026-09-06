@@ -1,18 +1,40 @@
 @use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
-// Position field
-.page-node-type-person.layout-builder-enabled,
-.page-node-type-mentor.layout-builder-enabled {
-  .field--name-field-person-position {
-    margin-top: .6rem;
-    .field__item {
-      // https://garyridgway.github.io/clampCalculator/?minWidth=600&maxWidth=1310&minFontSize=1.8&maxFontSize=2.3&auto
-      font-size: clamp(1.8rem, calc(1.1268vw + 1.3775rem), 2.3rem);
-      line-height: 1.1;
-      font-weight: 300;
-      margin-bottom: .5rem;
+.page-node-type-person {
+  .layout--twocol.bg--red.layout__container {
+    padding-bottom: 0;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#d2223a+0,9f1c31+100,9f1c31+100 */
+    background: linear-gradient(
+      to right,
+      #d2223a 0%,
+      #9f1c31 100%,
+      #9f1c31 100%
+    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+    .field--type-image {
+      margin-bottom: -2rem;
     }
+
+    .block-artsci-core-backtolink a {
+      color: variables.$color-white;
+      text-decoration: none;
+    }
+
+    .block-artsci-core-backtolink a:hover .artsci-backtolink__label {
+      text-decoration: underline;
+    }
+  }
+
+  @media (min-width: 980px) {
+    .layout--twocol.bg--red.layout__container .field--type-image {
+      margin-bottom: 1rem;
+      width: clamp(300px, 30vw, 450px);
+    }
+  }
+
+  .media--type-file .field--name-field-media-file a {
+    font-size: 1.5rem;
   }
 }
 
@@ -20,7 +42,7 @@
 .field--name-field-person-education.field--label-visually_hidden .field__item {
   display: inline-block;
   + .field__item {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -38,7 +60,15 @@
     }
   }
 }
-
+.field--name-field-person-position {
+  font-family: var(--font-family-sans-serif);
+  line-height: 140%;
+  letter-spacing: 0%;
+  .field__item:first-child {
+    font-weight: var(--font-weight-medium-bold);
+    // other styles for first position
+  }
+}
 // Empty profile img
 .img--empty {
   width: 100%;
@@ -50,7 +80,9 @@
   background-image: url('/themes/custom/atomic_artsci/assets/images/person-one.svg');
   .media--border & {
     aspect-ratio: 1 / 1;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.125), inset 0 0 0 9px #fff;
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.125),
+      inset 0 0 0 9px #fff;
     background-position: 50% 105%;
   }
   .media--widescreen & {
@@ -77,4 +109,252 @@
   .media--square .img--empty {
     padding-top: 100%;
   }
+}
+
+/* Right Sidebar */
+
+@media (min-width: 978px) {
+  .person-sidebar {
+    border-left: 2px solid variables.$bg--red;
+    padding-left: 2rem;
+  }
+}
+.person-sidebar {
+  font-family: variables.$font-family-sans-serif;
+  font-size: 1.13rem;
+  line-height: 1.7;
+  margin-bottom: 1.05rem;
+  margin-top: 0;
+
+  &__section {
+    margin-bottom: 2rem;
+  }
+
+  &__heading {
+    color: #a51417; // WashU red
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    border: none;
+    font-family: variables.$font-family-sans-serif;
+    font-weight: var(--font-weight-medium-bold);
+    line-height: 150%;
+  }
+
+  &__email {
+    display: block;
+    color: #a51417;
+    margin-bottom: 1rem;
+    font-family: variables.$font-family-sans-serif;
+    font-weight: var(--font-weight-medium-bold);
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0%;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: 0%;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__phone,
+  &__fax {
+    margin-bottom: 0.75rem;
+    font-family: variables.$font-family-sans-serif;
+    font-weight: 500;
+    font-weight: var(--font-weight-medium-bold);
+    font-size: 18px;
+    line-height: 140%;
+    letter-spacing: 0%;
+  }
+
+  &__label {
+    font-weight: var(--font-weight-medium-bold);
+    margin-right: 0.25rem;
+  }
+
+  &__location,
+  &__hours {
+    margin-bottom: 0.5rem;
+  }
+
+  &__directions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #a51417;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    .icon {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+
+  &__address {
+    font-weight: normal;
+    font-style: normal;
+
+    .address-line {
+      display: block;
+    }
+  }
+
+  &__link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: #a51417;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      .icon {
+        width: 0.875rem;
+        height: 0.875rem;
+      }
+    }
+  }
+}
+
+.node--type-person {
+  .field--name-field-media-image img {
+    margin-bottom: -3.5rem;
+    border-radius: 8px;
+  }
+
+  .field--name-field-person-interests .field__label,
+  .field--name-field-person-education .field__label,
+  .field--name-body .field__label,
+  .field--name-field-person-description .field__label {
+    font-family: 'ivypresto-headline';
+    font-size: 2rem;
+    font-weight: normal;
+
+    &::after {
+      content: '';
+    }
+  }
+
+  .field--name-field-person-description .show-more__preview {
+    mask-image: linear-gradient(180deg, #000 60%, transparent);
+  }
+
+  .field--name-body.field--type-text-with-summary .show-more__preview {
+    mask-image: linear-gradient(180deg, #000 60%, transparent);
+
+    p:first-child {
+      font-weight: variables.$font-weight-medium-bold;
+    }
+  }
+
+  .field--name-body.field--type-text-with-summary
+    .show-more__full
+    p:first-child {
+    font-weight: bold;
+  }
+
+  /* Social Media Icons */
+
+  .paragraph--type--social-media-links {
+    display: flex;
+
+    a.fa-icon-link.fa-icon {
+      color: variables.$color-black;
+    }
+
+    a.fa-icon-link.fa-icon:hover {
+      color: var(--link-color);
+    }
+  }
+
+  .paragraph--type--social-media-links .menu-link-title {
+    display: none;
+  }
+
+  div.field svg {
+    margin-right: 12px;
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .person-sidebar__link-list li a {
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .person-sidebar__office a::after {
+    font: var(--fa-font-sharp-light);
+    content: '\f08e';
+    margin-left: 0.875rem;
+    font-size: 1rem;
+  }
+
+  .person-sidebar__link-list li:first-child a::after {
+    font: var(--fa-font-light);
+    content: '\f178';
+    margin-left: 0.875rem;
+    display: inline-block;
+  }
+
+  .person-sidebar__link-list li a::after {
+    font: var(--fa-font-sharp-light);
+    content: '\f08e';
+    margin-left: 0.875rem;
+  }
+}
+
+@media (min-width: 978px) {
+  .node--type-person {
+    .block-artsci-core-sidebar-block {
+      margin-top: 5rem;
+    }
+
+    .block-field-blocknodepersonfield-person-interests ul {
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: start;
+    }
+
+    .block-field-blocknodepersonfield-person-interests ul li {
+      width: 18.75rem;
+    }
+  }
+}
+
+@media (max-width: 913px) {
+  .node--type-person {
+    .field--name-body.field--type-text-with-summary.field--label-hidden {
+      margin-top: 1rem;
+    }
+  }
+}
+
+.show-more__toggle {
+  font-size: 1rem;
+}
+
+.show-more__toggle::after {
+  display: inline-block;
 }

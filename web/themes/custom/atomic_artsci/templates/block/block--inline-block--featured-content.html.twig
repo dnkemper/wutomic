@@ -3,12 +3,33 @@
   'block',
   'block-' ~ configuration.provider|clean_class,
   'block-' ~ plugin_id|clean_class,
+  'artsci-aggregator',
 ]
 %}
+
+{# Extract headline classes from Layout Builder Styles #}
+{# {% set headline_classes = [] %}
+{% if elements['#layout_builder_style'] is defined %}
+  {% for style in elements['#layout_builder_style'] %}
+    {% if style starts with 'headline' %}
+      {% set headline_classes = headline_classes|merge([style]) %}
+    {% endif %}
+  {% endfor %}
+{% endif %} #}
+
 <div{{ attributes.addClass(classes) }}>
   {{ title_prefix }}
   {{ title_suffix }}
-  <div class="list-container__inner">
-    {{ content }}
+  {% if content.field_artsci_headline|render|trim is not empty %}
+    {% set banner_heading = {
+      'headline_level': headline_level ?: 'h3',
+      'headline_class': headline_classes,
+      'headline_text': content.field_artsci_headline,
+      'headline_attributes': headline_attributes ?: null,
+    } %}
+    {% include '@atomic_artsci/artsci/headline.html.twig' with banner_heading only %}
+  {% endif %}
+    <div class="list-container__inner">
+    {{ content|without('field_artsci_headline') }}
   </div>
 </div>

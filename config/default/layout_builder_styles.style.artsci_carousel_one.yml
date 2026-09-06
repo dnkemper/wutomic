@@ -1,0 +1,13 @@
+uuid: bf7b9581-aa25-4f3f-95f6-51abde19dfd9
+langcode: en
+status: true
+dependencies: {  }
+id: artsci_carousel_one
+label: '1 Slide'
+classes: carousel--one
+type: component
+group: artsci_carousel_size
+block_restrictions:
+  - 'inline_block:artsci_slider'
+layout_restrictions: {  }
+weight: 0

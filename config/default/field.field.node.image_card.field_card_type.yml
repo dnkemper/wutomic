@@ -1,0 +1,31 @@
+uuid: 572ee039-bd46-4936-813c-4d5ac637dd62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_card_type
+    - node.type.image_card
+    - taxonomy.vocabulary.card_type
+  module:
+    - taxonomy
+id: node.image_card.field_card_type
+field_name: field_card_type
+entity_type: node
+bundle: image_card
+label: Type
+description: 'Departments & Programs or Majors & Minors. Determined by source content type during migration.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      card_type: card_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

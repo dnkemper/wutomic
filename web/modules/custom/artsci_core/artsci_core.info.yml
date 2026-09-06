@@ -1,6 +1,6 @@
-name: University of Iowa Core
+name: Artsci Core
 type: module
-description: 'Provides common functionality for University of Iowa sites.'
-package: University of Iowa
+description: 'Provides common functionality for Artsci sites.'
+package: Arts & Sciences
 core_version_requirement: ^9 || ^10 || ^11
 #configure: artsci_core.settings_form

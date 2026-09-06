@@ -6,12 +6,17 @@
  */
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldFilteredMarkup;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\artsci_articles\Entity\Article;
 use Drupal\user\Entity\User;
@@ -67,28 +72,12 @@ function artsci_articles_entity_extra_field_info() {
 function artsci_articles_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form_id) {
     case 'node_article_edit_form':
-      if (isset($form['field_article_preserve_links'])) {
-        // Set description message to only display when the user doesn't have
-        // the 'administer artsci articles' permission.
-        $user = User::load(\Drupal::currentUser()->id());
-        if ($user->hasPermission('administer artsci articles')) {
-          $form['field_article_preserve_links']['widget']['value']['#description'] = FieldFilteredMarkup::create($form['field_article_preserve_links']['widget']['value']['#description'] . ' <a href="/admin/config/artsci/artsci-articles" target="_blank" rel="noopener">Customize this message and other site-wide article settings.</a>');
-        }
-      }
+      $form['field_article_source_link']['widget'][0]['title']['#title'] = 'Name of Publication';
+      $form['field_tags']['widget']['target_id']['#title'] = 'Category';
+
     case 'node_article_form':
-      if (isset($form['field_related_content'])) {
-        // Set field_related_content to node_reference group.
-        $form['field_related_content']['#group'] = 'node_relations';
-      }
-      $form['field_article_source_link_direct']['#states'] = [
-        'visible' => [
-          ':input[name="field_article_source_link[0][uri]"]' => ['filled' => TRUE],
-        ],
-      ];
-      // If article is being created, hide the preserve links checkbox.
-      if ($form_id === 'node_article_form') {
-        $form['field_article_preserve_links']['#access'] = FALSE;
-      }
+      $form['field_article_source_link']['widget'][0]['title']['#title'] = 'Name of Publication';
+      $form['field_tags']['widget']['target_id']['#title'] = 'Category';
 
       // If a new person is being created for the contact field,
       // they don't have a "title" yet, and so we need to fetch
@@ -156,12 +145,27 @@ function artsci_articles_preprocess_breadcrumb(&$variables) {
  */
 function artsci_articles_preprocess_field(&$variables) {
   if ($variables['element']['#field_name'] === 'field_article_author') {
-    if ($variables['element']['#view_mode'] == 'teaser') {
-      artsci_core_set_field_icon($variables, 'fas fa-user-circle');
-    }
+    // if ($variables['element']['#formatter'] === 'string') {
+    $test = $variables['element']['#formatter'] ?? 'default';
+      // Expose the field's display (view mode) as a class on the wrapper,
+      // e.g. field--display-default, field--display-header-image.
+      $variables['attributes']['class'][] = 'field--display-' . $test;
+      if ($test === 'entity_reference_entity_view') {
+        $variables['element']['#title'] = 'About the author';
+        $variables['label'] = 'About the author';
+      }
+      else {
+        $variables['element']['#title'] = 'By';
+        $variables['label'] = 'By';
+      }
+  }
+  if ($variables['element']['#field_name'] === 'field_tags') {
+    // if ($variables['element']['#view_mode'] == 'teaser') {
+    //   artsci_core_set_field_icon($variables, 'fas fa-tags');
+    // }
     if ($variables['element']['#formatter'] === 'entity_reference_label') {
-      $variables['element']['#title'] = 'Written by';
-      $variables['label'] = 'Written by';
+      $variables['element']['#title'] = 'Topics';
+      $variables['label'] = 'Topics';
       // Remove the label for article teasers.
       if ($variables['element']['#view_mode'] == 'teaser') {
         artsci_core_set_title_attributes($variables, 'visually-hidden');
@@ -183,8 +187,8 @@ function artsci_articles_preprocess_field(&$variables) {
   }
   if ($variables['element']['#field_name'] === 'field_article_source_org') {
     if ($variables['element']['#formatter'] === 'string') {
-      $variables['element']['#title'] = 'Organization';
-      $variables['label'] = 'Organization';
+      $variables['element']['#title'] = 'By';
+      $variables['label'] = 'By';
     }
   }
   if ($variables['element']['#field_name'] === 'field_gallery_images') {
@@ -225,9 +229,9 @@ function artsci_articles_preprocess_field(&$variables) {
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function artsci_articles_theme_suggestions_field_alter(array &$suggestions, array $variables) {
-  if ($variables['element']['#field_name'] === 'field_article_author') {
+  if ($variables['element']['#field_name'] === 'field_tags') {
     if ($variables['element']['#formatter'] === 'entity_reference_label') {
-      $suggestions[] = 'field__node__field_article_author__sep';
+      $suggestions[] = 'field__node__field_tags__sep';
     }
   }
 }
@@ -266,20 +270,20 @@ function artsci_articles_preprocess_node(&$variables) {
 
     switch ($node->getType()) {
       case 'article':
-        $variables['content']['article_author'] = $node->field_article_author->view([
-          'type' => 'entity_reference_label',
-          'label' => 'inline',
-          'settings' => [],
-        ]);
+        // $variables['content']['article_author'] = $node->field_tags->view([
+        //   'type' => 'entity_reference_label',
+        //   'label' => 'inline',
+        //   'settings' => [],
+        // ]);
 
         switch ($variables['view_mode']) {
           case 'full':
           case 'default':
             // For now, different byline behavior on full node than on teaser.
-            if (!$node->get('field_article_source_org')->isEmpty() && !$node->get('field_article_source_link')->isEmpty()) {
-              $variables['content']['field_article_source_link'][0]['#title'] = $node->field_article_source_org->value;
-              unset($variables['content']['field_article_source_org']);
-            }
+            // if (!$node->get('field_article_source_link')->isEmpty()) {
+            //   $variables['content']['field_article_source_link'][0]['#title'] = $node->field_article_source_org->value;
+            //   unset($variables['content']['field_article_source_org']);
+            // }
 
             // Check if we don't have any gallery images.
             if ($node->hasField('field_gallery_images') &&
@@ -288,13 +292,6 @@ function artsci_articles_preprocess_node(&$variables) {
               artsci_core_unset_layout_builder_block($variables, 'galleryjumplink_block');
             }
 
-            // Check if preserve links checkbox is checked.
-            if ($node->hasField('field_article_preserve_links')) {
-              if ((int) filter_var($node->field_article_preserve_links->value, FILTER_VALIDATE_BOOLEAN) !== 1) {
-                // If it isn't checked, hide the broken links message.
-                artsci_core_unset_layout_builder_block($variables, 'preservedlinksmessage_block');
-              }
-            }
             break;
 
         }
@@ -328,7 +325,7 @@ function artsci_articles_node_view(array &$build, EntityInterface $entity, Entit
     case 'article':
       if ($display->getComponent('article_created_date')) {
         $created = $entity->get('created')->value;
-        $date = \Drupal::service('date.formatter')->format($created, 'medium');
+        $date = \Drupal::service('date.formatter')->format($created, 'article');
         $build['article_created_date'] = [
           '#type' => 'container',
           '#attributes' => [
@@ -414,12 +411,6 @@ function artsci_articles_preprocess_views_view_unformatted(&$variables) {
   // otherwise media right. Unset completely for Artsci v2.
   if ($view->id() === 'related_manually_referenced_content' && $view->current_display === 'block_grid') {
 
-    // Add appropriate card styles for v2/3 teaser view modes.
-    // @todo Remove after v2 dies.
-    //   See https://github.com/artsci/artsci/issues/4948
-    $is_v2 = \Drupal::config('config_split.config_split.artsci_v2')->get('status');
-
-    if (!$is_v2) {
       foreach ($variables['rows'] as &$row_build) {
         $row_build['content']['#override_styles'] = [
           'card_media_position' => 'card--stacked',
@@ -429,14 +420,13 @@ function artsci_articles_preprocess_views_view_unformatted(&$variables) {
           'hide_descriptions' => 'hide-descriptions',
         ];
       }
-    }
   }
 
   $variables['row_item_classes'] = [];
 
   switch ($view->current_display) {
     case 'articles_author':
-      artsci_core_views_row_hide_fields($variables, 'field_article_author', 'field_teaser', 'field_image', 'field_article_source_org', 'field_article_source_link');
+      artsci_core_views_row_hide_fields($variables, 'field_tags', 'field_teaser', 'field_image', 'field_article_source_org', 'field_article_source_link');
       break;
   }
 }
@@ -468,126 +458,6 @@ function artsci_articles_theme($existing, $type, $theme, $path) {
   ];
 }
 
-/**
- * Implements hook_preprocess_HOOK().
- */
-function artsci_articles_preprocess_paragraph(&$variables) {
-  $paragraph = $variables['paragraph'];
-  switch ($paragraph->bundle()) {
-    case 'articles':
-      $admin_context = \Drupal::service('router.admin_context');
-      if (!$admin_context->isAdminRoute()) {
-
-        // Display title if it exists.
-        if ($paragraph->hasField('field_uip_display_title')) {
-          if ((int) $paragraph->field_uip_display_title->value === 1) {
-            $variables['display_title'] = TRUE;
-          }
-        }
-
-        if ($paragraph->hasField('field_uip_classes') && !$paragraph->get('field_uip_classes')->isEmpty()) {
-          $classes = $paragraph->get('field_uip_classes')->getValue();
-          // Clean array of classes selected.
-          $classes = array_column($classes, 'value');
-          // Check for grid classes otherwise add list class.
-          $display_options = [
-            'grid',
-            'masonry',
-          ];
-          $result = array_intersect($display_options, $classes);
-          if (!$result) {
-            $variables['attributes']['class'][] = 'list';
-          }
-        }
-        else {
-          $variables['attributes']['class'][] = 'list';
-        }
-        // Get field_uip_colwidth value.
-        if ($paragraph->hasField('field_uip_colwidth')) {
-          $variables['attributes']['class'][] = $paragraph->field_uip_colwidth->value;
-        }
-        // Get field_uip_id value.
-        if ($paragraph->hasField('field_uip_id')) {
-          $variables['attributes']['id'][] = Html::getClass($paragraph->field_uip_id->value);
-        }
-
-        $view = Views::getView('articles_block');
-        $view->setDisplay('block_articles');
-        $view->display_handler->setOption('parent_entity', $paragraph);
-
-        if ($paragraph->hasField('field_reference') && !$paragraph->get('field_reference')->isEmpty()) {
-          $tids = $paragraph->get('field_reference')->getValue();
-          // Clean array of tids selected.
-          $tids = array_column($tids, 'target_id');
-        }
-        else {
-          $tids = ['all'];
-        }
-        // Contextual relationship filter.
-        $args = implode('+', $tids);
-        $view->setArguments([$args]);
-
-        if ($paragraph->hasField('field_uip_items') && !$paragraph->get('field_uip_items')->isEmpty()) {
-          $items = $paragraph->field_uip_items->value;
-          $view->setItemsPerPage($items);
-          $view->setExposedInput([
-            'items_per_page' => $items,
-          ]);
-        }
-        $pager_type = 'some';
-        // Show pager if it exists and is set.
-        if ($paragraph->hasField('field_uip_pager')) {
-          if ((int) $paragraph->field_uip_pager->value === 1) {
-            $pager_type = 'full';
-          }
-        }
-
-        $pager = $view->display_handler->getOption('pager');
-        // IF show pager, change pager_type to 'full'.
-        $pager['type'] = $pager_type;
-        $view->display_handler->setOption('pager', $pager);
-
-        $view->preExecute();
-        $view->execute();
-        $variables['content']['view'] = $view->render();
-
-        // If we have more link checked and link provided, pass it.
-        if ($paragraph->hasField('field_articles_more')) {
-          $more = (int) $paragraph->field_articles_more->value === 1;
-          if ($more === TRUE) {
-            $variables['more'] = [
-              '#type' => 'container',
-              '#attributes' => [
-                'class' => 'more-link',
-              ],
-            ];
-
-            $view = View::load('articles');
-            $default =& $view->getDisplay('default');
-
-            if (!empty($more_path = $paragraph->get('field_articles_more_path')->getValue())) {
-              $url = Url::fromUri($more_path[0]['uri']);
-            }
-            elseif ($view->getDisplay('page_articles')['display_options']['enabled'] === TRUE) {
-              $url = Url::fromRoute('view.articles.page_articles');
-            }
-            if (isset($url)) {
-              $variables['more']['btn'] = [
-                '#type' => 'link',
-                '#title' => 'View more ' . strtolower($default['display_options']['title']),
-                '#url' => $url,
-                '#attributes' => [
-                  'class' => ['btn', 'btn-primary'],
-                ],
-              ];
-            }
-          }
-        }
-      }
-
-      break;
-  }
-}
 
 /**
  * Implements hook_views_pre_render().
@@ -608,27 +478,6 @@ function artsci_articles_form_views_exposed_form_alter(&$form, FormStateInterfac
       if (isset($exposed_input["items_per_page"])) {
         $form["items_per_page"]["#options"] = [$exposed_input["items_per_page"] => $exposed_input["items_per_page"]];
         $form["#attributes"]["class"][] = 'hidden';
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_field_widget_single_element_WIDGET_TYPE_form_alter().
- */
-function artsci_articles_field_widget_single_element_paragraphs_form_alter(&$element, &$form_state, $context) {
-  if ($element["#paragraph_type"] === 'articles') {
-    if (!empty($element['subform']['field_articles_more'])) {
-      $parents_array = $element['subform']['#parents'];
-      $parents = array_shift($parents_array) . '[' . implode('][', $parents_array) . ']';
-      if (!empty($element['subform']['field_articles_more_path'])) {
-        $element['subform']['field_articles_more_path']['#states'] = [
-          'visible' => [
-            ':input[name="' . $parents . '[field_articles_more][value]"]' => [
-              'checked' => TRUE,
-            ],
-          ],
-        ];
       }
     }
   }
@@ -656,7 +505,7 @@ function artsci_articles_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = 'media--square';
       break;
 
-    case 'field_block:node:article:field_article_author':
+    case 'field_block:node:article:field_tags':
     case 'field_block:node:article:field_article_source_link':
     case 'field_block:node:article:field_article_source_org':
     case 'galleryjumplink_block':
@@ -666,7 +515,8 @@ function artsci_articles_preprocess_block(&$variables) {
       break;
 
     case 'field_block:node:article:field_article_subhead':
-      $variables['attributes']['class'][] = 'element--light-intro';
+      $variables['attributes']['class'][] = 'artsci-component--bold-intro';
+      $variables['attributes']['class'][] = 'block-margin__top--extra';
 
       break;
 
@@ -745,4 +595,49 @@ function _artsci_articles_path_token_value() {
 
   // @todo Is this appropriate when there is no value?
   return '';
+}
+
+/**
+ * Implements hook_entity_field_access().
+ *
+ * Hides the plain-text "Author Name" (field_article_source_org) on articles
+ * whenever the structured "Article Authors" reference (field_article_author)
+ * has at least one value. The two fields are alternative representations of
+ * the same byline; when the structured reference is populated it is the
+ * canonical one, so the free-text org is suppressed to avoid a duplicate
+ * byline.
+ *
+ * Denying 'view' access here (rather than unsetting in a node preprocess) is
+ * the Layout Builder-correct approach: the article display renders these
+ * fields as Layout Builder field blocks, and FieldBlock::blockAccess()
+ * consults field access, so a forbidden result suppresses the whole block
+ * with no empty wrapper or label left behind. It also applies consistently
+ * to the teaser and any other rendering of the field.
+ *
+ * The result is made cache-dependent on the entity so that adding or removing
+ * an Article Authors value re-evaluates source-org visibility.
+ */
+function artsci_articles_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  if ($operation !== 'view' || $field_definition->getName() !== 'field_article_source_org') {
+    return AccessResult::neutral();
+  }
+
+  // Field access can be evaluated without a specific entity (e.g. in the
+  // Field UI); with no items there is no sibling field to consult.
+  if ($items === NULL) {
+    return AccessResult::neutral();
+  }
+
+  $entity = $items->getEntity();
+  if ($entity->bundle() !== 'article' || !$entity->hasField('field_article_author')) {
+    return AccessResult::neutral();
+  }
+
+  // Forbid the free-text org only when the structured author reference is
+  // populated; otherwise stay neutral so normal access rules apply.
+  $access = $entity->get('field_article_author')->isEmpty()
+    ? AccessResult::neutral()
+    : AccessResult::forbidden();
+
+  return $access->addCacheableDependency($entity);
 }

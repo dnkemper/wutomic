@@ -17,7 +17,7 @@ image_style_mappings:
   -
     image_mapping_type: sizes
     image_mapping:
-      sizes: '(min-width: 768px) calc(50vw - 3.75em), 100vw'
+      sizes: '(min-width: 73.75em) 58.875rem, (min-width: 980px) calc(82.63vw - 2.06575rem), calc(100vw - 2.5rem)'
       sizes_image_styles:
         - square__1024_x_1024
         - square__1312_x_1312

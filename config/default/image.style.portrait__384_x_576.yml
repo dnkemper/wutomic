@@ -1,0 +1,24 @@
+uuid: 6b2d0a3f-8c45-4e29-8b7d-2f3a4b5c6d72
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+name: portrait__384_x_576
+label: 'Portrait (384 x 576)'
+effects:
+  5a1c9f2e-7b34-4d18-9a6c-1e2f3a4b5c61:
+    uuid: 5a1c9f2e-7b34-4d18-9a6c-1e2f3a4b5c61
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 384
+      height: 576
+      crop_type: focal_point
+  5ff5fdb5-ab1c-404e-b542-16765e594f4d:
+    uuid: 5ff5fdb5-ab1c-404e-b542-16765e594f4d
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

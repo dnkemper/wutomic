@@ -10,8 +10,7 @@ classes: 'element--center '
 type: component
 group: alignment
 block_restrictions:
-  - 'inline_block:artsci_button'
-  - 'inline_block:artsci_spacer_separator'
+  - 'field_block:node:image_card:field_link'
   - 'menu_block:main'
 layout_restrictions: {  }
 weight: -68

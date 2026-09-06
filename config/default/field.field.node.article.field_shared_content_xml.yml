@@ -1,0 +1,19 @@
+uuid: e6a50a08-fea6-4b5c-9db5-f37fb7b622e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shared_content_xml
+    - node.type.article
+id: node.article.field_shared_content_xml
+field_name: field_shared_content_xml
+entity_type: node
+bundle: article
+label: shared_content_xml
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

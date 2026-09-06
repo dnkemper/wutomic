@@ -34,3 +34,7 @@ subscribe-block:
   dependencies:
     - core/drupal
     - core/once
+social_share:
+  css:
+    component:
+      css/social-share.css: {}

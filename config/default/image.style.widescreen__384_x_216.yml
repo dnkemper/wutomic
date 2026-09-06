@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - focal_point
+    - image
 _core:
   default_config_hash: fx7AXCQvBwWSOH4cHZ3cc3_xcUUif7M4gvdI0EzAkWk
 name: widescreen__384_x_216
@@ -17,3 +18,9 @@ effects:
       width: 384
       height: 216
       crop_type: focal_point
+  3828ece5-336e-4117-915a-55f5c1406300:
+    uuid: 3828ece5-336e-4117-915a-55f5c1406300
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

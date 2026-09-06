@@ -1,0 +1,324 @@
+@use 'sass:color';
+@use '../abstracts/variables.scss';
+@use '../abstracts/_utilities.scss';
+
+// === Horizontal Timeline === //
+// Inline-block view mode for artsci_collection. Renders a row of clickable
+// year dots above a card panel. The active dot determines which panel shows.
+// The rail draws a red fill from the start through the active dot, with the
+// remainder gray. Editor authors panel content (heading, body, CTA, image)
+// in field_collection_body using CKEditor; embedding a right-aligned media
+// produces the side-by-side card layout shown in the WashU example.
+
+.collection--horizontal-timeline {
+  --ht-color: #{variables.$primary};
+  --ht-color-rail-future: rgba(0, 0, 0, 0.85);
+  --ht-color-text: #000;
+  --ht-color-eyebrow: #{variables.$primary};
+  --ht-marker-size: 0.875rem;
+  --ht-marker-active-size: 1.125rem;
+  --ht-marker-border: 2px;
+  --ht-rail-thickness: 1.5px;
+  --ht-card-bg: #fff;
+  --ht-card-radius: 0.5rem;
+  --ht-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --ht-card-padding: 2.5rem;
+}
+
+.h-timeline {
+  position: relative;
+  margin: 0 auto;
+
+  &__nav-wrapper {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 2rem 0 1.5rem;
+  }
+
+  &__rail {
+    position: relative;
+    flex: 1;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    padding-top: 1.75rem; // headroom for year labels above each dot
+
+    // Gray base line behind everything.
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(
+        (var(--ht-marker-size) / 2) - (var(--ht-rail-thickness) / 2)
+      );
+      height: var(--ht-rail-thickness);
+      background-color: var(--ht-color-rail-future);
+      z-index: 0;
+    }
+
+    // Red progress fill, width driven by JS via --h-timeline-progress.
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: var(--h-timeline-progress, 0%);
+      bottom: calc(
+        (var(--ht-marker-size) / 2) - (var(--ht-rail-thickness) / 2)
+      );
+      height: var(--ht-rail-thickness);
+      background-color: var(--ht-color);
+      z-index: 1;
+      transition: width 0.3s ease;
+    }
+  }
+
+  &__dot {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    z-index: 2;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      .h-timeline__dot-marker {
+        box-shadow: 0 0 0 3px rgba(186, 12, 47, 0.35);
+      }
+    }
+  }
+
+  &__dot-label {
+    font-family: variables.$font-family-sans-serif;
+    font-size: 0.875rem;
+    font-weight: variables.$font-weight-medium;
+    letter-spacing: 0.04em;
+    color: var(--ht-color-text);
+    line-height: 1;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  &__dot-marker {
+    width: var(--ht-marker-size);
+    height: var(--ht-marker-size);
+    border-radius: 50%;
+    border: var(--ht-marker-border) solid var(--ht-color-rail-future);
+    background-color: #fff;
+    display: block;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      width 0.2s ease,
+      height 0.2s ease;
+  }
+
+  // Visited (before active): red ring, white fill.
+  &__dot.is-visited .h-timeline__dot-marker {
+    border-color: var(--ht-color);
+  }
+
+  // Active: filled red, slightly larger.
+  &__dot.is-active .h-timeline__dot-marker,
+  &__dot[aria-selected='true'] .h-timeline__dot-marker {
+    background-color: var(--ht-color);
+    border-color: var(--ht-color);
+    width: var(--ht-marker-active-size);
+    height: var(--ht-marker-active-size);
+  }
+
+  // Future: gray ring (default).
+
+  &__arrow {
+    appearance: none;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--ht-color-text);
+    font-size: 1.25rem;
+    line-height: 1;
+    margin-bottom: calc(
+      var(--ht-marker-size) / 2 - 1.125rem
+    ); // align with rail line
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: var(--ht-color);
+      border-color: var(--ht-color);
+      color: #fff;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ht-color);
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    span {
+      display: block;
+      transform: translateY(-1px);
+    }
+  }
+
+  &__panels {
+    margin-top: 1rem;
+  }
+
+  &__panel {
+    background-color: var(--ht-card-bg);
+    border-radius: var(--ht-card-radius);
+    box-shadow: var(--ht-card-shadow);
+    padding: var(--ht-card-padding);
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--ht-color);
+      outline-offset: -2px;
+    }
+  }
+
+  // Clearfix so right-floated media inside the body don't blow out the card.
+  &__panel-inner::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  &__panel-content {
+    min-width: 0;
+  }
+
+  &__panel-year {
+    display: block;
+    font-family: variables.$font-family-sans-serif;
+    font-size: 0.875rem;
+    font-weight: variables.$font-weight-medium-bold;
+    color: var(--ht-color-eyebrow);
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+    text-transform: none;
+  }
+
+  &__panel-body {
+    color: var(--ht-color-text);
+
+    h2,
+    h3,
+    h4 {
+      font-family: variables.$font-family-serif;
+      font-weight: variables.$font-weight-medium;
+      line-height: 1.15;
+      margin: 0 0 1rem;
+      color: var(--ht-color-text);
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, calc(1vw + 1.5rem), 2.25rem);
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--ht-color-text);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.25rem;
+    }
+
+    // Drupal media embed alignment classes — produce the side-by-side card.
+    .align-right,
+    [data-align='right'] {
+      @include utilities.breakpoint(md) {
+        float: right;
+        width: 45%;
+        margin: 0 0 1rem 2rem;
+        shape-outside: margin-box;
+      }
+    }
+
+    .align-left,
+    [data-align='left'] {
+      @include utilities.breakpoint(md) {
+        float: left;
+        width: 45%;
+        margin: 0 2rem 1rem 0;
+        shape-outside: margin-box;
+      }
+    }
+  }
+}
+
+// Mobile: allow horizontal scroll if there are many dots, and trim the card.
+@media (max-width: 600px) {
+  .collection--horizontal-timeline {
+    --ht-card-padding: 1.5rem;
+  }
+
+  .h-timeline__nav-wrapper {
+    gap: 0.5rem;
+  }
+
+  .h-timeline__rail {
+    overflow-x: auto;
+    grid-auto-columns: minmax(56px, 1fr);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .h-timeline__dot-label {
+    font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .h-timeline__rail::after,
+  .h-timeline__dot-marker,
+  .h-timeline__arrow {
+    transition: none;
+  }
+}

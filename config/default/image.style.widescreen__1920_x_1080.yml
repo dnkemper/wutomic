@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - focal_point
+    - image
 _core:
   default_config_hash: SBJ3C2zCmi11gKrlMbGVdx9Y55W0i9HQN1W-jABDOBY
 name: widescreen__1920_x_1080
@@ -17,3 +18,9 @@ effects:
       width: 1920
       height: 1080
       crop_type: focal_point
+  27673176-3c35-4a74-bb59-f4ea98832552:
+    uuid: 27673176-3c35-4a74-bb59-f4ea98832552
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

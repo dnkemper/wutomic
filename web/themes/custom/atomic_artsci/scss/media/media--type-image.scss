@@ -3,27 +3,25 @@
 
 // Media alignment
 
-  .align-right.embedded-entity,
-  .align-right .embedded-entity {
-    @include utilities.breakpoint(sm) {
-      margin-left: variables.$gutter;
-    }
+.align-right.embedded-entity,
+.align-right .embedded-entity {
+  @include utilities.breakpoint(sm) {
+    margin-left: variables.$gutter;
   }
+}
 
-  .align-left.embedded-entity,
-  .align-left .embedded-entity {
-    @include utilities.breakpoint(sm) {
-      margin-right: variables.$gutter;
-    }
+.align-left.embedded-entity,
+.align-left .embedded-entity {
+  @include utilities.breakpoint(sm) {
+    margin-right: variables.$gutter;
   }
-
+}
 
 .align-center {
   text-align: center;
 }
 
 .embedded-entity.align-center {
-
   .media--type-image,
   .field--name-field-media-image {
     margin: 0 auto;
@@ -71,7 +69,7 @@
 
 .block-field-blocknodepagebody,
 .block-inline-blockartsci-text-area {
-  [class*="media--type-"] {
+  [class*='media--type-'] {
     position: relative;
   }
 }
@@ -87,7 +85,7 @@ figure.element--cover {
     position: absolute;
     bottom: 0;
     color: #fff;
-    background: rgba(0,0,0,.7);
+    background: rgba(0, 0, 0, 0.7);
     width: 100%;
     height: auto;
     padding: 10px;
@@ -98,5 +96,10 @@ figure.element--cover {
         margin-top: 1rem;
       }
     }
+  }
+}
+.media--view-mode-small__square {
+  img {
+    float: right;
   }
 }

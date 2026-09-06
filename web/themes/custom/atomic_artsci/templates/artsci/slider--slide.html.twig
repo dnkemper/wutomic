@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Standalone partial for an artsci_slide rendered as a card.
+ *
+ * NOTE: This file is NOT auto-loaded by Drupal. The active slide template
+ * is templates/paragraphs/paragraph--artsci-slide.html.twig. This file is
+ * preserved as a reusable partial in case the same slide markup is ever
+ * needed outside the paragraph render pipeline (e.g. a custom render array).
+ *
+ * Expected variables (caller must provide):
+ * - attributes: Attribute object for the .card element (carries media_format,
+ *   card_media_position, media_size classes).
+ * - slide_image: Rendered image field.
+ * - slide_title: Headline text.
+ * - slide_summary: Rendered body content.
+ * - link: { link_url, link_text, link_classes }.
+ * - headline_level, headline_class, media_attributes, pre_title: optional.
+ */
+#}
+{{ attach_library('atomic_artsci/card') }}
+
+<div class="slider__slide paragraph--carousel-slide" data-carousel-slide>
+  {% embed '@atomic_artsci/artsci/card.html.twig' with {
+    'attributes': attributes,
+    'media': slide_image,
+    'media_attributes': media_attributes ?: create_attribute(),
+    'pre_title': pre_title,
+    'headline': {
+      'headline_level': headline_level ?: 'h3',
+      'headline_class': headline_class ?: ['headline', 'headline--serif', 'headline--medium'],
+      'headline_text': slide_title,
+      'headline_url': link.link_url,
+      'headline_url_class': link.link_url ? 'click-target' : null,
+    },
+    'content': slide_summary,
+    'links': link.link_url ? [link] : [],
+    'linked_element': link.link_url and not link.link_text ? 'media' : (link.link_text ? 'button' : null),
+    'show_button': link.link_text is not empty,
+    'button_classes': button_classes,
+    'button_attributes': create_attribute(),
+  } only %}
+  {% endembed %}
+</div>

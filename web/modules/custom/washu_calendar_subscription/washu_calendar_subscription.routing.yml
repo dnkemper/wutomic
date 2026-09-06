@@ -1,0 +1,15 @@
+academic_calendar_ical.feed:
+  path: '/academic-calendar/calendar.ics'
+  defaults:
+    _controller: '\Drupal\washu_calendar_subscription\Controller\AcademicCalendarIcalController::feed'
+    _title: 'WashU Academic Calendar iCal Feed'
+  requirements:
+    _permission: 'access content'
+
+washu_calendar_subscription.settings:
+  path: '/admin/config/content/academic-calendar'
+  defaults:
+    _form: '\Drupal\washu_calendar_subscription\Form\AcademicCalendarSettingsForm'
+    _title: 'Academic Calendar'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,19 @@
+uuid: e35cb7f2-f15d-4531-ae3e-2203b71bed0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_last_fetch
+    - node.type.book
+id: node.book.field_last_fetch
+field_name: field_last_fetch
+entity_type: node
+bundle: book
+label: 'Last Fetch Time'
+description: 'Timestamp of last successful fetch from remote source.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

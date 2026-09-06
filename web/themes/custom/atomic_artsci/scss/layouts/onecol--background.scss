@@ -57,7 +57,6 @@
 
 .content__container {
   .layout--onecol {
-
     &--background,
     &--no--background,
     &--background.page__container--edge.layout--has-sidebar,
@@ -81,29 +80,31 @@
 
     &:focus-within {
       @include utilities.element-invisible-off;
-      padding-left: .2rem;
+      padding-left: 0.2rem;
       a {
-        background: variables.$gray-light;
-        padding: .2rem;
+        background: variables.$gray-dark;
+        padding: 0.2rem;
       }
     }
   }
   // Featured images have a black background set making
   // links white so the breadcrumb background needs to be
   // black in order to be visible.
- &.layout--title--with-background {
-   .block-system-breadcrumb-block {
-     &:focus-within {
-       li, a {
-         background: variables.$secondary;
-       }
-     }
-   }
- }
+  &.layout--title--with-background {
+    .block-system-breadcrumb-block {
+      &:focus-within {
+        li,
+        a {
+          background: variables.$secondary;
+        }
+      }
+    }
+  }
 }
 
 // Fix for featured image banners on custom content types.
-.layout--onecol--background .block[class*="image"]:not([class*="image-caption"])  {
+.layout--onecol--background
+  .block[class*='image']:not([class*='image-caption']) {
   height: 100%;
   width: 100%;
   position: absolute;

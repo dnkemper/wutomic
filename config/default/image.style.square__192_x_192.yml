@@ -1,0 +1,26 @@
+uuid: 38615a53-f2e3-45d6-983e-2a7e8a7e5e19
+langcode: en
+status: true
+dependencies:
+  module:
+    - focal_point
+    - image
+_core:
+  default_config_hash: c7GfVy7bYjJPD9xKdht6yD_orN1mkWraFqkkBlRJ-6g
+name: square__192_x_192
+label: 'Square (192 x 192)'
+effects:
+  393b0268-e8ff-47ed-ae21-b99ba666e36d:
+    uuid: 393b0268-e8ff-47ed-ae21-b99ba666e36d
+    id: focal_point_scale_and_crop
+    weight: 1
+    data:
+      width: 192
+      height: 192
+      crop_type: focal_point
+  fce43cff-eb2b-46dc-a2c5-8eeccd6dde09:
+    uuid: fce43cff-eb2b-46dc-a2c5-8eeccd6dde09
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

@@ -1,0 +1,19 @@
+uuid: a3666755-e880-42ea-bc4d-c40be0885902
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sidebar_links_title
+    - node.type.image_card
+id: node.image_card.field_sidebar_links_title
+field_name: field_sidebar_links_title
+entity_type: node
+bundle: image_card
+label: 'Sidebar Links Title'
+description: 'Heading shown above the sidebar links (e.g., "Program Details").'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

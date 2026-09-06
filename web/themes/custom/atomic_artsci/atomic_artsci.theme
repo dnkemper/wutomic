@@ -8,6 +8,7 @@
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
+use Drupal\Core\Menu\InaccessibleMenuLink;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
@@ -15,10 +16,12 @@ use Drupal\block\Entity\Block;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\fragments\Entity\FragmentInterface;
 use Drupal\node\NodeInterface;
+use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\atomic_artsci\ArtsciPreRender;
 use Drupal\artsci_core\HeadlineHelper;
 use Drupal\artsci_core\LinkHelper;
+use Drupal\media\MediaInterface;
 use Drupal\views\Plugin\views\field\EntityField;
 
 /**
@@ -79,7 +82,7 @@ function atomic_artsci_form_views_exposed_form_alter(&$form, $form_state, $form_
       return;
     }
 
-    $form['#attributes']['class'][] = 'form bg--gray';
+    $form['#attributes']['class'][] = 'form';
     $form['#attached']['library'][] = 'artsci_core/exposedFormEnhancements';
     // Fixes a bug with BEF, details here:
     // https://www.drupal.org/project/better_exposed_filters/issues/3264403#comment-14803047
@@ -208,11 +211,6 @@ function atomic_artsci_preprocess_html(&$variables) {
   // Set a variable for whether layout builder is enabled.
   $variables['layout_builder_enabled'] = FALSE;
 
-  // Only set 'text--serif' if 'fonts.font-family' setting is set to serif.
-  if (theme_get_setting('fonts.font-family') === 'serif') {
-    $variables['attributes']['class'][] = 'text--serif';
-    $variables['#attached']['library'][] = 'atomic_artsci/global-serif';
-  }
 
   $route_match = \Drupal::routeMatch();
 
@@ -357,10 +355,6 @@ $variables['artsci_url'] = Url::fromRoute('<front>')->toString();
       $variables['#attached']['library'][] = 'atomic_artsci/search-results';
       break;
 
-    case 'artsci_events.single_controller.event':
-      $variables['#attached']['library'][] = 'atomic_artsci/artsci-events-single';
-      break;
-
   }
 }
 
@@ -372,7 +366,15 @@ function atomic_artsci_preprocess_node(&$variables) {
    * @var \Drupal\node\Entity\Node $node
    */
   $node = $variables['node'];
+  $is_shared_content = 0;
+if ($node->hasField('field_media_image')) {
+      // Get first image on multi value field.
+      $image = $node->field_media_image[0]->getValue();
 
+      $variables['img_width'] = $image['width'];
+      $variables['img_height'] = $image['height'];
+      $variables['image_url'] = $image['uri'];
+    }
   if ($variables['view_mode'] === 'teaser') {
     // Create heading_size variable for node teaser templates if a
     // corresponding render property was set.
@@ -381,7 +383,15 @@ function atomic_artsci_preprocess_node(&$variables) {
     }
 
   }
-
+            if (isset($variables["content"]["field_event_when"][0]["addtocal"])) {
+    $variables["content"]["addtocal"] = $variables["content"]["field_event_when"][0]["addtocal"];
+    unset($variables["content"]["field_event_when"][0]["addtocal"]);
+  }
+    if (isset($variables["content"]["field_start_date"][0]["addtocal"])) {
+    $variables["content"]["addtocal"] =
+      $variables["content"]["field_start_date"][0]["addtocal"];
+    unset($variables["content"]["field_start_date"][0]["addtocal"]);
+  }
   $admin_context = \Drupal::service('router.admin_context');
   if (!$admin_context->isAdminRoute()) {
     if (isset($variables['node'])) {
@@ -394,18 +404,59 @@ function atomic_artsci_preprocess_node(&$variables) {
     }
     $node = \Drupal::routeMatch()->getParameter('node');
     $node = ($node ?? \Drupal::routeMatch()->getParameter('node_preview'));
+      
 
     if ($node instanceof NodeInterface) {
+      /**
+       * @var \Drupal\node\Entity\Node $node
+       */
       $node = $variables['node'];
+      $variables['is_shared_content'] = FALSE;
+      $node_title = $node->getTitle();
+      $node_url = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+          $variables['date_today'] = strtotime("now");
+            $node_url = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+      $social_data = atomic_artsci_build_social_share($node_url, $node_title);
+      $node_title = $node->getTitle();
+      $variables['social_share'] = $social_data['links'];
+      $variables['youtube_username'] = $social_data['usernames']['youtube'];
+      $variables['linkedin_username'] = $social_data['usernames']['linkedin'];
+      $variables['twitter_username'] = $social_data['usernames']['twitter'];
+      $variables['facebook_username'] = $social_data['usernames']['facebook'];
+      $variables['instagram_username'] = $social_data['usernames']['instagram'];
+      $variables['current_url'] = $node_url;
+      $variables['current_title'] = $node_title;
+  
       switch ($node->getType()) {
         case 'person':
           $variables['#attached']['library'][] = 'atomic_artsci/person';
           break;
+        case 'academic_calendar_event':
+          $variables['#attached']['library'][] = 'atomic_artsci/view-academic-calendar';
+          $variables['attributes']['class'][] = 'academic-calendar';
+          $variables['external_target'] = '';
+          if ($node->hasField('field_external_url') && !$node->get('field_external_url')->isEmpty()) {
+            /** @var \Drupal\link\Plugin\Field\FieldType\LinkItem $link */
+            $link = $node->get('field_external_url')->first();
+            try {
+              // Resolves external, internal, and entity: URIs to a usable URL.
+              $variables['external_url'] = $link->getUrl()->toString();
+            }
+            catch (\Throwable $e) {
+              // Fall back to the raw stored URI (e.g. a scheme-less string carried
+              // over from the D10 plain-text field).
+              $variables['external_url'] = $link->get('uri')->getValue();
+            }
+          }
+          if ($node->hasField('field_new_window') && (bool) $node->get('field_new_window')->value) {
+            $variables['external_target'] = '_blank';
+          }
+          break;
 
         case 'event':
-          $variables['#attached']['library'][] = 'atomic_artsci/artsci-events-single';
           $variables['#attached']['library'][] = 'atomic_artsci/person';
           $variables['#attached']['library'][] = 'atomic_artsci/card';
+          
           break;
       }
       if (class_exists('\Drupal\layout_builder_custom\LayoutBuilderHelper')) {
@@ -413,8 +464,88 @@ function atomic_artsci_preprocess_node(&$variables) {
       }
     }
   }
-}
 
+
+}
+/**
+ * Helper function to build social share links and usernames.
+ *
+ * PERFORMANCE: Uses static cache for config.
+ *
+ * @param string|array $url
+ *   The URL to share.
+ * @param string|array $title
+ *   The title to share.
+ *
+ * @return array
+ *   An array containing 'links' and 'usernames' data.
+ */
+function atomic_artsci_build_social_share($url, $title) {
+  static $config;
+  if (!isset($config)) {
+    $config = \Drupal::config('olympian_core.settings');
+  }
+
+  static $site_name;
+  if (!isset($site_name)) {
+    $site_config = \Drupal::config('system.site');
+    $site_name = $site_config->get('name');
+  }
+
+  // Convert arrays to strings (handles Drupal render arrays).
+  if (is_array($url)) {
+    $url = \Drupal::service('renderer')->renderInIsolation($url);
+  }
+  if (is_array($title)) {
+    $title = \Drupal::service('renderer')->renderInIsolation($title);
+  }
+
+  // Ensure we have strings, fallback to empty string.
+  $url = (string) $url;
+  $title = (string) $title;
+
+  $share_text = $title . ' - ' . $site_name;
+
+  $twitter_username = $config->get('social_media.twitter_username');
+  $facebook_username = $config->get('social_media.facebook_username');
+  $instagram_username = $config->get('social_media.instagram_username');
+  $youtube_username = $config->get('social_media.youtube_username');
+  $linkedin_username = $config->get('social_media.linkedin_username');
+
+  return [
+    'links' => [
+      'facebook' => [
+        'url' => 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($url),
+        'username' => $facebook_username,
+        'label' => t('Share on Facebook'),
+        'text' => $share_text,
+      ],
+      'twitter' => [
+        'url' => 'https://twitter.com/intent/tweet?url=' . urlencode($url) . '&text=' . urlencode($share_text) . ($twitter_username ? '&via=' . $twitter_username : ''),
+        'username' => $twitter_username,
+        'label' => t('Share on Twitter'),
+        'text' => $share_text,
+      ],
+      'instagram' => [
+        'username' => $instagram_username,
+        'profile_url' => $instagram_username ? 'https://www.instagram.com/' . $instagram_username : '',
+        'label' => t('Follow on Instagram'),
+        'text' => $share_text,
+      ],
+      'email' => [
+        'url' => 'mailto:?subject=' . rawurlencode($title) . '&body=' . rawurlencode($share_text . "\n\n" . $url),
+        'label' => t('Share via Email'),
+      ],
+    ],
+    'usernames' => [
+      'twitter' => $twitter_username,
+      'facebook' => $facebook_username,
+      'instagram' => $instagram_username,
+      'youtube' => $youtube_username,
+      'linkedin' => $linkedin_username,
+    ],
+  ];
+}
 /**
  * Implements hook_preprocess_HOOK() for media.html.twig.
  */
@@ -702,8 +833,8 @@ function atomic_artsci_preprocess_layout(&$variables) {
         }
         $defaults = [
           'transparent' => FALSE,
-          'horizontal_align' => 'left',
-          'vertical_align' => 'bottom',
+          'horizontal_align' => 'center',
+          'vertical_align' => 'center',
         ];
 
         $variables['banner_settings'] = $variables['banner_settings'] + $defaults;
@@ -727,10 +858,6 @@ function atomic_artsci_preprocess_layout(&$variables) {
           }
           else {
             $variables['attributes']['class'][] = 'layout--onecol--no--background';
-          }
-
-          if ($title_hidden) {
-            $variables['attributes']['class'][] = 'layout--title--hidden';
           }
         }
         break;
@@ -801,6 +928,114 @@ function atomic_artsci_preprocess_layout__twocol__card_sidebar(&$variables) {
   }
 }
 
+/**
+ * Implements hook_preprocess_HOOK() for block--inline-block--artsci-text-area.html.twig.
+ */
+function atomic_artsci_preprocess_block__inline_block__artsci_text_area(&$variables) {
+  // Get the block content entity.
+  if (isset($variables['elements']['content']['#block_content'])) {
+    $block = $variables['elements']['content']['#block_content'];
+    
+    // Extract headline alignment from field_artsci_headline.
+    $variables['headline_alignment_class'] = '';
+    if ($block->hasField('field_artsci_headline') && !$block->get('field_artsci_headline')->isEmpty()) {
+      $headline_values = $block->get('field_artsci_headline')->first()->getValue();
+      $alignment = $headline_values['headline_alignment'] ?? 'default';
+      
+      // Convert to CSS class using HeadlineHelper.
+      $alignment_map = \Drupal\artsci_core\HeadlineHelper::getHeadingAlignment();
+      $variables['headline_alignment_class'] = $alignment_map[$alignment] ?? 'headline--left';
+    }
+    
+    // Also extract headline style classes.
+    $variables['headline_style_class'] = '';
+    if ($block->hasField('field_artsci_headline') && !$block->get('field_artsci_headline')->isEmpty()) {
+      $headline_values = $block->get('field_artsci_headline')->first()->getValue();
+      $style = $headline_values['headline_style'] ?? 'default';
+      
+      if ($style !== 'default') {
+        $style_map = \Drupal\artsci_core\HeadlineHelper::getStyles();
+        $variables['headline_style_class'] = $style_map[$style] ?? '';
+      }
+    }
+  }
+}
+/**
+ * Implements hook_preprocess_field() for field_event_when.
+ */
+function atomic_artsci_preprocess_field__field_event_when(&$variables) {
+  $date_formatter = \Drupal::service('date.formatter');
+  
+  // Get the entity and field values directly.
+  $entity = $variables['element']['#object'];
+  $field_name = $variables['element']['#field_name'];
+  
+  if (!$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+    return;
+  }
+
+  foreach ($entity->get($field_name) as $delta => $smart_date) {
+    $start = $smart_date->value;
+    $end = $smart_date->end_value;
+    $duration = $smart_date->duration ?? 0;
+
+    // Debug: uncomment to verify values.
+    // \Drupal::logger('atomic_artsci')->notice('Start: @start, End: @end, Duration: @dur', [
+    //   '@start' => $start,
+    //   '@end' => $end,
+    //   '@dur' => $duration,
+    // ]);
+
+    if (!is_numeric($start)) {
+      continue;
+    }
+
+    // Check if all day (duration = 1439 minutes = 23:59).
+    $is_all_day = ($duration == 1439);
+
+    // Format start date.
+    $start_month = $date_formatter->format($start, 'custom', 'F');
+    $start_day = $date_formatter->format($start, 'custom', 'j');
+
+    // Format end date.
+    $end_month = $date_formatter->format($end, 'custom', 'F');
+    $end_day = $date_formatter->format($end, 'custom', 'j');
+
+    // Build date string.
+    if ($start_month === $end_month && $start_day === $end_day) {
+      // Same day: "April 13"
+      $date_string = "$start_month $start_day";
+    }
+    elseif ($start_month === $end_month) {
+      // Same month: "April 13 - 15"
+      $date_string = "$start_month $start_day - $end_day";
+    }
+    else {
+      // Different months: "April 13 - May 9"
+      $date_string = "$start_month $start_day - $end_month $end_day";
+    }
+
+    // Format time.
+    if ($is_all_day) {
+      $time_string = 'All day';
+    }
+    else {
+      $start_time = $date_formatter->format($start, 'custom', 'g:i A');
+      $end_time = $date_formatter->format($end, 'custom', 'g:i A');
+
+      if ($start_time === $end_time) {
+        $time_string = $start_time;
+      }
+      else {
+        $time_string = "$start_time";
+      }
+    }
+
+    // Attach to the items array for Twig.
+    $variables['items'][$delta]['date_formatted'] = $date_string;
+    $variables['items'][$delta]['time_formatted'] = $time_string;
+  }
+}
 /**
  * Implements hook_preprocess_HOOK() for block.html.twig.
  */
@@ -938,20 +1173,12 @@ function atomic_artsci_preprocess_block(&$variables) {
     }
   }
 
-  if ($variables['derivative_plugin_id'] === 'artsci_cta') {
-    $variables['cta_link_attributes'] = [];
-    if (isset($variables['elements']['content']['field_artsci_cta_link'])) {
-      foreach (Element::children($variables['elements']['content']['field_artsci_cta_link']) as $delta) {
-        $url = $variables['elements']['content']['field_artsci_cta_link'][$delta]['#url'] ?? NULL;
-        $variables['cta_link_attributes'] = $url?->getOptions()['attributes'] ?? [];
-        break;
-      }
-    }
-  }
-
-  // Check if the hover effect should be applied on the stat block.
+  // Detect Layout Builder UI context for the statistic block so the template
+  // can skip wrapping the contents in an anchor. The wrapping anchor swallows
+  // hover/click on the contextual links toggle and the LB edit pencil.
   if ($variables['derivative_plugin_id'] === 'artsci_statistic') {
-    $class_array = $variables['elements']['#attributes']['class'] ?? [];
+    $route = \Drupal::routeMatch()->getRouteObject();
+    $variables['in_layout_builder'] = $route ? (bool) $route->getOption('_layout_builder') : FALSE;
   }
 
   // Check if the collection view mode is accordion.
@@ -969,6 +1196,12 @@ function atomic_artsci_preprocess_block(&$variables) {
     }
     elseif ($variables['content']['#view_mode'] === 'tab') {
       $variables['is_tab'] = TRUE;
+    }
+    elseif ($variables['content']['#view_mode'] === 'dotted_line') {
+      $variables['is_dotted_line'] = TRUE;
+    }
+    elseif ($variables['content']['#view_mode'] === 'horizontal_timeline') {
+      $variables['is_horizontal_timeline'] = TRUE;
     }
   }
 
@@ -1024,8 +1257,8 @@ function atomic_artsci_preprocess_block__inline_block__artsci_collection(&$varia
   $accordion_container_classes = ['accordion'];
   // If more label colors become available in Artsci,
   // update this to a match expression.
-  if ($block->field_accordion_label_color->value === 'white') {
-    $accordion_container_classes[] = 'accordion--white';
+  if ($block->field_accordion_label_color->value === 'gray_default') {
+    $accordion_container_classes[] = 'accordion--gray';
   }
   $variables['accordion_container_classes'] = implode(' ', $accordion_container_classes);
 
@@ -1055,6 +1288,21 @@ function atomic_artsci_preprocess_block__inline_block__artsci_collection(&$varia
       if ($paragraph instanceof ParagraphInterface && $paragraph->hasField('field_collection_headline')) {
         $variables['tab_nav'][] = [
           'id' => $block->id(),
+          'delta' => $delta,
+          'label' => $paragraph->get('field_collection_headline')->getString(),
+        ];
+      }
+    }
+  }
+
+  // Build dot navigation data when in horizontal_timeline view mode.
+  if (isset($variables['content']['#view_mode']) && $variables['content']['#view_mode'] === 'horizontal_timeline') {
+    $variables['h_timeline_nav'] = [];
+    $items = Element::children($variables['elements']['content']['field_artsci_collection_items']);
+    foreach ($items as $delta) {
+      $paragraph = $variables['elements']['content']['field_artsci_collection_items'][$delta]['#paragraph'];
+      if ($paragraph instanceof ParagraphInterface && $paragraph->hasField('field_collection_headline')) {
+        $variables['h_timeline_nav'][] = [
           'delta' => $delta,
           'label' => $paragraph->get('field_collection_headline')->getString(),
         ];
@@ -1126,7 +1374,7 @@ function atomic_artsci_preprocess_paragraph(&$variables) {
   $paragraph = $variables['paragraph'];
   // Get the value of the collection headline field.
   if ($paragraph->getType() == 'artsci_slide') {
-    $artsci_slide_headline = $paragraph->get('field_collection_headline')->getValue()[0]['value'];
+    $artsci_slide_headline = $paragraph->get('field_collection_headline')->getValue()[0]['value'] ?? '';
     // Strip tags.
     $variables['slide_headline'] = strip_tags($artsci_slide_headline);
   }
@@ -1138,7 +1386,7 @@ function atomic_artsci_preprocess_paragraph(&$variables) {
 
     $collection_types = [
       'artsci_collection_item' => 'field_artsci_collection_items',
-      'artsci_timeline_item' => 'field_artsci_timeline_items',
+      'artsci_slider_slide' => 'field_artsci_slider_slides',
     ];
 
     if (in_array($paragraph->bundle(), array_keys($collection_types))) {
@@ -1317,19 +1565,126 @@ function atomic_artsci_preprocess_input(&$variables) {
  * Implements hook_preprocess_superfish_menu_items().
  */
 function atomic_artsci_preprocess_superfish_menu_items(array &$variables) {
-  if (isset($variables['menu_items'])) {
-    foreach ($variables['menu_items'] as $i => $menu_item) {
-      if (isset($menu_item['link_menuparent'])) {
-        if ($menu_item['link']['#url']->isRouted() && $menu_item['link']['#url']->getRouteName() === '<nolink>') {
-          $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['tabindex'] = '0';
-        }
+  if (!isset($variables['menu_items'])) {
+    return;
+  }
 
-        if ($variables['element']['#settings']['menu_type'] === 'vertical') {
-          $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['role'] = 'button';
-          $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['aria-haspopup'] = 'true';
-        }
+  $menu_type = $variables['element']['#settings']['menu_type'] ?? '';
+
+  foreach ($variables['menu_items'] as $i => $menu_item) {
+    if (isset($menu_item['link_menuparent'])) {
+      if ($menu_item['link']['#url']->isRouted() && $menu_item['link']['#url']->getRouteName() === '<nolink>') {
+        $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['tabindex'] = '0';
+      }
+
+      if ($menu_type === 'vertical') {
+        $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['role'] = 'button';
+        $variables['menu_items'][$i]['link_menuparent']['#options']['attributes']['aria-haspopup'] = 'true';
       }
     }
+  }
+
+  // Inject an optional mega menu panel (image, headline, link) onto each
+  // top-level link that opens a dropdown. The panel content lives on the
+  // menu_link_content entity via menu_item_extras fields and is rendered
+  // through the dedicated "mega_panel" view mode. Superfish builds its own
+  // markup from the menu link plugins and never renders the menu link
+  // entity, so we bridge the rendered panel into the template here.
+  _atomic_artsci_superfish_attach_mega_panels($variables);
+}
+
+/**
+ * Attaches rendered mega menu panels to top-level Superfish items.
+ *
+ * Exposes the rendered panel to superfish-menu-items.html.twig as
+ * item.featured_panel. A panel is attached only when the item is a top-level
+ * link (depth 1) with at least one accessible child, and the menu_link_content
+ * entity has any panel field populated.
+ */
+function _atomic_artsci_superfish_attach_mega_panels(array &$variables) {
+  $tree = $variables['element']['#tree'] ?? [];
+  if (empty($tree)) {
+    return;
+  }
+
+  $entity_repository = \Drupal::service('entity.repository');
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('menu_link_content');
+
+  // Superfish skips inaccessible and disabled links when building
+  // $variables['menu_items'], so mirror that filter to keep $index aligned
+  // with the already-processed items. When sfTouchscreen cloning is enabled
+  // Superfish unshifts a cloned parent to the front of the processed items
+  // without adding it to #tree, so start past it to preserve alignment.
+  $index = (($variables['element']['#cloned_parent'] ?? FALSE) !== FALSE) ? 1 : 0;
+  foreach ($tree as $tree_item) {
+    $plugin = $tree_item->link;
+    $definition = $plugin->getPluginDefinition();
+
+    if ($plugin instanceof InaccessibleMenuLink || empty($definition['enabled'])) {
+      continue;
+    }
+
+    if (!isset($variables['menu_items'][$index])) {
+      $index++;
+      continue;
+    }
+
+    if ($tree_item->depth == 1
+      && $tree_item->hasChildren
+      && $plugin instanceof MenuLinkContent
+      && _atomic_artsci_superfish_subtree_has_access($tree_item)) {
+
+      $entity = $entity_repository->loadEntityByUuid('menu_link_content', $plugin->getDerivativeId());
+
+      if ($entity instanceof ContentEntityInterface
+        && _atomic_artsci_menu_panel_has_content($entity)) {
+        $variables['menu_items'][$index]['featured_panel'] = $view_builder->view($entity, 'mega_panel');
+      }
+    }
+
+    $index++;
+  }
+}
+
+/**
+ * Checks whether a menu tree element has at least one accessible child.
+ */
+function _atomic_artsci_superfish_subtree_has_access($tree_item) {
+  foreach ($tree_item->subtree as $subtree_item) {
+    if ($subtree_item->access && $subtree_item->access->isAllowed()) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Determines whether a menu link entity has any mega menu panel content.
+ *
+ * Treats the panel as present when the image, headline, or link field is
+ * populated, so links without panel content fall back to a column-only
+ * dropdown.
+ */
+function _atomic_artsci_menu_panel_has_content(ContentEntityInterface $entity) {
+  foreach (['field_image', 'field_artsci_headline', 'field_artsci_card_link'] as $field_name) {
+    if ($entity->hasField($field_name) && !$entity->get($field_name)->isEmpty()) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK() for card.
+ *
+ * Adds a bundle-specific suggestion (e.g. card--article) for entity cards so an
+ * individual content type can reorder card parts in its own template without
+ * affecting the shared card template used by every other bundle.
+ */
+function atomic_artsci_theme_suggestions_card_alter(array &$suggestions, array $variables) {
+  $node = $variables['element']['#node'] ?? NULL;
+  if ($node instanceof NodeInterface) {
+    $suggestions[] = 'card__' . $node->bundle();
   }
 }
 
@@ -1378,4 +1733,97 @@ function atomic_artsci_theme_suggestions_page_title_alter(array &$suggestions, a
 function atomic_artsci_photoswipe_js_options_alter(array &$settings) {
   // Disable's photoswipe's share links (twitter, fb, pintrest).
   $settings['shareEl'] = FALSE;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for photoswipe_image_formatter.
+ *
+ * Surfaces the referenced media entity's label as a `caption` variable so
+ * the artsci_image_gallery block can render it as an overlay on each
+ * thumbnail. Scoped to that bundle so other photoswipe galleries on the
+ * site are unaffected.
+ */
+function atomic_artsci_preprocess_photoswipe_image_formatter(array &$variables) {
+  _atomic_artsci_photoswipe_set_caption($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for photoswipe_responsive_image_formatter.
+ *
+ * @see atomic_artsci_preprocess_photoswipe_image_formatter()
+ */
+function atomic_artsci_preprocess_photoswipe_responsive_image_formatter(array &$variables) {
+  _atomic_artsci_photoswipe_set_caption($variables);
+}
+
+/**
+ * Adds a `caption` template variable holding the media entity's label and
+ * rewrites `data-overlay-title` so the lightbox caption preserves classes.
+ *
+ * The photoswipe preprocess only swaps its DTO's internal item to the
+ * file image item, leaving $variables['item'] as the original
+ * entity_reference item, so we can still reach the parent media entity
+ * from here.
+ *
+ * The contrib photoswipe_dynamic_caption module sets data-overlay-title
+ * by reading field_media_caption's raw value and running it through
+ * Xss::filter(), which strips every attribute (including class)
+ * regardless of what the field's text format permits. We re-render the
+ * value here through the field's actual stored format so anything the
+ * format allows survives into the lightbox.
+ *
+ * @param array $variables
+ *   Theme variables for photoswipe_image_formatter or its responsive twin.
+ */
+function _atomic_artsci_photoswipe_set_caption(array &$variables) {
+  $parent = $variables['entity'] ?? NULL;
+  if (!$parent instanceof BlockContent || $parent->bundle() !== 'artsci_image_gallery') {
+    return;
+  }
+  $item = $variables['item'] ?? NULL;
+  if (!$item || empty($item->entity) || !$item->entity instanceof MediaInterface) {
+    return;
+  }
+  $media = \Drupal::service('entity.repository')->getTranslationFromContext($item->entity);
+
+  // Per-thumbnail label shown over the image.
+  $label = trim((string) $media->label());
+  if ($label !== '') {
+    $variables['caption'] = $label;
+  }
+
+  // Re-render field_media_caption through its real text format so the
+  // lightbox caption keeps whatever HTML the format allows. Without this,
+  // the contrib module's Xss::filter() pass would have already stripped
+  // every attribute (class included) before the data attribute was set.
+  if ($media->hasField('field_media_caption') && !$media->get('field_media_caption')->isEmpty()) {
+    $captionItem = $media->get('field_media_caption')->first();
+    $value = (string) $captionItem->value;
+    if ($value !== '') {
+      $format = $captionItem->format ?: filter_fallback_format();
+      $rendered = check_markup($value, $format, $media->language()->getId());
+      $variables['attributes']['data-overlay-title'] = (string) $rendered;
+    }
+  }
+}
+/**
+ * Removes a set of CSS classes from an attributes container.
+ *
+ * Handles both the array form (typical during preprocess) and an Attribute
+ * object, so callers don't have to care which stage they're at.
+ *
+ * @param array|\Drupal\Core\Template\Attribute|null $attributes
+ *   The attributes container, passed by reference.
+ * @param string[] $classes
+ *   Class names to remove.
+ */
+function _atomic_artsci_strip_classes(&$attributes, array $classes): void {
+  if (is_array($attributes)) {
+    if (!empty($attributes['class']) && is_array($attributes['class'])) {
+      $attributes['class'] = array_values(array_diff($attributes['class'], $classes));
+    }
+  }
+  elseif ($attributes instanceof \Drupal\Core\Template\Attribute) {
+    $attributes->removeClass($classes);
+  }
 }

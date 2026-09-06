@@ -1,0 +1,72 @@
+system.admin_config_shared:
+  path: '/admin/config/olympian/shared-remote'
+  defaults:
+    _title: 'Shared content'
+    _form: 'Drupal\shared_content\Form\RemoteForm'
+  requirements:
+    _permission: 'administer site configuration'
+shared_content.callback:
+  path: '/admin/shared-content'
+  defaults:
+    _controller: '\Drupal\shared_content\Controller\SharedContentController::display'
+    _title: 'Shared Content'
+  requirements:
+    _permission: 'access content'  # Adjust permission as needed
+shared_content.force_update:
+  path: '/node/{node}/shared-content/force-update'
+  defaults:
+    _form: '\Drupal\shared_content\Form\ForceUpdateForm'
+    _title: 'Force Update Shared Content'
+  requirements:
+    _custom_access: '\Drupal\shared_content\Access\SharedContentAccessCheck::access'
+    _permission: 'access content'
+    node: \d+
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+
+shared_content.force_update_direct:
+  path: '/node/{node}/shared-content/force-update-direct'
+  defaults:
+    _controller: '\Drupal\shared_content\Controller\SharedContentController::forceUpdate'
+    _title: 'Force Update Shared Content'
+  requirements:
+    _permission: 'access content'
+    _csrf_token: 'TRUE'
+    node: \d+
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+shared_content.force_refresh_all:
+  path: '/admin/shared-content/force-refresh-all'
+  defaults:
+    _controller: '\Drupal\shared_content\Controller\SharedContentController::forceRefreshAll'
+    _title: 'Force Refresh All Feeds'
+  requirements:
+    _permission: 'access content'
+    _csrf_token: 'TRUE'
+  options:
+    _admin_route: TRUE
+
+# shared_content.aggregator_update_form:
+#   path: '/admin/content/shared-content/update'
+#   defaults:
+#     _form: '\Drupal\shared_content\Form\AggregatorUpdateForm'
+#     _title: 'Update Shared Content'
+#   requirements:
+#     _permission: 'administer shared content'
+#   options:
+#     _admin_route: TRUE
+shared_content.refresh_all_feeds:
+  path: '/admin/shared-content/refresh-aggregator-feeds'
+  defaults:
+    _controller: '\Drupal\shared_content\Controller\SharedContentController::refreshAllFeeds'
+    _title: 'Refresh Aggregator Feeds'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE

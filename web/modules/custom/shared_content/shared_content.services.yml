@@ -1,0 +1,128 @@
+services:
+  shared_content.route_subscriber:
+    class: Drupal\shared_content\EventSubscriber\RouteSubscriber
+    arguments: ['@current_user']
+    tags:
+      - { name: event_subscriber }
+
+  shared_content.controller_alter:
+    class: Drupal\shared_content\EventSubscriber\ControllerAlterSubscriber
+    arguments: ['@config.factory', '@date.formatter']
+    tags:
+      - { name: event_subscriber }
+
+  shared_content.remote_form:
+    class: Drupal\shared_content\Form\RemoteForm
+    arguments:
+      - '@entity_type.manager'
+      - '@http_client'
+      - '@date.formatter'
+      - '@request_stack'
+      - '@logger.channel.shared_content'
+      - '@messenger'
+
+  shared_content.feed_item_update_subscriber:
+    class: 'Drupal\shared_content\EventSubscriber\FeedItemUpdateSubscriber'
+    arguments: ['@logger.factory']
+    tags:
+      - { name: event_subscriber }
+
+  shared_content.rss_response_relative_url_filter:
+    class: Drupal\shared_content\EventSubscriber\RssResponseRelativeUrlFilter
+    tags:
+      - { name: event_subscriber }
+
+  shared_content.feed_refresher_force:
+    class: Drupal\shared_content\Service\SharedContentFeedRefresherForce
+    arguments:
+      - '@database'
+      - '@entity_type.manager'
+      - '@http_client'
+      - '@queue'
+      - '@state'
+      - '@logger.channel.shared_content'
+      - '@shared_content.field_mapper'
+
+  logger.channel.shared_content:
+    parent: logger.channel_base
+    arguments: ['shared_content']
+
+  shared_content.field_mapper:
+    class: Drupal\shared_content\Service\SharedContentFieldMapper
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.channel.shared_content'
+      - '@http_client'
+      - '@file_system'
+  shared_content.custom_items_import:
+    class: Drupal\shared_content\ItemsImporterOverride
+    decorates: aggregator.items.importer
+    decoration_priority: 9
+    public: false
+    arguments: ['@shared_content.custom_items_import.inner', '@config.factory', '@plugin.manager.aggregator.fetcher', '@plugin.manager.aggregator.parser', '@plugin.manager.aggregator.processor', '@logger.channel.aggregator', '@keyvalue.aggregator']
+  shared_content.commands:
+    class: Drupal\shared_content\Commands\SharedContentCommands
+    arguments:
+      - '@shared_content.feed_refresher_force'
+    tags:
+      - { name: drush.command }
+  shared_content.drush.commands.content_report:
+    class: Drupal\shared_content\Drush\Commands\ContentReportCommands
+    arguments:
+      - '@database'
+      - '@entity_type.bundle.info'
+    tags:
+      - { name: drush.command }
+
+  shared_content.drush.commands.content_integrity:
+    class: Drupal\shared_content\Drush\Commands\ContentIntegrityCommands
+    arguments:
+      - '@database'
+      - '@entity_type.bundle.info'
+      - '@entity_type.manager'
+    tags:
+      - { name: drush.command }
+  shared_content.node_deletion_audit:
+    class: Drupal\shared_content\EventSubscriber\NodeDeletionAuditSubscriber
+    arguments:
+      - '@database'
+      - '@current_user'
+      - '@request_stack'
+      - '@logger.channel.shared_content'
+      - '@config.factory'
+      - '@datetime.time'
+    tags:
+      - { name: event_subscriber }
+  shared_content.drush.commands.deletion_audit:
+    class: Drupal\shared_content\Drush\Commands\DeletionAuditCommands
+    arguments:
+      - '@database'
+      - '@entity_type.bundle.info'
+    tags:
+      - { name: drush.command }
+  shared_content.drush.commands.content_monitor:
+    class: Drupal\shared_content\Drush\Commands\ContentMonitorCommands
+    arguments:
+      - '@database'
+      - '@entity_type.bundle.info'
+      - '@state'
+      - '@http_client'
+    tags:
+      - { name: drush.command }
+  shared_content.drush.commands.essential:
+    class: Drupal\shared_content\Drush\Commands\SharedContentEssentialCommands
+    arguments:
+      - '@database'
+      - '@entity_type.manager'
+      - '@entity_type.bundle.info'
+      - '@http_client'
+    tags:
+      - { name: drush.command }
+  shared_content.migration_commands:
+    class: Drupal\shared_content\Drush\Commands\SharedContentMigrationCommands
+    arguments:
+      - '@database'
+      - '@state'
+      - '@http_client'
+    tags:
+      - { name: drush.command }

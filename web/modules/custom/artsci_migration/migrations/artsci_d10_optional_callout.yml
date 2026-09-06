@@ -1,0 +1,122 @@
+id: artsci_d10_optional_callout
+label: 'D10 optional_callout paragraphs → image_card field_sidebar_title / field_sidebar_text'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# Reads D10 optional_callout paragraphs directly from the source site's
+# JSON:API at /jsonapi/paragraph/optional_callout. Same shape as
+# artsci_d10_sample_courses_items but with a different destination:
+# instead of creating new paragraph entities on D11, this migration
+# UPDATES existing image_card nodes (created by the two image_card
+# migrations) with the paragraph's two text fields flattened onto them.
+#
+# How it works:
+#   - Each D10 paragraph has parent_id / parent_type attributes pointing
+#     to the node that owns it.
+#   - The image_card migrations preserve D10 nids verbatim (nid: nid),
+#     so the paragraph's parent_id IS the destination image_card nid.
+#   - migration_lookup against BOTH image_card migrations resolves that
+#     nid; if neither has it (paragraph orphaned or its parent isn't a
+#     departments_programs/majors_minors node), the row is skipped so we
+#     don't accidentally update some unrelated content type.
+#
+# IMPORTANT: this migration must run AFTER the two image_card migrations
+# so the nodes exist. The migration_dependencies block enforces that.
+# Re-running it is safe: same paragraph -> same parent_nid -> same node,
+# overwrites the two fields with current values.
+#
+# Source endpoint requires the same JSON:API read access as
+# artsci_d10_sample_courses_items. If you get 403s, add Authorization
+# headers via request_options or temporarily enable the resource via
+# jsonapi_extras on the source.
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/paragraph/optional_callout?page[limit]=50&sort=drupal_internal__id'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  # Keyed on the D10 paragraph's drupal_internal__id. parent_id can be
+  # shared across paragraphs (in theory), but pid is always unique, so
+  # it's the safe migration key.
+  ids:
+    pid:
+      type: integer
+
+  fields:
+    - name: pid
+      label: 'D10 paragraph ID'
+      selector: 'attributes/drupal_internal__id'
+    - name: parent_nid
+      label: 'D10 parent node ID (nid of the owning departments_programs or majors_minors node)'
+      selector: 'attributes/parent_id'
+    - name: parent_type
+      label: 'D10 parent entity type (expected: node)'
+      selector: 'attributes/parent_type'
+    - name: title
+      label: 'Source field_title (-> field_sidebar_title)'
+      selector: 'attributes/field_title'
+    - name: description_value
+      label: 'Source field_description value (-> field_sidebar_text/value)'
+      selector: 'attributes/field_description/value'
+    - name: description_format
+      label: 'Source field_description format (-> field_sidebar_text/format)'
+      selector: 'attributes/field_description/format'
+
+process:
+  # ---- Resolve which image_card node to update ----
+  # parent_id on the paragraph IS the D10 node nid. The two image_card
+  # migrations preserve nids, so the same value IS the destination nid.
+  # Looking it up via migration_lookup against BOTH migrations:
+  #   - confirms the paragraph's parent actually got migrated as an image_card
+  #   - skips orphans / paragraphs attached to other content types
+  #   - returns the destination nid (== parent_nid in practice)
+  nid:
+    - plugin: migration_lookup
+      source: parent_nid
+      migration:
+        - artsci_d10_departments_programs_image_card
+        - artsci_d10_majors_minors_image_card
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+      message: 'optional_callout: parent_id did not resolve to an image_card node (parent is not departments_programs or majors_minors, or those migrations have not run yet).'
+
+  # ---- The two flat fields ----
+  field_sidebar_title: title
+
+  # field_sidebar_text is text_long. Strip the literal <html>...</html>
+  # wrapper that D10 export adds, matching the body mapping in the
+  # image_card migrations.
+  'field_sidebar_text/value':
+    - plugin: str_replace
+      source: description_value
+      search: ['<html>', '</html>']
+      replace: ['', '']
+  'field_sidebar_text/format':
+    plugin: default_value
+    default_value: full_html
+    source: description_format
+
+# entity:node destination with the nid resolved above. Because nid points
+# at an existing node, the destination plugin loads that node and UPDATES
+# the two specified fields, leaving everything else alone. The
+# default_bundle line only matters if Drupal were ever to CREATE a node
+# from this migration, which can't happen here (skip_on_empty above
+# ensures we only ever hit existing nids).
+destination:
+  plugin: 'entity:node'
+  default_bundle: image_card
+
+migration_dependencies:
+  required:
+    - artsci_d10_departments_programs_image_card
+    - artsci_d10_majors_minors_image_card
+  optional: []

@@ -1,0 +1,19 @@
+uuid: 168e03ef-817a-4431-b028-957dd7c1d37b
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_sidebar_links
+field_name: field_sidebar_links
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

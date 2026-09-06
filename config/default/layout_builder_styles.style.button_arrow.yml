@@ -1,0 +1,15 @@
+uuid: 1ef51795-6fea-4dd9-9f25-fe4e4f638f41
+langcode: en
+status: true
+dependencies: {  }
+id: button_arrow
+label: Arrow
+classes: 'bttn bttn--arrow--red'
+type: component
+group: button_style
+block_restrictions:
+  - 'inline_block:artsci_banner'
+  - 'inline_block:artsci_card'
+  - 'inline_block:artsci_slider'
+layout_restrictions: {  }
+weight: 19

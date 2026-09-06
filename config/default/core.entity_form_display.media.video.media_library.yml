@@ -7,6 +7,8 @@ dependencies:
     - field.field.media.video.field_media_video_file
     - field.field.media.video.field_tags
     - media.type.video
+  module:
+    - file
 _core:
   default_config_hash: tDAk5WjHHzEBR0eK2k8ZlWr7Ji5lCSh_ddgoQnmfsCY
 id: media.video.media_library
@@ -14,9 +16,16 @@ targetEntityType: media
 bundle: video
 mode: media_library
 content:
+  field_media_video_file:
+    type: file_generic
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
   field_tags:
     type: entity_reference_autocomplete_tags
-    weight: 1
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS
@@ -34,7 +43,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_media_video_file: true
   path: true
   publish_on: true
   publish_state: true

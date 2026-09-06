@@ -44,6 +44,9 @@
     {% if item.multicolumn_wrapper %}
     <ul class="sf-multicolumn">
       <li class="sf-multicolumn-wrapper {{ item.item_class }}">
+        {% if item.featured_panel %}
+          {{ item.featured_panel }}
+        {% endif %}
         {% endif %}
 
         {# Children #}

@@ -1,6 +1,6 @@
 name: Artsci Events
 type: module
-description: 'Drupal module to provide dynamic views from the University of Iowa events promotion system.'
+description: 'Drupal module to provide dynamic views from the Artsci events promotion system.'
 package: Artsci
 core_version_requirement: ^9 || ^10 || ^11
 configure: artsci_events.settings_form

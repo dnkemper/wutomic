@@ -2,12 +2,6 @@
 @use 'abstracts/_utilities.scss';
 
 .off-brand {
-
-  .bg--white--pattern--brain,
-  .bg--white--pattern--particle {
-    filter: grayscale(100%);
-  }
-
   // Without the block artsci logo, the top bar will not render on some headers.
   // Sticky headers.
 
@@ -37,7 +31,10 @@
     }
   }
 
-  &.no-top-links .artsci-bar.artsci-bar--narrow .o-canvas--open .o-canvas__drawer {
+  &.no-top-links
+    .artsci-bar.artsci-bar--narrow
+    .o-canvas--open
+    .o-canvas__drawer {
     @include utilities.breakpoint(md) {
       top: 90px;
     }
@@ -132,5 +129,4 @@
   .site-name img {
     max-height: 70px;
   }
-
 }

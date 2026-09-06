@@ -9,8 +9,8 @@ id: node.person.field_teaser
 field_name: field_teaser
 entity_type: node
 bundle: person
-label: 'Short Biography'
-description: 'Provide a short biography for this person. This biography is used for search engine optimization and may be used when referencing this content within the site.'
+label: 'Intro Text'
+description: ''
 required: false
 translatable: true
 default_value: {  }

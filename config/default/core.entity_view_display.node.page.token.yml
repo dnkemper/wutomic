@@ -54,7 +54,7 @@ third_party_settings:
           - 'menu_block:main'
         Superfish: {  }
         System: {  }
-        'University of Iowa Alerts': {  }
+        'University of Artsci Alerts': {  }
         User: {  }
         Webform:
           - webform_block
@@ -73,7 +73,7 @@ third_party_settings:
       - 'Site custom'
       - Superfish
       - System
-      - 'University of Iowa Alerts'
+      - 'University of Artsci Alerts'
       - User
       - Webform
       - core
@@ -129,17 +129,15 @@ content:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: large__widescreen
+      view_mode: full__ultrawide
       link: false
     third_party_settings: {  }
     weight: 0
     region: content
-  private:
-    type: private
-    label: above
+  links:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
 hidden:
   content_moderation_control: true
@@ -154,6 +152,6 @@ hidden:
   field_tags: true
   field_teaser: true
   layout_builder__layout: true
-  links: true
+  private: true
   rabbit_hole__settings: true
   search_api_excerpt: true

@@ -135,11 +135,6 @@ fields:
         compare_description_field: 0
         compare_display_field: 0
         property_separator: nl
-    field_media_facebook:
-      type: core_field_diff_builder
-      settings:
-        show_header: 1
-        markdown: drupal_html_to_text
     field_media_file:
       type: file_field_diff_builder
       settings:
@@ -981,22 +976,6 @@ fields:
       settings:
         show_header: 1
         markdown: drupal_html_to_text
-    field_artsci_cta_link:
-      type: link_field_diff_builder
-      settings:
-        show_header: 1
-        markdown: drupal_html_to_text
-        compare_title: 0
-        compare_uri: 1
-    field_artsci_cta_summary:
-      type: text_field_diff_builder
-      settings:
-        show_header: 1
-        markdown: drupal_html_to_text
-        compare_format: 0
-    field_artsci_cta_title:
-      type: hidden
-      settings: {  }
     field_artsci_events_audiences:
       type: hidden
       settings: {  }

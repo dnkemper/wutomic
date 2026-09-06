@@ -1,0 +1,19 @@
+uuid: a5723ba7-2c30-40fd-b98a-84f233e620eb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mailing_address
+    - node.type.person
+id: node.person.field_mailing_address
+field_name: field_mailing_address
+entity_type: node
+bundle: person
+label: 'Mailing Address'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

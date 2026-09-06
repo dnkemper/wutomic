@@ -1,0 +1,35 @@
+uuid: ae560986-0b53-4adb-897a-d8376eba022c
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.portrait__1024_x_1536
+    - image.style.portrait__1312_x_1968
+    - image.style.portrait__1920_x_2880
+    - image.style.portrait__2592_x_3888
+    - image.style.portrait__384_x_576
+    - image.style.portrait__768_x_1152
+    - image.style.portrait__150_x_225
+    - image.style.portrait__165_x_225
+    - image.style.portrait__227_x_304
+id: large__portrait
+label: 'Large - Portrait'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: '(min-width: 73.75em) 58.875rem, (min-width: 980px) calc(82.63vw - 2.06575rem), calc(100vw - 2.5rem)'
+      sizes_image_styles:
+        - portrait__150_x_225
+        - portrait__165_x_225
+        - portrait__227_x_304
+        - portrait__384_x_576
+        - portrait__768_x_1152
+        - portrait__1024_x_1536
+        - portrait__1312_x_1968
+        - portrait__1920_x_2880
+        - portrait__2592_x_3888
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: portrait__768_x_1152

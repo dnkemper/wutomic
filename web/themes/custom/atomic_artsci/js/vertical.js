@@ -2,13 +2,13 @@
 const ctrlVideo = document.querySelectorAll(".player");
 
 // For each one...
-for (i = 0; i < ctrlVideo.length; ++i) {
+for (let i = 0; i < ctrlVideo.length; ++i) {
 
   // Add a listener for when the video plays.
   ctrlVideo[i].onplay = (event) => {
 
     // For each video that is not the one that was clicked on...
-    for (j = 0; j < ctrlVideo.length; ++j) {
+    for (let j = 0; j < ctrlVideo.length; ++j) {
       if (ctrlVideo[j] != event.target) {
 
         // Set the video to not active/paused.

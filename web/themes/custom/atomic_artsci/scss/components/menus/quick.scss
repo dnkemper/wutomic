@@ -23,11 +23,12 @@
         display: block;
         text-decoration: none;
         color: variables.$secondary;
-        font-size: .8rem;
+        font-size: 0.8rem;
         text-transform: uppercase;
         padding: 0;
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
           text-decoration: underline;
         }
       }
@@ -35,21 +36,20 @@
   }
 }
 
-
 .menu--quick-links {
   .contextual {
     display: none;
   }
 
-  li:first-child a:before {
-    content: "\f02e";
+  li:first-child a::before {
+    content: '\f02e';
     @include utilities.fas();
     padding-right: variables.$md;
     color: white;
   }
 
-  li:nth-child(2) a:before {
-    content: "\f007";
+  li:nth-child(2) a::before {
+    content: '\f007';
     @include utilities.fas();
     padding-right: variables.$md;
     color: white;
@@ -57,15 +57,12 @@
 }
 
 .region-under-search {
-  transition: transform .4s;
+  transition: transform 0.4s;
 }
 
 .search-is-open .region-under-search .menu--quick-links {
   @include utilities.breakpoint(md) {
-    clip: auto;
-    height: auto;
-    width: auto;
-    overflow: auto;
+    @include utilities.element-invisible-off;
     position: absolute !important;
   }
 }

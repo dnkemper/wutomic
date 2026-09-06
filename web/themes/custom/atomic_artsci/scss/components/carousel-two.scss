@@ -1,0 +1,310 @@
+// ==========================================================================
+// two CAROUSEL — "From Campus to Global Conversation" style
+//
+// Shows N cards per page with dot pagination and arrows in header.
+// Responsive: 3 cards → 2 → 1 based on viewport width.
+// translateX-based paging (not scroll-snap).
+//
+// Activated by: .artsci-carousel--two
+// ==========================================================================
+@use 'carousel-base' as cb;
+
+$_gap: 1.25rem;
+
+// ==========================================================================
+// CONTAINER
+// ==========================================================================
+.artsci-carousel--two {
+  padding: var(--space-section, 3.5rem) 0;
+  position: relative;
+  // [data-carousel-slide].is-active {
+  //   background: var(--bg--teal);
+  // }
+  // [data-carousel-slide].is-focused {
+  //   background: var(--bg--teal);
+  // }
+
+  // Or treat both the same:
+  // [data-carousel-slide].is-active,
+  // [data-carousel-slide].is-focused {
+  //   background: var(--bg--teal);
+  // }
+
+  .artsci-carousel__inner {
+    max-width: var(--container-narrow, 1100px);
+    margin: 0 auto;
+    padding: 0 var(--gutter, 2rem);
+  }
+}
+
+// ==========================================================================
+// HEADER — title row + arrows
+// ==========================================================================
+.artsci-carousel__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-6, 1.5rem);
+  gap: var(--space-4, 1rem);
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.artsci-carousel__header-text {
+  flex: 1;
+}
+
+.artsci-carousel--two .artsci-carousel__pre-title {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+  color: var(--brand-red, #ba0c2f);
+}
+
+.artsci-carousel--two .artsci-carousel__title {
+  font-size: var(--text-2xl, 2rem);
+  font-weight: 700;
+  line-height: var(--leading-tight, 1.15);
+  color: #1a1a1a;
+  margin: 0;
+}
+
+// ==========================================================================
+// ARROWS
+// ==========================================================================
+.artsci-carousel--two .artsci-carousel__nav {
+  display: flex;
+  gap: 0.625rem;
+  flex-shrink: 0;
+  margin-top: 0;
+}
+
+.artsci-carousel--two .artsci-carousel__arrow {
+  @include cb.arrow-button();
+}
+
+// ==========================================================================
+// VIEWPORT + TRACK
+// ==========================================================================
+.artsci-carousel--two .artsci-carousel__viewport {
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.artsci-carousel--two .artsci-carousel__track {
+  display: flex;
+  gap: $_gap;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  overflow: visible;
+
+  // Drupal field wrapper — make transparent to flex
+  > .field {
+    display: contents;
+  }
+}
+
+// ==========================================================================
+// SLIDES — sizing (JS overrides with inline flex-basis)
+// ==========================================================================
+.artsci-carousel--two .artsci-carousel__track > [data-carousel-slide],
+.artsci-carousel--two .artsci-carousel__track > .field > [data-carousel-slide] {
+  flex: 0 0 calc((100% - #{$_gap} * 2) / 3);
+
+  @media (max-width: 980px) {
+    flex: 0 0 calc((100% - #{$_gap}) / 2);
+  }
+  @media (max-width: 600px) {
+    flex: 0 0 100%;
+  }
+}
+
+// ==========================================================================
+// two CARD — standard card within the carousel
+// ==========================================================================
+.two-card {
+  background: #fff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+  }
+}
+
+.two-card__image {
+  @include cb.card-image();
+}
+
+.two-card__body {
+  padding: var(--space-5, 1.25rem);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.two-card__meta {
+  font-size: var(--text-xs, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-red, #ba0c2f);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+
+.two-card__title {
+  font-size: 1.0625rem;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 var(--space-2, 0.5rem);
+  line-height: var(--leading-snug, 1.3);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover,
+    &:focus {
+      color: var(--brand-red);
+    }
+  }
+}
+
+.two-card__summary {
+  font-size: var(--text-sm, 0.8125rem);
+  line-height: 1.55;
+  color: var(--color-gray-700, #666);
+  margin: 0;
+  flex: 1;
+}
+
+.two-card__link {
+  margin-top: var(--space-3, 0.75rem);
+  font-size: var(--text-sm, 0.8125rem);
+  font-weight: 600;
+  color: var(--brand-red);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ==========================================================================
+// DOTS
+// ==========================================================================
+.artsci-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+  margin-top: var(--space-5, 1.25rem);
+}
+
+.artsci-carousel__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-gray-300, #b5b5b5);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+
+  &:hover {
+    border-color: var(--brand-red, #ba0c2f);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-red, #ba0c2f);
+    outline-offset: 2px;
+  }
+
+  &.is-active {
+    background: var(--brand-red, #ba0c2f);
+    border-color: var(--brand-red, #ba0c2f);
+    transform: scale(1.15);
+  }
+}
+
+// ==========================================================================
+// BACKGROUND VARIANTS (via LB Style bg_color)
+// ==========================================================================
+.artsci-carousel--two {
+  .artsci-carousel__pre-title,
+  .artsci-carousel__title {
+    color: #fff;
+  }
+
+  .artsci-carousel__arrow {
+    @include cb.arrow-button-light();
+  }
+
+  .artsci-carousel__dot {
+    border-color: rgba(255, 255, 255, 0.4);
+    &.is-active {
+      background: #fff;
+      border-color: #fff;
+    }
+  }
+
+  &.bg--warm-gray {
+    background: var(--bg-warm-gray, #e8e3db);
+  }
+  &.bg--tan {
+    background: var(--bg-tan, #f5f1eb);
+  }
+  &.bg--red {
+    background: var(--bg-red, #ba0c2f);
+
+    .artsci-carousel__pre-title,
+    .artsci-carousel__title {
+      color: #fff;
+    }
+
+    //TODO: check if .artsci-carousel__arrow needs to be here again exactly as at .artsci-carousel--two level
+    .artsci-carousel__arrow {
+      @include cb.arrow-button-light();
+    }
+
+    //TODO: check if .artsci-carousel__dot needs to be here again exactly as at .artsci-carousel--two level
+    .artsci-carousel__dot {
+      border-color: rgba(255, 255, 255, 0.4);
+      &.is-active {
+        background: #fff;
+        border-color: #fff;
+      }
+    }
+  }
+}
+
+// ==========================================================================
+// DRAG STATE
+// ==========================================================================
+.artsci-carousel--two.is-dragging {
+  .artsci-carousel__track {
+    transition: none;
+    cursor: grabbing;
+  }
+}

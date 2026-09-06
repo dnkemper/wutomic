@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -20,8 +35,13 @@
 }
 
 .bttn {
+  --bttn-color: #000000;
+  --bttn-bg: transparent;
+  --bttn-border: #ba0c2f;
+  --bttn-color-hover: #fff;
+  --bttn-bg-hover: #ba0c2f;
+  --bttn-border-hover: #ba0c2f;
   border: none;
-  display: inline-block;
   align-items: center;
   justify-content: center;
   position: relative;
@@ -35,99 +55,222 @@
   line-height: 1.7;
   letter-spacing: 0.04rem;
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
-  border: 2px solid;
-  border-color: var(--transparent-border);
 }
 .bttn i,
 .bttn span[class*=fa-],
 .bttn svg {
   margin-left: 0.625rem;
 }
+.bttn {
+  border: 2px solid;
+  border-color: var(--transparent-border);
+}
 [class*=bg--black] .bttn {
   border-color: hsla(0, 0%, 100%, 0.325);
 }
-[class*=bg--] .bttn, [class*=bg--] [class*=bg--] .bttn {
-  border-color: rgba(0, 0, 0, 0.425);
-  color: #000000;
+.bttn {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
 }
-[class*=bg--teal] .bttn {
-  border-color: white;
+.bttn:hover, .bttn:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
+}
+.bttn i,
+.bttn svg,
+.bttn span[class*=fa-] {
+  color: inherit;
+  fill: currentColor;
 }
 
 .bttn--primary {
-  color: #BA0C2F;
-  background: #fff;
-  transition: filter 0.2s ease-in-out;
+  color: black;
 }
 .bttn--primary i,
 .bttn--primary svg,
 .bttn--primary span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
 .bttn--primary:hover a, .bttn--primary:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
 .bttn--primary {
-  border-color: #BA0C2F;
+  --bttn-color: #fff;
+  --bttn-bg: #ba0c2f;
+  --bttn-border: #ba0c2f;
+  --bttn-color-hover: #fff;
+  --bttn-bg-hover: #ba0c2f;
+  --bttn-border-hover: #ba0c2f;
 }
-[class*=bg--] [class*=bg--gray] .bttn--primary, [class*=bg--gray] .bttn--primary, [class*=bg--] [class*=bg--white] .bttn--primary, [class*=bg--white] .bttn--primary {
-  border-color: #BA0C2F;
+.bttn--primary {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
+}
+.bttn--primary:hover, .bttn--primary:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
+}
+
+.bttn--primary--reverse {
+  color: #fff;
+  background: #ba0c2f;
+}
+.bttn--primary--reverse i,
+.bttn--primary--reverse svg,
+.bttn--primary--reverse span[class*=fa-] {
+  color: #fff;
+}
+.bttn--primary--reverse:hover i,
+.bttn--primary--reverse:hover svg,
+.bttn--primary--reverse:hover span[class*=fa-] {
+  color: black;
+}
+.bttn--primary--reverse {
+  --bttn-color: #fff;
+  --bttn-bg: #ba0c2f;
+  --bttn-border: #fff;
+  --bttn-color-hover: #000000;
+  --bttn-bg-hover: transparent;
+  --bttn-border-hover: #ba0c2f;
+}
+.bttn--primary--reverse {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
+}
+.bttn--primary--reverse:hover, .bttn--primary--reverse:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
 }
 
 .bttn--secondary {
   color: #fff;
-  background: #000000;
-  transition: filter 0.2s ease-in-out;
+  background: var(--bg--teal);
 }
 .bttn--secondary i,
 .bttn--secondary svg,
 .bttn--secondary span[class*=fa-] {
-  color: #BA0C2F;
+  color: #fff;
 }
-.bttn--secondary:hover a, .bttn--secondary:focus a {
-  filter: brightness(0.75);
-  text-decoration: underline;
+.bttn--secondary:hover {
+  background: #d4f1e7;
+  color: black;
+}
+.bttn--secondary:hover i,
+.bttn--secondary:hover svg,
+.bttn--secondary:hover span[class*=fa-] {
+  color: black;
+}
+.bttn--secondary {
+  --bttn-color: #fff;
+  --bttn-bg: #000000;
+  --bttn-border: #000000;
+  --bttn-color-hover: #000000;
+  --bttn-bg-hover: transparent;
+  --bttn-border-hover: #000000;
+}
+.bttn--secondary {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
+}
+.bttn--secondary:hover, .bttn--secondary:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
 }
 .bttn--secondary__light {
   color: #fff;
 }
-[class*=bg--] .bttn--secondary, [class*=bg--] [class*=bg--] .bttn--secondary {
-  border-color: rgba(255, 255, 255, 0.425);
+
+.bttn--secondary--reverse {
+  color: black;
+  background: #d4f1e7;
+}
+.bttn--secondary--reverse i,
+.bttn--secondary--reverse svg,
+.bttn--secondary--reverse span[class*=fa-] {
+  color: black;
+}
+.bttn--secondary--reverse:hover {
+  background: var(--bg--teal);
+  color: #fff;
+}
+.bttn--secondary--reverse:hover i,
+.bttn--secondary--reverse:hover svg,
+.bttn--secondary--reverse:hover span[class*=fa-] {
+  color: #fff;
+}
+.bttn--secondary--reverse {
+  --bttn-color: black;
+  --bttn-bg: #d4f1e7;
+  --bttn-border: #000000;
+  --bttn-color-hover: #d4f1e7;
+  --bttn-bg-hover: #007d8a;
+  --bttn-border-hover: #d4f1e7;
+}
+.bttn--secondary--reverse {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
+}
+.bttn--secondary--reverse:hover, .bttn--secondary--reverse:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
+}
+.bttn--secondary--reverse__light {
   color: #fff;
 }
 
 .bttn--tertiary {
   color: #000000;
-  transition: filter 0.2s ease-in-out;
 }
 .bttn--tertiary i,
 .bttn--tertiary svg,
 .bttn--tertiary span[class*=fa-] {
-  color: #BA0C2F;
+  color: #ba0c2f;
 }
 .bttn--tertiary:hover a, .bttn--tertiary:focus a {
   filter: brightness(0.75);
   text-decoration: underline;
 }
 .bttn--tertiary {
-  background: #fff;
+  --bttn-color: #000000;
+  --bttn-bg: #fff;
+  --bttn-border: #ba0c2f;
+  --bttn-color-hover: #ba0c2f;
+  --bttn-bg-hover: #fff;
+  --bttn-border-hover: #ba0c2f;
 }
-[class*=bg--teal] .bttn--tertiary, [class*=bg--] [class*=bg--teal] .bttn--tertiary {
-  color: var(--bg-teal);
-  border: white;
+.bttn--tertiary {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
 }
-[class*=bg--teal] .bttn--tertiary svg, [class*=bg--] [class*=bg--teal] .bttn--tertiary svg {
-  color: var(--bg-teal);
+.bttn--tertiary:hover, .bttn--tertiary:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
+}
+.bttn--tertiary i,
+.bttn--tertiary span[class*=fa-],
+.bttn--tertiary svg {
+  color: #000000;
 }
 
 .bttn--transparent {
   background: transparent;
   color: #000000;
-  transition: filter 0.2s ease-in-out;
 }
 .bttn--transparent i,
 .bttn--transparent svg,
@@ -138,40 +281,141 @@
   filter: brightness(0.75);
   text-decoration: underline;
 }
-[class*=bg--teal] .bttn--transparent, [class*=bg--white] [class*=bg--teal] .bttn--transparent {
-  color: #fff;
+.bttn--transparent {
+  --bttn-color: #000000;
+  --bttn-bg: transparent;
+  --bttn-border: #ba0c2f;
+  --bttn-color-hover: #fff;
+  --bttn-bg-hover: #ba0c2f;
+  --bttn-border-hover: #ba0c2f;
 }
-[class*=bg--red] .bttn--transparent i, [class*=bg--white] [class*=bg--red] .bttn--transparent i,
-[class*=bg--red] .bttn--transparent span[class*=fa-],
-[class*=bg--white] [class*=bg--red] .bttn--transparent span[class*=fa-],
-[class*=bg--red] .bttn--transparent svg,
-[class*=bg--white] [class*=bg--red] .bttn--transparent svg {
-  color: #fff;
+.bttn--transparent {
+  color: var(--bttn-color);
+  background: var(--bttn-bg);
+  border-color: var(--bttn-border);
 }
-[class*=bg--teal] .bttn--transparent i, [class*=bg--white] [class*=bg--teal] .bttn--transparent i,
-[class*=bg--teal] .bttn--transparent span[class*=fa-],
-[class*=bg--white] [class*=bg--teal] .bttn--transparent span[class*=fa-],
-[class*=bg--teal] .bttn--transparent svg,
-[class*=bg--white] [class*=bg--teal] .bttn--transparent svg {
-  color: #fff;
+.bttn--transparent:hover, .bttn--transparent:focus {
+  color: var(--bttn-color-hover);
+  background: var(--bttn-bg-hover);
+  border-color: var(--bttn-border-hover);
 }
-[class*=bg--white] .bttn--transparent i, [class*=bg--red] [class*=bg--white] .bttn--transparent i, [class*=bg--red] [class*=bg--gray] .bttn--transparent i,
-[class*=bg--white] .bttn--transparent span[class*=fa-],
-[class*=bg--red] [class*=bg--white] .bttn--transparent span[class*=fa-],
-[class*=bg--red] [class*=bg--gray] .bttn--transparent span[class*=fa-],
-[class*=bg--white] .bttn--transparent svg,
-[class*=bg--red] [class*=bg--white] .bttn--transparent svg,
-[class*=bg--red] [class*=bg--gray] .bttn--transparent svg {
-  color: #BA0C2F;
-}
-[class*=bg--black] [class*=bg--white] .bttn--transparent, [class*=bg--black] [class*=bg--gray] .bttn--transparent, [class*=bg--black] [class*=bg--red] .bttn--transparent {
+.bttn--transparent i,
+.bttn--transparent span[class*=fa-],
+.bttn--transparent svg {
   color: #000000;
+}
+.bttn--transparent i:hover,
+.bttn--transparent span[class*=fa-]:hover,
+.bttn--transparent svg:hover {
+  color: #000000;
+}
+.bttn--transparent:hover i,
+.bttn--transparent:hover span[class*=fa-],
+.bttn--transparent:hover svg {
+  color: #000000;
+}
+
+.page__container--normal .bttn--transparent:hover,
+.block-superfish .menu ul.sf-multicolumn .bttn--transparent:hover,
+.page__container--normal .bttn--primary--reverse:hover {
+  text-decoration: none;
+}
+
+.block-superfish .menu ul.sf-multicolumn .bttn--transparent:hover {
+  color: #fff;
+}
+
+[class*=bg--red] .bttn--transparent,
+[class*=bg--black] .bttn--transparent {
+  --bttn-color: #fff;
+  --bttn-border: #fff;
+  --bttn-color-hover: #000000;
+  --bttn-bg-hover: #fff;
+  --bttn-border-hover: #fff;
+}
+[class*=bg--red] .bttn--transparent i,
+[class*=bg--red] .bttn--transparent span[class*=fa-],
+[class*=bg--red] .bttn--transparent svg,
+[class*=bg--black] .bttn--transparent i,
+[class*=bg--black] .bttn--transparent span[class*=fa-],
+[class*=bg--black] .bttn--transparent svg {
+  color: #fff;
+}
+[class*=bg--red] .bttn--transparent:hover,
+[class*=bg--black] .bttn--transparent:hover {
+  background: #fff;
+  color: #000000;
+}
+[class*=bg--red] .bttn--transparent:hover i,
+[class*=bg--red] .bttn--transparent:hover span[class*=fa-],
+[class*=bg--red] .bttn--transparent:hover svg,
+[class*=bg--black] .bttn--transparent:hover i,
+[class*=bg--black] .bttn--transparent:hover span[class*=fa-],
+[class*=bg--black] .bttn--transparent:hover svg {
+  color: #000000;
+}
+[class*=bg--red] .bttn--secondary,
+[class*=bg--black] .bttn--secondary {
+  --bttn-color: #fff;
+  --bttn-bg: transparent;
+  --bttn-border: rgba(255, 255, 255, 0.425);
+  --bttn-color-hover: #000000;
+  --bttn-bg-hover: #fff;
+  --bttn-border-hover: #fff;
+}
+[class*=bg--red] .bttn--secondary i,
+[class*=bg--red] .bttn--secondary span[class*=fa-],
+[class*=bg--red] .bttn--secondary svg,
+[class*=bg--black] .bttn--secondary i,
+[class*=bg--black] .bttn--secondary span[class*=fa-],
+[class*=bg--black] .bttn--secondary svg {
+  color: #fff;
+}
+
+[class*=bg--white] .bttn--transparent,
+[class*=bg--gray] .bttn--transparent,
+[class*=bg--tan] .bttn--transparent {
+  --bttn-color: #000000;
+  --bttn-border: #ba0c2f;
+}
+
+[class*=bg--white] .bttn--transparent:hover {
+  color: #fff;
+  background: #ba0c2f;
+}
+
+[class*=bg--teal] .bttn--tertiary {
+  --bttn-color: var(--bg--teal);
+  --bttn-color-hover: var(--bg--teal);
+  --bttn-border: var(--bg--teal);
+}
+[class*=bg--teal] .bttn--tertiary i,
+[class*=bg--teal] .bttn--tertiary span[class*=fa-],
+[class*=bg--teal] .bttn--tertiary svg {
+  color: var(--bg--teal);
+}
+[class*=bg--teal] .bttn--transparent {
+  --bttn-color: #fff;
+  --bttn-border: #fff;
+  --bttn-color-hover: black;
+  --bttn-bg-hover: #fff;
+  --bttn-border-hover: #fff;
+}
+[class*=bg--teal] .bttn--transparent i,
+[class*=bg--teal] .bttn--transparent span[class*=fa-],
+[class*=bg--teal] .bttn--transparent svg {
+  color: #fff;
+}
+[class*=bg--teal] .bttn--transparent:hover i,
+[class*=bg--teal] .bttn--transparent:hover span[class*=fa-],
+[class*=bg--teal] .bttn--transparent:hover svg {
+  color: black;
 }
 
 .bttn.borderless.bttn--transparent:focus, .bttn.borderless.bttn--transparent:hover {
   text-decoration: underline;
 }
-.bttn.borderless.bttn--transparent:after {
+.bttn.borderless.bttn--transparent::after {
   display: none;
 }
 
@@ -179,34 +423,6 @@
 .bttn--no-text span[class*=fa-],
 .bttn--no-text svg {
   margin-left: 0;
-}
-.bttn--no-text:not([class*=bttn--secondary]) i,
-.bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-.bttn--no-text:not([class*=bttn--secondary]) svg {
-  color: #000000;
-}
-[class*=bg--] [class*=bg--teal] .bttn--no-text:not([class*=bttn--secondary]) i, [class*=bg--teal] .bttn--no-text:not([class*=bttn--secondary]) i, [class*=bg--] [class*=bg--red] .bttn--no-text:not([class*=bttn--secondary]) i,
-[class*=bg--] [class*=bg--teal] .bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-[class*=bg--teal] .bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-[class*=bg--] [class*=bg--red] .bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-[class*=bg--] [class*=bg--teal] .bttn--no-text:not([class*=bttn--secondary]) svg,
-[class*=bg--teal] .bttn--no-text:not([class*=bttn--secondary]) svg,
-[class*=bg--] [class*=bg--red] .bttn--no-text:not([class*=bttn--secondary]) svg {
-  color: #fff;
-}
-[class*=bg--] [class*=bg--white] .bttn--no-text:not([class*=bttn--secondary]) i, [class*=bg--white] .bttn--no-text:not([class*=bttn--secondary]) i, [class*=bg--] [class*=bg--gray] .bttn--no-text:not([class*=bttn--secondary]) i,
-[class*=bg--] [class*=bg--white] .bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-[class*=bg--white] .bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-[class*=bg--] [class*=bg--gray] .bttn--no-text:not([class*=bttn--secondary]) span[class*=fa-],
-[class*=bg--] [class*=bg--white] .bttn--no-text:not([class*=bttn--secondary]) svg,
-[class*=bg--white] .bttn--no-text:not([class*=bttn--secondary]) svg,
-[class*=bg--] [class*=bg--gray] .bttn--no-text:not([class*=bttn--secondary]) svg {
-  color: #000000;
-}
-.bttn--no-text.bttn--transparent.bttn--secondary i,
-.bttn--no-text.bttn--transparent.bttn--secondary span[class*=fa-],
-.bttn--no-text.bttn--transparent.bttn--secondary svg {
-  color: #000000;
 }
 
 .bttn--large {
@@ -221,6 +437,9 @@
 
 .bttn--full {
   display: flex;
+  flex-basis: 100%;
+  height: -moz-min-content;
+  height: min-content;
 }
 
 .bttn--caps {
@@ -235,11 +454,11 @@
 }
 
 .bttn--light-font {
+  display: inline-block;
   font-family: "ivystyle-sans", "Calibri", sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.04rem;
-  display: inline-block;
 }
 .bttn--light-font:focus {
   text-decoration: underline;
@@ -259,7 +478,7 @@
   transform: none;
   line-height: 1;
 }
-.bttn--circle:after {
+.bttn--circle::after {
   left: 0;
   top: 0;
   height: 100%;
@@ -268,7 +487,7 @@
   transition: border-color 0.3s ease-in-out;
   transform: none;
 }
-.bttn--circle:hover:after, .bttn--circle:focus:after {
+.bttn--circle:hover::after, .bttn--circle:focus::after {
   transform: none;
   transition: none;
   border: 3px solid;
@@ -293,19 +512,13 @@
   }
 }
 
-.bttn--full {
-  flex-basis: 100%;
-  height: -moz-min-content;
-  height: min-content;
-}
-
 .more-link {
   margin-top: 2rem;
 }
 
 .block.bttn--row {
-  flex-direction: column;
   display: flex;
+  flex-direction: column;
   gap: 1.5rem;
 }
 .block.bttn--row.bttn--row--horizontal {
@@ -318,8 +531,8 @@
 }
 @media (min-width: 768px) {
   .block.bttn--row.bttn--full {
-    flex-direction: row;
     display: flex;
+    flex-direction: row;
     gap: 1.5rem;
   }
 }
@@ -354,4 +567,21 @@
 .layout--fourcol .block.bttn--row.bttn--full,
 .layout--page--left-sidebar.layout--has-sidebar .block.bttn--row.bttn--full {
   flex-direction: column;
-}/*# sourceMappingURL=button.css.map */
+}
+
+/* Video Play Button */
+.oembed-thumbnail__cta:hover {
+  background-color: #ba0c2f;
+  color: #fff;
+}
+.oembed-thumbnail__cta:hover .oembed-thumbnail__cta-icon {
+  background-color: #fff;
+}
+.oembed-thumbnail__cta:hover .oembed-thumbnail__cta-icon svg {
+  background-color: #fff;
+}
+.oembed-thumbnail__cta:hover .oembed-thumbnail__cta-icon svg path {
+  fill: #ba0c2f;
+}
+
+/*# sourceMappingURL=button.css.map */

@@ -7,9 +7,7 @@ dependencies:
     - node.type.book
     - system.menu.main
   module:
-    - datetime
     - node
-    - paragraphs
     - user
 id: books
 label: Books
@@ -265,7 +263,7 @@ display:
         type: normal
         title: Books
         description: ''
-        weight: -45
+        weight: -44
         enabled: false
         expanded: true
         menu_name: main

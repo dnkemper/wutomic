@@ -7,7 +7,6 @@ dependencies:
     - block_content.type.artsci_banner
     - block_content.type.artsci_card
     - block_content.type.artsci_collection
-    - block_content.type.artsci_cta
     - block_content.type.artsci_image
     - block_content.type.artsci_statistic
     - block_content.type.artsci_text_area
@@ -40,7 +39,6 @@ dependencies:
     - artsci_core
     - artsci_pages
     - artsci_people
-    - artsci_search
     - block_content
     - content_moderation
     - contextual
@@ -49,7 +47,6 @@ dependencies:
     - entity_usage
     - file
     - filter
-    - find_text
     - fontawesome
     - fragments
     - layout_builder
@@ -89,7 +86,6 @@ permissions:
   - 'access entity usage statistics'
   - 'access featured_content_browser entity browser pages'
   - 'access files overview'
-  - 'access find text'
   - 'access fontawesome additional settings'
   - 'access fragments overview'
   - 'access layout builder direct add more options'
@@ -147,11 +143,8 @@ permissions:
   - 'administer artsci articles'
   - 'administer artsci pages'
   - 'administer artsci people'
-  - 'administer artsci_search configuration'
   - 'administer basic site settings'
   - 'administer footer-primary menu items'
-  - 'administer footer-secondary menu items'
-  - 'administer footer-tertiary menu items'
   - 'administer link field attributes'
   - 'administer main menu items'
   - 'administer maintenance mode'
@@ -177,7 +170,6 @@ permissions:
   - 'create artsci_banner block content'
   - 'create artsci_card block content'
   - 'create artsci_collection block content'
-  - 'create artsci_cta block content'
   - 'create artsci_image block content'
   - 'create artsci_statistic block content'
   - 'create artsci_text_area block content'
@@ -200,7 +192,6 @@ permissions:
   - 'delete any artsci_banner block content'
   - 'delete any artsci_card block content'
   - 'delete any artsci_collection block content'
-  - 'delete any artsci_cta block content'
   - 'delete any artsci_image block content'
   - 'delete any artsci_statistic block content'
   - 'delete any artsci_text_area block content'
@@ -237,7 +228,6 @@ permissions:
   - 'edit any artsci_banner block content'
   - 'edit any artsci_card block content'
   - 'edit any artsci_collection block content'
-  - 'edit any artsci_cta block content'
   - 'edit any artsci_image block content'
   - 'edit any artsci_statistic block content'
   - 'edit any artsci_text_area block content'

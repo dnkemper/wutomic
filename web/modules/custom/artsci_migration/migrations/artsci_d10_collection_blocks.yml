@@ -1,0 +1,150 @@
+id: artsci_d10_collection_blocks
+label: 'D10 source nodes → artsci_collection block_content (one per node)'
+migration_group: artsci_d10
+migration_tags:
+  - artsci_d10
+
+# For each D10 departments_programs or majors_minors node that has
+# sample_courses paragraphs, create ONE artsci_collection block_content
+# entity grouping its migrated artsci_collection_item paragraphs. The
+# image_card node migrations then reference this block via
+# field_artsci_collection (entity_reference to block_content).
+#
+# Both source bundles are fetched in one migration via two source URLs.
+# Nodes without sample_courses paragraphs are filtered out via the
+# _skip_check process step below.
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls:
+    - 'https://artsci.washu.edu/jsonapi/node/departments_programs?page[limit]=50&sort=drupal_internal__nid'
+    - 'https://artsci.washu.edu/jsonapi/node/majors_minors?page[limit]=50&sort=drupal_internal__nid'
+  headers:
+    Accept: 'application/vnd.api+json'
+  item_selector: data
+  pager:
+    type: urls
+    selector: 'links/next/href'
+
+  constants:
+    info_suffix: 'Sample Courses'
+
+  # Source rows keyed on the D10 node's nid. The image_card node
+  # migrations look up this block via migration_lookup against the
+  # current node's nid, so the key must match.
+  ids:
+    nid:
+      type: integer
+
+  fields:
+    - name: nid
+      label: 'D10 source NID'
+      selector: 'attributes/drupal_internal__nid'
+    - name: uuid
+      label: 'D10 source UUID'
+      selector: 'id'
+    - name: title
+      label: 'Source title (used to build the block info label)'
+      selector: 'attributes/title'
+    - name: langcode
+      label: Language
+      selector: 'attributes/langcode'
+    - name: status
+      label: Status
+      selector: 'attributes/status'
+    # Array of {type, id, meta} refs to sample_courses paragraphs.
+    # Drives both the skip check and the sub_process below.
+    - name: source_sample_courses_refs
+      label: 'D10 field_sample_courses_p paragraph refs'
+      selector: 'relationships/field_sample_courses_p/data'
+
+process:
+  # Skip nodes that have no sample_courses paragraphs. method: row halts
+  # the whole row so no empty artsci_collection block is created.
+  _skip_check:
+    plugin: skip_on_empty
+    method: row
+    source: source_sample_courses_refs
+
+  type:
+    plugin: default_value
+    default_value: artsci_collection
+
+  langcode:
+    plugin: default_value
+    default_value: en
+    source: langcode
+
+  status:
+    plugin: default_value
+    default_value: 1
+    source: status
+
+  # Human-readable block label: "Department of Foo — Sample Courses".
+  info:
+    plugin: concat
+    source:
+      - title
+      - constants/info_suffix
+    delimiter: ' — '
+
+  # ---- Accordion appearance settings ----
+  # TODO: Replace the placeholder values below with real allowed_values
+  # from the field storage. Inspect with:
+  #   ddev drush config:get field.storage.block_content.field_accordion_type allowed_values
+  #   ddev drush config:get field.storage.block_content.field_accordion_label_color allowed_values
+  # The migration will fail validation on these placeholder strings.
+  field_accordion_type:
+    plugin: default_value
+    default_value: single_select
+
+  field_accordion_label_color:
+    plugin: default_value
+    default_value: gray
+
+  # ---- Headline ----
+  # field_artsci_headline is a custom 'artsci_headline' compound field type.
+  # Leaving unmapped on initial migration since I don't know its property
+  # structure from here. Confirm with:
+  #   ddev drush ev "var_export(\Drupal\field\Entity\FieldStorageConfig::loadByName('block_content', 'field_artsci_headline')->getPropertyDefinitions());"
+  # then uncomment & map the right sub-property to title (and optionally
+  # a 'pre_headline' sub-property if it exists).
+  # 'field_artsci_headline/headline': title
+
+  # ---- Collection items ----
+  # entity_reference_revisions field. Same pattern as field_person_contact_information
+  # on the person migration: stash migration_lookup result, then extract index 0
+  # (target_id) and index 1 (target_revision_id) into the field's sub-properties.
+  # Doing this inside a sub_process so multiple referenced paragraphs each get
+  # their own delta.
+  field_artsci_collection_items:
+    plugin: sub_process
+    source: source_sample_courses_refs
+    process:
+      _lookup:
+        - plugin: migration_lookup
+          migration: artsci_d10_sample_courses_items
+          source: meta/drupal_internal__target_id
+          no_stub: true
+        - plugin: skip_on_empty
+          method: process
+      target_id:
+        plugin: extract
+        source: '@_lookup'
+        index:
+          - 0
+      target_revision_id:
+        plugin: extract
+        source: '@_lookup'
+        index:
+          - 1
+
+destination:
+  plugin: 'entity:block_content'
+  default_bundle: artsci_collection
+
+migration_dependencies:
+  required:
+    - artsci_d10_sample_courses_items
+  optional: []

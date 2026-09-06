@@ -13,7 +13,12 @@ libraries-extend:
   core/drupal.message:
     - atomic_artsci/message
 libraries:
+  - atomic_artsci/typekit
   - atomic_artsci/global-styling
+  - atomic_artsci/layouts
+favicon:
+  use_default: false
+  path: favicon.ico
 regions:
   under_search: 'Under search'
   page_top: 'Page top'

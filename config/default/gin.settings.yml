@@ -12,13 +12,13 @@ logo:
 third_party_settings:
   shortcut:
     module_link: true
-preset_accent_color: neutral
+preset_accent_color: custom
 preset_focus_color: gin
 enable_darkmode: '0'
 classic_toolbar: classic
 secondary_toolbar_frontend: true
 high_contrast_mode: false
-accent_color: ''
+accent_color: '#BA0C2F'
 focus_color: ''
 layout_density: medium
 show_description_toggle: true

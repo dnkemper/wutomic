@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Theme implementation for an artsci_collection_item rendered as a panel
+ * inside a horizontal timeline.
+ *
+ * Field mapping:
+ * - field_collection_headline: the year label (e.g. "1969"). Used both as the
+ *   dot label on the rail and as the red eyebrow above the panel title.
+ * - field_collection_body: full HTML content (heading, paragraph, CTA, image).
+ *   Editors can embed an image with right alignment via the Drupal media
+ *   embed dialog to get the side-by-side layout.
+ *
+ * Variables provided by atomic_artsci_preprocess_paragraph():
+ * - parent_id: ID of the parent block.
+ * - delta: this paragraph's index in the parent collection.
+ */
+#}
+{% set panel_id = 'h-timeline-' ~ parent_id ~ '__panel--' ~ delta %}
+{% set panel_labelled_by = 'h-timeline-' ~ parent_id ~ '__dot--' ~ delta %}
+<div tabindex="0"
+     role="tabpanel"
+     id="{{ panel_id }}"
+     aria-labelledby="{{ panel_labelled_by }}"
+     class="h-timeline__panel"
+     {{ delta == 0 ? '' : 'hidden="hidden"' }}>
+  <div class="h-timeline__panel-inner">
+    <div class="h-timeline__panel-content">
+      <span class="h-timeline__panel-year">{{ content.field_collection_headline }}</span>
+      <div class="h-timeline__panel-body">
+        {{ content.field_collection_body }}
+      </div>
+    </div>
+  </div>
+</div>

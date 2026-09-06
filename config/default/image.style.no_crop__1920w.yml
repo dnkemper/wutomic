@@ -1,7 +1,9 @@
 uuid: a0512bf9-adce-42af-9f19-e28b5748638a
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - image
 _core:
   default_config_hash: zHkEL6aXU4SdSolD6nQZ2Kk5EFEjthMiJH3wdCGcVaw
 name: no_crop__1920w
@@ -15,3 +17,9 @@ effects:
       width: 1920
       height: null
       upscale: false
+  d9f303f9-7c99-40cf-9916-043bf11528d9:
+    uuid: d9f303f9-7c99-40cf-9916-043bf11528d9
+    id: image_convert_avif
+    weight: 2
+    data:
+      extension: webp

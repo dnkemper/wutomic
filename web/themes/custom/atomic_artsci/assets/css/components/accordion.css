@@ -1,18 +1,33 @@
 :root {
+  --font-family-sans-serif: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-serif: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-serif-alt: 'ivypresto-headline', 'Georgia', serif;
+  --font-family-caps: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-family-caps-light: 'ivystyle-sans', 'Calibri', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-medium-bold: 600;
+  --font-weight-bold: 500;
+  --font-weight-heavy: 900;
+  --content-font-size: 1.2rem;
+  --font-family-caps-bold: 'ivystyle-sans', 'Calibri', sans-serif;
   font-size: 16px;
-  --bg-teal: #367B88;
-  --bg-red: #BA0C2F;
-  --bg-gray: #EDEAE1;
-  --artsci-gold: #BA0C2F;
+  --bg--teal: #007d8a;
+  --bg--red: #ba0c2f;
+  --bg--red-gradient: linear-gradient(90deg, #cb2237 0%, #971b2f 100%);
+  --bg--gray: #f4f2ed;
+  --bg--dark-gray: #eae8e4;
+  --artsci-red: #ba0c2f;
   --artsci-black: #000000;
-  --brand-primary: var(--artsci-gold);
+  --brand-primary: var(--artsci-red);
   --brand-secondary: var(--artsci-black);
-  --artsci-gray-cool: #63666A;
-  --link-color: #BA0C2F;
-  --artsci-light: #F3F3F3;
+  --artsci-gray-cool: #f4f2ed;
+  --link-color: #ba0c2f;
+  --artsci-light: #edeae1;
   --artsci-gray-mid: #9a9a9a;
   --artsci-gray: #737373;
-  --artsci-gray-light: #CACACA;
+  --artsci-gray-light: #cacaca;
   --transparent-border: rgb(0, 0, 0, 0);
   --space-lg-width-gutter: 3rem;
   --space-md-width-gutter: 2rem;
@@ -22,11 +37,13 @@
 .accordion {
   --trans-time: 0.2s;
   --accordion-label-color: var(--artsci-light);
-  --accordion-label-color-hover: rgb(229.5, 229.5, 229.5);
+  --accordion-label-color-hover: #e8e6e1;
   --accordion-outline-color: var(--artsci-gray-cool);
-  --accordion-border-color: var(--artsci-gray-light);
+  --accordion-border-color: #00000033;
+  --accordion-content-bg: #edeae1;
 }
-.accordion details[open] summary i, .accordion details[open] summary svg {
+.accordion details[open] summary i,
+.accordion details[open] summary svg {
   transform: rotate(0deg) translate(0px, 0.1em);
 }
 .accordion summary {
@@ -34,6 +51,8 @@
   background-color: var(--accordion-label-color);
   display: flex;
   cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
 }
 .accordion summary:hover, .accordion summary:focus {
   background-color: var(--accordion-label-color-hover);
@@ -42,7 +61,8 @@
 .accordion summary::-webkit-details-marker {
   visibility: hidden;
 }
-.accordion summary i, .accordion summary svg {
+.accordion summary i,
+.accordion summary svg {
   transition: all var(--trans-time) ease-in-out;
   width: 1.4rem;
   height: 1.4rem;
@@ -54,13 +74,13 @@
   transition-property: transform, background-color;
   background-color: transparent;
   transform: rotate(-180deg) translate(0px, -0.1em);
-  color: #BA0C2F;
+  color: #971b2f;
 }
 .accordion .accordion__heading :is(h2, h3, h4, h5, h6) {
   all: inherit;
   border: none;
   display: flex;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
   padding: 1.05rem;
   width: 100%;
@@ -71,7 +91,7 @@
   outline: 2px auto -webkit-focus-ring-color;
 }
 .accordion .accordion__content {
-  background-color: #fff;
+  background-color: var(--accordion-content-bg);
   padding: 1.05rem;
   border-top: 1px solid var(--accordion-border-color);
 }
@@ -101,16 +121,17 @@
   --accordion-label-color-hover: var(--artsci-light);
   --accordion-outline-color: var(--artsci-gray-mid);
   --accordion-border-color: var(--artsci-gray-light);
+  --accordion-content-bg: #fff;
 }
 
 .collection--accordion .accordion__content {
-  background-color: #fff;
+  background-color: var(--accordion-content-bg);
 }
 .collection--accordion .accordion__content:not([hidden]) {
   display: flow-root;
 }
 .collection--accordion .accordion__content blockquote {
-  border-color: #BA0C2F;
+  border-color: #ba0c2f;
   color: #000000;
 }
 .collection--accordion .accordion__content blockquote a {
@@ -131,4 +152,6 @@ details.accordion__item summary {
 
 .accordion .accordion__heading button.border {
   border: 1px solid rgba(0, 0, 0, 0.25);
-}/*# sourceMappingURL=accordion.css.map */
+}
+
+/*# sourceMappingURL=accordion.css.map */

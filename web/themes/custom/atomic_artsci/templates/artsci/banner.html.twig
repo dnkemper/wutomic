@@ -48,18 +48,22 @@
       {{ banner_image }}
     {% endif %}
   {% endblock %}
-{% set has_banner_content = banner_title is not empty and banner_pre_title is not empty and banner_summary is not empty %}
+{% set has_banner_content = banner_title is not empty or banner_pre_title is not empty or banner_summary is not empty %}
+{% set has_banner_image = banner_image is not empty %}
 
   {# Set content classes based on whether content exists #}
   {% set content_classes = ['banner__content'] %}
   {% if has_banner_content %}
     {% set content_classes = content_classes|merge(['banner__content--has-content']) %}
   {% endif %}
+  {% if has_banner_image %}
+    {% set content_classes = content_classes|merge(['banner__content--has-image']) %}
+  {% endif %}
 
   <div class="{{ content_classes|join(' ') }}">
     {% block heading %}
-      {% if banner_title is not empty %}
-        {# Pre-title should only display if title is also being displayed. #}
+      {% if banner_title is not empty or banner_pre_title is not empty %}
+        {# Pre-title displays above the main headline #}
         {% if banner_pre_title is not empty %}
           {% set banner_pre_title_heading = {
             'headline_level': 'div',
@@ -68,18 +72,21 @@
           } %}
           {% include '@atomic_artsci/artsci/headline.html.twig' with banner_pre_title_heading only %}
         {% endif %}
-        {# @todo Determine if it is better to programatically set level and class via preprocess. #}
-        {% set banner_heading = {
-          'headline_level': headline_level ?: 'h2',
-          'headline_class' : headline_class,
-          'headline_text' : banner_title,
-          'headline_url': link.link_url,
-          'headline_aria': banner_aria_describedby,
-          'headline_attributes': headline_attributes ?: null,
-          'headline_url_attributes': link_element == 'title' ? link.link_attributes|default({}) : null,
-          'headline_url_class': link_element == 'title' ? 'click-target' : null,
-        } %}
-        {% include '@atomic_artsci/artsci/headline.html.twig' with banner_heading only %}
+        {# Main headline #}
+        {% if banner_title is not empty %}
+          {# @todo Determine if it is better to programatically set level and class via preprocess. #}
+          {% set banner_heading = {
+            'headline_level': headline_level ?: 'h2',
+            'headline_class' : headline_class,
+            'headline_text' : banner_title,
+            'headline_url': link.link_url,
+            'headline_aria': banner_aria_describedby,
+            'headline_attributes': headline_attributes ?: null,
+            'headline_url_attributes': link_element == 'title' ? link.link_attributes|default({}) : null,
+            'headline_url_class': link_element == 'title' ? 'click-target' : null,
+          } %}
+          {% include '@atomic_artsci/artsci/headline.html.twig' with banner_heading only %}
+        {% endif %}
       {% endif %}
     {% endblock %}
 
@@ -97,7 +104,6 @@
                 <a {{ link_button_attributes.addClass(button_classes) }}
                   href="{{ link.link_url }}">
                   {{ link.link_text }}
-                  <span role="presentation" class="fas fa-arrow-right"></span>
                 </a>
               {% endfor %}
             </div>
@@ -108,15 +114,15 @@
               <a {{ link_button_attributes.addClass(button_classes, 'click-target') }}
                 href="{{ link.link_url }}">
                 {{ link.link_text }}
-                <i role="presentation" class="fas fa-arrow-right"></i>
               </a>
             {% elseif show_button %}
               {# Display as a pseudo-link. #}
-              <div
-                aria-hidden="true" {{ button_attributes.addclass(button_classes) }} {% if banner_aria_describedby %} id="{{ banner_aria_describedby }}" {% endif %}>
+              <a
+                {{ button_attributes.addclass(button_classes) }}
+                {% if banner_aria_describedby %} id="{{ banner_aria_describedby }}"
+                {% endif %} href="{{ link.link_url }}">
                 {{ link.link_text }}
-                <i role="presentation" class="fas fa-arrow-right"></i>
-              </div>
+            </a>
             {% endif %}
           {% endif %}
         </div>

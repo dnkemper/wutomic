@@ -1,17 +1,9 @@
 @use '../abstracts/variables.scss';
 @use '../abstracts/_utilities.scss';
 
-.layout--fourcol,
-.layout--threecol,
-.layout--twocol {
-  .card__row {
-    flex: 1 1 100%;
-  }
-}
-
-// Event block
 .artsci-card-event.card.card--media-left {
   margin-bottom: 0;
+
   @include utilities.breakpoint(sm) {
     flex-direction: unset;
   }
@@ -24,156 +16,147 @@
   }
 }
 
-// Events List
 .artsci-events,
 .artsci-card-event {
-
-  .card {
-    &__row {
-      @include utilities.breakpoint(sm) {
-        display: flex;
-        justify-content: center;
-        flex-wrap: nowrap;
-        border: none;
-        padding: 1.5rem 0;
-        background: transparent;
-      }
+  .card__row {
+    @include utilities.breakpoint(sm) {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      border: none;
+      padding: 1.5rem 0;
+      background: transparent;
     }
   }
 
-  &.hide-descriptions,
-  .paragraph--type--events.hide-descriptions & {
-    .card__description {
-      display: none;
-    }
-  }
-
+  // Image position modifier
   &.image-right .media.media--circle {
     @include utilities.breakpoint(sm) {
+      order: 1;
       margin-left: 15px;
       margin-right: 0;
-      order: 1;
 
-      &+.card__body {
+      + .card__body {
         padding-left: 0;
         padding-right: 1.25rem;
       }
     }
   }
 
-  &.hide-images,
-  .paragraph--type--events.hide-images &,
-    {
-    .media.media--circle {
-      display: none;
-
-      &+.card__body {
-        @include utilities.breakpoint(sm) {
-          padding: 0;
-        }
-      }
-    }
-  }
-
+  // Hide details modifier
   &.hide-details .card__details {
     display: none;
   }
-
-  .paragraph--type--events.grid & {
-    .card {
-      &__row {
-        margin-top: 0!important;
-        display: inline-block;
-        padding: 1.5rem;
-        margin: 0;
-        flex-basis: 33%;
-        border: none;
-      }
-
-      .media {
-        max-width: 165px;
-        margin: 0 auto 1.25rem;
-        .media__inner {
-          margin-right: 0 !important;
-        }
-      }
-
-      &__body {
-        text-align: center;
-      }
-    }
-  }
-
-  .paragraph--type--events.masonry & {
-    .card {
-      &__row {
-        margin-top: 0!important;
-        display: inline-block;
-        padding: 1.5rem;
-        border: none;
-      }
-
-      .media {
-        max-width: 165px;
-        margin: 0 auto 1.25rem;
-        .media__inner {
-          margin-right: 0 !important;
-        }
-      }
-
-      &__body {
-        text-align: center;
-      }
-    }
-  }
 }
 
-.container-fluid {
-  margin: 0 auto;
-  width: 100%;
-  padding-right: 0;
-  padding-left: 0;
+.artsci-events-wrapper.list-container__inner h2 a {
+  color: black;
+  text-decoration: none;
 }
 
-// v2 styles
+.event-date {
+  margin: 10px 0;
+  color: variables.$primary;
+  font-family: var(--font-family-sans-serif);
+  font-weight: 600;
+  font-size: inherit;
+  line-height: 150%;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
 
-.bg-black .paragraph--type--events {
-  color: #fff;
+h3.event-details__heading {
+  color: variables.$primary;
+  font-family: var(--font-family-sans-serif);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+// .event-details__date {
+//   font-family: 'IvyPresto Headline', serif;
+//   font-weight: 400;
+//   font-size: 24px;
+//   line-height: 140%;
+//   letter-spacing: 0;
+// }
+
+.event-details {
+  font-size: 1rem;
+  line-height: 2;
+  text-align: left;
 
   a {
+    text-decoration: none;
+  }
+
+  svg {
+    margin-right: 5px;
     color: variables.$primary;
   }
 }
 
-.paragraph--type--section.bg-black .paragraph--type--events {
-  color: inherit;
+// Hide duplicate location block
+.block-margin__top.block.block-layout-builder.block-field-blocknodeeventfield-event-location,
+.block.block-layout-builder.block-field-blocknodeeventfield-is-shared {
+  display: none;
+}
+
+.add-to-cal.flex {
+  align-items: center;
+}
+
+.block.block-layout-builder.block-field-blocknodeeventfield-event-virtual {
+  text-align: left;
 
   a {
-    color: inherit;
+    @include utilities.bttn;
+    @include utilities.bttn--tertiary;
+    @include utilities.bttn--focus;
+    border: 2px solid variables.$primary;
   }
 }
-
-
-.paragraph.bg-black .paragraph--type--events .card__body a:not(.btn):not(.bttn):not(.button),
-.paragraph.bg-dark .paragraph--type--events .card__body a:not(.btn):not(.bttn):not(.button) {
-  color: #fff;
+a.artsci-backtolink {
+  color: white;
+  font-family: var(--font-family-sans-serif);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
   text-decoration: none;
-  ;
-}
+  text-transform: unset !important;
 
-.paragraph--type--events {
-  .card {
-    background: transparent;
+  .artsci-backtolink__icon {
+    display: inline-block;
   }
 }
 
-.bg-yellow.paragraph .paragraph--type--events.list .card,
-.bg-black.paragraph.paragraph--type--section .paragraph--type--events.list .card,
-.bg-dark.paragraph.paragraph--type--section .paragraph--type--events.list .card {
-  border-bottom: none;
+.block-artsci-core-backtolink a:hover {
+  text-decoration: underline;
 }
 
-.bg-black.paragraph.paragraph--type--section .media--border img,
-.bg-dark.paragraph.paragraph--type--section .media--border img {
-  border: 1px solid variables.$primary;
+span.add-to-calendar a {
+  color: black;
+}
+.field--name-field-rsvp-form.field--type-webform,
+.block-field-blocknodeeventfield-event-series-link {
+  text-align: left;
+
+  a {
+    @include utilities.bttn;
+    @include utilities.bttn--primary;
+    @include utilities.bttn--focus;
+    color: white;
+  }
+}
+.page-node-type-event {
+  .layout .layout__region--first {
+    align-content: center;
+  }
+  .layout__region-container.card {
+    border-left: 2px solid variables.$primary;
+  }
 }

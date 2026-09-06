@@ -55,12 +55,16 @@ ul.sf-mega-menu.sf-accordion li li.sf-depth-2.sfHover > ul {
 
 .block-superfish .sf-mega-menu .sf-multicolumn {
   position: absolute;
+  z-index: 999;
   width: 100%;
-  border-top: 1px solid #e1e1e1;
-  border-block-start: 1px solid #e1e1e1;
-  box-shadow: 0 0.3px 0.4px rgba(0, 0, 0, 0.025),0 0.9px 1.5px rgba(0, 0, 0, 0.05),0 3.5px 6px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #ba0c2f;
+  border-block-start: 1px solid #ba0c2f;
+  box-shadow:
+    0 0.3px 0.4px rgba(0, 0, 0, 0.025),
+    0 0.9px 1.5px rgba(0, 0, 0, 0.05),
+    0 3.5px 6px rgba(0, 0, 0, 0.1);
   @include utilities.breakpoint(page-container) {
-    left: calc(50% - 665px);
+    left: calc(50% - 765px);
     width: 1310px;
   }
 }
@@ -70,7 +74,7 @@ ul.sf-mega-menu.sf-accordion li li.sf-depth-2.sfHover > ul {
   & > ol {
     display: grid;
     gap: 0 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr) );
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     padding: variables.$md;
     @include utilities.breakpoint(page-container) {
       padding: 1.5rem variables.$mobile-height-gutter;
@@ -84,8 +88,16 @@ ul.sf-mega-menu.sf-accordion li li.sf-depth-2.sfHover > ul {
   }
 }
 
-.block-superfish .sf-mega-menu .sf-multicolumn .sf-multicolumn-wrapper li.sf-depth-2,
-.block-superfish .sf-mega-menu .sf-multicolumn .sf-multicolumn-wrapper li.sf-depth-3 {
+.block-superfish
+  .sf-mega-menu
+  .sf-multicolumn
+  .sf-multicolumn-wrapper
+  li.sf-depth-2,
+.block-superfish
+  .sf-mega-menu
+  .sf-multicolumn
+  .sf-multicolumn-wrapper
+  li.sf-depth-3 {
   // overrides
   width: 100%;
 }
@@ -95,7 +107,7 @@ ul.sf-mega-menu.sf-accordion li li.sf-depth-2.sfHover > ul {
   line-height: 1.2;
 }
 
-.block-superfish .sf-mega-menu .sf-multicolumn li  {
+.block-superfish .sf-mega-menu .sf-multicolumn li {
   float: none;
   line-height: 1;
 }
@@ -125,5 +137,102 @@ ul.sf-mega-menu.sf-accordion li li.sf-depth-2.sfHover > ul {
 
   .is-active {
     text-decoration: underline;
+  }
+}
+
+// Mega menu featured panel
+// When a top-level link has panel content, the rendered .mega-panel sits as a
+// sibling of the column list inside .sf-multicolumn-wrapper. Switch the wrapper
+// to a two-track grid (panel left, columns right) only when a panel is present,
+// so dropdowns without a panel keep their full-width column grid untouched.
+.block-superfish .sf-mega-menu .sf-multicolumn-wrapper:has(.mega-panel) {
+  @include utilities.breakpoint(page-container) {
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) 1fr;
+    align-items: start;
+  }
+}
+
+.block-superfish .sf-mega-menu .mega-panel {
+  padding: variables.$md;
+  @include utilities.breakpoint(page-container) {
+    padding: 1.5rem variables.$mobile-height-gutter;
+  }
+
+  &__media img {
+    display: block;
+    width: 100%;
+    // Match the comp: crop to a 263 x 300 portrait box with rounded corners,
+    // regardless of the source responsive image style's native ratio. Cap
+    // max-width to pin it to the comp's exact 263px; remove to fill the track.
+    max-width: 16.4375rem; // 263px
+    aspect-ratio: 263 / 300;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  &__headline {
+    margin: 1rem 0 0.5rem;
+  }
+
+  &__link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid #ba0c2f;
+    border-radius: 2rem;
+    color: #ba0c2f;
+    font-weight: variables.$font-weight-bold;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      background: #ba0c2f;
+      color: #fff;
+    }
+  }
+}
+
+// Mega menu link hierarchy
+// Match the comp: second-level items read as crimson section headers, third
+// level items as dark leaf links, with clear separation between groups. Scoped
+// under .sf-mega-menu .sf-multicolumn with depth classes so it wins over the
+// shared nested-link color rules in superfish.scss / horizontal-menu.scss.
+.block-superfish .sf-mega-menu .sf-multicolumn {
+  // Section headers (second level), whether linked or a nolink label.
+  a.sf-depth-2,
+  span.sf-depth-2,
+  .sf-depth-2.nolink {
+    color: variables.$primary;
+    font-weight: variables.$font-weight-medium-bold;
+  }
+
+  // Leaf links (third level).
+  a.sf-depth-3,
+  span.sf-depth-3,
+  .sf-depth-3.nolink {
+    color: variables.$secondary;
+    font-weight: variables.$font-weight-normal;
+  }
+
+  // Underline on interaction and for the active link.
+  a:hover,
+  a:focus,
+  a.is-active {
+    text-decoration: underline;
+  }
+
+  // Separate each section group within a column.
+  & > ol > li.sf-depth-2 {
+    margin-bottom: 1.25rem;
+  }
+
+  // Small gap between a header and its own child list.
+  & > ol > li.sf-depth-2 > .sf-multicolumn-column > a.sf-depth-2,
+  & > ol > li.sf-depth-2 > .sf-multicolumn-column > .sf-depth-2.nolink {
+    display: inline-block;
+    margin-bottom: 0.25rem;
   }
 }

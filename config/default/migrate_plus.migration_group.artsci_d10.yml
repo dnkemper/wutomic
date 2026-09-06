@@ -1,0 +1,12 @@
+uuid: 71007abc-2b07-4552-a514-6fdfa7d5be3f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: uGov9V9mtwyxvwOXkMOuX2k1RuvHsXZldrn1W2UKC9A
+id: artsci_d10
+label: 'Artsci D10 import'
+description: 'Migrations that pull legacy D10 content into D11 via JSON:API.'
+source_type: 'JSON:API'
+module: null
+shared_configuration: {  }

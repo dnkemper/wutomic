@@ -101,7 +101,7 @@ class PeopleBlockViewTest extends BrowserTestBase {
         'field_person_last_name' => [
           'value' => $this->randomGenerator->name(),
         ],
-        'field_person_position' => [
+        'field_person_department' => [
           'value' => $this->randomGenerator->name(),
         ],
       ];

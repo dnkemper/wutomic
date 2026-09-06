@@ -14,20 +14,12 @@ class Person extends NodeBundleBase implements RendersAsCardInterface {
   use StringTranslationTrait;
 
   /**
-   * If entity has link directly to source field.
-   *
-   * @var string|null
-   *   field name or null.
-   */
-  protected $sourceLinkDirect = 'field_person_website_link_direct';
-
-  /**
    * If entity has source link field.
    *
    * @var string|null
    *   field name or null.
    */
-  protected $sourceLink = 'field_person_website';
+  protected $sourceLink = 'field_external_link';
 
   /**
    * {@inheritdoc}
@@ -61,13 +53,12 @@ class Person extends NodeBundleBase implements RendersAsCardInterface {
     // Add the media library.
     $build['#attached']['library'][] = 'atomic_artsci/media';
 
-    // Process additional card mappings.
+    // Department becomes the card subtitle; contact fields become the meta.
+    // mapFieldsToCardBuild() skips hidden fields internally, so no manual
+    // hide_fields handling is needed here.
     $this->mapFieldsToCardBuild($build, [
-      '#subtitle' => 'field_person_position',
-      '#meta' => [
-        'field_person_email',
-        'field_person_website',
-      ],
+      '#subtitle' => 'field_person_department',
+      '#meta' => [],
     ]);
 
     // Handle link directly to source functionality.
@@ -94,7 +85,7 @@ class Person extends NodeBundleBase implements RendersAsCardInterface {
       parent::getDefaultCardStyles(),
       [
         'card_media_position' => 'card--layout-left',
-        'media_format' => 'media--circle media--border',
+        'media_format' => 'media--square media--border',
       ]
     );
   }
